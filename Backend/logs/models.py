@@ -1,11 +1,3 @@
 from django.db import models
 
-class Logs(models.Model):
-    log_id = models.BigIntegerField(primary_key=True)
-    log_date = models.DateField()
-    log_time = models.TimeField()
-    log_message = models.CharField(max_length=500)
-    log_type = models.CharField(max_length=100)
-
-    class Meta:
-        db_table = 'Logs'
+# Create your models here.
