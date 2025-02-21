@@ -169,8 +169,8 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     position: "absolute",
-    bottom: 20,
-    left: 20,
+    bottom: 100,
+    left: 100,
   },
   logo: {
     width: isTablet ? 200 : 150,

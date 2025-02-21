@@ -6,40 +6,9 @@ const isTablet = width > 900;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: "row",
     backgroundColor: "#F8F8F8",
-    padding: 20,
-    flexDirection: "column",
   },
-  roleContainer: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    marginVertical: 50,
-    width: "100%",
-  },
-  roleButton: {
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#007bff",
-    paddingVertical: 15, 
-    paddingHorizontal: 30, 
-    borderRadius: 15,
-    marginBottom: 10,
-    width: width * 0.6,
-  },    
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    marginTop: 5,
-    borderRadius: 5,
-    width: "80%",
-    maxWidth: 400,
-    textAlign: "center",
-  },    
   sidebar: {
     width: isTablet ? 100 : 75,
     backgroundColor: "#E0E0E0",
@@ -170,11 +139,12 @@ const styles = StyleSheet.create({
   logoContainer: {
     position: "absolute",
     bottom: 20,
-    left: 20,
+    width: "100%",
+    alignItems: "center",
   },
   logo: {
-    width: isTablet ? 200 : 150,
-    height: isTablet ? 200 : 150,
+    width: isTablet ? 80 : 60,
+    height: isTablet ? 80 : 60,
     resizeMode: "contain",
   },
 });
