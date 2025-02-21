@@ -1,166 +1,135 @@
-import React, { useState } from "react";
-import { 
-  View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, Dimensions, Image 
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Dimensions,
+  ScrollView,
+  Image,
+  Modal,
 } from "react-native";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
+import styles from "./styles";
 
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
+const isTablet = width > 900;
 
-const LoginScreen = () => {
-  const [role, setRole] = useState(null);
-  const [id, setId] = useState("");
-  const [password, setPassword] = useState("");
+export default function LogsScreen() {
+  const [logs, setLogs] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedLog, setSelectedLog] = useState(null);
+
+  useEffect(() => {
+      fetchData()
+  }, [])
+
+  const fetchData = async () => {
+    const response = await fetch("http://127.0.0.1:8000/api/logs/")
+    const logs = await response.json()
+    setLogs(logs)
+  }
+
+  const handleViewPress = (log) => {
+    setSelectedLog(log);
+    setModalVisible(true);
+  };
 
   return (
     <View style={styles.container}>
-      {/* Logo Image (Centered Above All Elements) */}
-      <Image source={require("../assets/images/medisync-logo.png")} style={styles.logo} />
+      {/* Sidebar */}
+      <View style={styles.sidebar}>
+        <TouchableOpacity>
+          <FontAwesome name="bars" size={24} color="gray" style={styles.icon} />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <FontAwesome
+            name="file-text-o"
+            size={24}
+            color="gray"
+            style={styles.icon}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <FontAwesome
+            name="calendar"
+            size={24}
+            color="gray"
+            style={styles.icon}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <FontAwesome
+            name="clock-o"
+            size={24}
+            color="gray"
+            style={styles.icon}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <FontAwesome name="cog" size={24} color="gray" style={styles.icon} />
+        </TouchableOpacity>
+        <View style={styles.logoContainer}>
+          <Image source={require("../assets/images/react-logo.png")} style={styles.logo} />
+        </View>
+      </View>
 
-      {!role ? (
-        <>
-          <Text style={styles.title}>Select Role:</Text>
-          <View style={styles.roleContainer}>
-            <TouchableOpacity
-              style={styles.roleButton}
-              onPress={() => setRole("nurse")}
-              activeOpacity={0.6}
-            >
-              <FontAwesome5 name="user-nurse" size={28} color="white" />
-              <Text style={styles.roleText}>Nurse</Text>
-            </TouchableOpacity>
+      {/* Main Content */}
+      <View style={styles.mainContent}>
+        <Text style={styles.title}>Logs</Text>
+        <ScrollView contentContainerStyle={styles.listContainer}>
+          {logs.map((item) => (
+            <View key={item.id} style={styles.card}>
+              <View style={styles.cardContent}>
+                <View style={styles.row}>
+                  <FontAwesome
+                    name="clock-o"
+                    size={24}
+                    color="#666"
+                    style={styles.iconClock}
+                  />
+                  <Text style={styles.date}>{item.log_date}</Text>
+                  <Text style={styles.time}>{item.log_time}</Text>
+                </View>
+                <Text style={styles.changes}>{item.log_message}</Text>
+              </View>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => handleViewPress(item)}
+              >
+                <Text style={styles.buttonText}>View</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
+        </ScrollView>
+        <TouchableOpacity style={styles.backButton}>
+          <Text style={styles.backButtonText}>Back</Text>
+        </TouchableOpacity>
+      </View>
 
+      {/* Modal for Viewing Log Details */}
+      <Modal visible={modalVisible} transparent animationType="fade">
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>View</Text>
+            {selectedLog && (
+              <>
+                <Text style={styles.modalDate}>{selectedLog.date}</Text>
+                <Text style={styles.modalText}>Patient ID - 0012345AB</Text>
+                <Text style={styles.modalDescription}>
+                  Add Description of Changes Here
+                </Text>
+              </>
+            )}
             <TouchableOpacity
-              style={styles.roleButton}
-              onPress={() => setRole("physician")}
-              activeOpacity={0.6}
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)}
             >
-              <FontAwesome5 name="user-md" size={28} color="white" />
-              <Text style={styles.roleText}>Physician</Text>
+              <Text style={styles.closeButtonText}>Cancel</Text>
             </TouchableOpacity>
           </View>
-        </>
-      ) : (
-        <>
-          <Text style={styles.title}>
-            {role === "nurse" ? "Nurse Login" : "Physician Login"}
-          </Text>
-
-          <TextInput
-            style={styles.input}
-            placeholder="Enter ID"
-            placeholderTextColor="rgba(0, 0, 0, 0.4)"
-            value={id}
-            onChangeText={setId}
-            keyboardType="numeric"
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Enter Password"
-            placeholderTextColor="rgba(0, 0, 0, 0.4)"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.cancelButton} onPress={() => setRole(null)}>
-              <Text style={styles.cancelText}>Cancel</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.loginButton} onPress={() => Alert.alert("Logging in...")}>
-              <Text style={styles.loginText}>Login</Text>
-            </TouchableOpacity>
-          </View>
-        </>
-      )}
+        </View>
+      </Modal>
     </View>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-    backgroundColor: "#f8f9fa",
-  },
-  logo: {
-    width: 150,  // Adjust size as needed
-    height: 150,
-    marginBottom: 30, // Space between logo and buttons
-    resizeMode: "contain",
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  roleContainer: {
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 15,
-  },
-  roleButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#007bff",
-    paddingVertical: 15,
-    borderRadius: 10,
-    width: width * 0.5,
-    marginVertical: 10, // Space between buttons
-  },
-  roleText: {
-    color: "white",
-    marginLeft: 10,
-    fontWeight: "bold",
-    fontSize: 18,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 15,
-    marginTop: 10,
-    borderRadius: 10,
-    width: width * 0.6,
-    fontSize: 18,
-    backgroundColor: "white",
-    textAlign: "center",
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: width * 0.6,
-    marginTop: 20,
-  },
-  cancelButton: {
-    backgroundColor: "#ccc",
-    paddingVertical: 15,
-    flex: 1,
-    borderRadius: 10,
-    alignItems: "center",
-    marginRight: 10,
-  },
-  cancelText: {
-    color: "black",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  loginButton: {
-    backgroundColor: "#28a745",
-    paddingVertical: 15,
-    flex: 1,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  loginText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-});
-
-export default LoginScreen;
+}
