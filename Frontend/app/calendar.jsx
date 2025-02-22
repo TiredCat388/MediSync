@@ -47,17 +47,10 @@ export default function CalendarApp() {
 
   const daysInMonth = getDaysInMonth(currentYear, currentMonth);
   const firstDay = getFirstDayOfMonth(currentYear, currentMonth);
-  const prevMonthDays = getDaysInMonth(currentYear, currentMonth - 1);
-  
+
   const dates = Array.from({ length: 42 }, (_, i) => {
-    if (i < firstDay) {
-      return { day: prevMonthDays - firstDay + i + 1, currentMonth: false };
-    }
     const day = i - firstDay + 1;
-    if (day > daysInMonth) {
-      return { day: day - daysInMonth, currentMonth: false };
-    }
-    return { day, currentMonth: true };
+    return day > 0 && day <= daysInMonth ? day : null;
   });
 
   return (
@@ -130,15 +123,26 @@ export default function CalendarApp() {
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
               <TouchableOpacity
-                style={{ flex: 1, aspectRatio: 1, borderWidth: 0.5, borderColor: '#ccc', alignItems: 'flex-start', justifyContent: 'flex-start', backgroundColor: item.currentMonth ? 'white' : '#d0d0d0', padding: 4 }}
-                onPress={() => item.currentMonth && handleDatePress(item.day)}
-                disabled={!item.currentMonth}
+                style={{ flex: 1, aspectRatio: 1, borderWidth: 0.5, borderColor: '#ccc', alignItems: 'flex-start', justifyContent: 'flex-start', backgroundColor: item ? 'white' : '#e0e0e0', padding: 4 }}
+                onPress={() => item && handleDatePress(item)}
+                disabled={!item}
               >
-                <Text style={{ fontSize: 16, color: item.currentMonth ? 'black' : 'gray' }}>{item.day}</Text>
+                {item && <Text style={{ fontSize: 16 }}>{item}</Text>}
               </TouchableOpacity>
             )}
           />
         </View>
+
+        {/* Modal for Date Details */}
+        <Modal visible={modalVisible} transparent={true} animationType="slide">
+          <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{ width: 300, padding: 20, backgroundColor: 'white', borderRadius: 10 }}>
+              <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Details for {selectedDate}</Text>
+              <Text style={{ marginVertical: 10 }}>Add your notes or schedule for this date here.</Text>
+              <Button title="Close" onPress={() => setModalVisible(false)} />
+            </View>
+          </View>
+        </Modal>
       </View>
     </View>
   );
