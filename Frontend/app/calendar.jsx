@@ -4,9 +4,15 @@ import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 
 const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-const totalCells = 35;
-const dates = Array.from({ length: totalCells }, (_, i) => (i < 31 ? i + 1 : null));
 const months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+
+const getDaysInMonth = (year, month) => {
+  return new Date(year, month + 1, 0).getDate();
+};
+
+const getFirstDayOfMonth = (year, month) => {
+  return new Date(year, month, 1).getDay();
+};
 
 export default function CalendarApp() {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -38,6 +44,14 @@ export default function CalendarApp() {
       return newMonth;
     });
   };
+
+  const daysInMonth = getDaysInMonth(currentYear, currentMonth);
+  const firstDay = getFirstDayOfMonth(currentYear, currentMonth);
+
+  const dates = Array.from({ length: 42 }, (_, i) => {
+    const day = i - firstDay + 1;
+    return day > 0 && day <= daysInMonth ? day : null;
+  });
 
   return (
     <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#f0f0f0' }}>
@@ -109,7 +123,7 @@ export default function CalendarApp() {
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
               <TouchableOpacity
-                style={{ flex: 1, aspectRatio: 1, borderWidth: 0.5, borderColor: '#ccc', alignItems: 'center', justifyContent: 'center', backgroundColor: item ? 'white' : '#e0e0e0' }}
+                style={{ flex: 1, aspectRatio: 1, borderWidth: 0.5, borderColor: '#ccc', alignItems: 'flex-start', justifyContent: 'flex-start', backgroundColor: item ? 'white' : '#e0e0e0', padding: 4 }}
                 onPress={() => item && handleDatePress(item)}
                 disabled={!item}
               >
