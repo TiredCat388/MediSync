@@ -6,25 +6,58 @@ import { Feather } from '@expo/vector-icons';
 const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 const totalCells = 35;
 const dates = Array.from({ length: totalCells }, (_, i) => (i < 31 ? i + 1 : null));
+const months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
 
 export default function CalendarApp() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [currentMonth, setCurrentMonth] = useState(0);
+  const [currentYear, setCurrentYear] = useState(2024);
 
   const handleDatePress = (date) => {
     setSelectedDate(date);
     setModalVisible(true);
   };
 
+  const handleSidebarPress = (icon) => {
+    console.log(`${icon} clicked`);
+  };
+
+  const handleMonthChange = (direction) => {
+    setCurrentMonth((prevMonth) => {
+      let newMonth = prevMonth + direction;
+      let newYear = currentYear;
+      if (newMonth < 0) {
+        newMonth = 11;
+        newYear--;
+      } else if (newMonth > 11) {
+        newMonth = 0;
+        newYear++;
+      }
+      setCurrentYear(newYear);
+      return newMonth;
+    });
+  };
+
   return (
     <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#f0f0f0' }}>
       {/* Sidebar Icons */}
       <View style={{ width: 50, backgroundColor: '#e0e0e0', alignItems: 'center', paddingTop: 16 }}>
-        <FontAwesome name="bars" size={24} color="gray" style={{ marginBottom: 24 }} />
-        <FontAwesome name="file-text-o" size={24} color="gray" style={{ marginBottom: 24 }} />
-        <FontAwesome name="calendar" size={24} color="gray" style={{ marginBottom: 24 }} />
-        <FontAwesome name="clock-o" size={24} color="gray" style={{ marginBottom: 24 }} />
-        <FontAwesome name="cog" size={24} color="gray" style={{ marginBottom: 24 }} />
+        <TouchableOpacity onPress={() => handleSidebarPress('menu')}>
+          <FontAwesome name="bars" size={24} color="gray" style={{ marginBottom: 24 }} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleSidebarPress('file')}>
+          <FontAwesome name="file-text-o" size={24} color="gray" style={{ marginBottom: 24 }} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleSidebarPress('calendar')}>
+          <FontAwesome name="calendar" size={24} color="gray" style={{ marginBottom: 24 }} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleSidebarPress('clock')}>
+          <FontAwesome name="clock-o" size={24} color="gray" style={{ marginBottom: 24 }} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleSidebarPress('settings')}>
+          <FontAwesome name="cog" size={24} color="gray" style={{ marginBottom: 24 }} />
+        </TouchableOpacity>
       </View>
 
       <View style={{ flex: 1, padding: 8 }}>
@@ -53,9 +86,13 @@ export default function CalendarApp() {
             alignItems: 'center', 
             justifyContent: 'space-between' 
           }}>
-            <Feather name="arrow-left-circle" size={24} color="white" />
-            <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>JANUARY 2024</Text>
-            <Feather name="arrow-right-circle" size={24} color="white" />
+            <TouchableOpacity onPress={() => handleMonthChange(-1)}>
+              <Feather name="arrow-left-circle" size={24} color="white" />
+            </TouchableOpacity>
+            <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>{months[currentMonth]} {currentYear}</Text>
+            <TouchableOpacity onPress={() => handleMonthChange(1)}>
+              <Feather name="arrow-right-circle" size={24} color="white" />
+            </TouchableOpacity>
           </View>
 
           {/* Days of the Week */}
