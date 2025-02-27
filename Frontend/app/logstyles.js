@@ -15,16 +15,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 20,
   },
-  icon: {
-    marginVertical: 20,
-  },
-  iconClock: {
-    marginRight: 10,
-  },
-  row: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
   mainContent: {
     flex: 4,
     paddingHorizontal: isTablet ? 80 : 20,
@@ -56,7 +46,7 @@ const styles = StyleSheet.create({
     fontSize: isTablet ? 26 : 18,
     fontWeight: "bold",
   },
-  time:{
+  time: {
     padding: 10,
     fontSize: isTablet ? 23 : 14,
     fontWeight: "bold",
@@ -106,17 +96,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     alignItems: "flex-start",
   },
-  modalDate: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 5,
-    alignItems: "flex-start",
-  },
-  modalDescription: {
-    fontSize: 16,
-    marginBottom: 5,
-    alignItems: "center",
-  },
   modalText: {
     fontSize: 14,
     color: "#333",
@@ -136,16 +115,29 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-  logoContainer: {
-    position: "absolute",
-    bottom: 20,
-    width: "100%",
-    alignItems: "center",
+  modalButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 20,
   },
-  logo: {
-    width: isTablet ? 80 : 60,
-    height: isTablet ? 80 : 60,
-    resizeMode: "contain",
+  modalButton: {
+    flex: 0,
+    width: "45%",
+    paddingVertical: 12,
+    alignItems: "center",
+    borderRadius: 8,
+    marginHorizontal: 5,
+  },
+  cancelButton: {
+    backgroundColor: "#ccc",
+  },
+  logoutButton: {
+    backgroundColor: "#d9534f",
+  },
+  modalButtonText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "white",
   },
 });
 
