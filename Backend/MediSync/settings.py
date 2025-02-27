@@ -38,10 +38,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'patients',
+    'medications',
+    'logs',
+    'rest_framework',
+    'login',
+    'rest_framework.authtoken',
+
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -78,11 +86,11 @@ WSGI_APPLICATION = 'MediSync.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DATABASE_NAME'),
-        'USER': config('DATABASE_USER'),
-        'PASSWORD': config('DATABASE_PASSWORD'),
-        'HOST': config('DATABASE_HOST'),
-        'PORT': config('DATABASE_PORT'),
+        'NAME': 'TEst',  # Ensure this matches the exact name of your database
+        'USER': 'juju',
+        'PASSWORD': 'juju1234',
+        'HOST': 'localhost',  # Or your server IP
+        'PORT': '5432',  # Default Postgres port
     }
 }
 
@@ -127,3 +135,15 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# CORS_ALLOWED_ORIGINS = [
+#     "http://192.168.1.5:8081",
+#     "http://localhost:19006",
+#     "http://127.0.0.1:8000",
+#     "http://127.0.0.1:19006"
+# ]
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+ALLOWED_HOSTS = ['192.168.1.4', 'localhost', '127.0.0.1']
