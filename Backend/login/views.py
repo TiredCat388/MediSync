@@ -8,7 +8,7 @@ from rest_framework import status
 class LoginView(APIView):
     def post(self, request):
         print("Request data:", request.data)  # Debugging
-        username = request.data.get('username')  # Change to 'email' if needed
+        username = request.data.get('username')
         password = request.data.get('password')
 
         user = authenticate(username=username, password=password)

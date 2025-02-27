@@ -6,30 +6,74 @@ const isTablet = width > 900;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
     backgroundColor: "#F8F8F8",
-    padding: 20,
     flexDirection: "column",
+    justifyContent: "center", // Center the content vertically
+    alignItems: "center", // Center the content horizontally
+  },
+  upperHalf: {
+    flex: 0,
+    backgroundColor: "#5879a5",
+    justifyContent: "center", // Center logo and title vertically
+    alignItems: "center", // Center logo and title horizontally
+    width: "100%",
+    paddingTop: 20, // Add some space at the top to prevent logo from sticking to the edge
+    zIndex: 1,
+  },
+  lowerHalf: {
+    flex: 1,
+    backgroundColor: "white",
+    width: "100%",
+    alignItems: "center", // Center buttons and inputs horizontally
+    justifyContent: "center", // Center buttons and inputs vertically
+    paddingHorizontal: 20,
+    zIndex: 0,
+  },
+  circleBackground: {
+    width: isTablet ? 300 : 150,
+    height: isTablet ? 300 : 150,
+    borderRadius: 300,
+    backgroundColor: "white",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 60,
+  },
+  logo: {
+    width: isTablet ? 400 : 300,
+    height: isTablet ? 400 : 300,
+    resizeMode: "contain",
+  },
+  title: {
+    fontSize: isTablet ? 40 : 24,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 20, // Adjusted for proper spacing
   },
   roleContainer: {
     flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    marginVertical: 50,
+    justifyContent: "center", // Center buttons vertically in lower half
+    alignItems: "center", // Center buttons horizontally
+    marginVertical: 10,
     width: "100%",
   },
   roleButton: {
-    flexDirection: "column",
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#007bff",
-    paddingVertical: 15, 
-    paddingHorizontal: 30, 
+    backgroundColor: "#5879a5",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
     borderRadius: 15,
     marginBottom: 10,
-    width: width * 0.6,
-  },    
+    width: width * 0.35,
+  },
+  roleText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+    marginLeft: 25,
+    textAlign: "center",
+  },
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
@@ -39,144 +83,49 @@ const styles = StyleSheet.create({
     width: "80%",
     maxWidth: 400,
     textAlign: "center",
-  },    
-  sidebar: {
-    width: isTablet ? 100 : 75,
-    backgroundColor: "#E0E0E0",
-    alignItems: "center",
-    paddingVertical: 20,
   },
-  icon: {
-    marginVertical: 20,
-  },
-  iconClock: {
-    marginRight: 10,
-  },
-  row: {
+  buttonContainer: {
     flexDirection: "row",
-    alignItems: "center",
-  },
-  mainContent: {
-    flex: 4,
-    paddingHorizontal: isTablet ? 80 : 20,
-    paddingTop: isTablet ? 60 : 30,
-  },
-  title: {
-    fontSize: isTablet ? 40 : 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "left",
-  },
-  listContainer: {
-    flexGrow: 1,
-  },
-  card: {
-    backgroundColor: "#E0E0E0",
-    borderRadius: 18,
-    padding: isTablet ? 20 : 15,
-    flexDirection: "row",
-    alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 25,
-    width: "100%",
+    width: "80%",
+    maxWidth: 400,
+    marginTop: 20,
   },
-  cardContent: {
-    flex: 1,
-  },
-  date: {
-    fontSize: isTablet ? 26 : 18,
-    fontWeight: "bold",
-  },
-  time:{
-    padding: 10,
-    fontSize: isTablet ? 23 : 14,
-    fontWeight: "bold",
-  },
-  changes: {
-    fontSize: isTablet ? 22 : 16,
-    color: "#666",
-  },
-  button: {
-    backgroundColor: "#D9D9D9",
-    paddingVertical: isTablet ? 15 : 10,
-    paddingHorizontal: isTablet ? 30 : 20,
-    borderRadius: 8,
-  },
-  buttonText: {
-    fontSize: isTablet ? 22 : 16,
-    fontWeight: "bold",
-  },
-  backButton: {
+  cancelButton: {
     backgroundColor: "#BDBDBD",
-    paddingVertical: 18,
-    paddingHorizontal: isTablet ? 80 : 40,
-    alignItems: "center",
-    borderRadius: 10,
-    marginTop: 30,
-    alignSelf: "flex-end",
-  },
-  backButtonText: {
-    fontSize: isTablet ? 24 : 18,
-    fontWeight: "bold",
-  },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContent: {
-    backgroundColor: "#fff",
-    padding: 15,
-    borderRadius: 10,
-    width: isTablet ? "45%" : "80%",
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 10,
-    alignItems: "flex-start",
-  },
-  modalDate: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 5,
-    alignItems: "flex-start",
-  },
-  modalDescription: {
-    fontSize: 16,
-    marginBottom: 5,
-    alignItems: "center",
-  },
-  modalText: {
-    fontSize: 14,
-    color: "#333",
-    textAlign: "left",
-    marginBottom: 10,
-  },
-  closeButton: {
-    backgroundColor: "#ccc",
     paddingVertical: 12,
     paddingHorizontal: 20,
-    borderRadius: 5,
-    alignSelf: "flex-start",
-    width: "30%",
+    borderRadius: 8,
     alignItems: "center",
+    flex: 1,
+    marginRight: 10,
   },
-  closeButtonText: {
+  cancelText: {
     fontSize: 16,
     fontWeight: "bold",
+    color: "#fff",
   },
-  logoContainer: {
-    position: "absolute",
-    bottom: 100,
-    left: 100,
+  loginButton: {
+    backgroundColor: "#007bff",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: "center",
+    flex: 1,
   },
-  logo: {
-    width: isTablet ? 200 : 150,
-    height: isTablet ? 200 : 150,
-    resizeMode: "contain",
+  loginText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#fff",
+    textAlign: "center",
+  },
+
+  errorText: {
+    color: "red",
+    marginTop: 10,
+    textAlign: "center",
   },
 });
+
 
 export default styles;
