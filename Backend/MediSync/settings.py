@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'medications',
     'logs',
     'rest_framework',
+    'login',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
