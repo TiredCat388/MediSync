@@ -179,7 +179,10 @@ export default function RegisterNewPatient() {
             <View style={styles.modalButtonContainer}>
               <TouchableOpacity
                 style={[styles.modalButton, styles.stayButton]}
-                onPress={() => setWarningModalVisible(false)}
+                onPress={() => {
+                  setModalVisible(false);
+                  router.push('/directory');
+                }}
               >
                 <Text style={styles.modalButtonText}>Proceed</Text>
               </TouchableOpacity>
