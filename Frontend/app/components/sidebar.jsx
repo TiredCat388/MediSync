@@ -4,7 +4,7 @@ import { FontAwesome, Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import styles from './sidebarstyle';
 
-const Sidebar = () => {
+const Sidebar = ({ onNavigate }) => {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const [sidebarWidth] = useState(new Animated.Value(70));
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
@@ -27,17 +27,18 @@ const Sidebar = () => {
       setIconColor(newColor);
       setTextColor(newColor); 
     } else if (icon === 'file') {
-      router.push('/logs');
+      router.push('/directory');
     } else if (icon === 'calendar') {
       router.push('/calendar');
     } else if (icon === 'clock') {
       router.push('/clock');
     } else if (icon === 'settings') {
-      router.push('/settings');
+      router.push('/logs');
     } else if (icon === 'logout') {
       setLogoutModalVisible(true);  
     }
   };
+  
 
   const handleLogout = () => {
     router.replace('/'); 

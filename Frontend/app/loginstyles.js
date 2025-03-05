@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     alignItems: "center", // Center the content horizontally
   },
   upperHalf: {
-    flex: 0,
+    flex: 1.5,
     backgroundColor: "#5879a5",
     justifyContent: "center", // Center logo and title vertically
     alignItems: "center", // Center logo and title horizontally
@@ -21,33 +21,32 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   lowerHalf: {
-    flex: 1,
+    flex: 2,
     backgroundColor: "white",
     width: "100%",
     alignItems: "center", // Center buttons and inputs horizontally
     justifyContent: "center", // Center buttons and inputs vertically
-    paddingHorizontal: 20,
-    zIndex: 0,
   },
   circleBackground: {
     width: isTablet ? 300 : 150,
     height: isTablet ? 300 : 150,
-    borderRadius: 300,
+    borderRadius: 150,
     backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 60,
+    marginTop: 70,
   },
   logo: {
-    width: isTablet ? 400 : 300,
-    height: isTablet ? 400 : 300,
+    width: isTablet ? 450 : 350,
+    height: isTablet ? 450 : 350,
     resizeMode: "contain",
   },
   title: {
+    zIndex: 0,
     fontSize: isTablet ? 40 : 24,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 20, // Adjusted for proper spacing
+    marginBottom: 10, // Adjusted for proper spacing
   },
   roleContainer: {
     flexDirection: "column",

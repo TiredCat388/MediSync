@@ -23,7 +23,7 @@ const LoginScreen = () => {
 
   useEffect(() => {
     if (role === "nurse") {
-      router.push("/logs");
+      router.push("/directory");
     }
   }, [role]);
 
@@ -54,7 +54,7 @@ const LoginScreen = () => {
       console.log("Token:", data.token);
       Alert.alert("Login successful!");
       // Navigate to logs screen
-      router.push("/logs");
+      router.push("/directory");
     } catch (error) {
       console.error("Login error:", error);
       setErrorMessage("An error occurred. Please try again later."); // Set error message
