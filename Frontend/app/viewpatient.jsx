@@ -1,23 +1,21 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import { useRouter } from 'expo-router';
+import Sidebar from './components/sidebar';
 
 export default function PatientDetails() {
+  const router = useRouter();
   return (
     <View style={styles.container}>
-      {/* Sidebar */}
-      <View style={styles.sidebar}>
-        <FontAwesome name="menu" size={24} color="gray" style={styles.sidebarIcon} />
-        <FontAwesome name="calendar" size={24} color="gray" style={styles.sidebarIcon} />
-        <FontAwesome name="clock" size={24} color="gray" style={styles.sidebarIcon} />
-        <FontAwesome name="settings" size={24} color="gray" style={styles.sidebarIcon} />
-        <FontAwesome name="refresh-cw" size={24} color="gray" style={styles.sidebarIcon} />
-      </View>
+      <Sidebar />
 
       {/* Main Content */}
       <ScrollView style={styles.mainContent}>
         <View style={styles.headerButtons}>
-          <TouchableOpacity style={styles.backButton}>
+          <TouchableOpacity 
+            style={styles.backButton} 
+            onPress={() => router.push('/directory')}
+          >
             <Text style={styles.buttonText}>Back</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.deactivateButton}>
@@ -67,8 +65,8 @@ const styles = StyleSheet.create({
   container: { flex: 1, flexDirection: "row", backgroundColor: "#f0f0f0" },
   sidebar: { width: 50, backgroundColor: "#e0e0e0", alignItems: "center", paddingTop: 16 },
   sidebarIcon: { marginBottom: 24 },
-  mainContent: { flex: 1, padding: 20 },
-  headerButtons: { flexDirection: "row", justifyContent: "flex-end", marginBottom: 10 },
+  mainContent: { flex: 1, padding: 20, marginLeft: 70 },
+  headerButtons: { flexDirection: "row", justifyContent: "flex-end", marginBottom: 10},
   backButton: { backgroundColor: "#ccc", padding: 10, borderRadius: 5, marginRight: 10 },
   deactivateButton: { backgroundColor: "#ffb3b3", padding: 10, borderRadius: 5 },
   patientId: { fontSize: 18, fontWeight: "bold", marginBottom: 10 },

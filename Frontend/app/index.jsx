@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-  Dimensions,
-  Image,
-} from "react-native";
+import {View, Text, TextInput, TouchableOpacity, Alert, Dimensions, Image} from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import styles from "./loginstyles";

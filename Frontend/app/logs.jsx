@@ -14,7 +14,7 @@ export default function LogsScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
   const [selectedLog, setSelectedLog] = useState(null);
-  const [sidebarWidth, setSidebarWidth] = useState(70); // Default sidebar width when collapsed
+  const [sidebarWidth, setSidebarWidth] = useState(70);
 
   useEffect(() => {
     fetchData();
@@ -42,8 +42,7 @@ export default function LogsScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Sidebar */}
-      <Sidebar setSidebarWidth={setSidebarWidth} />
+      <Sidebar />
 
       {/* Main Content */}
       <View style={[styles.mainContent, { marginLeft: sidebarWidth }]}>

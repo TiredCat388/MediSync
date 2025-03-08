@@ -1,44 +1,135 @@
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import { useRouter } from 'expo-router';
 import Sidebar from './components/sidebar';
+import { useState, useEffect } from 'react';
+import { Menu, Divider, Provider } from 'react-native-paper';
 
 export default function PatientsDirectory() {
   const router = useRouter();
-  
-  //will be replaced by database connection??
-  const patients = [];
-  const totalRows = 10;
-  
-  // Generate table data (filled + empty rows)
-  const tableData = [
-    { id: 'Patient ID', name: 'Patient Name', header: true }, // Header row
-    ...patients,
-    ...Array.from({ length: totalRows - patients.length }, (_, i) => ({ id: '', name: '', header: false }))
-  ];
+  const [patients, setPatients] = useState([]);
+  const [visibleMenu, setVisibleMenu] = useState(null);
 
-  const renderItem = ({ item }) => (
-    <View style={{ flexDirection: 'row', borderBottomWidth: 1, borderColor: 'lightgrey', backgroundColor: item.id ? 'white' : 'lightgrey', padding: 10 }}>
-      <Text style={{ flex: 1, textAlign: 'center', fontWeight: item.header ? 'bold' : 'normal' }}>{item.id}</Text>
-      <Text style={{ flex: 2, textAlign: 'center', fontWeight: item.header ? 'bold' : 'normal' }}>{item.name}</Text>
-    </View>
-  );
+  useEffect(() => {
+    fetchPatients();
+  }, []);
+
+  const fetchPatients = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/patients/");
+      const data = await response.json();
+      setPatients(data);
+    } catch (error) {
+      console.error("Error fetching patients:", error);
+    }
+  };
+
+  const totalRows = 12;
+  const displayedPatients = [...patients];
+
+  if (displayedPatients.length === 0) {
+    displayedPatients.push({ id: '123456', name: 'JOHN DOE' });
+  }
+
+  while (displayedPatients.length < totalRows) {
+    displayedPatients.push({ id: '', name: '' });
+  }
 
   return (
-    <View style={{ flex: 1, flexDirection: 'row' }}>
-      <Sidebar />
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10 }}>Patients Directory</Text>
-        <View style={{ width: '80%', backgroundColor: 'white', borderRadius: 10, overflow: 'hidden', borderWidth: 1, borderColor: 'lightgrey' }}>
-          <FlatList
-            data={tableData}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => index.toString()}
-          />
+    <Provider>
+      <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#f8f8f8' }}>
+        <Sidebar onNavigate={(destination) => router.push(destination)} />
+        <View style={{ flex: 1, marginLeft: 70, padding: 40 }}>
+          {/* Header and Button Row */}
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Text style={{ fontSize: 25, fontWeight: 'bold' }}>Patients Directory</Text>
+            <TouchableOpacity
+              onPress={() => router.push('/registernew')}
+              style={{
+                backgroundColor: '#5879a5',
+                paddingVertical: 8,
+                paddingHorizontal: 20,
+                borderRadius: 8,
+                alignItems: 'center',
+                justifyContent: 'center',
+                minWidth: 180,
+                marginTop: 40,
+              }}
+            >
+              <Text style={{ color: 'white', fontSize: 18, fontWeight: "bold" }}>+  New Patient </Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Table */}
+          <View
+            style={{
+              marginTop: 20,
+              backgroundColor: 'white',
+              borderRadius: 15,
+              borderWidth: 1,
+              borderColor: 'black',
+              overflow: 'hidden',
+            }}
+          >
+            {/* Table Header */}
+            <View
+              style={{
+                flexDirection: 'row',
+                backgroundColor: 'white',
+                paddingVertical: 10,
+                borderBottomWidth: 1,
+                borderColor: 'black',
+              }}
+            >
+              <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Patient ID</Text>
+              </View>
+              <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Patient Name</Text>
+              </View>
+            </View>
+
+            {/* Table Rows */}
+            <FlatList
+              data={displayedPatients}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item, index }) => (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    backgroundColor: item.id ? 'white' : 'lightgrey',
+                    borderBottomWidth: 1,
+                    borderColor: 'black',
+                    minHeight: 35,
+                  }}
+                >
+                  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 10 }}>
+                    <Text style={{ fontSize: 16 }}>{item.id || ''}</Text>
+                  </View>
+                  <View style={{ width: 2, backgroundColor: 'black', alignSelf: 'stretch' }} />
+                  <View style={{ flex: 2, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 10 }}>
+                    <Text style={{ fontSize: 16, flex: 1, textAlign: 'center' }}>{item.name || ''}</Text>
+                    {item.id && (
+                      <Menu
+                        visible={visibleMenu === index}
+                        onDismiss={() => setVisibleMenu(null)}
+                        anchor={
+                          <TouchableOpacity onPress={() => setVisibleMenu(visibleMenu === index ? null : index)} style={{ marginLeft: 10 }}>
+                            <Text style={{ fontSize: 20 }}>⋯</Text>
+                          </TouchableOpacity>
+                        }
+                      >
+                        <Menu.Item onPress={() => router.push('/viewpatient')} title="View" />
+                        <Divider />
+                        <Menu.Item onPress={() => console.log('Delete', item.id)} title="Delete" />
+                      </Menu>
+                    )}
+                  </View>
+                </View>
+              )}
+            />
+          </View>
         </View>
-        <TouchableOpacity onPress={() => router.push('/registernew')} style={{ backgroundColor: 'blue', padding: 10, borderRadius: 5, marginTop: 20 }}>
-          <Text style={{ color: 'white', fontWeight: 'bold' }}>New Patient +</Text>
-        </TouchableOpacity>
       </View>
-    </View>
+    </Provider>
   );
 }
