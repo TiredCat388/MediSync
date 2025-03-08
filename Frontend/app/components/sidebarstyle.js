@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 999,
     flexDirection: 'column',
-    width: isTablet ? 200 : 70, // Adjust width based on tablet or not
+    width: isTablet ? 300 : 70, // Adjust width based on tablet or not
   },
   sidebarContent: {
     flexDirection: 'row',
