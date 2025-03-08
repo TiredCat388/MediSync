@@ -1,18 +1,17 @@
 import React from "react";
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import styles from "./viewstyle";
 
 export default function PatientDetails() {
   return (
     <View style={styles.container}>
       {/* Sidebar */}
       <View style={styles.sidebar}>
-        <FontAwesome name="menu" size={24} color="black" style={styles.sidebarIcon} />
-        <FontAwesome name="calendar" size={24} color="black" style={styles.sidebarIcon} />
-        <FontAwesome name="clock" size={24} color="black" style={styles.sidebarIcon} />
-        <FontAwesome name="settings" size={24} color="black" style={styles.sidebarIcon} />
-        <FontAwesome name="refresh-cw" size={24} color="black" style={styles.sidebarIcon} />
+        <FontAwesome name="menu" size={24} color="gray" style={styles.sidebarIcon} />
+        <FontAwesome name="calendar" size={24} color="gray" style={styles.sidebarIcon} />
+        <FontAwesome name="clock" size={24} color="gray" style={styles.sidebarIcon} />
+        <FontAwesome name="settings" size={24} color="gray" style={styles.sidebarIcon} />
+        <FontAwesome name="refresh-cw" size={24} color="gray" style={styles.sidebarIcon} />
       </View>
 
       {/* Main Content */}
@@ -63,3 +62,23 @@ export default function PatientDetails() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1, flexDirection: "row", backgroundColor: "#f0f0f0" },
+  sidebar: { width: 50, backgroundColor: "#e0e0e0", alignItems: "center", paddingTop: 16 },
+  sidebarIcon: { marginBottom: 24 },
+  mainContent: { flex: 1, padding: 20 },
+  headerButtons: { flexDirection: "row", justifyContent: "flex-end", marginBottom: 10 },
+  backButton: { backgroundColor: "#ccc", padding: 10, borderRadius: 5, marginRight: 10 },
+  deactivateButton: { backgroundColor: "#ffb3b3", padding: 10, borderRadius: 5 },
+  patientId: { fontSize: 18, fontWeight: "bold", marginBottom: 10 },
+  infoContainer: { backgroundColor: "#e0e0e0", padding: 15, borderRadius: 8, flexDirection: "row", justifyContent: "space-between" },
+  sectionContainer: { flex: 1 },
+  section: { marginBottom: 10 },
+  sectionTitle: { fontWeight: "bold", marginBottom: 5 },
+  divider: { width: 1, backgroundColor: "black", marginHorizontal: 10 },
+  button: { backgroundColor: "#ccc", padding: 10, alignItems: "center", borderRadius: 5, marginTop: 10 },
+  buttonText: { fontWeight: "bold" },
+  externalEditButton: { backgroundColor: "#ddd", padding: 12, alignItems: "center", borderRadius: 5, alignSelf: "flex-end", marginTop: 10 },
+  editButtonText: { fontSize: 14, fontWeight: "bold" }
+});
