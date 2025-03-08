@@ -27,7 +27,7 @@ export default function PatientsDirectory() {
   const displayedPatients = [...patients];
 
   if (displayedPatients.length === 0) {
-    displayedPatients.push({ id: '123456', name: 'JOHN DOE' });
+    displayedPatients.push({ id: '0123456', name: 'TESTING PURPOSES ONLY' });
   }
 
   while (displayedPatients.length < totalRows) {
