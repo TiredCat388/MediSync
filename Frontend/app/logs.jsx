@@ -14,7 +14,7 @@ export default function LogsScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
   const [selectedLog, setSelectedLog] = useState(null);
-  const [sidebarWidth, setSidebarWidth] = useState(70); // Default sidebar width when collapsed
+  const [sidebarWidth, setSidebarWidth] = useState(70);
 
   useEffect(() => {
     fetchData();
@@ -42,8 +42,7 @@ export default function LogsScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Sidebar */}
-      <Sidebar setSidebarWidth={setSidebarWidth} />
+      <Sidebar />
 
       {/* Main Content */}
       <View style={[styles.mainContent, { marginLeft: sidebarWidth }]}>
@@ -67,7 +66,7 @@ export default function LogsScreen() {
         </ScrollView>
 
         {/* Back Button */}
-        <TouchableOpacity style={styles.backButton} onPress={() => router.replace("/")}>
+        <TouchableOpacity style={styles.backButton} onPress={() => router.push("/directory")}>
           <Text style={styles.backButtonText}>Back</Text>
         </TouchableOpacity>
       </View>
@@ -87,32 +86,6 @@ export default function LogsScreen() {
             <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
               <Text style={styles.closeButtonText}>Cancel</Text>
             </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-
-      {/* Logout Confirmation Modal */}
-      <Modal visible={logoutModalVisible} transparent animationType="fade">
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Confirm Logout</Text>
-            <Text style={styles.modalText}>Are you sure you want to log out?</Text>
-            <View style={styles.modalButtonContainer}>
-              {/* Cancel Button */}
-              <TouchableOpacity 
-                style={[styles.modalButton, styles.cancelButton]} 
-                onPress={() => setLogoutModalVisible(false)}
-              >
-                <Text style={styles.modalButtonText}>Cancel</Text>
-              </TouchableOpacity>
-              {/* Log Out Button */}
-              <TouchableOpacity 
-                style={[styles.modalButton, styles.logoutButton]} 
-                onPress={handleLogout}
-              >
-                <Text style={styles.modalButtonText}>Log Out</Text>
-              </TouchableOpacity>
-            </View>
           </View>
         </View>
       </Modal>

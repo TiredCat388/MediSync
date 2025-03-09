@@ -139,6 +139,33 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "white",
   },
+  modalButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 20,
+  },
+  
+  modalButton: {
+    flex: 1,
+    paddingVertical: 12,
+    alignItems: "center",
+    borderRadius: 8,
+    marginHorizontal: 5,
+  },
+  
+  cancelButton: {
+    backgroundColor: "#ccc",
+  },
+  
+  logoutButton: {
+    backgroundColor: "#d9534f",
+  },
+  
+  modalButtonText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "white",
+  },
 });
 
 export default styles;
