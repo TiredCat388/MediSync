@@ -18,6 +18,8 @@ class Patients(models.Model):
     patient_number = models.AutoField(primary_key=True)
     age = models.IntegerField(blank=False)
     contact_number = models.BigIntegerField(blank=False)
+    date_of_birth = models.DateField(blank=False)
+    room_number = models.IntegerField(blank=False)
 
     class Meta:
         db_table = 'Patients'

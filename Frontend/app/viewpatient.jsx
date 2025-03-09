@@ -1,10 +1,62 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import Sidebar from './components/sidebar';
 
 export default function PatientDetails() {
   const router = useRouter();
+  const { patient_number } = useLocalSearchParams();
+  const [patient, setPatient] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchPatientDetails();
+  }, [patient_number]);
+
+  const fetchPatientDetails = async () => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/patients/by-number/${patient_number}/`);
+      if (!response.ok) {
+        throw new Error('Patient not found');
+      }
+      const data = await response.json();
+      setPatient(data);
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Sidebar />
+        <View style={styles.mainContent}>
+          <Text>Loading patient details...</Text>
+        </View>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <Sidebar />
+        <View style={styles.mainContent}>
+          <Text>Error: {error}</Text>
+          <TouchableOpacity 
+            style={styles.backButton} 
+            onPress={() => router.push('/directory')}
+          >
+            <Text style={styles.buttonText}>Back to Directory</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <Sidebar />
@@ -23,19 +75,19 @@ export default function PatientDetails() {
           </TouchableOpacity>
         </View>
         
-        <Text style={styles.patientId}>PATIENT ID: 0012345AB</Text>
+        <Text style={styles.patientId}>PATIENT ID: {patient?.patient_number}</Text>
         
         <View style={styles.infoContainer}>
           <View style={styles.sectionContainer}>
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Patient Details</Text>
-              <Text>Name: DELA CRUZ, JUAN</Text>
-              <Text>Birth Date: 09/19/1996</Text>
-              <Text>Contact Details: 09919491104</Text>
+              <Text>Name: {patient?.last_name}, {patient?.first_name} {patient?.middle_name}</Text>
+              <Text>Birth Date: {patient?.date_of_birth}</Text>
+              <Text>Contact Details: {patient?.contact_number}</Text>
             </View>
             <View style={styles.section}>
               <Text>Room No.</Text>
-              <Text>420</Text>
+              <Text>{patient?.room_number}</Text>
               <TouchableOpacity style={styles.button}>
                 <Text style={styles.buttonText}>View List of Medications</Text>
               </TouchableOpacity>
@@ -45,9 +97,9 @@ export default function PatientDetails() {
           <View style={styles.sectionContainer}>
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Emergency Contact Details</Text>
-              <Text>Name: DELA CRUZ, ANNA MARIE</Text>
-              <Text>Relation to Patient: SISTER</Text>
-              <Text>Contact Details: 09289607745</Text>
+              <Text>Name: {patient?.emergency_contact?.first_name} {patient?.emergency_contact?.last_name}</Text>
+              <Text>Relation to Patient: {patient?.emergency_contact?.relation_to_patient}</Text>
+              <Text>Contact Details: {patient?.emergency_contact?.contact_number}</Text>
             </View>
           </View>
         </View>

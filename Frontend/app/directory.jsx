@@ -23,6 +23,13 @@ export default function PatientsDirectory() {
     }
   };
 
+  const formatName = (firstName, middleName, lastName) => {
+    const formattedLastName = lastName.toUpperCase();
+    const formattedFirstName = firstName;
+    const formattedMiddleInitial = middleName ? `${middleName.charAt(0)}.` : "";
+    return `${formattedLastName}, ${formattedFirstName}${formattedMiddleInitial ? `, ${formattedMiddleInitial}` : ""}`;
+  };
+
   const totalRows = 12;
   const displayedPatients = [...patients];
 
@@ -103,12 +110,14 @@ export default function PatientsDirectory() {
                   }}
                 >
                   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 10 }}>
-                    <Text style={{ fontSize: 16 }}>{item.id || ''}</Text>
+                    <Text style={{ fontSize: 16 }}>{item.patient_number || ''}</Text>
                   </View>
                   <View style={{ width: 2, backgroundColor: 'black', alignSelf: 'stretch' }} />
                   <View style={{ flex: 2, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 10 }}>
-                    <Text style={{ fontSize: 16, flex: 1, textAlign: 'center' }}>{item.name || ''}</Text>
-                    {item.id && (
+                    <Text style={{ fontSize: 16, flex: 1, textAlign: 'center' }}>
+                      {item.first_name && item.last_name ? formatName(item.first_name, item.middle_name, item.last_name) : ''}
+                    </Text>
+                    {item.patient_number && (
                       <Menu
                         visible={visibleMenu === index}
                         onDismiss={() => setVisibleMenu(null)}
@@ -121,7 +130,7 @@ export default function PatientsDirectory() {
                           </TouchableOpacity>
                         }
                       >
-                        <Menu.Item onPress={() => router.push('/viewpatient')} title="View" />
+                        <Menu.Item onPress={() => router.push(`/viewpatient?patient_number=${item.patient_number}`)} title="View" />
                         <Divider />
                         <Menu.Item onPress={() => console.log('Delete', item.id)} title="Delete" />
                       </Menu>

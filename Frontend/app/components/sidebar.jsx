@@ -27,7 +27,7 @@ const Sidebar = () => {
       setIconColor(newColor);
       setTextColor(newColor); 
     } else if (icon === 'file') {
-      router.push('/logs');
+      router.push('/directory');
     } else if (icon === 'calendar') {
       router.push('/calendar');
     } else if (icon === 'clock') {
