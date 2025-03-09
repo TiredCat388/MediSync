@@ -112,8 +112,11 @@ export default function PatientsDirectory() {
                       <Menu
                         visible={visibleMenu === index}
                         onDismiss={() => setVisibleMenu(null)}
+                        anchorPosition="bottom"
                         anchor={
-                          <TouchableOpacity onPress={() => setVisibleMenu(visibleMenu === index ? null : index)} style={{ marginLeft: 10 }}>
+                          <TouchableOpacity 
+                            onPress={() => setVisibleMenu(visibleMenu === index ? null : index)} 
+                            style={{ marginLeft: 10 }}>
                             <Text style={{ fontSize: 20 }}>⋯</Text>
                           </TouchableOpacity>
                         }

@@ -33,7 +33,7 @@ const Sidebar = () => {
     } else if (icon === 'clock') {
       router.push('/clock');
     } else if (icon === 'settings') {
-      router.push('/settings');
+      router.push('/logs');
     } else if (icon === 'logout') {
       setLogoutModalVisible(true);  
     }
@@ -56,7 +56,7 @@ const Sidebar = () => {
 
           <TouchableOpacity onPress={() => handleSidebarPress('file')} style={styles.iconLabelContainer}>
             <FontAwesome name="file-text-o" size={24} color={iconColor} />
-            {isSidebarExpanded && <Text style={[styles.iconLabel, { color: textColor }]}>Logs</Text>}
+            {isSidebarExpanded && <Text style={[styles.iconLabel, { color: textColor }]}>Directory</Text>}
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => handleSidebarPress('calendar')} style={styles.iconLabelContainer}>
