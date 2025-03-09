@@ -103,7 +103,7 @@ export default function PatientsDirectory() {
                 <View
                   style={{
                     flexDirection: 'row',
-                    backgroundColor: item.id ? 'white' : 'lightgrey',
+                    backgroundColor: item.patient_number ? 'white' : 'lightgrey',
                     borderBottomWidth: 1,
                     borderColor: 'black',
                     minHeight: 35,
