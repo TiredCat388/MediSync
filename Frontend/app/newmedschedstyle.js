@@ -48,6 +48,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 8,
     marginBottom: 10,
+    fontSize: 16,
+    minHeight: 40, 
+    textAlignVertical: 'top',
   },
   dobContainer: {
     flexDirection: 'row',
@@ -68,11 +71,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingHorizontal: 70,
     width: 60,
+    height: 40,
     marginRight: 8,
     textAlign: 'center',
     fontSize: 18,
     borderRadius: 8,
   },
+  dobSelectWeb: {
+    width: 'auto', 
+    minWidth: 80,
+    height: 50,
+    justifyContent: 'center', 
+    alignItems: 'center',
+  },  
   dobSelectContainer: {
     flexDirection: 'row',
     marginBottom: 10,
@@ -165,6 +176,36 @@ const styles = StyleSheet.create({
     marginVertical: 5, 
     marginHorizontal: 30,
     alignSelf: 'stretch'
+  },
+  autocompleteContainer: {
+    position: 'relative',
+    zIndex: 1,
+    marginBottom: 100,
+  },
+  autocompleteWrapper: {
+    borderWidth: 1,
+    borderColor: 'black',
+    backgroundColor: 'white',
+    padding: 8,
+    fontSize: 16,
+    minHeight: 40,
+  },
+  autocompleteInput: {
+    borderWidth: 1,
+    borderColor: 'black',
+    backgroundColor: 'white',
+    padding: 8,
+    fontSize: 16,
+    minHeight: 40,
+  },
+  autocompleteItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    backgroundColor: '#fff',
+  },
+  autocompleteText: {
+    fontSize: 16,
   },
 });
 

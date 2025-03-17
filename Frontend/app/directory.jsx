@@ -58,6 +58,13 @@ export default function PatientsDirectory() {
               <Text style={{ color: 'white', fontSize: 18, fontWeight: "bold" }}>+  New Patient </Text>
             </TouchableOpacity>
           </View>
+          
+          {/* Simple Clickable Text for Redirect */}
+          <TouchableOpacity onPress={() => router.push('/newmedsched')}>
+              <Text style={{ color: 'blue', textDecorationLine: 'underline', marginTop: 10 }}>
+                New Med Sched (temporary)
+              </Text>
+            </TouchableOpacity>
 
           {/* Table */}
           <View
