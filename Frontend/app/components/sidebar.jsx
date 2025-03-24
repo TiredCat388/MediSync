@@ -26,6 +26,7 @@ const Sidebar = () => {
       const newColor = isSidebarExpanded ? 'gray' : 'white'; 
       setIconColor(newColor);
       setTextColor(newColor); 
+
     } if (icon === 'file') {
       router.push('/directory');
     } else if (icon === 'calendar') {
