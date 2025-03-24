@@ -243,7 +243,7 @@ export default function NewMedSched() {
               <TouchableOpacity style={[styles.modalButton, styles.stayButton]} onPress={() => setModalVisible(false)}>
                 <Text style={styles.modalButtonText}>Stay</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.modalButton, styles.leaveButton]} onPress={() => { setModalVisible(false); router.push('/directory'); }}>
+              <TouchableOpacity style={[styles.modalButton, styles.leaveButton]} onPress={() => { setModalVisible(false); router.back(); }}>
                 <Text style={styles.modalButtonText}>Leave</Text>
               </TouchableOpacity>
             </View>
@@ -258,7 +258,7 @@ export default function NewMedSched() {
                 <Text style={styles.modalTitle}>Incomplete Form</Text>
                 <Text style={styles.modalMessage}>Some details are missing. Are you sure you want to proceed?</Text>
                 <View style={styles.modalButtonContainer}>
-                <TouchableOpacity style={[styles.modalButton, styles.stayButton]} onPress={() => { setWarningModalVisible(false); router.push('/directory'); }}>
+                <TouchableOpacity style={[styles.modalButton, styles.stayButton]} onPress={() => { setWarningModalVisible(false); router.back(); }}>
                 <Text style={styles.modalButtonText}>Proceed</Text>
                 </TouchableOpacity>
               <TouchableOpacity style={[styles.modalButton, styles.leaveButton]} onPress={() => setWarningModalVisible(false)}>

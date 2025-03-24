@@ -4,6 +4,8 @@ import Sidebar from './components/sidebar';
 import { useState, useEffect } from 'react';
 import { Menu, Divider, Provider } from 'react-native-paper';
 
+const TESTING_PATIENT = { id: '0123456', name: 'TESTING PURPOSES ONLY' };
+
 export default function PatientsDirectory() {
   const router = useRouter();
   const [patients, setPatients] = useState([]);
@@ -17,18 +19,15 @@ export default function PatientsDirectory() {
     try {
       const response = await fetch("http://127.0.0.1:8000/api/patients/");
       const data = await response.json();
-      setPatients(data);
+      setPatients(data.length > 0 ? data : [TESTING_PATIENT]);
     } catch (error) {
       console.error("Error fetching patients:", error);
+      setPatients([TESTING_PATIENT]);
     }
   };
 
   const totalRows = 12;
   const displayedPatients = [...patients];
-
-  if (displayedPatients.length === 0) {
-    displayedPatients.push({ id: '0123456', name: 'TESTING PURPOSES ONLY' });
-  }
 
   while (displayedPatients.length < totalRows) {
     displayedPatients.push({ id: '', name: '' });
@@ -58,13 +57,6 @@ export default function PatientsDirectory() {
               <Text style={{ color: 'white', fontSize: 18, fontWeight: "bold" }}>+  New Patient </Text>
             </TouchableOpacity>
           </View>
-          
-          {/* Simple Clickable Text for Redirect */}
-          <TouchableOpacity onPress={() => router.push('/newmedsched')}>
-              <Text style={{ color: 'blue', textDecorationLine: 'underline', marginTop: 10 }}>
-                New Med Sched (temporary)
-              </Text>
-            </TouchableOpacity>
 
           {/* Table */}
           <View
