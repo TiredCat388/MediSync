@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Modal, TextInput, FlatList } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import Sidebar from './components/sidebar';
 import RNPickerSelect from 'react-native-picker-select';
 import Autocomplete from 'react-native-autocomplete-input';
@@ -8,8 +8,8 @@ import styles from './registerstyle';
 
 export default function NewMedSched() {
   const router = useRouter();
+  const { patient_number } = useLocalSearchParams(); // Extract patient_number from the URL
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
-  const [patientID, setPatientID] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [warningModalVisible, setWarningModalVisible] = useState(false);
 
@@ -22,8 +22,8 @@ export default function NewMedSched() {
     timePeriod: '',
     medicationNotes: '',
     physicianID: '',
-    medicationTimingHour: '',
-    medicationTimingMinute: '',
+    frequencyHour: '',
+    frequencyMinute: '',
   });
 
   const [medications, setMedications] = useState([]); // List from DB
@@ -79,11 +79,40 @@ export default function NewMedSched() {
     setFilteredMedications([]);
   };
 
-  const handleRegister = () => {
-    if (Object.values(formData).some(value => value.trim() === '')) {
+  const handleRegister = async () => {
+    if (Object.values(formData).some((value) => value.trim() === '')) {
       setWarningModalVisible(true);
-    } else {
-      // form submission logic
+      return;
+    }
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/medications/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          Medication_name: formData.medicineName,
+          Dosage: formData.dosage,
+          Dosage_Unit: formData.dosageUnit,
+          Medication_Time: `${formData.timeHour}:${formData.timeMinute} ${formData.timePeriod}`,
+          Frequency: `${formData.frequencyHour}:${formData.frequencyMinute}`,
+          Medication_notes: formData.medicationNotes,
+          patient_number: patient_number, // Include patient_number in the payload
+        }),
+      });
+
+      if (response.ok) {
+        alert('Medication added successfully!');
+        router.push(`/viewpatient?patient_number=${patient_number}`);
+      } else {
+        const errorData = await response.json();
+        console.error('Error adding medication:', errorData);
+        alert('Failed to add medication. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error adding medication:', error);
+      alert('An error occurred. Please try again.');
     }
   };
 
@@ -95,7 +124,7 @@ export default function NewMedSched() {
         <View style={styles.formContainer}>
           <View style={styles.column}>
             <Text style={styles.sectionTitle}>
-              {patientID ? `FOR: Patient ID - ${patientID}` : "FOR: Patient ID - Loading..."}
+              {patient_number ? `FOR: Patient ID - ${patient_number}` : "FOR: Patient ID - Loading..."}
             </Text>
 
             {/* Medication Name with Autocomplete */}
@@ -201,6 +230,22 @@ export default function NewMedSched() {
                 placeholder={{ label: 'MM', value: '' }}
                 style={{ inputAndroid: styles.dobSelect, inputIOS: styles.dobSelect, inputWeb: styles.dobSelectWeb }}
                 />
+            </View>
+
+            <Text style={styles.label}>Frequency</Text>
+            <View style={styles.dobContainer}>
+              <TextInput
+                style={[styles.dobInput, { width: 50 }]}
+                placeholder="HH"
+                keyboardType="numeric"
+                onChangeText={(text) => setFormData({ ...formData, frequencyHour: text })}
+              />
+              <TextInput
+                style={[styles.dobInput, { width: 50 }]}
+                placeholder="MM"
+                keyboardType="numeric"
+                onChangeText={(text) => setFormData({ ...formData, frequencyMinute: text })}
+              />
             </View>
           </View>
 
