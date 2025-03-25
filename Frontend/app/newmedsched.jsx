@@ -207,7 +207,7 @@ export default function NewMedSched() {
             />
             </View>
 
-            <Text style={styles.label}>Medication Timing</Text>
+            <Text style={styles.label}>Frequency</Text>
             <View style={styles.dobContainer}>
             <RNPickerSelect
             items={Array.from({ length: 12 }, (_, index) => ({
