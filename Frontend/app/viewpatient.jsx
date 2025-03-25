@@ -163,7 +163,7 @@ export default function PatientDetails() {
             </View>
 
             <View style={styles.buttonWrapper}>
-              <Button mode="contained" style={styles.addMedicationButton} onPress={() => router.push('/newmedsched')}>
+              <Button mode="contained" style={styles.addMedicationButton} onPress={() => router.push(`/newmedsched?patient_number=${patient_number}`)}>
                 Add Medication
               </Button>
             </View>
