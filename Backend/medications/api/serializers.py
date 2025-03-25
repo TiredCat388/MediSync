@@ -5,3 +5,4 @@ class MedicationsModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Medications
         fields = '__all__'
+        read_only_fields = ('schedule_id',)

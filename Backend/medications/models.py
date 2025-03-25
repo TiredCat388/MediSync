@@ -9,7 +9,7 @@ class Medications(models.Model):
     Frequency = models.TimeField(blank=False)
     Medication_notes = models.TextField(blank=False)
     patient_number = models.ForeignKey(Patients, on_delete=models.CASCADE, db_column='patient_number')
-    schedule_id = models.IntegerField()
+    schedule_id = models.IntegerField(blank=True, null=True)  # Making this field optional
 
     class Meta:
         db_table = 'Medications'

@@ -80,35 +80,70 @@ export default function NewMedSched() {
   };
 
   const handleRegister = async () => {
-    if (Object.values(formData).some((value) => value.trim() === '')) {
+    // Only check required fields
+    const requiredFields = ['medicineName', 'dosage', 'dosageUnit', 'timeHour', 'timeMinute', 'timePeriod', 'medicationNotes', 'frequencyHour', 'frequencyMinute'];
+    const hasEmptyFields = requiredFields.some(field => !formData[field] || formData[field].trim() === '');
+    
+    if (hasEmptyFields) {
       setWarningModalVisible(true);
       return;
     }
 
+    // Convert 12-hour time to 24-hour format
+    const convertTo24Hour = (hour, minute, period) => {
+      let hour24 = parseInt(hour);
+      if (period === 'PM' && hour24 !== 12) {
+        hour24 += 12;
+      } else if (period === 'AM' && hour24 === 12) {
+        hour24 = 0;
+      }
+      return `${hour24.toString().padStart(2, '0')}:${minute.padStart(2, '0')}`;
+    };
+
     try {
+      const medicationTime = convertTo24Hour(
+        formData.timeHour,
+        formData.timeMinute,
+        formData.timePeriod
+      );
+
+      const frequency = `${formData.frequencyHour.padStart(2, '0')}:${formData.frequencyMinute.padStart(2, '0')}`;
+
+      const requestData = {
+        Medication_name: formData.medicineName,
+        Dosage: formData.dosage,
+        Dosage_Unit: formData.dosageUnit,
+        Medication_Time: medicationTime,
+        Frequency: frequency,
+        Medication_notes: formData.medicationNotes,
+        patient_number: parseInt(patient_number), // Convert to integer
+      };
+
+      console.log('Sending data:', requestData);
+
       const response = await fetch('http://127.0.0.1:8000/api/medications/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          Medication_name: formData.medicineName,
-          Dosage: formData.dosage,
-          Dosage_Unit: formData.dosageUnit,
-          Medication_Time: `${formData.timeHour}:${formData.timeMinute} ${formData.timePeriod}`,
-          Frequency: `${formData.frequencyHour}:${formData.frequencyMinute}`,
-          Medication_notes: formData.medicationNotes,
-          patient_number: patient_number, // Include patient_number in the payload
-        }),
+        body: JSON.stringify(requestData),
       });
+
+      console.log('Response status:', response.status);
+      const responseData = await response.json();
+      console.log('Response data:', responseData);
 
       if (response.ok) {
         alert('Medication added successfully!');
         router.push(`/viewpatient?patient_number=${patient_number}`);
       } else {
-        const errorData = await response.json();
-        console.error('Error adding medication:', errorData);
-        alert('Failed to add medication. Please try again.');
+        console.error('Error adding medication:', responseData);
+        // Display more detailed error message
+        const errorMessage = responseData.detail || 
+          (responseData.non_field_errors && responseData.non_field_errors[0]) ||
+          Object.values(responseData)[0] ||
+          'Please try again.';
+        alert(`Failed to add medication: ${errorMessage}`);
       }
     } catch (error) {
       console.error('Error adding medication:', error);
@@ -209,42 +244,26 @@ export default function NewMedSched() {
 
             <Text style={styles.label}>Frequency</Text>
             <View style={styles.dobContainer}>
-            <RNPickerSelect
-            items={Array.from({ length: 12 }, (_, index) => ({
-                label: (index + 1).toString().padStart(2, '0'),
-                value: (index + 1).toString().padStart(2, '0')
-            }))}
-            value={formData.timeHour}
-            onValueChange={value => setFormData({ ...formData, timeHour: value })}
-            placeholder={{ label: 'HH', value: '' }}
-            style={{ inputAndroid: styles.dobSelect, inputIOS: styles.dobSelect, inputWeb: styles.dobSelectWeb }}
-            />
-
-                <RNPickerSelect
-                items={Array.from({ length: 12 }, (_, index) => ({
-                    label: (index * 5).toString().padStart(2, '0'),
-                    value: (index * 5).toString().padStart(2, '0'),
+              <RNPickerSelect
+                items={Array.from({ length: 24 }, (_, index) => ({
+                  label: index.toString().padStart(2, '0'),
+                  value: index.toString().padStart(2, '0')
                 }))}
-                value={formData.medicationTimingMinute}
-                onValueChange={value => setFormData({ ...formData, medicationTimingMinute: value })}
+                value={formData.frequencyHour}
+                onValueChange={value => setFormData({ ...formData, frequencyHour: value })}
+                placeholder={{ label: 'HH', value: '' }}
+                style={{ inputAndroid: styles.dobSelect, inputIOS: styles.dobSelect, inputWeb: styles.dobSelectWeb }}
+              />
+
+              <RNPickerSelect
+                items={Array.from({ length: 12 }, (_, index) => ({
+                  label: (index * 5).toString().padStart(2, '0'),
+                  value: (index * 5).toString().padStart(2, '0'),
+                }))}
+                value={formData.frequencyMinute}
+                onValueChange={value => setFormData({ ...formData, frequencyMinute: value })}
                 placeholder={{ label: 'MM', value: '' }}
                 style={{ inputAndroid: styles.dobSelect, inputIOS: styles.dobSelect, inputWeb: styles.dobSelectWeb }}
-                />
-            </View>
-
-            <Text style={styles.label}>Frequency</Text>
-            <View style={styles.dobContainer}>
-              <TextInput
-                style={[styles.dobInput, { width: 50 }]}
-                placeholder="HH"
-                keyboardType="numeric"
-                onChangeText={(text) => setFormData({ ...formData, frequencyHour: text })}
-              />
-              <TextInput
-                style={[styles.dobInput, { width: 50 }]}
-                placeholder="MM"
-                keyboardType="numeric"
-                onChangeText={(text) => setFormData({ ...formData, frequencyMinute: text })}
               />
             </View>
           </View>
