@@ -143,16 +143,13 @@ export default function NewMedSched() {
 
       console.log("Sending data:", requestData);
 
-      const response = await fetch(
-        "http://192.168.1.4:8000/api/medications/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestData),
-        }
-      );
+      const response = await fetch("http://127.0.0.1:8000/api/medications/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
 
       console.log("Response status:", response.status);
       const responseData = await response.json();

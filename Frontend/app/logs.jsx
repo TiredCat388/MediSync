@@ -22,7 +22,7 @@ export default function LogsScreen() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("http://192.168.1.4:8000/api/logs/");
+      const response = await fetch("http://127.0.0.1:8000/api/logs/");
       const logs = await response.json();
       setLogs(logs);
     } catch (error) {

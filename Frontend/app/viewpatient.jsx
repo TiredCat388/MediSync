@@ -38,7 +38,7 @@ export default function PatientDetails() {
   const fetchPatientDetails = async () => {
     try {
       const response = await fetch(
-        `http://192.168.1.4:8000/api/patients/by-number/${patient_number}/`
+        `http://127.0.0.1:8000/api/patients/by-number/${patient_number}/`
       );
       if (!response.ok) {
         throw new Error("Patient not found");
@@ -70,7 +70,7 @@ export default function PatientDetails() {
  const fetchMedications = async () => {
    try {
      const response = await fetch(
-       `http://192.168.1.4:8000/api/medications/?patient_number=${patient_number}`
+       `http://127.0.0.1:8000/api/medications/?patient_number=${patient_number}`
      );
      if (!response.ok) {
        throw new Error("Failed to fetch medications");
