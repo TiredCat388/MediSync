@@ -238,7 +238,6 @@ const { schedule_id, patient_number } = useLocalSearchParams();
                 inputContainerStyle={styles.autocompleteInput}
               />
             </View>
-
             <Text style={styles.label}>Dosage</Text>
             <View style={styles.dobContainer}>
               <TextInput
@@ -363,7 +362,6 @@ const { schedule_id, patient_number } = useLocalSearchParams();
               />
             </View>
           </View>
-
           <View style={styles.divider} />
 
           <View style={styles.column}>
@@ -387,7 +385,6 @@ const { schedule_id, patient_number } = useLocalSearchParams();
             />
           </View>
         </View>
-
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             onPress={() => router.back()}

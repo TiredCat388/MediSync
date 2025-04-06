@@ -12,8 +12,6 @@ import { DataTable, Button } from "react-native-paper";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import Sidebar from "./components/sidebar";
 import { Feather } from "@expo/vector-icons";
-
-
 const { width } = Dimensions.get("window");
 const isTablet = width > 900;
 const sidebarWidth = 70;
@@ -29,7 +27,6 @@ export default function PatientDetails() {
   const [showMedications, setShowMedications] = useState(false);
   const [searchQuery, setSearchQuery] = useState(""); // Search bar state
   const [openMenuId, setOpenMenuId] = useState(null);
-
 
 
   useEffect(() => {
@@ -117,7 +114,6 @@ export default function PatientDetails() {
       console.error("Delete error:", error);
     }
   };
-
   if (loading) {
     return <Text>Loading patient details...</Text>;
   }
@@ -178,7 +174,6 @@ export default function PatientDetails() {
             </View>
           </View>
         </View>
-
         <View
           style={{
             flexDirection: "row",
@@ -405,7 +400,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 10,
   },
-
   searchInput: {
     backgroundColor: "#fff",
     borderWidth: 1,

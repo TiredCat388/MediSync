@@ -6,7 +6,6 @@ from .serializers import MedicationsModelSerializer
 class MedicationsViewSet(viewsets.ModelViewSet):
     queryset = Medications.objects.all()
     serializer_class = MedicationsModelSerializer
-
     lookup_field = "schedule_id"
     lookup_url_kwarg = "schedule_id"
 
@@ -15,7 +14,7 @@ class MedicationsViewSet(viewsets.ModelViewSet):
         if patient_number:
             return Medications.objects.filter(patient_number=patient_number)
         return super().get_queryset()
-    
+
     def retrieve(self, request, *args, **kwargs):
         try:
             patient_number = self.kwargs.get("patient_number")
