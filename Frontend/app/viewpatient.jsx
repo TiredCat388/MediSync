@@ -21,11 +21,10 @@ export default function PatientDetails() {
   const {patient_number } = useLocalSearchParams();
   const [patient, setPatient] = useState(null);
   const [loading, setLoading] = useState(true);
-
   const [medicationData, setMedicationData] = useState([]);
   const [showMedications, setShowMedications] = useState(false);
-
   const [selectedRow, setSelectedRow] = useState(null);
+  const [visibleMenu, setVisibleMenu] = useState(null);
 
   const handleRowPress = (id) => {
     setSelectedRow(id);
