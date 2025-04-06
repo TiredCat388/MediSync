@@ -4,12 +4,7 @@ import Sidebar from './components/sidebar';
 import { useState, useEffect } from 'react';
 import { Menu, Divider, Provider } from 'react-native-paper';
 
-const TESTING_PATIENT = { 
-  id: '0123456', 
-  first_name: 'TESTING', 
-  middle_name: '', 
-  last_name: 'PURPOSES ONLY' 
-};
+const TESTING_PATIENT = { id: '0123456', name: 'TESTING PURPOSES ONLY' };
 
 export default function PatientsDirectory() {
   const router = useRouter();
@@ -107,27 +102,21 @@ export default function PatientsDirectory() {
                 <View
                   style={{
                     flexDirection: 'row',
-                    backgroundColor: item.id ? 'white' : 'lightgrey',
+                    backgroundColor: item.patient_number ? 'white' : 'lightgrey',
                     borderBottomWidth: 1,
                     borderColor: 'black',
                     minHeight: 35,
                   }}
                 >
-                  {/* Patient ID Column */}
                   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 10 }}>
-                    <Text style={{ fontSize: 16 }}>{item.id || ''}</Text>
+                    <Text style={{ fontSize: 16 }}>{item.patient_number || ''}</Text>
                   </View>
-
                   <View style={{ width: 2, backgroundColor: 'black', alignSelf: 'stretch' }} />
-
-                  {/* Patient Name Column */}
                   <View style={{ flex: 2, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 10 }}>
                     <Text style={{ fontSize: 16, flex: 1, textAlign: 'center' }}>
-                      {item.first_name && item.last_name ? formatName(item.first_name, item.middle_name, item.last_name) : item.name || ''}
+                      {item.first_name && item.last_name ? formatName(item.first_name, item.middle_name, item.last_name) : ''}
                     </Text>
-
-                    {/* Always Show Action Menu (Three Dots) */}
-                    {item.id && (
+                    {item.patient_number && (
                       <Menu
                         visible={visibleMenu === index}
                         onDismiss={() => setVisibleMenu(null)}
@@ -135,13 +124,12 @@ export default function PatientsDirectory() {
                         anchor={
                           <TouchableOpacity 
                             onPress={() => setVisibleMenu(visibleMenu === index ? null : index)} 
-                            style={{ marginLeft: 10 }}
-                          >
+                            style={{ marginLeft: 10 }}>
                             <Text style={{ fontSize: 20 }}>⋯</Text>
                           </TouchableOpacity>
                         }
                       >
-                        <Menu.Item onPress={() => router.push(`/viewpatient?patient_number=${item.id}`)} title="View" />
+                        <Menu.Item onPress={() => router.push(`/viewpatient?patient_number=${item.patient_number}`)} title="View" />
                         <Divider />
                         <Menu.Item onPress={() => console.log('Delete', item.id)} title="Delete" />
                       </Menu>
