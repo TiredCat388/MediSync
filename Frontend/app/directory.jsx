@@ -1,4 +1,10 @@
-import { View, Text, TouchableOpacity, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  TextInput,
+} from "react-native";
 import { useRouter } from "expo-router";
 import Sidebar from "./components/sidebar";
 import { useState, useEffect } from "react";
@@ -10,6 +16,8 @@ export default function PatientsDirectory() {
   const router = useRouter();
   const [patients, setPatients] = useState([]);
   const [visibleMenu, setVisibleMenu] = useState(null);
+  const [searchText, setSearchText] = useState("");
+  const [sortAscending, setSortAscending] = useState(true);
 
   useEffect(() => {
     fetchPatients();
@@ -35,9 +43,24 @@ export default function PatientsDirectory() {
     }`;
   };
 
-  const totalRows = 12;
-  const displayedPatients = [...patients];
+  // Filter + Sort
+  const filteredAndSortedPatients = [...patients].filter((patient) => {
+    const search = searchText.toLowerCase();
+    const name = `${patient.first_name ?? ""} ${patient.middle_name ?? ""} ${
+      patient.last_name ?? ""
+    }`.toLowerCase();
+    const id = (patient.patient_number + "").toLowerCase();
+    return id.includes(search) || name.includes(search);
+  });
 
+  patients.sort((a, b) =>
+    (a.patient_number ?? "")
+      .toString()
+      .localeCompare((b.patient_number ?? "").toString())
+  );
+
+  const totalRows = 12;
+  const displayedPatients = [...filteredAndSortedPatients];
   while (displayedPatients.length < totalRows) {
     displayedPatients.push({ id: "", name: "" });
   }
@@ -77,6 +100,56 @@ export default function PatientsDirectory() {
                 style={{ color: "white", fontSize: 18, fontWeight: "bold" }}
               >
                 + New Patient{" "}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Search + Sort */}
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginTop: 20,
+            }}
+          >
+            <TextInput
+              style={{
+                flex: 1,
+                height: 45,
+                borderColor: "#000",
+                borderWidth: 1,
+                borderRadius: 10,
+                paddingHorizontal: 14,
+                marginRight: 12,
+                backgroundColor: "#fff",
+                fontSize: 16,
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 1 },
+                shadowOpacity: 0.1,
+                shadowRadius: 2,
+                elevation: 2,
+              }}
+              placeholder="Search by name or patient number"
+              placeholderTextColor="#666"
+              value={searchText}
+              onChangeText={setSearchText}
+            />
+            <TouchableOpacity
+              onPress={() => setSortAscending(!sortAscending)}
+              style={{
+                backgroundColor: "#5c87b2",
+                paddingVertical: 10,
+                paddingHorizontal: 16,
+                borderRadius: 10,
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 1 },
+                shadowOpacity: 0.1,
+                shadowRadius: 2,
+                elevation: 2,
+              }}
+            >
+              <Text style={{ fontSize: 16, color: "#fff", fontWeight: "600" }}>
+                Sort {sortAscending ? "↑" : "↓"}
               </Text>
             </TouchableOpacity>
           </View>
