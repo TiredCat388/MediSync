@@ -1,15 +1,23 @@
-import { View, Text, TouchableOpacity, FlatList } from 'react-native';
-import { useRouter } from 'expo-router';
-import Sidebar from './components/sidebar';
-import { useState, useEffect } from 'react';
-import { Menu, Divider, Provider } from 'react-native-paper';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  TextInput,
+} from "react-native";
+import { useRouter } from "expo-router";
+import Sidebar from "./components/sidebar";
+import { useState, useEffect } from "react";
+import { Menu, Divider, Provider } from "react-native-paper";
 
-const TESTING_PATIENT = { id: '0123456', name: 'TESTING PURPOSES ONLY' };
+const TESTING_PATIENT = { id: "0123456", name: "TESTING PURPOSES ONLY" };
 
 export default function PatientsDirectory() {
   const router = useRouter();
   const [patients, setPatients] = useState([]);
   const [visibleMenu, setVisibleMenu] = useState(null);
+  const [searchText, setSearchText] = useState("");
+  const [sortAscending, setSortAscending] = useState(true);
 
   useEffect(() => {
     fetchPatients();
@@ -30,38 +38,119 @@ export default function PatientsDirectory() {
     const formattedLastName = lastName.toUpperCase();
     const formattedFirstName = firstName;
     const formattedMiddleInitial = middleName ? `${middleName.charAt(0)}.` : "";
-    return `${formattedLastName}, ${formattedFirstName}${formattedMiddleInitial ? `, ${formattedMiddleInitial}` : ""}`;
+    return `${formattedLastName}, ${formattedFirstName}${
+      formattedMiddleInitial ? `, ${formattedMiddleInitial}` : ""
+    }`;
   };
 
-  const totalRows = 12;
-  const displayedPatients = [...patients];
+  // Filter + Sort
+  const filteredAndSortedPatients = [...patients].filter((patient) => {
+    const search = searchText.toLowerCase();
+    const name = `${patient.first_name ?? ""} ${patient.middle_name ?? ""} ${
+      patient.last_name ?? ""
+    }`.toLowerCase();
+    const id = (patient.patient_number + "").toLowerCase();
+    return id.includes(search) || name.includes(search);
+  });
 
+  patients.sort((a, b) =>
+    (a.patient_number ?? "")
+      .toString()
+      .localeCompare((b.patient_number ?? "").toString())
+  );
+
+  const totalRows = 12;
+  const displayedPatients = [...filteredAndSortedPatients];
   while (displayedPatients.length < totalRows) {
-    displayedPatients.push({ id: '', name: '' });
+    displayedPatients.push({ id: "", name: "" });
   }
 
   return (
     <Provider>
-      <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#f8f8f8' }}>
+      <View
+        style={{ flex: 1, flexDirection: "row", backgroundColor: "#f8f8f8" }}
+      >
         <Sidebar onNavigate={(destination) => router.push(destination)} />
         <View style={{ flex: 1, marginLeft: 70, padding: 40 }}>
           {/* Header and Button Row */}
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Text style={{ fontSize: 25, fontWeight: 'bold' }}>Patients Directory</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ fontSize: 25, fontWeight: "bold" }}>
+              Patients Directory
+            </Text>
             <TouchableOpacity
-              onPress={() => router.push('/registernew')}
+              onPress={() => router.push("/registernew")}
               style={{
-                backgroundColor: '#5879a5',
+                backgroundColor: "#5879a5",
                 paddingVertical: 8,
                 paddingHorizontal: 20,
                 borderRadius: 8,
-                alignItems: 'center',
-                justifyContent: 'center',
+                alignItems: "center",
+                justifyContent: "center",
                 minWidth: 180,
                 marginTop: 40,
               }}
             >
-              <Text style={{ color: 'white', fontSize: 18, fontWeight: "bold" }}>+  New Patient </Text>
+              <Text
+                style={{ color: "white", fontSize: 18, fontWeight: "bold" }}
+              >
+                + New Patient{" "}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Search + Sort */}
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginTop: 20,
+            }}
+          >
+            <TextInput
+              style={{
+                flex: 1,
+                height: 45,
+                borderColor: "#000",
+                borderWidth: 1,
+                borderRadius: 10,
+                paddingHorizontal: 14,
+                marginRight: 12,
+                backgroundColor: "#fff",
+                fontSize: 16,
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 1 },
+                shadowOpacity: 0.1,
+                shadowRadius: 2,
+                elevation: 2,
+              }}
+              placeholder="Search by name or patient number"
+              placeholderTextColor="#666"
+              value={searchText}
+              onChangeText={setSearchText}
+            />
+            <TouchableOpacity
+              onPress={() => setSortAscending(!sortAscending)}
+              style={{
+                backgroundColor: "#5c87b2",
+                paddingVertical: 10,
+                paddingHorizontal: 16,
+                borderRadius: 10,
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 1 },
+                shadowOpacity: 0.1,
+                shadowRadius: 2,
+                elevation: 2,
+              }}
+            >
+              <Text style={{ fontSize: 16, color: "#fff", fontWeight: "600" }}>
+                Sort {sortAscending ? "↑" : "↓"}
+              </Text>
             </TouchableOpacity>
           </View>
 
@@ -69,28 +158,44 @@ export default function PatientsDirectory() {
           <View
             style={{
               marginTop: 20,
-              backgroundColor: 'white',
+              backgroundColor: "white",
               borderRadius: 15,
               borderWidth: 1,
-              borderColor: 'black',
-              overflow: 'hidden',
+              borderColor: "black",
+              overflow: "hidden",
             }}
           >
             {/* Table Header */}
             <View
               style={{
-                flexDirection: 'row',
-                backgroundColor: 'white',
+                flexDirection: "row",
+                backgroundColor: "white",
                 paddingVertical: 10,
                 borderBottomWidth: 1,
-                borderColor: 'black',
+                borderColor: "black",
               }}
             >
-              <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Patient ID</Text>
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                  Patient ID
+                </Text>
               </View>
-              <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Patient Name</Text>
+              <View
+                style={{
+                  flex: 2,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                  Patient Name
+                </Text>
               </View>
             </View>
 
@@ -101,20 +206,53 @@ export default function PatientsDirectory() {
               renderItem={({ item, index }) => (
                 <View
                   style={{
-                    flexDirection: 'row',
-                    backgroundColor: item.patient_number ? 'white' : 'lightgrey',
+                    flexDirection: "row",
+                    backgroundColor: item.patient_number
+                      ? "white"
+                      : "lightgrey",
                     borderBottomWidth: 1,
-                    borderColor: 'black',
+                    borderColor: "black",
                     minHeight: 35,
                   }}
                 >
-                  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 10 }}>
-                    <Text style={{ fontSize: 16 }}>{item.patient_number || ''}</Text>
+                  <View
+                    style={{
+                      flex: 1,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: 10,
+                    }}
+                  >
+                    <Text style={{ fontSize: 16 }}>
+                      {item.patient_number || ""}
+                    </Text>
                   </View>
-                  <View style={{ width: 2, backgroundColor: 'black', alignSelf: 'stretch' }} />
-                  <View style={{ flex: 2, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 10 }}>
-                    <Text style={{ fontSize: 16, flex: 1, textAlign: 'center' }}>
-                      {item.first_name && item.last_name ? formatName(item.first_name, item.middle_name, item.last_name) : ''}
+                  <View
+                    style={{
+                      width: 2,
+                      backgroundColor: "black",
+                      alignSelf: "stretch",
+                    }}
+                  />
+                  <View
+                    style={{
+                      flex: 2,
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: 10,
+                    }}
+                  >
+                    <Text
+                      style={{ fontSize: 16, flex: 1, textAlign: "center" }}
+                    >
+                      {item.first_name && item.last_name
+                        ? formatName(
+                            item.first_name,
+                            item.middle_name,
+                            item.last_name
+                          )
+                        : ""}
                     </Text>
                     {item.patient_number && (
                       <Menu
@@ -122,16 +260,31 @@ export default function PatientsDirectory() {
                         onDismiss={() => setVisibleMenu(null)}
                         anchorPosition="bottom"
                         anchor={
-                          <TouchableOpacity 
-                            onPress={() => setVisibleMenu(visibleMenu === index ? null : index)} 
-                            style={{ marginLeft: 10 }}>
+                          <TouchableOpacity
+                            onPress={() =>
+                              setVisibleMenu(
+                                visibleMenu === index ? null : index
+                              )
+                            }
+                            style={{ marginLeft: 10 }}
+                          >
                             <Text style={{ fontSize: 20 }}>⋯</Text>
                           </TouchableOpacity>
                         }
                       >
-                        <Menu.Item onPress={() => router.push(`/viewpatient?patient_number=${item.patient_number}`)} title="View" />
+                        <Menu.Item
+                          onPress={() =>
+                            router.push(
+                              `/viewpatient?patient_number=${item.patient_number}`
+                            )
+                          }
+                          title="View"
+                        />
                         <Divider />
-                        <Menu.Item onPress={() => console.log('Delete', item.id)} title="Delete" />
+                        <Menu.Item
+                          onPress={() => console.log("Delete", item.id)}
+                          title="Delete"
+                        />
                       </Menu>
                     )}
                   </View>

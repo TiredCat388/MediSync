@@ -6,29 +6,28 @@ import {
   StyleSheet,
   ScrollView,
   Dimensions,
+  TextInput,
 } from "react-native";
 import { DataTable, Button } from "react-native-paper";
-import { Feather } from "@expo/vector-icons";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import Sidebar from "./components/sidebar";
-
+import { Feather } from "@expo/vector-icons";
 const { width } = Dimensions.get("window");
 const isTablet = width > 900;
 const sidebarWidth = 70;
 
+
 export default function PatientDetails() {
   const router = useRouter();
-  const {patient_number } = useLocalSearchParams();
+  const { patient_number, schedule_id } = useLocalSearchParams();
   const [patient, setPatient] = useState(null);
   const [loading, setLoading] = useState(true);
+
   const [medicationData, setMedicationData] = useState([]);
   const [showMedications, setShowMedications] = useState(false);
-  const [selectedRow, setSelectedRow] = useState(null);
-  const [visibleMenu, setVisibleMenu] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(""); // Search bar state
+  const [openMenuId, setOpenMenuId] = useState(null);
 
-  const handleRowPress = (id) => {
-    setSelectedRow(id);
-  };
 
   useEffect(() => {
     fetchPatientDetails();
@@ -66,25 +65,59 @@ export default function PatientDetails() {
     }
   };
 
- const fetchMedications = async () => {
-   try {
-     const response = await fetch(
-       `http://127.0.0.1:8000/api/medications/?patient_number=${patient_number}`
-     );
-     if (!response.ok) {
-       throw new Error("Failed to fetch medications");
-     }
-     const data = await response.json();
-     setMedicationData(data);
-   } catch (err) {
-     console.error("Error fetching medications:", err.message);
-     setMedicationData([]);
-   }
- };
+  const fetchMedications = async () => {
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/medications/?patient_number=${patient_number}`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch medications");
+      }
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        setMedicationData(data);
+      } else {
+        console.error("Unexpected API response format:", data);
+        setMedicationData([]);
+      }
+    } catch (err) {
+      console.error("Error fetching medications:", err.message);
+      setMedicationData([]);
+    }
+  };
 
+  const filteredMedications = medicationData.filter((item) => {
+    const query = searchQuery.toLowerCase();
+    return (
+      item.schedule_id.toString().includes(query) ||
+      item.Medication_name.toLowerCase().includes(query)
+    );
+  });
+
+  const deleteSchedule = async (scheduleId) => {
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/medications/${scheduleId}/`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (response.ok) {
+        console.log("Deleted successfully");
+        // Optionally, refresh the medications list
+        fetchMedications();
+      } else {
+        console.error("Failed to delete medication");
+      }
+    } catch (error) {
+      console.error("Delete error:", error);
+    }
+  };
   if (loading) {
     return <Text>Loading patient details...</Text>;
   }
+
 
   return (
     <View style={styles.container}>
@@ -141,64 +174,146 @@ export default function PatientDetails() {
             </View>
           </View>
         </View>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginTop: 15,
+          }}
+        >
+          <TouchableOpacity
+            style={styles.medicationToggleButton}
+            onPress={async () => {
+              if (!showMedications) {
+                await fetchMedications();
+              }
+              setShowMedications(!showMedications);
+            }}
+          >
+            <Text style={styles.buttonText}>
+              {showMedications ? "Hide" : "View"} Medication List
+            </Text>
+          </TouchableOpacity>
+        </View>
 
-<TouchableOpacity
-  style={styles.medicationToggleButton}
-  onPress={async () => {
-    if (!showMedications) {
-      await fetchMedications(); // Fetch medications when showing the list
-    }
-    setShowMedications(!showMedications);
-  }}
->
-  <Text style={styles.buttonText}>
-    {showMedications ? "Hide" : "View"} Medication List
-  </Text>
-</TouchableOpacity>
-
-{showMedications && (
-  <View>
-    <View style={[styles.tableContainer, { maxHeight: 350 }]}>
-      <ScrollView nestedScrollEnabled={true}>
-        <DataTable>
-          <DataTable.Header style={styles.tableHeader}>
-            <DataTable.Title style={styles.columnId}>
-              Schedule ID
-            </DataTable.Title>
-            <DataTable.Title style={styles.columnName}>
-              Medication Name
-            </DataTable.Title>
-            <DataTable.Title style={styles.columnTime}>
-              Time
-            </DataTable.Title>
-            <DataTable.Title style={styles.columnNotes}>
-              Notes
-            </DataTable.Title>
-          </DataTable.Header>
-
-          {medicationData.map((item) => (
-            <DataTable.Row
-              key={item.schedule_id}
+        {showMedications && (
+          <View>
+            <View
               style={[
-                styles.row,
-                selectedRow === item.schedule_id && styles.selectedRow,
+                styles.tableContainer,
+                { maxHeight: 350, overflow: "visible" },
               ]}
-              onPress={() => handleRowPress(item.schedule_id)}
             >
-              <DataTable.Cell style={styles.columnId}>
-                {`${item.patient_number} - ${item.schedule_id}`}
-              </DataTable.Cell>
-              <DataTable.Cell style={styles.columnName}>
-                {item.Medication_name}
-              </DataTable.Cell>
-              <DataTable.Cell style={styles.columnTime}>
-                {item.Medication_Time}
-              </DataTable.Cell>
-              <DataTable.Cell style={styles.columnNotes}>
-                {item.Medication_notes}
-              </DataTable.Cell>
-            </DataTable.Row>
-          ))}
+              <ScrollView nestedScrollEnabled={true}>
+                <DataTable>
+                  <View style={styles.headerRowContainer}>
+                    <DataTable.Header style={styles.tableHeader}>
+                      <DataTable.Title style={styles.columnId}>
+                        Schedule ID
+                      </DataTable.Title>
+                      <DataTable.Title style={styles.columnName}>
+                        Medication Name
+                      </DataTable.Title>
+                      <DataTable.Title style={styles.columnTime}>
+                        Time
+                      </DataTable.Title>
+                      <DataTable.Title style={styles.columnNotes}>
+                        Notes
+                      </DataTable.Title>
+                      <DataTable.Title style={styles.searchBarColumn}>
+                        <TextInput
+                          style={styles.searchInput}
+                          placeholder="Search"
+                          placeholderTextColor="#888"
+                          value={searchQuery}
+                          onChangeText={setSearchQuery}
+                        />
+                      </DataTable.Title>
+                    </DataTable.Header>
+                  </View>
+
+                  {filteredMedications.map((item) => (
+                    <View
+                      key={item.schedule_id}
+                      style={{
+                        zIndex: openMenuId === item.schedule_id ? 10 : 0,
+                      }}
+                    >
+                      <DataTable.Row style={styles.row}>
+                        <DataTable.Cell style={styles.columnId}>
+                          {item.schedule_id}
+                        </DataTable.Cell>
+                        <DataTable.Cell style={styles.columnName}>
+                          {item.Medication_name}
+                        </DataTable.Cell>
+                        <DataTable.Cell style={styles.columnTime}>
+                          {item.Medication_Time}
+                        </DataTable.Cell>
+                        <DataTable.Cell style={styles.columnNotes}>
+                          {item.Medication_notes}
+                        </DataTable.Cell>
+
+                        <DataTable.Cell style={styles.columnActions}>
+                          <View style={{ position: "relative" }}>
+                            <TouchableOpacity
+                              style={styles.customizeButton}
+                              onPress={() =>
+                                setOpenMenuId(
+                                  openMenuId === item.schedule_id
+                                    ? null
+                                    : item.schedule_id
+                                )
+                              }
+                            >
+                              <Feather
+                                name="more-horizontal"
+                                size={20}
+                                color="black"
+                              />
+                            </TouchableOpacity>
+
+                            {openMenuId === item.schedule_id && (
+                              <View style={styles.popupMenu}>
+                                <TouchableOpacity
+                                  style={styles.menuItem}
+                                  onPress={() => {
+                                    router.push(`/updatemed?schedule_id=${item.schedule_id}&patient_number=${patient_number}`);
+                                  }}
+                                >
+                                  <Text
+                                    style={[
+                                      styles.menuItemText,
+                                      styles.updateText,
+                                    ]}
+                                  >
+                                    Update
+                                  </Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                  style={styles.menuItem}
+                                  onPress={() => {
+                                    setOpenMenuId(null);
+                                    deleteSchedule(item.schedule_id);
+                                  }}
+                                >
+                                  <Text
+                                    style={[
+                                      styles.menuItemText,
+                                      styles.deleteText,
+                                    ]}
+                                  >
+                                    Delete
+                                  </Text>
+                                </TouchableOpacity>
+                              </View>
+                            )}
+                          </View>
+                        </DataTable.Cell>
+                      </DataTable.Row>
+                    </View>
+                  ))}
                 </DataTable>
               </ScrollView>
             </View>
@@ -207,7 +322,9 @@ export default function PatientDetails() {
               <Button
                 mode="contained"
                 style={styles.addMedicationButton}
-                onPress={() => router.push(`/newmedsched?patient_number=${patient_number}`)}
+                onPress={() =>
+                  router.push(`/newmedsched?patient_number=${patient_number}`)
+                }
               >
                 Add Medication
               </Button>
@@ -250,13 +367,18 @@ const styles = StyleSheet.create({
   divider: { width: 1, backgroundColor: "gray", marginHorizontal: 10 },
   sectionTitle: { fontWeight: "bold", fontSize: 20, marginBottom: 5 },
   medicationToggleButton: {
-    backgroundColor: "#ddd",
+    backgroundColor: "#5879a5",
     padding: 10,
-    alignItems: "center",
+    alignItems: "flex-start", 
     borderRadius: 5,
     marginTop: 15,
+    alignSelf: "flex-start", 
+    marginLeft: 0, 
   },
-  buttonText: { fontWeight: "bold" },
+  buttonText: {
+    fontWeight: "bold",
+    color: "white", 
+  },
   deactbuttonText: { fontWeight: "bold", color: "white" },
   tableContainer: {
     marginTop: 10,
@@ -266,18 +388,87 @@ const styles = StyleSheet.create({
     maxHeight: 500,
     overflow: "visible",
   },
-  tableHeader: { backgroundColor: "#ddd" },
-  row: { borderBottomWidth: 1, borderColor: "#ccc" },
+  tableHeader: {
+    backgroundColor: "#f6f6f6",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  row: { borderBottomWidth: 2, borderColor: "#ccc" },
   buttonWrapper: { alignItems: "flex-end", marginTop: 10 },
   addMedicationButton: {
     backgroundColor: "#5879a5",
     paddingHorizontal: 10,
     borderRadius: 10,
   },
+  searchInput: {
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#888",
+    borderRadius: 5,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    fontSize: 14,
+    width: 140,
+    height: 24.5,
+  },
+
+  columnId: {
+    flex: 1.2,
+  },
+
+  columnName: {
+    flex: 1.2,
+  },
+
+  columnTime: {
+    flex: 1.2,
+  },
+
+  columnNotes: {
+    flex: 3,
+  },
+
   columnActions: {
     flex: 1,
+    alignItems: "center",
     justifyContent: "flex-end",
-    alignItems: "flex-end",
   },
-  columnNotes: { flex: 3 },
+
+  popupMenu: {
+    position: "absolute",
+    top: 30,
+    right: 0,
+    backgroundColor: "#fff",
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    elevation: 10, 
+    zIndex: 9999, 
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    width: 130,
+  },
+
+  menuItem: {
+    paddingVertical: 8,
+  },
+
+  menuItemText: {
+    fontSize: 16,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 6,
+  },
+
+  updateText: {
+    color: "#000", 
+    fontWeight: "500",
+  },
+
+  deleteText: {
+    color: "#", 
+    fontWeight: "500",
+  },
 });

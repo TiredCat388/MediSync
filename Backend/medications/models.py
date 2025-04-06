@@ -21,3 +21,5 @@ class Medications(models.Model):
             last_schedule = Medications.objects.filter(patient_number=self.patient_number).order_by('-schedule_id').first()
             self.schedule_id = (last_schedule.schedule_id + 1) if last_schedule else 1
         super().save(*args, **kwargs)
+    
+    
