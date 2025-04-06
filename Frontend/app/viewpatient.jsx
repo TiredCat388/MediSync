@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from "react-native";
-import { DataTable, Button } from "react-native-paper";
+import { Menu, DataTable, Button } from "react-native-paper";
 import { Feather } from "@expo/vector-icons";
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import Sidebar from './components/sidebar';
@@ -14,10 +14,9 @@ export default function PatientDetails() {
   const { patient_number } = useLocalSearchParams();
   const [patient, setPatient] = useState(null);
   const [loading, setLoading] = useState(true);
-
   const [showMedications, setShowMedications] = useState(false);
-
   const [selectedRow, setSelectedRow] = useState(null);
+  const [visibleMenu, setVisibleMenu] = useState(null);
 
   const handleRowPress = (id) => {
     setSelectedRow(id);
@@ -65,11 +64,6 @@ export default function PatientDetails() {
     { id: 5, name: "Ibuprofen", time: "12:00 PM", notes: ["Avoid alcohol"] },
     { id: 6, name: "Paracetamol", time: "6:00 PM", notes: ["Drink plenty of water"] },
     { id: 7, name: "Aspirin", time: "8:00 AM", notes: ["Take with food"] },
-    { id: 8, name: "Ibuprofen", time: "12:00 PM", notes: ["Avoid alcohol"] },
-    { id: 9, name: "Paracetamol", time: "6:00 PM", notes: ["Drink plenty of water"] },
-    { id: 10, name: "Aspirin", time: "8:00 AM", notes: ["Take with food"] },
-    { id: 11, name: "Ibuprofen", time: "12:00 PM", notes: ["Avoid alcohol"] },
-    { id: 12, name: "Paracetamol", time: "6:00 PM", notes: ["Drink plenty of water"] },
   ];
 
   if (loading) {
@@ -154,7 +148,20 @@ export default function PatientDetails() {
                         </Text>
                       </DataTable.Cell>
                       <DataTable.Cell style={styles.columnActions}>
-                        <Feather name="more-horizontal" size={20} color="black" />
+                        <Menu
+                          visible={visibleMenu === item.id}
+                          onDismiss={() => setVisibleMenu(null)}
+                          anchor={
+                            <TouchableOpacity 
+                              onPress={() => setVisibleMenu(visibleMenu === item.id ? null : item.id)} 
+                              style={{ marginLeft: 5 }}
+                            >
+                              <Feather name="more-horizontal" size={20} color="black" />
+                            </TouchableOpacity>
+                          }
+                        >
+                          <Menu.Item onPress={() => (setVisibleMenu(null), router.push(`/updatemed`))} title="Update" />
+                        </Menu>
                       </DataTable.Cell>
                     </DataTable.Row>
                   ))}
@@ -173,7 +180,6 @@ export default function PatientDetails() {
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: { flex: 1, flexDirection: "row", backgroundColor: "#f0f0f0" },
@@ -196,6 +202,5 @@ const styles = StyleSheet.create({
   buttonWrapper: { alignItems: "flex-end", marginTop: 10 },
   addMedicationButton: { backgroundColor: "#5879a5", paddingHorizontal: 10, borderRadius: 10 },
   columnActions: { flex: 1, justifyContent: "flex-end", alignItems: "flex-end" },
-  columnNotes: { flex: 3},
+  columnNotes: { flex: 3, color: 'red'},
 });
-
