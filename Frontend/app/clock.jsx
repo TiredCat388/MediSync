@@ -3,34 +3,64 @@ import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import Svg, { Line, Circle, Text as SvgText } from 'react-native-svg';
 import Sidebar from './components/sidebar';
 
-
 const { width } = Dimensions.get("window");
 const sidebarWidth = 70;
 
 const AnalogClock = () => {
   const [time, setTime] = useState(new Date());
+  const [upcomingAlerts, setUpcomingAlerts] = useState([]);
+  const [timeLeftUpdates, setTimeLeftUpdates] = useState(new Date()); // Tracks updates for time left
 
   useEffect(() => {
     const interval = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const fetchAlerts = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/medications');
+        const data = await response.json();
+        setUpcomingAlerts(data);
+      } catch (error) {
+        console.error('Error fetching alerts:', error);
+      }
+    };
+
+    fetchAlerts();
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => setTimeLeftUpdates(new Date()), 60000); // Update every minute
+    return () => clearInterval(interval);
+  }, []);
+
+  const calculateTimeLeft = (alertTime) => {
+    const now = timeLeftUpdates;
+    const [alertHours, alertMinutes, alertSeconds] = alertTime.split(':').map(Number);
+    const alertDate = new Date(now);
+    alertDate.setHours(alertHours, alertMinutes, alertSeconds, 0);
+    
+    const diff = alertDate - now;
+    
+
+    if (diff <= 0) return 'Now';
+
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    return `${hours > 0 ? `${hours}h ` : ''}${minutes}m`;
+  };
+
   const getRotation = (unit, max) => (unit / max) * 360;
-  
+
   const hours = time.getHours() % 12;
   const minutes = time.getMinutes();
   const seconds = time.getSeconds();
-
-  const upcomingAlerts = [
-    { id: '0012330AC - 0077CB', time: 'in 2 hours' },
-    { id: '0012321BA - 0061BC', time: 'in 4 hours' },
-  ];
 
   return (
     <View style={styles.container}>
       <Sidebar />
       <ScrollView style={[styles.mainContent, { marginLeft: sidebarWidth }]}>
-        {/* Centered Clock */}
         <View style={styles.clockWrapper}>
           <Svg height="500" width="500" viewBox="0 0 300 300">
             <Circle cx="150" cy="150" r="142.5" stroke="black" strokeWidth="3" fill="none" />
@@ -92,8 +122,8 @@ const AnalogClock = () => {
           <Text style={styles.alertsTitle}>Upcoming Alerts</Text>
           {upcomingAlerts.map((alert, index) => (
             <View key={index} style={styles.alertItem}>
-              <Text style={styles.alertText}>Schedule ID: {alert.id}</Text>
-              <Text style={styles.alertTime}>[{alert.time}]</Text>
+              <Text style={styles.alertText}>Schedule ID: {alert.schedule_id} - {alert.patient_number}</Text>
+              <Text style={styles.alertTime}>[{calculateTimeLeft(alert.Medication_Time)}]</Text>
             </View>
           ))}
         </View>
