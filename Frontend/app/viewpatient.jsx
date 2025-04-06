@@ -21,7 +21,7 @@ const sidebarWidth = 70;
 
 export default function PatientDetails() {
   const router = useRouter();
-  const { patient_number } = useLocalSearchParams();
+  const { patient_number, schedule_id } = useLocalSearchParams();
   const [patient, setPatient] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -283,9 +283,7 @@ export default function PatientDetails() {
                                 <TouchableOpacity
                                   style={styles.menuItem}
                                   onPress={() => {
-                                    router.push(
-                                      `/updatemed?schedule_id=${item.schedule_id}&patient_number=${patient_number}`
-                                    );
+                                    router.push(`/updatemed?schedule_id=${item.schedule_id}&patient_number=${patient_number}`);
                                   }}
                                 >
                                   <Text
@@ -330,7 +328,8 @@ export default function PatientDetails() {
                 mode="contained"
                 style={styles.addMedicationButton}
                 onPress={() =>
-                router.push(`/newmedsched?patient_number=${patient_number}`)}
+                  router.push(`/newmedsched?patient_number=${patient_number}`)
+                }
               >
                 Add Medication
               </Button>

@@ -145,4 +145,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
-ALLOWED_HOSTS = ['192.168.1.4', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['192.168.1.5', 'localhost', '127.0.0.1']

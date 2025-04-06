@@ -42,11 +42,11 @@ const { schedule_id, patient_number } = useLocalSearchParams();
 
 
   useEffect(() => {
-    if (schedule_id) {
+    if (schedule_id && patient_number) {
       const fetchMedicationDetails = async () => {
         try {
           const response = await fetch(
-            `http://127.0.0.1:8000/api/medications/${schedule_id}/`
+            `http://127.0.0.1:8000/api/medications/${patient_number}/${schedule_id}/`
           );
           console.log("Fetch Response:", response);
           if (response.ok) {
@@ -77,15 +77,19 @@ const { schedule_id, patient_number } = useLocalSearchParams();
 
       fetchMedicationDetails();
     }
-  }, [schedule_id]);
+  }, [schedule_id, patient_number]);
+
+  
 
   const handleInputChange = (text) => {
     setQuery(text);
     setFormData({ ...formData, medicineName: text });
 
     if (text.length > 0) {
-      const filtered = medications.filter((item) =>
-        item.toLowerCase().includes(text.toLowerCase())
+      const filtered = medications.filter(
+        (item) =>
+          item.patient_number === patient_number && // Ensure it matches the patient
+          item.Medication_name.toLowerCase().includes(text.toLowerCase())
       );
       setFilteredMedications(filtered);
     } else {
@@ -137,7 +141,7 @@ const { schedule_id, patient_number } = useLocalSearchParams();
       const medicationTime = convertTo24Hour(
         formData.timeHour,
         formData.timeMinute,
-        formData.timePeriod
+        formData.timePeriod,
       );
 
       const frequency = `${formData.frequencyHour.padStart(
@@ -150,14 +154,14 @@ const { schedule_id, patient_number } = useLocalSearchParams();
         Dosage: formData.dosage,
         Dosage_Unit: formData.dosageUnit,
         Medication_Time: medicationTime,
-        Frequency: `${formData.frequencyHour}:${formData.frequencyMinute}`,
+        Frequency: frequency,
         Medication_notes: formData.medicationNotes,
         physicianID: formData.physicianID,
       };
 
       const url = schedule_id
-        ? `http://127.0.0.1:8000/api/medications/${schedule_id}/`
-        : `http://127.0.0.1:8000/api/medications/`;
+          ? `http://127.0.0.1:8000/api/medications/${patient_number}/${schedule_id}/`
+          : `http://127.0.0.1:8000/api/medications/${patient_number}/`;
       const method = schedule_id ? "PUT" : "POST";
 
       console.log("Request URL:", url);
