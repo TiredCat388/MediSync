@@ -1,19 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from "react-native";
-import { Menu, DataTable, Button } from "react-native-paper";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+} from "react-native";
+import { DataTable, Button } from "react-native-paper";
 import { Feather } from "@expo/vector-icons";
-import { useRouter, useLocalSearchParams } from 'expo-router';
-import Sidebar from './components/sidebar';
+import { useRouter, useLocalSearchParams } from "expo-router";
+import Sidebar from "./components/sidebar";
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get("window");
 const isTablet = width > 900;
 const sidebarWidth = 70;
 
 export default function PatientDetails() {
   const router = useRouter();
-  const { patient_number } = useLocalSearchParams();
+  const {patient_number } = useLocalSearchParams();
   const [patient, setPatient] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [medicationData, setMedicationData] = useState([]);
   const [showMedications, setShowMedications] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [visibleMenu, setVisibleMenu] = useState(null);
@@ -28,9 +36,11 @@ export default function PatientDetails() {
 
   const fetchPatientDetails = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/patients/by-number/${patient_number}/`);
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/patients/by-number/${patient_number}/`
+      );
       if (!response.ok) {
-        throw new Error('Patient not found');
+        throw new Error("Patient not found");
       }
       const data = await response.json();
       setPatient(data);
@@ -56,15 +66,21 @@ export default function PatientDetails() {
     }
   };
 
-  const medicationData = [
-    { id: 1, name: "Aspirin", time: "8:00 AM", notes: ["Take with food"] },
-    { id: 2, name: "Ibuprofen", time: "12:00 PM", notes: ["Avoid alcohol"] },
-    { id: 3, name: "Paracetamol", time: "6:00 PM", notes: ["Drink plenty of water", "More text", "Other comments that may be longer than simple phrases or contain specific instructions."] },
-    { id: 4, name: "Aspirin", time: "8:00 AM", notes: ["Take with food"] },
-    { id: 5, name: "Ibuprofen", time: "12:00 PM", notes: ["Avoid alcohol"] },
-    { id: 6, name: "Paracetamol", time: "6:00 PM", notes: ["Drink plenty of water"] },
-    { id: 7, name: "Aspirin", time: "8:00 AM", notes: ["Take with food"] },
-  ];
+ const fetchMedications = async () => {
+   try {
+     const response = await fetch(
+       `http://127.0.0.1:8000/api/medications/?patient_number=${patient_number}`
+     );
+     if (!response.ok) {
+       throw new Error("Failed to fetch medications");
+     }
+     const data = await response.json();
+     setMedicationData(data);
+   } catch (err) {
+     console.error("Error fetching medications:", err.message);
+     setMedicationData([]);
+   }
+ };
 
   if (loading) {
     return <Text>Loading patient details...</Text>;
@@ -73,9 +89,12 @@ export default function PatientDetails() {
   return (
     <View style={styles.container}>
       <Sidebar />
-      <ScrollView style={[styles.mainContent, { marginLeft: sidebarWidth }]}> 
+      <ScrollView style={[styles.mainContent, { marginLeft: sidebarWidth }]}>
         <View style={styles.headerButtons}>
-          <TouchableOpacity style={styles.backButton} onPress={() => router.push('/directory')}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => router.push("/directory")}
+          >
             <Text style={styles.buttonText}>Back</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.deactivateButton}>
@@ -83,14 +102,19 @@ export default function PatientDetails() {
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.patientId}>PATIENT ID: {patient?.patient_number}</Text>
+        <Text style={styles.patientId}>
+          PATIENT ID: {patient?.patient_number}
+        </Text>
 
         <View style={styles.infoContainer}>
           <View style={styles.detailsSection}>
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Patient Details</Text>
               <Text style={styles.boldLabel}>Name</Text>
-              <Text>{patient?.last_name}, {patient?.first_name} {patient?.middle_name}</Text>
+              <Text>
+                {patient?.last_name}, {patient?.first_name}{" "}
+                {patient?.middle_name}
+              </Text>
               <Text style={styles.boldLabel}>Birth Date</Text>
               <Text>{patient?.date_of_birth}</Text>
               <Text style={styles.boldLabel}>Contact Details</Text>
@@ -106,7 +130,10 @@ export default function PatientDetails() {
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Emergency Contact Details</Text>
               <Text style={styles.boldLabel}>Name</Text>
-              <Text>{patient?.emergency_contact?.first_name} {patient?.emergency_contact?.last_name}</Text>
+              <Text>
+                {patient?.emergency_contact?.first_name}{" "}
+                {patient?.emergency_contact?.last_name}
+              </Text>
               <Text style={styles.boldLabel}>Relation to Patient</Text>
               <Text>{patient?.emergency_contact?.relation_to_patient}</Text>
               <Text style={styles.boldLabel}>Contact Details</Text>
@@ -115,62 +142,73 @@ export default function PatientDetails() {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.medicationToggleButton} onPress={() => setShowMedications(!showMedications)}>
-          <Text style={styles.buttonText}>{showMedications ? "Hide" : "View"} Medication List</Text>
-        </TouchableOpacity>
+<TouchableOpacity
+  style={styles.medicationToggleButton}
+  onPress={async () => {
+    if (!showMedications) {
+      await fetchMedications(); // Fetch medications when showing the list
+    }
+    setShowMedications(!showMedications);
+  }}
+>
+  <Text style={styles.buttonText}>
+    {showMedications ? "Hide" : "View"} Medication List
+  </Text>
+</TouchableOpacity>
 
-        {showMedications && (
-          <View>
-            <View style={[styles.tableContainer, { maxHeight: 350 }]}> 
-              <ScrollView nestedScrollEnabled={true}>
-                <DataTable>
-                  <DataTable.Header style={styles.tableHeader}>
-                    <DataTable.Title style={styles.columnId}>Schedule ID</DataTable.Title>
-                    <DataTable.Title style={styles.columnName}>Medication</DataTable.Title>
-                    <DataTable.Title style={styles.columnTime}>Time</DataTable.Title>
-                    <DataTable.Title style={styles.columnNotes}>Notes</DataTable.Title>
-                    <DataTable.Title style={styles.columnActions}></DataTable.Title>
-                  </DataTable.Header>
+{showMedications && (
+  <View>
+    <View style={[styles.tableContainer, { maxHeight: 350 }]}>
+      <ScrollView nestedScrollEnabled={true}>
+        <DataTable>
+          <DataTable.Header style={styles.tableHeader}>
+            <DataTable.Title style={styles.columnId}>
+              Schedule ID
+            </DataTable.Title>
+            <DataTable.Title style={styles.columnName}>
+              Medication Name
+            </DataTable.Title>
+            <DataTable.Title style={styles.columnTime}>
+              Time
+            </DataTable.Title>
+            <DataTable.Title style={styles.columnNotes}>
+              Notes
+            </DataTable.Title>
+          </DataTable.Header>
 
-                  {medicationData.map((item) => (
-                    <DataTable.Row key={item.id} 
-                    style={[
-                      styles.row, 
-                      selectedRow === item.id && styles.selectedRow
-                    ]}
-                    onPress={() => handleRowPress(item.id)}>
-                      <DataTable.Cell style={styles.columnId}>{patient?.patient_number} - {item.id}</DataTable.Cell>
-                      <DataTable.Cell style={styles.columnName}>{item.name}</DataTable.Cell>
-                      <DataTable.Cell style={styles.columnTime}>{item.time}</DataTable.Cell>
-                      <DataTable.Cell style={styles.columnNotes}>
-                        <Text style={styles.notesText} numberOfLines={0}>
-                          {item.notes.map(note => `• ${note}`).join("\n")}
-                        </Text>
-                      </DataTable.Cell>
-                      <DataTable.Cell style={styles.columnActions}>
-                        <Menu
-                          visible={visibleMenu === item.id}
-                          onDismiss={() => setVisibleMenu(null)}
-                          anchor={
-                            <TouchableOpacity 
-                              onPress={() => setVisibleMenu(visibleMenu === item.id ? null : item.id)} 
-                              style={{ marginLeft: 5 }}
-                            >
-                              <Feather name="more-horizontal" size={20} color="black" />
-                            </TouchableOpacity>
-                          }
-                        >
-                          <Menu.Item onPress={() => (setVisibleMenu(null), router.push(`/updatemed`))} title="Update" />
-                        </Menu>
-                      </DataTable.Cell>
-                    </DataTable.Row>
-                  ))}
+          {medicationData.map((item) => (
+            <DataTable.Row
+              key={item.schedule_id}
+              style={[
+                styles.row,
+                selectedRow === item.schedule_id && styles.selectedRow,
+              ]}
+              onPress={() => handleRowPress(item.schedule_id)}
+            >
+              <DataTable.Cell style={styles.columnId}>
+                {`${item.patient_number} - ${item.schedule_id}`}
+              </DataTable.Cell>
+              <DataTable.Cell style={styles.columnName}>
+                {item.Medication_name}
+              </DataTable.Cell>
+              <DataTable.Cell style={styles.columnTime}>
+                {item.Medication_Time}
+              </DataTable.Cell>
+              <DataTable.Cell style={styles.columnNotes}>
+                {item.Medication_notes}
+              </DataTable.Cell>
+            </DataTable.Row>
+          ))}
                 </DataTable>
               </ScrollView>
             </View>
 
             <View style={styles.buttonWrapper}>
-              <Button mode="contained" style={styles.addMedicationButton} onPress={() => router.push('/newmedsched')}>
+              <Button
+                mode="contained"
+                style={styles.addMedicationButton}
+                onPress={() => router.push(`/newmedsched?patient_number=${patient_number}`)}
+              >
                 Add Medication
               </Button>
             </View>
@@ -185,22 +223,61 @@ const styles = StyleSheet.create({
   container: { flex: 1, flexDirection: "row", backgroundColor: "#f0f0f0" },
   mainContent: { flex: 1, padding: 20, marginLeft: sidebarWidth },
   boldLabel: { fontWeight: "bold", fontSize: 16, marginTop: 10 },
-  headerButtons: { flexDirection: "row", justifyContent: "flex-end", marginBottom: 10 },
-  backButton: { backgroundColor: "#ccc", padding: 10, borderRadius: 5, marginRight: 10 },
-  deactivateButton: { backgroundColor: "#C15959", padding: 10, borderRadius: 5 },
+  headerButtons: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginBottom: 10,
+  },
+  backButton: {
+    backgroundColor: "#ccc",
+    padding: 10,
+    borderRadius: 5,
+    marginRight: 10,
+  },
+  deactivateButton: {
+    backgroundColor: "#C15959",
+    padding: 10,
+    borderRadius: 5,
+  },
   patientId: { fontSize: 18, fontWeight: "bold", marginBottom: 10 },
-  infoContainer: { flexDirection: "row", backgroundColor: "#e0e0e0", padding: 15, borderRadius: 8 },
+  infoContainer: {
+    flexDirection: "row",
+    backgroundColor: "#e0e0e0",
+    padding: 15,
+    borderRadius: 8,
+  },
   detailsSection: { flex: 1, paddingHorizontal: 10 },
   divider: { width: 1, backgroundColor: "gray", marginHorizontal: 10 },
   sectionTitle: { fontWeight: "bold", fontSize: 20, marginBottom: 5 },
-  medicationToggleButton: { backgroundColor: "#ddd", padding: 10, alignItems: "center", borderRadius: 5, marginTop: 15 },
+  medicationToggleButton: {
+    backgroundColor: "#ddd",
+    padding: 10,
+    alignItems: "center",
+    borderRadius: 5,
+    marginTop: 15,
+  },
   buttonText: { fontWeight: "bold" },
-  deactbuttonText: { fontWeight: "bold", color: 'white' },
-  tableContainer: { marginTop: 10, borderWidth: 1, borderColor: "#ccc", borderRadius: 8, maxHeight: 500, overflow: "visible" },
+  deactbuttonText: { fontWeight: "bold", color: "white" },
+  tableContainer: {
+    marginTop: 10,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    maxHeight: 500,
+    overflow: "visible",
+  },
   tableHeader: { backgroundColor: "#ddd" },
   row: { borderBottomWidth: 1, borderColor: "#ccc" },
   buttonWrapper: { alignItems: "flex-end", marginTop: 10 },
-  addMedicationButton: { backgroundColor: "#5879a5", paddingHorizontal: 10, borderRadius: 10 },
-  columnActions: { flex: 1, justifyContent: "flex-end", alignItems: "flex-end" },
-  columnNotes: { flex: 3, color: 'red'},
+  addMedicationButton: {
+    backgroundColor: "#5879a5",
+    paddingHorizontal: 10,
+    borderRadius: 10,
+  },
+  columnActions: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+  },
+  columnNotes: { flex: 3 },
 });
