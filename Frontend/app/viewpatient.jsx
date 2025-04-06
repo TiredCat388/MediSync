@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ScrollView,
   Dimensions,
+  TextInput,
 } from "react-native";
 import { DataTable, Button } from "react-native-paper";
 import { Feather } from "@expo/vector-icons";
@@ -18,14 +19,14 @@ const sidebarWidth = 70;
 
 export default function PatientDetails() {
   const router = useRouter();
-  const {patient_number } = useLocalSearchParams();
+  const { patient_number } = useLocalSearchParams();
   const [patient, setPatient] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const [medicationData, setMedicationData] = useState([]);
   const [showMedications, setShowMedications] = useState(false);
-
   const [selectedRow, setSelectedRow] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(""); // Search bar state
 
   const handleRowPress = (id) => {
     setSelectedRow(id);
@@ -67,27 +68,34 @@ export default function PatientDetails() {
     }
   };
 
- const fetchMedications = async () => {
-   try {
-     const response = await fetch(
-       `http://127.0.0.1:8000/api/medications/?patient_number=${patient_number}`
-     );
-     if (!response.ok) {
-       throw new Error("Failed to fetch medications");
-     }
-     const data = await response.json();
+  const fetchMedications = async () => {
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/medications/?patient_number=${patient_number}`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch medications");
+      }
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        setMedicationData(data);
+      } else {
+        console.error("Unexpected API response format:", data);
+        setMedicationData([]);
+      }
+    } catch (err) {
+      console.error("Error fetching medications:", err.message);
+      setMedicationData([]);
+    }
+  };
 
-     if (Array.isArray(data)) {
-       setMedicationData(data);
-     } else {
-       console.error("Unexpected API response format:", data);
-       setMedicationData([]); 
-     }
-   } catch (err) {
-     console.error("Error fetching medications:", err.message);
-     setMedicationData([]); 
-   }
- };
+  const filteredMedications = medicationData.filter((item) => {
+    const query = searchQuery.toLowerCase();
+    return (
+      item.schedule_id.toString().includes(query) ||
+      item.Medication_name.toLowerCase().includes(query)
+    );
+  });
 
   if (loading) {
     return <Text>Loading patient details...</Text>;
@@ -149,63 +157,81 @@ export default function PatientDetails() {
           </View>
         </View>
 
-<TouchableOpacity
-  style={styles.medicationToggleButton}
-  onPress={async () => {
-    if (!showMedications) {
-      await fetchMedications(); // Fetch medications when showing the list
-    }
-    setShowMedications(!showMedications);
-  }}
->
-  <Text style={styles.buttonText}>
-    {showMedications ? "Hide" : "View"} Medication List
-  </Text>
-</TouchableOpacity>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginTop: 15,
+          }}
+        >
+          <TouchableOpacity
+            style={styles.medicationToggleButton}
+            onPress={async () => {
+              if (!showMedications) {
+                await fetchMedications();
+              }
+              setShowMedications(!showMedications);
+            }}
+          >
+            <Text style={styles.buttonText}>
+              {showMedications ? "Hide" : "View"} Medication List
+            </Text>
+          </TouchableOpacity>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search schedule ID or name"
+            placeholderTextColor="#888"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
+        </View>
 
-{showMedications && (
-  <View>
-    <View style={[styles.tableContainer, { maxHeight: 350 }]}>
-      <ScrollView nestedScrollEnabled={true}>
-        <DataTable>
-          <DataTable.Header style={styles.tableHeader}>
-            <DataTable.Title style={styles.columnId}>
-              Schedule ID
-            </DataTable.Title>
-            <DataTable.Title style={styles.columnName}>
-              Medication Name
-            </DataTable.Title>
-            <DataTable.Title style={styles.columnTime}>
-              Time
-            </DataTable.Title>
-            <DataTable.Title style={styles.columnNotes}>
-              Notes
-            </DataTable.Title>
-          </DataTable.Header>
+        {showMedications && (
+          <View>
+            <View style={[styles.tableContainer, { maxHeight: 350 }]}>
+              <ScrollView nestedScrollEnabled={true}>
+                <DataTable>
+                  <View style={styles.headerRowContainer}>
+                    <DataTable.Header style={[styles.tableHeader, { flex: 1 }]}>
+                      <DataTable.Title style={styles.columnId}>
+                        Schedule ID
+                      </DataTable.Title>
+                      <DataTable.Title style={styles.columnName}>
+                        Medication Name
+                      </DataTable.Title>
+                      <DataTable.Title style={styles.columnTime}>
+                        Time
+                      </DataTable.Title>
+                      <DataTable.Title style={styles.columnNotes}>
+                        Notes
+                      </DataTable.Title>
+                    </DataTable.Header>
+                  </View>
 
-          {medicationData.map((item) => (
-            <DataTable.Row
-              key={item.schedule_id}
-              style={[
-                styles.row,
-                selectedRow === item.schedule_id && styles.selectedRow,
-              ]}
-              onPress={() => handleRowPress(item.schedule_id)}
-            >
-              <DataTable.Cell style={styles.columnId}>
-                {item.schedule_id}
-              </DataTable.Cell>
-              <DataTable.Cell style={styles.columnName}>
-                {item.Medication_name}
-              </DataTable.Cell>
-              <DataTable.Cell style={styles.columnTime}>
-                {item.Medication_Time}
-              </DataTable.Cell>
-              <DataTable.Cell style={styles.columnNotes}>
-                {item.Medication_notes}
-              </DataTable.Cell>
-            </DataTable.Row>
-          ))}
+                  {filteredMedications.map((item) => (
+                    <DataTable.Row
+                      key={item.schedule_id}
+                      style={[
+                        styles.row,
+                        selectedRow === item.schedule_id && styles.selectedRow,
+                      ]}
+                      onPress={() => handleRowPress(item.schedule_id)}
+                    >
+                      <DataTable.Cell style={styles.columnId}>
+                        {item.schedule_id}
+                      </DataTable.Cell>
+                      <DataTable.Cell style={styles.columnName}>
+                        {item.Medication_name}
+                      </DataTable.Cell>
+                      <DataTable.Cell style={styles.columnTime}>
+                        {item.Medication_Time}
+                      </DataTable.Cell>
+                      <DataTable.Cell style={styles.columnNotes}>
+                        {item.Medication_notes}
+                      </DataTable.Cell>
+                    </DataTable.Row>
+                  ))}
                 </DataTable>
               </ScrollView>
             </View>
@@ -214,7 +240,9 @@ export default function PatientDetails() {
               <Button
                 mode="contained"
                 style={styles.addMedicationButton}
-                onPress={() => router.push(`/newmedsched?patient_number=${patient_number}`)}
+                onPress={() =>
+                  router.push(`/newmedsched?patient_number=${patient_number}`)
+                }
               >
                 Add Medication
               </Button>
@@ -257,13 +285,18 @@ const styles = StyleSheet.create({
   divider: { width: 1, backgroundColor: "gray", marginHorizontal: 10 },
   sectionTitle: { fontWeight: "bold", fontSize: 20, marginBottom: 5 },
   medicationToggleButton: {
-    backgroundColor: "#ddd",
+    backgroundColor: "#5879a5",
     padding: 10,
-    alignItems: "center",
+    alignItems: "flex-start", // Keep this to align content inside the button
     borderRadius: 5,
     marginTop: 15,
+    alignSelf: "flex-start", // Move the button to the left side
+    marginLeft: 0, // Ensure no extra margin on the left
   },
-  buttonText: { fontWeight: "bold" },
+  buttonText: {
+    fontWeight: "bold",
+    color: "white", // Set the font color to white
+  },
   deactbuttonText: { fontWeight: "bold", color: "white" },
   tableContainer: {
     marginTop: 10,
@@ -274,17 +307,39 @@ const styles = StyleSheet.create({
     overflow: "visible",
   },
   tableHeader: { backgroundColor: "#ddd" },
-  row: { borderBottomWidth: 1, borderColor: "#ccc" },
+  row: { borderBottomWidth: 2, borderColor: "#ccc" },
   buttonWrapper: { alignItems: "flex-end", marginTop: 10 },
   addMedicationButton: {
     backgroundColor: "#5879a5",
     paddingHorizontal: 10,
     borderRadius: 10,
   },
-  columnActions: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
+
+  searchInput: {
+    backgroundColor: "#fff",
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    width: 300,
+    alignSelf: "flex-end", // Align the search bar to the end of its container
+    marginLeft: 10, // Add spacing between the toggle button and the search bar
   },
-  columnNotes: { flex: 3 },
+  headerRowContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  columnId: {
+    flex: 1.1,
+  },
+  columnName: {
+    flex: 1.1,
+  },
+  columnTime: {
+    flex: 1,
+  },
+  columnNotes: {
+    flex: 3,
+  },
 });
