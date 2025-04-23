@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     width: 'auto',
-    alignItems: 'center', // Keep logo centered horizontally
+    alignItems: 'center', 
     flexDirection: 'row',
   },
   logo: {
@@ -113,6 +113,19 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "white",
   },
+  subOptionContainer: {
+    paddingLeft: 11,
+    marginTop: -20,
+    marginBottom: 20,
+  },
+  subOption: {
+    marginBottom: 15,
+  },
+  subOptionText: {
+    color: '#B8CBDB',
+    fontSize: 18,
+    fontWeight: '600',
+  }
 });
 
 export default styles;
