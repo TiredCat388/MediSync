@@ -12,8 +12,6 @@ import { DataTable, Button } from "react-native-paper";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import Sidebar from "./components/sidebar";
 import { Feather } from "@expo/vector-icons";
- import { Alert } from "react-native";
-
 const { width } = Dimensions.get("window");
 const isTablet = width > 900;
 const sidebarWidth = 70;
@@ -66,37 +64,6 @@ export default function PatientDetails() {
       setLoading(false);
     }
   };
-
-
-  const archivePatient = async () => {
-    try {
-      const response = await fetch(
-        `http://127.0.0.1:8000/api/patients/${patient_number}/`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            is_archived: true,
-          }),
-        }
-      );
-
-      if (response.ok) {
-        Alert.alert("Success", "Patient archived successfully");
-        router.push("/directory");
-      } else {
-        Alert.alert("Error", "Failed to archive patient");
-      }
-    } catch (error) {
-      console.error("Archive patient error:", error);
-      Alert.alert("Error", "An error occurred while archiving the patient");
-    }
-  };
-
-
-
 
   const fetchMedications = async () => {
     try {
@@ -163,19 +130,8 @@ export default function PatientDetails() {
           >
             <Text style={styles.buttonText}>Back</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.deactivateButton}
-            onPress={async () => {
-              try {
-                // Assuming you have a function to update archive status
-                await archivePatient(patient_number);
-                Alert.alert("Success", "Patient has been archived.");
-              } catch (error) {
-                Alert.alert("Error", "Failed to archive patient.");
-              }
-            }}
-          >
-            <Text style={styles.deactbuttonText}>Archive Patient</Text>
+          <TouchableOpacity style={styles.deactivateButton}>
+            <Text style={styles.deactbuttonText}>Deactivate Patient</Text>
           </TouchableOpacity>
         </View>
 
@@ -322,9 +278,7 @@ export default function PatientDetails() {
                                 <TouchableOpacity
                                   style={styles.menuItem}
                                   onPress={() => {
-                                    router.push(
-                                      `/updatemed?schedule_id=${item.schedule_id}&patient_number=${patient_number}`
-                                    );
+                                    router.push(`/updatemed?schedule_id=${item.schedule_id}&patient_number=${patient_number}`);
                                   }}
                                 >
                                   <Text
@@ -350,7 +304,7 @@ export default function PatientDetails() {
                                       styles.deleteText,
                                     ]}
                                   >
-                                    Archive
+                                    Delete
                                   </Text>
                                 </TouchableOpacity>
                               </View>

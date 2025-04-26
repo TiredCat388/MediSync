@@ -21,3 +21,16 @@ class PatientsViewSet(viewsets.ModelViewSet):
                 {'error': f'Patient {patient_number} not found'}, 
                 status=status.HTTP_404_NOT_FOUND
             )
+    
+    @action(detail=True, methods=['patch'], url_path='archive')  # 👈 Add this decorator
+    def archive(self, request, pk=None):
+        try:
+            patient = self.get_object()
+            patient.is_archived = True  # Make sure this field exists in your model
+            patient.save()
+            return Response({'status': 'archived'}, status=status.HTTP_200_OK)
+        except Patients.DoesNotExist:
+            return Response({'error': 'Patient not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+

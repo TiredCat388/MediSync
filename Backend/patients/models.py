@@ -20,6 +20,7 @@ class Patients(models.Model):
     contact_number = models.BigIntegerField(blank=False)
     date_of_birth = models.DateField(blank=False)
     room_number = models.IntegerField(blank=False)
+    is_archived = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'Patients'

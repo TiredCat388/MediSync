@@ -23,16 +23,25 @@ export default function PatientsDirectory() {
     fetchPatients();
   }, []);
 
-  const fetchPatients = async () => {
-    try {
-      const response = await fetch("http://127.0.0.1:8000/api/patients/");
-      const data = await response.json();
-      setPatients(data.length > 0 ? data : [TESTING_PATIENT]);
-    } catch (error) {
-      console.error("Error fetching patients:", error);
-      setPatients([TESTING_PATIENT]);
-    }
-  };
+ const fetchPatients = async () => {
+   try {
+     const response = await fetch("http://127.0.0.1:8000/api/patients/");
+     const data = await response.json();
+
+     // Assuming each patient has an `is_archived` field (you can change this based on your backend)
+     const activePatients = data.filter((patient) => !patient.is_archived);
+
+     setPatients(
+       activePatients.length > 0 ? activePatients : [TESTING_PATIENT]
+     );
+   } catch (error) {
+     console.error("Error fetching patients:", error);
+     setPatients([TESTING_PATIENT]);
+   }
+ };
+
+
+  
 
   const formatName = (firstName, middleName, lastName) => {
     const formattedLastName = lastName.toUpperCase();
@@ -43,7 +52,6 @@ export default function PatientsDirectory() {
     }`;
   };
 
-  // Filter + Sort
   const filteredAndSortedPatients = [...patients].filter((patient) => {
     const search = searchText.toLowerCase();
     const name = `${patient.first_name ?? ""} ${patient.middle_name ?? ""} ${
@@ -282,8 +290,37 @@ export default function PatientsDirectory() {
                         />
                         <Divider />
                         <Menu.Item
-                          onPress={() => console.log("Delete", item.id)}
-                          title="Delete"
+                          onPress={async () => {
+                            try {
+                              const response = await fetch(
+                                `http://127.0.0.1:8000/api/patients/${item.patient_number}/archive/`,
+                                {
+                                  method: "PATCH",
+                                }
+                              );
+
+                              if (response.ok) {
+                                // Remove the archived patient from the visible list
+                                setPatients((prevPatients) =>
+                                  prevPatients.filter(
+                                    (p) =>
+                                      p.patient_number !== item.patient_number
+                                  )
+                                );
+
+                                // Optional: show a toast or success message
+                                console.log("Patient successfully archived.");
+                              } else {
+                                console.error(
+                                  "Archiving failed with status:",
+                                  response.status
+                                );
+                              }
+                            } catch (error) {
+                              console.error("Failed to archive:", error);
+                            }
+                          }}
+                          title="Archive"
                         />
                       </Menu>
                     )}
