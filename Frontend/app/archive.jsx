@@ -54,28 +54,21 @@ export default function PatientsDirectory() {
      patient.last_name ?? ""
    }`.toLowerCase();
    const id = (patient.patient_number + "").toLowerCase();
-   const dateArchived = patient.date_archived
-     ? new Date(patient.date_archived).toLocaleString().toLowerCase()
-     : "";
-
-   return (
-     id.includes(search) ||
-     name.includes(search) ||
-     dateArchived.includes(search)
-   );
+   return id.includes(search) || name.includes(search);
  });
 
-  patients.sort((a, b) =>
-    (a.patient_number ?? "")
-      .toString()
-      .localeCompare((b.patient_number ?? "").toString())
-  );
+ patients.sort((a, b) =>
+   (a.patient_number ?? "")
+     .toString()
+     .localeCompare((b.patient_number ?? "").toString())
+ );
 
-  const totalRows = 12;
-  const displayedPatients = [...filteredAndSortedPatients];
-  while (displayedPatients.length < totalRows) {
-    displayedPatients.push({ id: "", name: "" });
-  }
+ // Now use the sorted list for display
+ const totalRows = 12;
+ const displayedPatients = [...filteredAndSortedPatients];
+ while (displayedPatients.length < totalRows) {
+   displayedPatients.push({ id: "", name: "" });
+ }
 
   return (
     <Provider>
