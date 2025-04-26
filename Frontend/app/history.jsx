@@ -119,222 +119,157 @@ export default function PatientDetails() {
   }
 
 
-  return (
-    <View style={styles.container}>
-      <Sidebar />
-      <ScrollView style={[styles.mainContent, { marginLeft: sidebarWidth }]}>
-        <View style={styles.headerButtons}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => router.push("/directory")}
-          >
-            <Text style={styles.buttonText}>Back</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.deactivateButton}>
-            <Text style={styles.deactbuttonText}>Deactivate Patient</Text>
-          </TouchableOpacity>
-        </View>
+ return (
+   <View style={styles.container}>
+     <Sidebar />
+     <ScrollView style={[styles.mainContent, { marginLeft: sidebarWidth }]}>
+       <Text style={styles.title}>Patient History</Text>
 
-        <Text style={styles.patientId}>
-          PATIENT ID: {patient?.patient_number}
-        </Text>
+       <Text style={styles.patientId}>
+         PATIENT ID: {patient?.patient_number}
+       </Text>
 
-        <View style={styles.infoContainer}>
-          <View style={styles.detailsSection}>
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Patient Details</Text>
-              <Text style={styles.boldLabel}>Name</Text>
-              <Text>
-                {patient?.last_name}, {patient?.first_name}{" "}
-                {patient?.middle_name}
-              </Text>
-              <Text style={styles.boldLabel}>Birth Date</Text>
-              <Text>{patient?.date_of_birth}</Text>
-              <Text style={styles.boldLabel}>Contact Details</Text>
-              <Text>{patient?.contact_number}</Text>
-              <Text style={styles.boldLabel}>Room No</Text>
-              <Text>{patient?.room_number}</Text>
-            </View>
-          </View>
+       <View style={styles.infoContainer}>
+         <View style={styles.detailsSection}>
+           <View style={styles.section}>
+             <Text style={styles.sectionTitle}>Patient Details</Text>
+             <Text style={styles.boldLabel}>Name</Text>
+             <Text>
+               {patient?.last_name}, {patient?.first_name}{" "}
+               {patient?.middle_name}
+             </Text>
+             <Text style={styles.boldLabel}>Birth Date</Text>
+             <Text>{patient?.date_of_birth}</Text>
+             <Text style={styles.boldLabel}>Contact Details</Text>
+             <Text>{patient?.contact_number}</Text>
+             <Text style={styles.boldLabel}>Room No</Text>
+             <Text>{patient?.room_number}</Text>
+           </View>
+         </View>
 
-          <View style={styles.divider} />
+         <View style={styles.divider} />
 
-          <View style={styles.detailsSection}>
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Emergency Contact Details</Text>
-              <Text style={styles.boldLabel}>Name</Text>
-              <Text>
-                {patient?.emergency_contact?.first_name}{" "}
-                {patient?.emergency_contact?.last_name}
-              </Text>
-              <Text style={styles.boldLabel}>Relation to Patient</Text>
-              <Text>{patient?.emergency_contact?.relation_to_patient}</Text>
-              <Text style={styles.boldLabel}>Contact Details</Text>
-              <Text>{patient?.emergency_contact?.contact_number}</Text>
-            </View>
-          </View>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginTop: 15,
-          }}
-        >
-          <TouchableOpacity
-            style={styles.medicationToggleButton}
-            onPress={async () => {
-              if (!showMedications) {
-                await fetchMedications();
-              }
-              setShowMedications(!showMedications);
-            }}
-          >
-            <Text style={styles.buttonText}>
-              {showMedications ? "Hide" : "View"} Medication List
-            </Text>
-          </TouchableOpacity>
-        </View>
+         <View style={styles.detailsSection}>
+           <View style={styles.section}>
+             <Text style={styles.sectionTitle}>Emergency Contact Details</Text>
+             <Text style={styles.boldLabel}>Name</Text>
+             <Text>
+               {patient?.emergency_contact?.first_name}{" "}
+               {patient?.emergency_contact?.last_name}
+             </Text>
+             <Text style={styles.boldLabel}>Relation to Patient</Text>
+             <Text>{patient?.emergency_contact?.relation_to_patient}</Text>
+             <Text style={styles.boldLabel}>Contact Details</Text>
+             <Text>{patient?.emergency_contact?.contact_number}</Text>
+           </View>
+         </View>
+       </View>
+       <View
+         style={{
+           flexDirection: "row",
+           alignItems: "center",
+           justifyContent: "space-between",
+           marginTop: 15,
+         }}
+       >
+         <TouchableOpacity
+           style={styles.medicationToggleButton}
+           onPress={async () => {
+             if (!showMedications) {
+               await fetchMedications();
+             }
+             setShowMedications(!showMedications);
+           }}
+         >
+           <Text style={styles.buttonText}>
+             {showMedications ? "Hide" : "View"} Medication List
+           </Text>
+         </TouchableOpacity>
+       </View>
 
-        {showMedications && (
-          <View>
-            <View
-              style={[
-                styles.tableContainer,
-                { maxHeight: 350, overflow: "visible" },
-              ]}
-            >
-              <ScrollView nestedScrollEnabled={true}>
-                <DataTable>
-                  <View style={styles.headerRowContainer}>
-                    <DataTable.Header style={styles.tableHeader}>
-                      <DataTable.Title style={styles.columnId}>
-                        Schedule ID
-                      </DataTable.Title>
-                      <DataTable.Title style={styles.columnName}>
-                        Medication Name
-                      </DataTable.Title>
-                      <DataTable.Title style={styles.columnTime}>
-                        Time
-                      </DataTable.Title>
-                      <DataTable.Title style={styles.columnNotes}>
-                        Notes
-                      </DataTable.Title>
-                      <DataTable.Title style={styles.searchBarColumn}>
-                        <TextInput
-                          style={styles.searchInput}
-                          placeholder="Search"
-                          placeholderTextColor="#888"
-                          value={searchQuery}
-                          onChangeText={setSearchQuery}
-                        />
-                      </DataTable.Title>
-                    </DataTable.Header>
-                  </View>
+       {showMedications && (
+         <View>
+           <View
+             style={[
+               styles.tableContainer,
+               { maxHeight: 350, overflow: "visible" },
+             ]}
+           >
+             <ScrollView nestedScrollEnabled={true}>
+               <DataTable>
+                 <View style={styles.headerRowContainer}>
+                   <DataTable.Header style={styles.tableHeader}>
+                     <DataTable.Title style={styles.columnId}>
+                       Schedule ID
+                     </DataTable.Title>
+                     <DataTable.Title style={styles.columnName}>
+                       Medication Name
+                     </DataTable.Title>
+                     <DataTable.Title style={styles.columnTime}>
+                       Time
+                     </DataTable.Title>
+                     <DataTable.Title style={styles.columnNotes}>
+                       Notes
+                     </DataTable.Title>
+                     <DataTable.Title style={styles.searchBarColumn}>
+                       <TextInput
+                         style={styles.searchInput}
+                         placeholder="Search"
+                         placeholderTextColor="#888"
+                         value={searchQuery}
+                         onChangeText={setSearchQuery}
+                       />
+                     </DataTable.Title>
+                   </DataTable.Header>
+                 </View>
 
-                  {filteredMedications.map((item) => (
-                    <View
-                      key={item.schedule_id}
-                      style={{
-                        zIndex: openMenuId === item.schedule_id ? 10 : 0,
-                      }}
-                    >
-                      <DataTable.Row style={styles.row}>
-                        <DataTable.Cell style={styles.columnId}>
-                          {item.schedule_id}
+                 {filteredMedications.map((item) => (
+                   <View
+                     key={item.schedule_id}
+                     style={{
+                       zIndex: openMenuId === item.schedule_id ? 10 : 0,
+                     }}
+                   >
+                     <DataTable.Row style={styles.row}>
+                       <DataTable.Cell style={styles.columnId}>
+                         {item.schedule_id}
+                       </DataTable.Cell>
+                       <DataTable.Cell style={styles.columnName}>
+                         {item.Medication_name}
+                       </DataTable.Cell>
+                       <DataTable.Cell style={styles.columnTime}>
+                         {item.Medication_Time}
+                       </DataTable.Cell>
+                       <DataTable.Cell style={styles.columnNotes}>
+                         {item.Medication_notes}
+                       </DataTable.Cell>
+                     <DataTable.Cell style={styles.columnActions}>    
                         </DataTable.Cell>
-                        <DataTable.Cell style={styles.columnName}>
-                          {item.Medication_name}
-                        </DataTable.Cell>
-                        <DataTable.Cell style={styles.columnTime}>
-                          {item.Medication_Time}
-                        </DataTable.Cell>
-                        <DataTable.Cell style={styles.columnNotes}>
-                          {item.Medication_notes}
-                        </DataTable.Cell>
-
-                        <DataTable.Cell style={styles.columnActions}>
-                          <View style={{ position: "relative" }}>
-                            <TouchableOpacity
-                              style={styles.customizeButton}
-                              onPress={() =>
-                                setOpenMenuId(
-                                  openMenuId === item.schedule_id
-                                    ? null
-                                    : item.schedule_id
-                                )
-                              }
-                            >
-                              <Feather
-                                name="more-horizontal"
-                                size={20}
-                                color="black"
-                              />
-                            </TouchableOpacity>
-
-                            {openMenuId === item.schedule_id && (
-                              <View style={styles.popupMenu}>
-                                <TouchableOpacity
-                                  style={styles.menuItem}
-                                  onPress={() => {
-                                    router.push(`/updatemed?schedule_id=${item.schedule_id}&patient_number=${patient_number}`);
-                                  }}
-                                >
-                                  <Text
-                                    style={[
-                                      styles.menuItemText,
-                                      styles.updateText,
-                                    ]}
-                                  >
-                                    Update
-                                  </Text>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity
-                                  style={styles.menuItem}
-                                  onPress={() => {
-                                    setOpenMenuId(null);
-                                    deleteSchedule(item.schedule_id);
-                                  }}
-                                >
-                                  <Text
-                                    style={[
-                                      styles.menuItemText,
-                                      styles.deleteText,
-                                    ]}
-                                  >
-                                    Delete
-                                  </Text>
-                                </TouchableOpacity>
-                              </View>
-                            )}
-                          </View>
-                        </DataTable.Cell>
-                      </DataTable.Row>
+                    </DataTable.Row>
                     </View>
-                  ))}
+                 ))}
                 </DataTable>
-              </ScrollView>
-            </View>
-
-            <View style={styles.buttonWrapper}>
-              <Button
-                mode="contained"
-                style={styles.addMedicationButton}
-                onPress={() =>
-                  router.push(`/newmedsched?patient_number=${patient_number}`)
-                }
-              >
-                Add Medication
-              </Button>
-            </View>
-          </View>
-        )}
-      </ScrollView>
-    </View>
-  );
+                </ScrollView>
+                </View>
+                     
+                <View style={styles.buttonWrapper}>
+                    <Button
+                        mode="contained"
+                        style={styles.addMedicationButton}
+                        onPress={() =>
+                        router.push(`/archive`)
+                        }
+                        >
+                    Back
+                </Button>
+                </View>
+                </View>
+                 )}
+            </ScrollView>
+        </View>
+    );
 }
+                     
 
 const styles = StyleSheet.create({
   container: { flex: 1, flexDirection: "row", backgroundColor: "#f0f0f0" },
@@ -369,15 +304,15 @@ const styles = StyleSheet.create({
   medicationToggleButton: {
     backgroundColor: "#5879a5",
     padding: 10,
-    alignItems: "flex-start", 
+    alignItems: "flex-start",
     borderRadius: 5,
     marginTop: 15,
-    alignSelf: "flex-start", 
-    marginLeft: 0, 
+    alignSelf: "flex-start",
+    marginLeft: 0,
   },
   buttonText: {
     fontWeight: "bold",
-    color: "white", 
+    color: "white",
   },
   deactbuttonText: { fontWeight: "bold", color: "white" },
   tableContainer: {
@@ -434,6 +369,14 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
 
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 10,
+    textAlign: "flex-start", // Centers the title
+    color: "#000", // Choose a suitable color
+  },
+
   popupMenu: {
     position: "absolute",
     top: 30,
@@ -442,8 +385,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 8,
-    elevation: 10, 
-    zIndex: 9999, 
+    elevation: 10,
+    zIndex: 9999,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
@@ -463,12 +406,12 @@ const styles = StyleSheet.create({
   },
 
   updateText: {
-    color: "#000", 
+    color: "#000",
     fontWeight: "500",
   },
 
   deleteText: {
-    color: "#", 
+    color: "#",
     fontWeight: "500",
   },
 });

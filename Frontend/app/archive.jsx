@@ -48,14 +48,22 @@ export default function PatientsDirectory() {
   };
 
   // Filter + Sort
-  const filteredAndSortedPatients = [...patients].filter((patient) => {
-    const search = searchText.toLowerCase();
-    const name = `${patient.first_name ?? ""} ${patient.middle_name ?? ""} ${
-      patient.last_name ?? ""
-    }`.toLowerCase();
-    const id = (patient.patient_number + "").toLowerCase();
-    return id.includes(search) || name.includes(search);
-  });
+ const filteredAndSortedPatients = [...patients].filter((patient) => {
+   const search = searchText.toLowerCase();
+   const name = `${patient.first_name ?? ""} ${patient.middle_name ?? ""} ${
+     patient.last_name ?? ""
+   }`.toLowerCase();
+   const id = (patient.patient_number + "").toLowerCase();
+   const dateArchived = patient.date_archived
+     ? new Date(patient.date_archived).toLocaleString().toLowerCase()
+     : "";
+
+   return (
+     id.includes(search) ||
+     name.includes(search) ||
+     dateArchived.includes(search)
+   );
+ });
 
   patients.sort((a, b) =>
     (a.patient_number ?? "")
@@ -87,7 +95,6 @@ export default function PatientsDirectory() {
             <Text style={{ fontSize: 25, fontWeight: "bold" }}>
               Archive History
             </Text>
-            
           </View>
 
           {/* Search + Sort */}
@@ -115,7 +122,7 @@ export default function PatientsDirectory() {
                 shadowRadius: 2,
                 elevation: 2,
               }}
-              placeholder="Search by name or patient number"
+              placeholder="Search by name or patient number or date"
               placeholderTextColor="#666"
               value={searchText}
               onChangeText={setSearchText}
@@ -168,7 +175,7 @@ export default function PatientsDirectory() {
                   justifyContent: "center",
                 }}
               >
-                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                <Text style={{ fontSize: 17, fontWeight: "bold" }}>
                   Patient ID
                 </Text>
               </View>
@@ -179,8 +186,19 @@ export default function PatientsDirectory() {
                   justifyContent: "center",
                 }}
               >
-                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                <Text style={{ fontSize: 17, fontWeight: "bold" }}>
                   Patient Name
+                </Text>
+              </View>
+              <View
+                style={{
+                  flex: 2,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text style={{ fontSize: 17, fontWeight: "bold" }}>
+                  Archived Date
                 </Text>
               </View>
             </View>
@@ -198,40 +216,40 @@ export default function PatientsDirectory() {
                       : "lightgrey",
                     borderBottomWidth: 1,
                     borderColor: "black",
-                    minHeight: 35,
+                    minHeight: 40,
+                    alignItems: "center",
+                    paddingHorizontal: 5,
                   }}
                 >
+                  {/* Patient ID */}
                   <View
                     style={{
                       flex: 1,
                       alignItems: "center",
                       justifyContent: "center",
-                      padding: 10,
+                      height: "100%",
+                      borderRightWidth: 1,
+                      borderColor: "black",
                     }}
                   >
-                    <Text style={{ fontSize: 16 }}>
+                    <Text style={{ fontSize: 15 }}>
                       {item.patient_number || ""}
                     </Text>
                   </View>
-                  <View
-                    style={{
-                      width: 2,
-                      backgroundColor: "black",
-                      alignSelf: "stretch",
-                    }}
-                  />
+
+                  {/* Patient Name */}
                   <View
                     style={{
                       flex: 2,
-                      flexDirection: "row",
                       alignItems: "center",
                       justifyContent: "center",
-                      padding: 10,
+                      height: "100%",
+                      borderRightWidth: 1,
+                      borderColor: "black",
+                      paddingHorizontal: 5,
                     }}
                   >
-                    <Text
-                      style={{ fontSize: 16, flex: 1, textAlign: "center" }}
-                    >
+                    <Text style={{ fontSize: 15, textAlign: "center" }}>
                       {item.first_name && item.last_name
                         ? formatName(
                             item.first_name,
@@ -240,6 +258,34 @@ export default function PatientsDirectory() {
                           )
                         : ""}
                     </Text>
+                  </View>
+
+                  {/* Archived Date */}
+                  <View
+                    style={{
+                      flex: 2,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      height: "100%",
+                      borderColor: "black",
+                    }}
+                  >
+                    <Text style={{ fontSize: 15 }}>
+                      {item.date_archived
+                        ? new Date(item.date_archived).toLocaleString()
+                        : ""}
+                    </Text>
+                  </View>
+
+                  {/* Menu Button (no border) */}
+                  <View
+                    style={{
+                      width: 50,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      height: "100%",
+                    }}
+                  >
                     {item.patient_number && (
                       <Menu
                         visible={visibleMenu === index}
@@ -252,7 +298,6 @@ export default function PatientsDirectory() {
                                 visibleMenu === index ? null : index
                               )
                             }
-                            style={{ marginLeft: 10 }}
                           >
                             <Text style={{ fontSize: 20 }}>⋯</Text>
                           </TouchableOpacity>
@@ -261,12 +306,11 @@ export default function PatientsDirectory() {
                         <Menu.Item
                           onPress={() =>
                             router.push(
-                              `/viewpatient?patient_number=${item.patient_number}`
+                              `/history?patient_number=${item.patient_number}`
                             )
                           }
                           title="History"
                         />
-                        
                       </Menu>
                     )}
                   </View>
