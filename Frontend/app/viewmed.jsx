@@ -104,6 +104,10 @@ const { schedule_id, patient_number } = useLocalSearchParams();
     setFilteredMedications([]);
   };
 
+  const handleCancel = () => {
+    router.push("/calendar"); // Navigate back to the calendar screen
+  };
+
   const handleRegister = async () => {
     console.log("Form Data Before Submit:", formData);
 
@@ -207,13 +211,13 @@ const { schedule_id, patient_number } = useLocalSearchParams();
           { marginLeft: isSidebarExpanded ? 200 : 70 },
         ]}
       >
-        <Text style={styles.screenTitle}>Update Medication Schedule</Text>
+        <Text style={styles.screenTitle}>View Medication</Text>
         <View style={styles.formContainer}>
           <View style={styles.column}>
             <Text style={styles.sectionTitle}>
-              {schedule_id
-                ? `FOR: Schedule ID - ${schedule_id}`
-                : "FOR: Schedule ID - Loading..."}
+              {patient_number && schedule_id
+                ? `FOR: Patient ID - ${patient_number} with Schedule ID - ${schedule_id}`
+                : "FOR: Patient ID - Loading... with Schedule ID - Loading..."}
             </Text>
 
             {/* Medication Name with Autocomplete */}
@@ -221,8 +225,9 @@ const { schedule_id, patient_number } = useLocalSearchParams();
             <View style={styles.autocompleteContainer}>
               <Autocomplete
                 data={filteredMedications}
-                value={formData.medicineName} // Pre-fill medication name
+                value={formData.medicineName}
                 onChangeText={handleInputChange}
+                editable={false}
                 flatListProps={{
                   keyExtractor: (_, idx) => idx.toString(),
                   renderItem: ({ item }) => (
@@ -243,7 +248,8 @@ const { schedule_id, patient_number } = useLocalSearchParams();
               <TextInput
                 style={[styles.dobInput, { width: 60 }]}
                 keyboardType="numeric"
-                value={formData.dosage} // Pre-fill dosage
+                value={formData.dosage}
+                editable={false}
                 onChangeText={(text) =>
                   setFormData({ ...formData, dosage: text })
                 }
@@ -257,7 +263,8 @@ const { schedule_id, patient_number } = useLocalSearchParams();
                     { label: "mg", value: "mg" },
                     { label: "drops", value: "drops" },
                   ]}
-                  value={formData.dosageUnit} // Pre-fill dosage unit
+                  value={formData.dosageUnit}
+                  disabled={true}
                   onValueChange={(value) =>
                     setFormData({ ...formData, dosageUnit: value })
                   }
@@ -283,6 +290,7 @@ const { schedule_id, patient_number } = useLocalSearchParams();
                   setFormData({ ...formData, timeHour: value })
                 }
                 placeholder={{ label: "HH", value: "" }}
+                disabled={true}
                 style={{
                   inputAndroid: styles.dobSelect,
                   inputIOS: styles.dobSelect,
@@ -296,6 +304,7 @@ const { schedule_id, patient_number } = useLocalSearchParams();
                   value: index.toString().padStart(2, "0"),
                 }))}
                 value={formData.timeMinute}
+                disabled={true}
                 onValueChange={(value) =>
                   setFormData({ ...formData, timeMinute: value })
                 }
@@ -313,6 +322,7 @@ const { schedule_id, patient_number } = useLocalSearchParams();
                   { label: "PM", value: "PM" },
                 ]}
                 value={formData.timePeriod}
+                disabled={true}
                 onValueChange={(value) =>
                   setFormData({ ...formData, timePeriod: value })
                 }
@@ -333,6 +343,7 @@ const { schedule_id, patient_number } = useLocalSearchParams();
                   value: index.toString().padStart(2, "0"),
                 }))}
                 value={formData.frequencyHour}
+                disabled={true}
                 onValueChange={(value) =>
                   setFormData({ ...formData, frequencyHour: value })
                 }
@@ -350,6 +361,7 @@ const { schedule_id, patient_number } = useLocalSearchParams();
                   value: (index * 5).toString().padStart(2, "0"),
                 }))}
                 value={formData.frequencyMinute}
+                disabled={true}
                 onValueChange={(value) =>
                   setFormData({ ...formData, frequencyMinute: value })
                 }
@@ -372,6 +384,7 @@ const { schedule_id, patient_number } = useLocalSearchParams();
               multiline
               numberOfLines={4}
               value={formData.medicationNotes} // Pre-fill medication notes
+              editable={false}
               onChangeText={(text) =>
                 setFormData({ ...formData, medicationNotes: text })
               }
@@ -379,6 +392,7 @@ const { schedule_id, patient_number } = useLocalSearchParams();
             <Text style={styles.label}>Physician ID</Text>
             <TextInput
               style={styles.input}
+              editable={false}
               onChangeText={(text) =>
                 setFormData({ ...formData, physicianID: text })
               }
@@ -387,77 +401,13 @@ const { schedule_id, patient_number } = useLocalSearchParams();
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
-            onPress={() => router.back()}
-            style={[styles.button, styles.leaveButton]}
+            onPress={handleCancel}
+            style={[styles.button, styles.stayButton]}
           >
             <Text style={styles.buttonText}>Cancel</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={handleRegister}
-            style={[styles.button, styles.stayButton]}
-          >
-            <Text style={styles.buttonText}>Update Medication</Text>
-          </TouchableOpacity>
         </View>
       </View>
-
-      {/* Cancel Confirmation Modal */}
-      <Modal visible={modalVisible} transparent animationType="fade">
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Cancel Medication Schedule</Text>
-            <Text style={styles.modalMessage}>
-              Are you sure you want to cancel scheduling this medication?
-            </Text>
-            <View style={styles.modalButtonContainer}>
-              <TouchableOpacity
-                style={[styles.modalButton, styles.stayButton]}
-                onPress={() => setModalVisible(false)}
-              >
-                <Text style={styles.modalButtonText}>Stay</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.modalButton, styles.leaveButton]}
-                onPress={() => {
-                  setModalVisible(false);
-                  router.back();
-                }}
-              >
-                <Text style={styles.modalButtonText}>Leave</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
-
-      {/* Warning Modal for Incomplete Form */}
-      <Modal visible={warningModalVisible} transparent animationType="fade">
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Incomplete Form</Text>
-            <Text style={styles.modalMessage}>
-              Some details are missing. Are you sure you want to proceed?
-            </Text>
-            <View style={styles.modalButtonContainer}>
-              <TouchableOpacity
-                style={[styles.modalButton, styles.stayButton]}
-                onPress={() => {
-                  setWarningModalVisible(false);
-                  router.back();
-                }}
-              >
-                <Text style={styles.modalButtonText}>Update</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.modalButton, styles.leaveButton]}
-                onPress={() => setWarningModalVisible(false)}
-              >
-                <Text style={styles.modalButtonText}>Stay</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 }

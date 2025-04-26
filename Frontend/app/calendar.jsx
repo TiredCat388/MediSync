@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, FlatList, Modal, Button } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, Modal, Button,ScrollView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import Sidebar from './components/sidebar';
@@ -82,50 +82,77 @@ export default function CalendarApp() {
   });
 
   return (
-    <View style={{ flex: 1, flexDirection: 'row' }}>
+    <View style={{ flex: 1, flexDirection: "row" }}>
       {/* Reusable Sidebar Component */}
       <Sidebar setSidebarWidth={setSidebarWidth} />
 
       {/* Main Calendar Content */}
       <View style={{ flex: 1, padding: 8, marginLeft: sidebarWidth }}>
-        <Text style={{ fontSize: 30, fontWeight: 'bold', margin: 8 }}>Calendar</Text>
+        <Text style={{ fontSize: 30, fontWeight: "bold", margin: 8 }}>
+          Calendar
+        </Text>
 
         {/* Calendar Section */}
-        <View style={{ 
-          backgroundColor: '#3b82f6', 
-          borderRadius: 8, 
-          borderWidth: 1, 
-          borderColor: '#ccc', 
-          padding: 8, 
-          margin: 8, 
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.1,
-          shadowRadius: 4,
-        }}>
+        <View
+          style={{
+            backgroundColor: "#3b82f6",
+            borderRadius: 8,
+            borderWidth: 1,
+            borderColor: "#ccc",
+            padding: 8,
+            margin: 8,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
+          }}
+        >
           {/* Calendar Header */}
-          <View style={{ 
-            backgroundColor: '#3b82f6', 
-            borderTopLeftRadius: 8, 
-            borderTopRightRadius: 8, 
-            padding: 8, 
-            flexDirection: 'row', 
-            alignItems: 'center', 
-            justifyContent: 'space-between' 
-          }}>
+          <View
+            style={{
+              backgroundColor: "#3b82f6",
+              borderTopLeftRadius: 8,
+              borderTopRightRadius: 8,
+              padding: 8,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
             <TouchableOpacity onPress={() => handleMonthChange(-1)}>
               <Feather name="arrow-left-circle" size={24} color="white" />
             </TouchableOpacity>
-            <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>{months[currentMonth]} {currentYear}</Text>
+            <Text style={{ color: "white", fontSize: 16, fontWeight: "600" }}>
+              {months[currentMonth]} {currentYear}
+            </Text>
             <TouchableOpacity onPress={() => handleMonthChange(1)}>
               <Feather name="arrow-right-circle" size={24} color="white" />
             </TouchableOpacity>
           </View>
 
           {/* Days of the Week */}
-          <View style={{ flexDirection: 'row', justifyContent: 'space-around', backgroundColor: 'white', padding: 4, borderBottomWidth: 1, borderColor: '#ccc' }}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-around",
+              backgroundColor: "white",
+              padding: 4,
+              borderBottomWidth: 1,
+              borderColor: "#ccc",
+            }}
+          >
             {daysOfWeek.map((day) => (
-              <Text key={day} style={{ flex: 1, textAlign: 'center', fontWeight: '600', padding: 4 }}>{day}</Text>
+              <Text
+                key={day}
+                style={{
+                  flex: 1,
+                  textAlign: "center",
+                  fontWeight: "600",
+                  padding: 4,
+                }}
+              >
+                {day}
+              </Text>
             ))}
           </View>
 
@@ -136,13 +163,16 @@ export default function CalendarApp() {
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => {
               const dateKey = item
-                ? `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(item).padStart(2, '0')}`
+                ? `${currentYear}-${String(currentMonth + 1).padStart(
+                    2,
+                    "0"
+                  )}-${String(item).padStart(2, "0")}`
                 : null;
 
-              // Check if there are medications for this date
-              const medications = dateKey && medicationData[dateKey] ? medicationData[dateKey] : [];
-
-              console.log('Date Key:', dateKey, 'Medications:', medications);
+              const medications =
+                dateKey && medicationData[dateKey]
+                  ? medicationData[dateKey]
+                  : [];
 
               return (
                 <TouchableOpacity
@@ -150,10 +180,10 @@ export default function CalendarApp() {
                     flex: 1,
                     aspectRatio: 1,
                     borderWidth: 0.5,
-                    borderColor: '#ccc',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: item ? 'white' : '#e0e0e0',
+                    borderColor: "#ccc",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    backgroundColor: item ? "white" : "#e0e0e0",
                     padding: 4,
                   }}
                   onPress={() => item && handleDatePress(dateKey)}
@@ -161,10 +191,53 @@ export default function CalendarApp() {
                 >
                   {item && (
                     <>
-                      <Text style={{ fontSize: 16 }}>{item}</Text>
-                      {medications.length > 0 && (
-                        <Text style={{ fontSize: 12, color: 'red' }}>{medications.length} meds</Text>
-                      )}
+                      <Text style={{ fontSize: 16, marginBottom: 2 }}>
+                        {item}
+                      </Text>
+                      <View
+                        style={{
+                          width: "100%",
+                          alignItems: "center",
+                          marginTop: 2,
+                        }}
+                      >
+                        {medications.slice(0, 4).map(
+                          (
+                            med,
+                            index // Limit to 3 previews to avoid overcrowding
+                          ) => (
+                            <View
+                              key={index}
+                              style={{
+                                backgroundColor: "rgba(103, 154, 236, 0.2)",
+                                paddingHorizontal: 7,
+                                paddingVertical: 7,
+                                borderRadius: 3,
+                                marginVertical: 1,
+                                width: "100%",
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  fontSize: 10,
+                                  textAlign: "flex-start",
+                                  color: "#000",
+                                  fontWeight: "bold",
+                                }}
+                                numberOfLines={1}
+                              >
+                                {med.name} at {med.time} (Patient ID:{" "}
+                                {med.patientId}, Schedule ID: {med.scheduleId})
+                              </Text>
+                            </View>
+                          )
+                        )}
+                        {medications.length > 3 && (
+                          <Text style={{ fontSize: 8, color: "blue" }}>
+                            +{medications.length - 3} more
+                          </Text>
+                        )}
+                      </View>
                     </>
                   )}
                 </TouchableOpacity>
@@ -175,18 +248,65 @@ export default function CalendarApp() {
 
         {/* Date Details Modal */}
         <Modal visible={modalVisible} transparent={true} animationType="slide">
-          <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' }}>
-            <View style={{ width: 300, padding: 20, backgroundColor: 'white', borderRadius: 10 }}>
-              <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Details for {selectedDate}</Text>
-              {medicationData[selectedDate] ? (
-                medicationData[selectedDate].map((med, index) => (
-                  <Text key={index} style={{ marginVertical: 5 }}>
-                    {med.name} at {med.time} (Patient ID: {med.patientId})
-                  </Text>
-                ))
-              ) : (
-                <Text>No medications for this day.</Text>
-              )}
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "rgba(0,0,0,0.5)",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <View
+              style={{
+                width: 500,
+                height: 500,
+                padding: 20,
+                backgroundColor: "white",
+                borderRadius: 10,
+              }}
+            >
+              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                Details for {selectedDate}
+              </Text>
+
+              <ScrollView style={{ marginVertical: 10 }}>
+                {medicationData[selectedDate] ? (
+                  medicationData[selectedDate].map((med, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      style={{
+                        backgroundColor: "rgba(103, 154, 236, 0.2)",
+                        padding: 10,
+                        borderRadius: 5,
+                        marginVertical: 5,
+                        paddingHorizontal: 10,
+                        paddingVertical: 10,
+                      }}
+                      onPress={() => {
+                        router.push(
+                          `/viewmed?schedule_id=${med.scheduleId}&patient_number=${med.patientId}`
+                        );
+
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          textAlign: "flex-start",
+                          color: "#000",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {med.name} at {med.time} (Patient ID: {med.patientId},
+                        Schedule ID: {med.scheduleId})
+                      </Text>
+                    </TouchableOpacity>
+                  ))
+                ) : (
+                  <Text>No medications for this day.</Text>
+                )}
+              </ScrollView>
+
               <Button title="Close" onPress={() => setModalVisible(false)} />
             </View>
           </View>
