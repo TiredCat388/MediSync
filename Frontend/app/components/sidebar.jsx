@@ -3,6 +3,7 @@ import { Animated, TouchableOpacity, Modal, Text, View, Image } from 'react-nati
 import { FontAwesome, Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import styles from './sidebarstyle';
+import { useNotification } from '../../notifcontext';
 
 const Sidebar = () => {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
@@ -13,6 +14,7 @@ const Sidebar = () => {
   const [textColor, setTextColor] = useState('gray');
   const [showSubOptions, setShowSubOptions] = useState(false);
   const [isDirectoryExpanded, setIsDirectoryExpanded] = useState(false);
+  const { showNotification } = useNotification();
 
   const router = useRouter();
 
@@ -124,6 +126,27 @@ const Sidebar = () => {
             <Feather name="log-out" size={24} color={iconColor} />
             {isSidebarExpanded && <Text style={[styles.iconLabel, { color: textColor }]}>Logout</Text>}
           </TouchableOpacity>
+
+          {/*For testing the notification to see how it looks, delete when finalizing
+          <TouchableOpacity
+            onPress={() =>
+              showNotification({
+                scheduleId: 'A-129',
+                patient: 'John Smith',
+                medication: 'Amoxicillin',
+                dosage: '250mg',
+                room: 'Room 402',
+                quantity: '2 tablets',
+                notes: 'Take after meals',
+              })
+            }
+            style={styles.iconLabelContainer}
+          >
+            <Feather name="alert-circle" size={24} color={iconColor} />
+            {isSidebarExpanded && <Text style={[styles.iconLabel, { color: textColor }]}>Notif_Test</Text>}
+          </TouchableOpacity>
+          */}
+
         </View>
 
         {/* Logo */}
