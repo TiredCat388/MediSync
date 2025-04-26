@@ -175,7 +175,7 @@ export default function PatientsDirectory() {
                   justifyContent: "center",
                 }}
               >
-                <Text style={{ fontSize: 17, fontWeight: "bold" }}>
+                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
                   Patient ID
                 </Text>
               </View>
@@ -186,7 +186,7 @@ export default function PatientsDirectory() {
                   justifyContent: "center",
                 }}
               >
-                <Text style={{ fontSize: 17, fontWeight: "bold" }}>
+                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
                   Patient Name
                 </Text>
               </View>
@@ -197,7 +197,7 @@ export default function PatientsDirectory() {
                   justifyContent: "center",
                 }}
               >
-                <Text style={{ fontSize: 17, fontWeight: "bold" }}>
+                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
                   Archived Date
                 </Text>
               </View>
@@ -216,9 +216,7 @@ export default function PatientsDirectory() {
                       : "lightgrey",
                     borderBottomWidth: 1,
                     borderColor: "black",
-                    minHeight: 40,
-                    alignItems: "center",
-                    paddingHorizontal: 5,
+                    minHeight: 35,
                   }}
                 >
                   {/* Patient ID */}
@@ -227,9 +225,9 @@ export default function PatientsDirectory() {
                       flex: 1,
                       alignItems: "center",
                       justifyContent: "center",
-                      height: "100%",
                       borderRightWidth: 1,
                       borderColor: "black",
+                      paddingHorizontal: 5,
                     }}
                   >
                     <Text style={{ fontSize: 15 }}>
@@ -243,7 +241,6 @@ export default function PatientsDirectory() {
                       flex: 2,
                       alignItems: "center",
                       justifyContent: "center",
-                      height: "100%",
                       borderRightWidth: 1,
                       borderColor: "black",
                       paddingHorizontal: 5,
@@ -266,8 +263,8 @@ export default function PatientsDirectory() {
                       flex: 2,
                       alignItems: "center",
                       justifyContent: "center",
-                      height: "100%",
                       borderColor: "black",
+                      paddingHorizontal:5,
                     }}
                   >
                     <Text style={{ fontSize: 15 }}>
@@ -283,7 +280,6 @@ export default function PatientsDirectory() {
                       width: 50,
                       alignItems: "center",
                       justifyContent: "center",
-                      height: "100%",
                     }}
                   >
                     {item.patient_number && (
