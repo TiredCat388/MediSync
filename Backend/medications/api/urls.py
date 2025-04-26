@@ -12,7 +12,7 @@ urlpatterns = router.urls + [
         name='medications-detail'
     ),
     path(
-        'medications/<str:patient_number>/',
+        'medications/',
         MedicationsViewSet.as_view({'post': 'create'}),
         name='medications-create'
     ),

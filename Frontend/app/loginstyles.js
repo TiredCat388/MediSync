@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 15,
     marginBottom: 10,
-    width: width * 0.35,
+    width: width * 0.45,
   },
   roleText: {
     color: "white",

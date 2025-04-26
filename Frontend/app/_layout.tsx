@@ -1,10 +1,12 @@
-import { Stack } from "expo-router";
-import { PaperProvider } from "react-native-paper";
+import { Slot } from 'expo-router';
+import { NotificationProvider, useNotification } from '../notifcontext';
+import GlobalNotification from './notification/globalnotif';  // Import GlobalNotification component
 
-export default function RootLayout() {
+export default function Layout() {
   return (
-    <PaperProvider>
-      <Stack />
-    </PaperProvider>
+    <NotificationProvider>
+      <Slot />  
+      <GlobalNotification /> 
+    </NotificationProvider>
   );
 }
