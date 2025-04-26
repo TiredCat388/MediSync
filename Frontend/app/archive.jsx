@@ -264,12 +264,14 @@ export default function PatientsDirectory() {
                       alignItems: "center",
                       justifyContent: "center",
                       borderColor: "black",
-                      paddingHorizontal:5,
+                      paddingHorizontal: 5,
                     }}
                   >
                     <Text style={{ fontSize: 15 }}>
                       {item.date_archived
-                        ? new Date(item.date_archived).toLocaleString()
+                        ? new Date(item.date_archived).toLocaleString("en-PH", {
+                            timeZone: "Asia/Manila",
+                          })
                         : ""}
                     </Text>
                   </View>
