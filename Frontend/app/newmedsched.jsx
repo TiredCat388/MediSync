@@ -215,7 +215,7 @@ export default function NewMedSched() {
               />
             </View>
 
-            <Text style={styles.label}>Dosage</Text>
+            <Text style={[styles.label, { marginTop: 50 }]}>Dosage</Text>
             <View style={styles.dobContainer}>
               <TextInput
                 style={[styles.dobInput, { width: 60 }]}

@@ -32,3 +32,19 @@ class PatientsModelSerializer(serializers.ModelSerializer):
         except serializers.ValidationError as e:
             print(f"Validation error: {e.detail}")
             raise e
+        
+    def update(self, instance, validated_data):
+        emergency_contact_data = validated_data.pop('emergencycontactdetails', None)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        if emergency_contact_data:
+            emergency_contact = instance.emergencycontactdetails
+            for attr, value in emergency_contact_data.items():
+                setattr(emergency_contact, attr, value)
+            emergency_contact.save()
+
+        return instance
+

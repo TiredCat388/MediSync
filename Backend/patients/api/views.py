@@ -3,6 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from ..models import Patients
 from .serializers import PatientsModelSerializer
+from django.utils import timezone
 
 class PatientsViewSet(viewsets.ModelViewSet):
     queryset = Patients.objects.all()
@@ -21,3 +22,17 @@ class PatientsViewSet(viewsets.ModelViewSet):
                 {'error': f'Patient {patient_number} not found'}, 
                 status=status.HTTP_404_NOT_FOUND
             )
+    
+    @action(detail=True, methods=['patch'], url_path='archive')  
+    def archive(self, request, pk=None):
+        try:
+            patient = self.get_object()
+            patient.is_archived = True  
+            patient.date_archived = timezone.now()  
+            patient.save()
+            return Response({'status': 'archived'}, status=status.HTTP_200_OK)
+        except Patients.DoesNotExist:
+            return Response({'error': 'Patient not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
