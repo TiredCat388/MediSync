@@ -59,7 +59,7 @@ export default function SettingsScreen() {
       console.error("Error playing sound:", error);
     }
   };
- 
+
   const handleAlertSoundChange = async (itemValue) => {
     setAlertSound(itemValue);
 
@@ -88,7 +88,6 @@ export default function SettingsScreen() {
   const handleVolumeChange = (value) => {
     setVolume(value);
   };
-
 
   return (
     <View style={{ flex: 1, flexDirection: "row" }}>
@@ -222,7 +221,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   picker: {
-    height: 44,
+    height: 50,
     width: "100%",
     color: "#000",
   },
