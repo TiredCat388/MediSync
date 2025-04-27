@@ -11,12 +11,7 @@ export default function SettingsScreen() {
   const [selectedSound, setSelectedSound] = useState("Default");
 
   return (
-<<<<<<< Updated upstream
-    <View style={styles.container}>
-      <Text style={styles.heading}>SETTINGS</Text>
-=======
     <View style={{ flex: 1, flexDirection: "row" }}>
->>>>>>> Stashed changes
 
       {/* Volume Control */}
       <Text style={styles.label}>Volume</Text>
@@ -52,9 +47,6 @@ export default function SettingsScreen() {
       </View>
     </View>
   );
-<<<<<<< Updated upstream
-}
-=======
 }
 
 const styles = StyleSheet.create({
@@ -127,4 +119,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
->>>>>>> Stashed changes
