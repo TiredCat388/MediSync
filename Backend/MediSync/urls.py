@@ -14,5 +14,6 @@ urlpatterns = [
     path('api/', include('login.api.urls')),
     path('api/', include('patients.api.urls')),
     path('api/', include('medications.api.urls')),
+     path('api/', include('settings.api.urls')), 
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
 ]

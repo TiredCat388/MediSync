@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'patients',
     'medications',
     'logs',
-    'login'
+    'login',
+    'settings'
 ]
 
 MIDDLEWARE = [
@@ -91,7 +92,9 @@ DATABASES = {
         'HOST': config('DATABASE_HOST'),
         'PORT': config('DATABASE_PORT'),
     }
+
 }
+
 
 
 # Password validation
