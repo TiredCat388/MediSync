@@ -37,32 +37,6 @@ export default function NewMedSched() {
   const [filteredMedications, setFilteredMedications] = useState([]); // Filtered list
   const [query, setQuery] = useState("");
 
-  useEffect(() => {
-    async function fetchPatientID() {
-      try {
-        const response = await fetch("https://your-api.com/get-patient-id");
-        const data = await response.json();
-        setPatientID(data.patientID);
-      } catch (error) {
-        console.error("Error fetching patient ID:", error);
-      }
-    }
-    fetchPatientID();
-  }, []);
-
-  // Fetch medications from database
-  useEffect(() => {
-    async function fetchMedications() {
-      try {
-        const response = await fetch("https://your-api.com/get-medications");
-        const data = await response.json();
-        setMedications(data.medications); // Assuming response is { medications: [...] }
-      } catch (error) {
-        console.error("Error fetching medications:", error);
-      }
-    }
-    fetchMedications();
-  }, []);
 
   // Handle input change & filter meds
   const handleInputChange = (text) => {

@@ -19,7 +19,7 @@ export const NotificationProvider = ({ children }) => {
   useEffect(() => {
     const interval = setInterval(async () => {
       try {
-        const response = await fetch('[replace_with_your_api_endpoint]');
+        const response = await fetch('http://127.0.0.1:8000/api/medications/');
         const schedules = await response.json();
 
         const now = new Date();

@@ -88,7 +88,7 @@ const { schedule_id, patient_number } = useLocalSearchParams();
     if (text.length > 0) {
       const filtered = medications.filter(
         (item) =>
-          item.patient_number === patient_number && // Ensure it matches the patient
+          item.patient_number === patient_number &&
           item.Medication_name.toLowerCase().includes(text.toLowerCase())
       );
       setFilteredMedications(filtered);

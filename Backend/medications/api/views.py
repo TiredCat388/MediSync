@@ -95,6 +95,6 @@ class MedicationsViewSet(viewsets.ModelViewSet):
 
         # Log the deletion
         log_action(
-            f"Deleted medication with schedule ID {schedule_id} for patient {patient_number}.",
-            log_type="DELETION",
+            f"Archived medication with schedule ID {schedule_id} for patient {patient_number}.",
+            log_type="Archive",
         )
