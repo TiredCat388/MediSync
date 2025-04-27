@@ -11,8 +11,12 @@ export default function SettingsScreen() {
   const [selectedSound, setSelectedSound] = useState("Default");
 
   return (
+<<<<<<< Updated upstream
     <View style={styles.container}>
       <Text style={styles.heading}>SETTINGS</Text>
+=======
+    <View style={{ flex: 1, flexDirection: "row" }}>
+>>>>>>> Stashed changes
 
       {/* Volume Control */}
       <Text style={styles.label}>Volume</Text>
@@ -48,4 +52,79 @@ export default function SettingsScreen() {
       </View>
     </View>
   );
+<<<<<<< Updated upstream
 }
+=======
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 10,
+    padding: 90,
+    backgroundColor: "#fff",
+  },
+  heading: {
+    fontSize: 40,
+    fontWeight: "bold",
+    marginBottom: 50,
+    color: "#000",
+  },
+  sliderWrapper: {
+    borderWidth: 4,
+    borderColor: "#3b5f8a",
+    borderRadius: 12,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+  },
+  thumbStyle: {
+    width: 20, 
+    height: 20, 
+    borderRadius: 15, 
+    backgroundColor: "#3b5f8a", 
+  },
+  label: {
+    fontSize: 25,
+    fontWeight: "600",
+    marginTop: 16,
+    marginBottom: 20,
+    color: "#000",
+  },
+  volumeContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start", 
+    marginBottom: 16,
+    alignSelf: "flex-start", 
+    paddingHorizontal: 12, 
+  },
+  slider: {
+    flex: 1,
+    width: 885,
+    height: 40, 
+    marginHorizontal: 10,
+    borderRadius: 15, 
+    backgroundColor: "e0e0e0", 
+  },
+  pickerWrapper: {
+    alignSelf: "left",
+    width: 965,
+    borderWidth: 4,
+    borderColor: "#3b5f8a",
+    borderRadius: 20,
+    overflow: "hidden",
+    
+  },
+  picker: {
+    height: 44,
+    width: "100%",
+    color: "#000",
+  },
+  trackBackground: {
+    width: 900,
+    height: 25, 
+    borderRadius: 15,
+    backgroundColor: "#e0e0e0",
+    justifyContent: "center",
+  },
+});
+>>>>>>> Stashed changes
