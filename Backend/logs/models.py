@@ -1,7 +1,7 @@
 from django.db import models
 
 class Logs(models.Model):
-    log_id = models.BigIntegerField(primary_key=True)
+    log_id = models.BigAutoField(primary_key=True)
     log_date = models.DateField()
     log_time = models.TimeField()
     log_message = models.CharField(max_length=500)

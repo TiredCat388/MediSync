@@ -4,6 +4,7 @@ from rest_framework.test import APIClient
 from rest_framework import status
 from medications.models import Medications
 from patients.models import Patients
+from logs.models import Logs
 
 class MedicationsAPITestCase(TestCase):
     def setUp(self):

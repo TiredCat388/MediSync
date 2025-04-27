@@ -42,7 +42,7 @@ const Sidebar = () => {
     } else if (icon === 'clock') {
       router.push('/clock');
     } else if (icon === 'settings') {
-      router.push('/logs');
+      router.push('/settings');
     } else if (icon === 'logout') {
       setLogoutModalVisible(true);
     }
