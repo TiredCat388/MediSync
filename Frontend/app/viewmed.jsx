@@ -11,17 +11,17 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import Sidebar from "./components/sidebar";
 import RNPickerSelect from "react-native-picker-select";
 import Autocomplete from "react-native-autocomplete-input";
-import styles from "./registerstyle";
+import styles from "./viewmedstyle";
 
 export default function NewMedSched() {
   const router = useRouter();
-const { schedule_id, patient_number } = useLocalSearchParams();
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [warningModalVisible, setWarningModalVisible] = useState(false);
+  const { schedule_id, patient_number } = useLocalSearchParams();
+  const [isSidebarExpanded] = useState(false);
+  const [setWarningModalVisible] = useState(false);
+  const [patientName, setPatientName] = useState("Loading...");
 
-    console.log("Schedule ID:", schedule_id);
-    console.log("Patient Number:", patient_number);  
+  console.log("Schedule ID:", schedule_id);
+  console.log("Patient Number:", patient_number);
 
   const [formData, setFormData] = useState({
     medicineName: "",
@@ -40,6 +40,27 @@ const { schedule_id, patient_number } = useLocalSearchParams();
   const [filteredMedications, setFilteredMedications] = useState([]); // Filtered list
   const [query, setQuery] = useState("");
 
+  useEffect(() => {
+    const fetchPatientName = async () => {
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:8000/api/patients/by-number/${patient_number}/`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setPatientName(`${data.first_name} ${data.last_name}`);
+        } else {
+          console.error("Failed to fetch patient name");
+        }
+      } catch (error) {
+        console.error("Error fetching patient name:", error);
+      }
+    };
+
+    if (patient_number) {
+      fetchPatientName();
+    }
+  }, [patient_number]);
 
   useEffect(() => {
     if (schedule_id && patient_number) {
@@ -78,8 +99,6 @@ const { schedule_id, patient_number } = useLocalSearchParams();
       fetchMedicationDetails();
     }
   }, [schedule_id, patient_number]);
-
-  
 
   const handleInputChange = (text) => {
     setQuery(text);
@@ -145,7 +164,7 @@ const { schedule_id, patient_number } = useLocalSearchParams();
       const medicationTime = convertTo24Hour(
         formData.timeHour,
         formData.timeMinute,
-        formData.timePeriod,
+        formData.timePeriod
       );
 
       const frequency = `${formData.frequencyHour.padStart(
@@ -196,7 +215,7 @@ const { schedule_id, patient_number } = useLocalSearchParams();
           `Failed to save medication: ${responseData.error || "Unknown error"}`
         );
       }
-    } catch (error) {   
+    } catch (error) {
       console.error("Full Error:", JSON.stringify(error, null, 2));
       alert("An error occurred. Please try again.");
     }
@@ -215,9 +234,9 @@ const { schedule_id, patient_number } = useLocalSearchParams();
         <View style={styles.formContainer}>
           <View style={styles.column}>
             <Text style={styles.sectionTitle}>
-              {patient_number && schedule_id
-                ? `FOR: Patient ID - ${patient_number} with Schedule ID - ${schedule_id}`
-                : "FOR: Patient ID - Loading... with Schedule ID - Loading..."}
+              {patientName && schedule_id
+                ? `FOR: Patient - ${patientName} | Schedule ID - ${schedule_id}`
+                : `FOR: Patient - ${patientName} | Schedule ID - Loading...`}
             </Text>
 
             {/* Medication Name with Autocomplete */}
@@ -393,6 +412,7 @@ const { schedule_id, patient_number } = useLocalSearchParams();
             <TextInput
               style={styles.input}
               editable={false}
+              value={formData.physicianID}
               onChangeText={(text) =>
                 setFormData({ ...formData, physicianID: text })
               }
@@ -404,7 +424,7 @@ const { schedule_id, patient_number } = useLocalSearchParams();
             onPress={handleCancel}
             style={[styles.button, styles.stayButton]}
           >
-            <Text style={styles.buttonText}>Cancel</Text>
+            <Text style={styles.buttonText}>Back</Text>
           </TouchableOpacity>
         </View>
       </View>

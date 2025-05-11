@@ -9,6 +9,8 @@ import { useRouter } from "expo-router";
 import Sidebar from "./components/sidebar";
 import { useState, useEffect } from "react";
 import { Menu, Divider, Provider } from "react-native-paper";
+import styles from "./directorystyles";
+
 
 const TESTING_PATIENT = { id: "0123456", name: "TESTING PURPOSES ONLY" };
 
@@ -23,25 +25,21 @@ export default function PatientsDirectory() {
     fetchPatients();
   }, []);
 
- const fetchPatients = async () => {
-   try {
-     const response = await fetch("http://127.0.0.1:8000/api/patients/");
-     const data = await response.json();
+  const fetchPatients = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/patients/");
+      const data = await response.json();
 
-     // Assuming each patient has an `is_archived` field (you can change this based on your backend)
-     const activePatients = data.filter((patient) => !patient.is_archived);
+      const activePatients = data.filter((patient) => !patient.is_archived);
 
-     setPatients(
-       activePatients.length > 0 ? activePatients : [TESTING_PATIENT]
-     );
-   } catch (error) {
-     console.error("Error fetching patients:", error);
-     setPatients([TESTING_PATIENT]);
-   }
- };
-
-
-  
+      setPatients(
+        activePatients.length > 0 ? activePatients : [TESTING_PATIENT]
+      );
+    } catch (error) {
+      console.error("Error fetching patients:", error);
+      setPatients([TESTING_PATIENT]);
+    }
+  };
 
   const formatName = (firstName, middleName, lastName) => {
     const formattedLastName = lastName.toUpperCase();
@@ -75,68 +73,18 @@ export default function PatientsDirectory() {
 
   return (
     <Provider>
-      <View
-        style={{ flex: 1, flexDirection: "row", backgroundColor: "#f8f8f8" }}
-      >
+      <View style={styles.container}>
         <Sidebar onNavigate={(destination) => router.push(destination)} />
-        <View style={{ flex: 1, marginLeft: 70, padding: 40 }}>
-          {/* Header and Button Row */}
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Text style={{ fontSize: 25, fontWeight: "bold" }}>
-              Patients Directory
-            </Text>
-            <TouchableOpacity
-              onPress={() => router.push("/registernew")}
-              style={{
-                backgroundColor: "#5879a5",
-                paddingVertical: 8,
-                paddingHorizontal: 20,
-                borderRadius: 8,
-                alignItems: "center",
-                justifyContent: "center",
-                minWidth: 180,
-                marginTop: 40,
-              }}
-            >
-              <Text
-                style={{ color: "white", fontSize: 18, fontWeight: "bold" }}
-              >
-                + New Patient{" "}
-              </Text>
-            </TouchableOpacity>
+        <View style={styles.content}>
+          {/* Header */}
+          <View style={styles.header}>
+            <Text style={styles.headerText}>Patients Directory</Text>
           </View>
 
           {/* Search + Sort */}
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              marginTop: 20,
-            }}
-          >
+          <View style={styles.searchSortContainer}>
             <TextInput
-              style={{
-                flex: 1,
-                height: 45,
-                borderColor: "#000",
-                borderWidth: 1,
-                borderRadius: 10,
-                paddingHorizontal: 14,
-                marginRight: 12,
-                backgroundColor: "#fff",
-                fontSize: 16,
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 1 },
-                shadowOpacity: 0.1,
-                shadowRadius: 2,
-                elevation: 2,
-              }}
+              style={styles.searchInput}
               placeholder="Search by name or patient number"
               placeholderTextColor="#666"
               value={searchText}
@@ -144,116 +92,53 @@ export default function PatientsDirectory() {
             />
             <TouchableOpacity
               onPress={() => setSortAscending(!sortAscending)}
-              style={{
-                backgroundColor: "#5c87b2",
-                paddingVertical: 10,
-                paddingHorizontal: 16,
-                borderRadius: 10,
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 1 },
-                shadowOpacity: 0.1,
-                shadowRadius: 2,
-                elevation: 2,
-              }}
+              style={styles.sortButton}
             >
-              <Text style={{ fontSize: 16, color: "#fff", fontWeight: "600" }}>
+              <Text style={styles.sortButtonText}>
                 Sort {sortAscending ? "↑" : "↓"}
               </Text>
             </TouchableOpacity>
           </View>
 
           {/* Table */}
-          <View
-            style={{
-              marginTop: 20,
-              backgroundColor: "white",
-              borderRadius: 15,
-              borderWidth: 1,
-              borderColor: "black",
-              overflow: "hidden",
-            }}
-          >
-            {/* Table Header */}
-            <View
-              style={{
-                flexDirection: "row",
-                backgroundColor: "white",
-                paddingVertical: 10,
-                borderBottomWidth: 1,
-                borderColor: "black",
-              }}
-            >
-              <View
-                style={{
-                  flex: 1,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-                  Patient ID
-                </Text>
+          <View style={styles.table}>
+            <View style={styles.tableHeader}>
+              <View style={styles.tableHeaderCell}>
+                <Text style={styles.tableHeaderText}>Patient ID</Text>
               </View>
-              <View
-                style={{
-                  flex: 2,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-                  Patient Name
-                </Text>
+              <View style={styles.tableHeaderCell}>
+                <Text style={styles.tableHeaderText}>Patient Name</Text>
               </View>
             </View>
 
-            {/* Table Rows */}
             <FlatList
               data={displayedPatients}
               keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item, index }) => (
-                <View
-                  style={{
-                    flexDirection: "row",
-                    backgroundColor: item.patient_number
-                      ? "white"
-                      : "lightgrey",
-                    borderBottomWidth: 1,
-                    borderColor: "black",
-                    minHeight: 35,
-                  }}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  onPress={() =>
+                    item.patient_number &&
+                    router.push(
+                      `/viewpatient?patient_number=${item.patient_number}`
+                    )
+                  }
+                  style={[
+                    styles.row,
+                    {
+                      backgroundColor: item.patient_number
+                        ? "white"
+                        : "lightgrey",
+                    },
+                  ]}
                 >
-                  <View
-                    style={{
-                      flex: 1,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: 10,
-                    }}
-                  >
-                    <Text style={{ fontSize: 16 }}>
+                  <View style={styles.rowCellID}>
+                    <Text style={styles.rowText}>
                       {item.patient_number || ""}
                     </Text>
                   </View>
-                  <View
-                    style={{
-                      width: 2,
-                      backgroundColor: "black",
-                      alignSelf: "stretch",
-                    }}
-                  />
-                  <View
-                    style={{
-                      flex: 2,
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: 10,
-                    }}
-                  >
-                    <Text
-                      style={{ fontSize: 16, flex: 1, textAlign: "center" }}
-                    >
+                  <View style={styles.rowDivider} />
+                  <View style={styles.rowCellName}>
+                    <Text style={styles.rowTextCentered}>
                       {item.first_name && item.last_name
                         ? formatName(
                             item.first_name,
@@ -262,70 +147,8 @@ export default function PatientsDirectory() {
                           )
                         : ""}
                     </Text>
-                    {item.patient_number && (
-                      <Menu
-                        visible={visibleMenu === index}
-                        onDismiss={() => setVisibleMenu(null)}
-                        anchorPosition="bottom"
-                        anchor={
-                          <TouchableOpacity
-                            onPress={() =>
-                              setVisibleMenu(
-                                visibleMenu === index ? null : index
-                              )
-                            }
-                            style={{ marginLeft: 10 }}
-                          >
-                            <Text style={{ fontSize: 20 }}>⋯</Text>
-                          </TouchableOpacity>
-                        }
-                      >
-                        <Menu.Item
-                          onPress={() =>
-                            router.push(
-                              `/viewpatient?patient_number=${item.patient_number}`
-                            )
-                          }
-                          title="View"
-                        />
-                        <Divider />
-                        <Menu.Item
-                          onPress={async () => {
-                            try {
-                              const response = await fetch(
-                                `http://127.0.0.1:8000/api/patients/${item.patient_number}/archive/`,
-                                {
-                                  method: "PATCH",
-                                }
-                              );
-
-                              if (response.ok) {
-                                // Remove the archived patient from the visible list
-                                setPatients((prevPatients) =>
-                                  prevPatients.filter(
-                                    (p) =>
-                                      p.patient_number !== item.patient_number
-                                  )
-                                );
-
-                                // Optional: show a toast or success message
-                                console.log("Patient successfully archived.");
-                              } else {
-                                console.error(
-                                  "Archiving failed with status:",
-                                  response.status
-                                );
-                              }
-                            } catch (error) {
-                              console.error("Failed to archive:", error);
-                            }
-                          }}
-                          title="Archive"
-                        />
-                      </Menu>
-                    )}
                   </View>
-                </View>
+                </TouchableOpacity>
               )}
             />
           </View>

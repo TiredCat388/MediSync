@@ -12,12 +12,12 @@ import { DataTable, Button } from "react-native-paper";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import Sidebar from "./components/sidebar";
 import { Feather } from "@expo/vector-icons";
- import { Alert } from "react-native";
+import { Alert } from "react-native";
+import { styles } from "./viewpatientstyle.js";
 
 const { width } = Dimensions.get("window");
 const isTablet = width > 900;
 const sidebarWidth = 70;
-
 
 export default function PatientDetails() {
   const router = useRouter();
@@ -26,13 +26,13 @@ export default function PatientDetails() {
   const [loading, setLoading] = useState(true);
 
   const [medicationData, setMedicationData] = useState([]);
-  const [showMedications, setShowMedications] = useState(false);
+  const [showMedications, setShowMedications] = useState(true);
   const [searchQuery, setSearchQuery] = useState(""); // Search bar state
   const [openMenuId, setOpenMenuId] = useState(null);
 
-
   useEffect(() => {
     fetchPatientDetails();
+    fetchMedications(); // load meds right away
   }, [patient_number]);
 
   const fetchPatientDetails = async () => {
@@ -67,7 +67,6 @@ export default function PatientDetails() {
     }
   };
 
-
   const archivePatient = async () => {
     try {
       const response = await fetch(
@@ -85,7 +84,7 @@ export default function PatientDetails() {
 
       if (response.ok) {
         Alert.alert("Success", "Patient archived successfully");
-        router.push("/directory");
+        router.push("/archive");
       } else {
         Alert.alert("Error", "Failed to archive patient");
       }
@@ -94,9 +93,6 @@ export default function PatientDetails() {
       Alert.alert("Error", "An error occurred while archiving the patient");
     }
   };
-
-
-
 
   const fetchMedications = async () => {
     try {
@@ -151,7 +147,6 @@ export default function PatientDetails() {
     return <Text>Loading patient details...</Text>;
   }
 
-
   return (
     <View style={styles.container}>
       <Sidebar />
@@ -163,6 +158,16 @@ export default function PatientDetails() {
           >
             <Text style={styles.buttonText}>Back</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.UpdateButton}
+            onPress={() =>
+              router.push(`/updatepatient?patient_number=${patient_number}`)
+            }
+          >
+            <Text style={styles.buttonText}>Update Patient</Text>
+          </TouchableOpacity>
+
           <TouchableOpacity
             style={styles.deactivateButton}
             onPress={async () => {
@@ -245,8 +250,7 @@ export default function PatientDetails() {
           <View>
             <View
               style={[
-                styles.tableContainer,
-                { maxHeight: 350, overflow: "visible" },
+                styles.tableContainer 
               ]}
             >
               <ScrollView nestedScrollEnabled={true}>
@@ -341,7 +345,10 @@ export default function PatientDetails() {
                                   style={styles.menuItem}
                                   onPress={() => {
                                     setOpenMenuId(null);
-                                    deleteSchedule(item.schedule_id);
+                                    deleteSchedule(
+                                      item.schedule_id,
+                                      patient_number
+                                    );
                                   }}
                                 >
                                   <Text
@@ -381,140 +388,3 @@ export default function PatientDetails() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, flexDirection: "row", backgroundColor: "#f0f0f0" },
-  mainContent: { flex: 1, padding: 20, marginLeft: sidebarWidth },
-  boldLabel: { fontWeight: "bold", fontSize: 16, marginTop: 10 },
-  headerButtons: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    marginBottom: 10,
-  },
-  backButton: {
-    backgroundColor: "#ccc",
-    padding: 10,
-    borderRadius: 5,
-    marginRight: 10,
-  },
-  deactivateButton: {
-    backgroundColor: "#C15959",
-    padding: 10,
-    borderRadius: 5,
-  },
-  patientId: { fontSize: 18, fontWeight: "bold", marginBottom: 10 },
-  infoContainer: {
-    flexDirection: "row",
-    backgroundColor: "#e0e0e0",
-    padding: 15,
-    borderRadius: 8,
-  },
-  detailsSection: { flex: 1, paddingHorizontal: 10 },
-  divider: { width: 1, backgroundColor: "gray", marginHorizontal: 10 },
-  sectionTitle: { fontWeight: "bold", fontSize: 20, marginBottom: 5 },
-  medicationToggleButton: {
-    backgroundColor: "#5879a5",
-    padding: 10,
-    alignItems: "flex-start", 
-    borderRadius: 5,
-    marginTop: 15,
-    alignSelf: "flex-start", 
-    marginLeft: 0, 
-  },
-  buttonText: {
-    fontWeight: "bold",
-    color: "white", 
-  },
-  deactbuttonText: { fontWeight: "bold", color: "white" },
-  tableContainer: {
-    marginTop: 10,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-    maxHeight: 500,
-    overflow: "visible",
-  },
-  tableHeader: {
-    backgroundColor: "#f6f6f6",
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  row: { borderBottomWidth: 2, borderColor: "#ccc" },
-  buttonWrapper: { alignItems: "flex-end", marginTop: 10 },
-  addMedicationButton: {
-    backgroundColor: "#5879a5",
-    paddingHorizontal: 10,
-    borderRadius: 10,
-  },
-  searchInput: {
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "#888",
-    borderRadius: 5,
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-    fontSize: 14,
-    width: 140,
-    height: 24.5,
-  },
-
-  columnId: {
-    flex: 1.2,
-  },
-
-  columnName: {
-    flex: 1.2,
-  },
-
-  columnTime: {
-    flex: 1.2,
-  },
-
-  columnNotes: {
-    flex: 3,
-  },
-
-  columnActions: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-end",
-  },
-
-  popupMenu: {
-    position: "absolute",
-    top: 30,
-    right: 0,
-    backgroundColor: "#fff",
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 8,
-    elevation: 10, 
-    zIndex: 9999, 
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    width: 130,
-  },
-
-  menuItem: {
-    paddingVertical: 8,
-  },
-
-  menuItemText: {
-    fontSize: 16,
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    borderRadius: 6,
-  },
-
-  updateText: {
-    color: "#000", 
-    fontWeight: "500",
-  },
-
-  deleteText: {
-    color: "#", 
-    fontWeight: "500",
-  },
-});

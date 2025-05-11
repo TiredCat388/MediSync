@@ -24,29 +24,45 @@ export default function CalendarApp() {
     try {
       const response = await fetch(`http://127.0.0.1:8000/api/medications`);
       if (!response.ok) {
-        throw new Error('Failed to fetch medication data');
+        throw new Error("Failed to fetch medication data");
       }
       const data = await response.json();
-      const today = new Date().toISOString().split('T')[0];
+      const today = new Date().toISOString().split("T")[0];
       const formattedData = {};
-      data.forEach((med) => {
+      const patientNames = {}; // To store Patients
+
+      // Fetch Patients
+      for (const med of data) {
+        if (!patientNames[med.patient_number]) {
+          const patientResponse = await fetch(
+            `http://127.0.0.1:8000/api/patients/${med.patient_number}`
+          );
+          const patientData = await patientResponse.json();
+          patientNames[
+            med.patient_number
+          ] = `${patientData.first_name} ${patientData.last_name}`;
+        }
+
         if (!formattedData[today]) {
           formattedData[today] = [];
         }
+
         formattedData[today].push({
           name: med.Medication_name,
           time: med.Medication_Time,
           patientId: med.patient_number,
+          patientName: patientNames[med.patient_number], // Add Patient
           scheduleId: med.schedule_id,
         });
-      });
+      }
 
-      console.log('Formatted Data:', formattedData);
+      console.log("Formatted Data:", formattedData);
       setMedicationData(formattedData);
     } catch (error) {
-      console.error('Error fetching medication data:', error);
+      console.error("Error fetching medication data:", error);
     }
   };
+  
 
   useEffect(() => {
     fetchMedicationData();
@@ -226,8 +242,9 @@ export default function CalendarApp() {
                                 }}
                                 numberOfLines={1}
                               >
-                                {med.name} at {med.time} (Patient ID:{" "}
-                                {med.patientId}, Schedule ID: {med.scheduleId})
+                                {med.name} at {med.time} (Patient:{" "}
+                                {med.patientName}, Schedule ID: {med.scheduleId}
+                                )
                               </Text>
                             </View>
                           )
@@ -286,19 +303,19 @@ export default function CalendarApp() {
                         router.push(
                           `/viewmed?schedule_id=${med.scheduleId}&patient_number=${med.patientId}`
                         );
-
                       }}
                     >
                       <Text
                         style={{
-                          fontSize: 13,
+                          fontSize: 10,
                           textAlign: "flex-start",
                           color: "#000",
                           fontWeight: "bold",
                         }}
+                        numberOfLines={1}
                       >
-                        {med.name} at {med.time} (Patient ID: {med.patientId},
-                        Schedule ID: {med.scheduleId})
+                        {med.name} at {med.time} (Patient:{" "}
+                        {med.patientName}, Schedule ID: {med.scheduleId})
                       </Text>
                     </TouchableOpacity>
                   ))

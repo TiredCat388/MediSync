@@ -15,7 +15,6 @@ const TESTING_PATIENT = { id: "0123456", name: "TESTING PURPOSES ONLY" };
 export default function PatientsDirectory() {
   const router = useRouter();
   const [patients, setPatients] = useState([]);
-  const [visibleMenu, setVisibleMenu] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [sortAscending, setSortAscending] = useState(true);
 
@@ -23,20 +22,19 @@ export default function PatientsDirectory() {
     fetchPatients();
   }, []);
 
- const fetchPatients = async () => {
-   try {
-     const response = await fetch("http://127.0.0.1:8000/api/patients/");
-     const data = await response.json();
-     const archivedPatients = data.filter((patient) => patient.is_archived);
-     setPatients(
-       archivedPatients.length > 0 ? archivedPatients : [TESTING_PATIENT]
-     );
-   } catch (error) {
-     console.error("Error fetching patients:", error);
-     setPatients([TESTING_PATIENT]);
-   }
- };
-
+  const fetchPatients = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/patients/");
+      const data = await response.json();
+      const archivedPatients = data.filter((patient) => patient.is_archived);
+      setPatients(
+        archivedPatients.length > 0 ? archivedPatients : [TESTING_PATIENT]
+      );
+    } catch (error) {
+      console.error("Error fetching patients:", error);
+      setPatients([TESTING_PATIENT]);
+    }
+  };
 
   const formatName = (firstName, middleName, lastName) => {
     const formattedLastName = lastName.toUpperCase();
@@ -48,27 +46,31 @@ export default function PatientsDirectory() {
   };
 
   // Filter + Sort
- const filteredAndSortedPatients = [...patients].filter((patient) => {
-   const search = searchText.toLowerCase();
-   const name = `${patient.first_name ?? ""} ${patient.middle_name ?? ""} ${
-     patient.last_name ?? ""
-   }`.toLowerCase();
-   const id = (patient.patient_number + "").toLowerCase();
-   return id.includes(search) || name.includes(search);
- });
+  const filteredAndSortedPatients = [...patients].filter((patient) => {
+    const search = searchText.toLowerCase();
+    const name = `${patient.first_name ?? ""} ${patient.middle_name ?? ""} ${
+      patient.last_name ?? ""
+    }`.toLowerCase();
+    const id = (patient.patient_number + "").toLowerCase();
+    return id.includes(search) || name.includes(search);
+  });
 
- patients.sort((a, b) =>
-   (a.patient_number ?? "")
-     .toString()
-     .localeCompare((b.patient_number ?? "").toString())
- );
+  filteredAndSortedPatients.sort((a, b) => {
+    const aValue = a.patient_number ?? "";
+    const bValue = b.patient_number ?? "";
+    return sortAscending
+      ? aValue.toString().localeCompare(bValue.toString())
+      : bValue.toString().localeCompare(aValue.toString());
+  });
 
- // Now use the sorted list for display
- const totalRows = 12;
- const displayedPatients = [...filteredAndSortedPatients];
- while (displayedPatients.length < totalRows) {
-   displayedPatients.push({ id: "", name: "" });
- }
+  // Now use the sorted list for display
+  const totalRows = 12;
+  const displayedPatients = [...filteredAndSortedPatients];
+  while (displayedPatients.length < totalRows) {
+    displayedPatients.push({ id: "", name: "" });
+  }
+
+  
 
   return (
     <Provider>
@@ -194,6 +196,8 @@ export default function PatientsDirectory() {
                   Archived Date
                 </Text>
               </View>
+              <View style={{ width: 50 }} />{" "}
+              {/* Empty view for the removed button space */}
             </View>
 
             {/* Table Rows */}
@@ -201,7 +205,15 @@ export default function PatientsDirectory() {
               data={displayedPatients}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({ item, index }) => (
-                <View
+                <TouchableOpacity
+                  disabled={!item.patient_number}
+                  onPress={() => {
+                    if (item.patient_number) {
+                      router.push(
+                        `/history?patient_number=${item.patient_number}`
+                      );
+                    }
+                  }}
                   style={{
                     flexDirection: "row",
                     backgroundColor: item.patient_number
@@ -269,7 +281,6 @@ export default function PatientsDirectory() {
                     </Text>
                   </View>
 
-                  {/* Menu Button (no border) */}
                   <View
                     style={{
                       width: 50,
@@ -277,35 +288,9 @@ export default function PatientsDirectory() {
                       justifyContent: "center",
                     }}
                   >
-                    {item.patient_number && (
-                      <Menu
-                        visible={visibleMenu === index}
-                        onDismiss={() => setVisibleMenu(null)}
-                        anchorPosition="bottom"
-                        anchor={
-                          <TouchableOpacity
-                            onPress={() =>
-                              setVisibleMenu(
-                                visibleMenu === index ? null : index
-                              )
-                            }
-                          >
-                            <Text style={{ fontSize: 20 }}>⋯</Text>
-                          </TouchableOpacity>
-                        }
-                      >
-                        <Menu.Item
-                          onPress={() =>
-                            router.push(
-                              `/history?patient_number=${item.patient_number}`
-                            )
-                          }
-                          title="History"
-                        />
-                      </Menu>
-                    )}
+                   
                   </View>
-                </View>
+                </TouchableOpacity>
               )}
             />
           </View>
