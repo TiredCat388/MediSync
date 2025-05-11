@@ -11,34 +11,57 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import Sidebar from "./components/sidebar";
 import RNPickerSelect from "react-native-picker-select";
 import Autocomplete from "react-native-autocomplete-input";
-import styles from "./registerstyle";
+import styles from "./newmedschedstyle";
 
 export default function NewMedSched() {
   const router = useRouter();
-  const { patient_number } = useLocalSearchParams(); // Extract patient_number from the URL
+  const { patient_number } = useLocalSearchParams();
+
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [warningModalVisible, setWarningModalVisible] = useState(false);
 
+  const [patientName, setPatientName] = useState(null); // ✅ for storing patient name
+
   const [formData, setFormData] = useState({
-    medicineName: '',
-    dosage: '',
-    dosageUnit: '',
-    timeHour: '',
-    timeMinute: '',
-    timePeriod: '',
-    medicationNotes: '',
-    physicianID: '',
-    frequencyHour: '',
-    frequencyMinute: '',
+    medicineName: "",
+    dosage: "",
+    dosageUnit: "",
+    timeHour: "",
+    timeMinute: "",
+    timePeriod: "",
+    medicationNotes: "",
+    physicianID: "",
+    frequencyHour: "",
+    frequencyMinute: "",
   });
 
-  const [medications, setMedications] = useState([]); // List from DB
-  const [filteredMedications, setFilteredMedications] = useState([]); // Filtered list
+  const [medications, setMedications] = useState([]);
+  const [filteredMedications, setFilteredMedications] = useState([]);
   const [query, setQuery] = useState("");
 
+  useEffect(() => {
+    const fetchPatientDetails = async () => {
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:8000/api/patients/${patient_number}/`
+        );
+        const data = await response.json();
+        if (response.ok) {
+          setPatientName(`${data.first_name} ${data.last_name}`);
+        } else {
+          console.error("Failed to fetch patient:", data);
+        }
+      } catch (error) {
+        console.error("Error fetching patient:", error);
+      }
+    };
 
-  // Handle input change & filter meds
+    if (patient_number) {
+      fetchPatientDetails();
+    }
+  }, [patient_number]);
+
   const handleInputChange = (text) => {
     setQuery(text);
     setFormData({ ...formData, medicineName: text });
@@ -53,7 +76,6 @@ export default function NewMedSched() {
     }
   };
 
-  // Handle medication selection
   const handleSelectMedication = (medName) => {
     setQuery(medName);
     setFormData({ ...formData, medicineName: medName });
@@ -61,7 +83,6 @@ export default function NewMedSched() {
   };
 
   const handleRegister = async () => {
-    // Only check required fields
     const requiredFields = [
       "medicineName",
       "dosage",
@@ -82,14 +103,10 @@ export default function NewMedSched() {
       return;
     }
 
-    // Convert 12-hour time to 24-hour format
     const convertTo24Hour = (hour, minute, period) => {
       let hour24 = parseInt(hour);
-      if (period === "PM" && hour24 !== 12) {
-        hour24 += 12;
-      } else if (period === "AM" && hour24 === 12) {
-        hour24 = 0;
-      }
+      if (period === "PM" && hour24 !== 12) hour24 += 12;
+      if (period === "AM" && hour24 === 12) hour24 = 0;
       return `${hour24.toString().padStart(2, "0")}:${minute.padStart(2, "0")}`;
     };
 
@@ -112,29 +129,21 @@ export default function NewMedSched() {
         Medication_Time: medicationTime,
         Frequency: frequency,
         Medication_notes: formData.medicationNotes,
-        patient_number: parseInt(patient_number), // Convert to integer
+        patient_number: parseInt(patient_number),
       };
-
-      console.log("Sending data:", requestData);
 
       const response = await fetch("http://127.0.0.1:8000/api/medications/", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestData),
       });
 
-      console.log("Response status:", response.status);
       const responseData = await response.json();
-      console.log("Response data:", responseData);
 
       if (response.ok) {
         alert("Medication added successfully!");
         router.push(`/viewpatient?patient_number=${patient_number}`);
       } else {
-        console.error("Error adding medication:", responseData);
-        // Display more detailed error message
         const errorMessage =
           responseData.detail ||
           (responseData.non_field_errors && responseData.non_field_errors[0]) ||
@@ -162,7 +171,9 @@ export default function NewMedSched() {
           <View style={styles.column}>
             <Text style={styles.sectionTitle}>
               {patient_number
-                ? `FOR: Patient ID - ${patient_number}`
+                ? patientName
+                  ? `FOR: ${patientName} | Patient ID - ${patient_number}`
+                  : `FOR: Patient ID - ${patient_number}`
                 : "FOR: Patient ID - Loading..."}
             </Text>
 
@@ -371,7 +382,7 @@ export default function NewMedSched() {
                 style={[styles.modalButton, styles.leaveButton]}
                 onPress={() => {
                   setModalVisible(false);
-                  router.back();
+                  router.push(`/viewpatient?patient_number=${patient_number}`);
                 }}
               >
                 <Text style={styles.modalButtonText}>Leave</Text>

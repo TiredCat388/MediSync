@@ -11,14 +11,38 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import Sidebar from "./components/sidebar";
 import RNPickerSelect from "react-native-picker-select";
 import Autocomplete from "react-native-autocomplete-input";
-import styles from "./registerstyle";
+import styles from "./updatemedstyle";
 
 export default function NewMedSched() {
   const router = useRouter();
-const { schedule_id, patient_number } = useLocalSearchParams();
+  const { schedule_id, patient_number } = useLocalSearchParams();
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [warningModalVisible, setWarningModalVisible] = useState(false);
+  const [patientName, setPatientName] = useState(null);
+
+  useEffect(() => {
+    if (patient_number) {
+      const fetchPatientName = async () => {
+        try {
+          const response = await fetch(
+            `http://127.0.0.1:8000/api/patients/${patient_number}/`
+          );
+          if (response.ok) {
+            const data = await response.json();
+            setPatientName(`${data.first_name} ${data.last_name}`);
+          } else {
+            console.error("Failed to fetch patient name");
+          }
+        } catch (error) {
+          console.error("Error fetching patient name:", error);
+        }
+      };
+
+      fetchPatientName();
+    }
+  }, [patient_number]);
+
 
     console.log("Schedule ID:", schedule_id);
     console.log("Patient Number:", patient_number);  
@@ -211,9 +235,9 @@ const { schedule_id, patient_number } = useLocalSearchParams();
         <View style={styles.formContainer}>
           <View style={styles.column}>
             <Text style={styles.sectionTitle}>
-              {schedule_id
-                ? `FOR: Schedule ID - ${schedule_id}`
-                : "FOR: Schedule ID - Loading..."}
+              {schedule_id && patientName
+                ? `FOR: ${patientName} | Schedule ID - ${schedule_id}`
+                : "Loading schedule and patient info..."}
             </Text>
 
             {/* Medication Name with Autocomplete */}

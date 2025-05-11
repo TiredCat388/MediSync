@@ -1,0 +1,116 @@
+import { StyleSheet } from "react-native";
+
+export default StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "row",
+    backgroundColor: "#f8f8f8",
+  },
+  content: {
+    flex: 1,
+    marginLeft: 70,
+    padding: 40,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  headerText: {
+    fontSize: 25,
+    fontWeight: "bold",
+  },
+  searchSortContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  searchInput: {
+    flex: 1,
+    height: 45,
+    borderColor: "#000",
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    marginRight: 12,
+    backgroundColor: "#fff",
+    fontSize: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  sortButton: {
+    backgroundColor: "#5c87b2",
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  sortButtonText: {
+    fontSize: 16,
+    color: "#fff",
+    fontWeight: "600",
+  },
+  table: {
+    marginTop: 20,
+    backgroundColor: "white",
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: "black",
+    overflow: "hidden",
+  },
+  tableHeader: {
+    flexDirection: "row",
+    backgroundColor: "white",
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderColor: "black",
+  },
+  tableHeaderCell: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  tableHeaderText: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  row: {
+    flexDirection: "row",
+    borderBottomWidth: 1,
+    borderColor: "black",
+    minHeight: 35,
+  },
+  rowCellID: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
+  },
+  rowCellName: {
+    flex: 2,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
+  },
+  rowDivider: {
+    width: 2,
+    backgroundColor: "black",
+    alignSelf: "stretch",
+  },
+  rowText: {
+    fontSize: 16,
+  },
+  rowTextCentered: {
+    fontSize: 16,
+    flex: 1,
+    textAlign: "center",
+  },
+});
