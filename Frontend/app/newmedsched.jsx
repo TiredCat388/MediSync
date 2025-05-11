@@ -40,7 +40,6 @@ export default function NewMedSched() {
   const [filteredMedications, setFilteredMedications] = useState([]);
   const [query, setQuery] = useState("");
 
-  // ✅ Fetch patient name
   useEffect(() => {
     const fetchPatientDetails = async () => {
       try {

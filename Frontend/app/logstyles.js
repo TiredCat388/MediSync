@@ -43,11 +43,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   date: {
+    paddingLeft: 10,
     fontSize: isTablet ? 26 : 18,
     fontWeight: "bold",
   },
   time: {
-    padding: 10,
     fontSize: isTablet ? 23 : 14,
     fontWeight: "bold",
   },
@@ -165,6 +165,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "white",
+  },
+  dateTimeContainer: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
 
