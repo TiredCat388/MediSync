@@ -23,6 +23,13 @@ export default function RegisterNewPatient() {
     emergencySurname: "",
     relation: "",
     emergencyPhone: "",
+    gender: "",
+    religion: "",
+    height: "",
+    weight: "",
+    bloodType: "",
+    chiefComplaint: "",
+    diagnosis: "",
   });
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -110,6 +117,11 @@ export default function RegisterNewPatient() {
             first_name: formData.firstName,
             middle_name: formData.middleName,
             last_name: formData.surname,
+            gender: formData.gender,
+            religion: formData.religion, 
+            height: formData.height,
+            weight: formData.weight,
+            blood_type: formData.bloodType,
             date_of_birth: `${formData.birthYear}-${formData.birthMonth}-${formData.birthDay}`,
             contact_number: formData.phoneNumber,
             bed_number: formData.bedNumber,
@@ -120,6 +132,7 @@ export default function RegisterNewPatient() {
               last_name: formData.emergencySurname,
               relation_to_patient: formData.relation,
               contact_number: formData.emergencyPhone,
+            
             },
           }),
         });
@@ -171,6 +184,100 @@ export default function RegisterNewPatient() {
               }
             />
 
+            <Text style={styles.label}>Sex</Text>
+              <RNPickerSelect
+                items={[
+                  { label: "Male", value: "Male" },
+                  { label: "Female", value: "Female" },
+                ]}
+                value={formData.gender}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, gender: value })
+                }
+                placeholder={{ label: "Select Sex", value: "" }}
+                style={{
+                  inputAndroid: styles.input,
+                  inputIOS: styles.input,
+                }}
+              />
+
+              <Text style={styles.label}>Religion</Text>
+                <RNPickerSelect
+                  items={[
+                    { label: "Roman Catholic", value: "Catholic" },
+                    { label: "Christianity", value: "Christianity" },
+                    { label: "Islam", value: "Islam" },
+                    { label: "Hinduism", value: "Hinduism" },
+                    { label: "Buddhism", value: "Buddhism" },
+                    { label: "Judaism", value: "Judaism" },
+                    { label: "Atheism", value: "Atheism" },
+                    { label: "Other", value: "Other" },
+                  ]}
+                  value={formData.religion}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, religion: value })
+                  }
+                  placeholder={{ label: "Select Religion", value: "" }}
+                  style={{
+                    inputAndroid: styles.input,
+                    inputIOS: styles.input,
+                  }}
+                />
+           <View style={styles.inlineContainer}>
+            <View style={styles.inlineItem}>
+              <Text style={styles.label}>Height</Text>
+              <View style={styles.heightRow}>
+                <View style={styles.heightInputContainer}>
+                  <TextInput
+                    style={styles.heightInput}
+                    keyboardType="numeric"
+                    placeholder=" "
+                    value={formData.height}
+                    onChangeText={(text) => setFormData({ ...formData, height: text })}
+                  />
+                  <Text style={styles.unitLabel}>meters</Text>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.inlineItem}>
+              <Text style={styles.label}>Weight</Text>
+              <View style={styles.weightRow}>
+                <View style={styles.weightInputContainer}>
+                  <TextInput
+                    style={styles.weightInput}
+                    keyboardType="numeric"
+                    placeholder=" "
+                    value={formData.weight}
+                    onChangeText={(text) => setFormData({ ...formData, weight: text })}
+                  />
+                  <Text style={styles.unitLabel}>kg</Text>
+                </View>
+              </View>
+            </View>
+          </View>
+                    
+            <Text style={styles.label}>Blood Type</Text>
+            <RNPickerSelect
+              items={[
+                { label: "A+", value: "A+" },
+                { label: "A-", value: "A-" },
+                { label: "B+", value: "B+" },
+                { label: "B-", value: "B-" },
+                { label: "AB+", value: "AB+" },
+                { label: "AB-", value: "AB-" },
+                { label: "O+", value: "O+" },
+                { label: "O-", value: "O-" },
+              ]}
+              value={formData.bloodType}
+              onValueChange={(value) => setFormData({ ...formData, bloodType: value })}
+              placeholder={{ label: "Select Blood Type", value: "" }}
+              style={{
+                inputAndroid: styles.input,
+                inputIOS: styles.input,
+              }}
+            />
+            
             <Text style={styles.label}>Date of Birth</Text>
             <View style={styles.dobContainer}>
               <RNPickerSelect
@@ -211,7 +318,18 @@ export default function RegisterNewPatient() {
               />
             </View>
 
-            <Text style={styles.label}>Phone Number</Text>
+            <Text style={styles.label}>Age</Text>
+            <TextInput
+              style={styles.ageInput}
+              value={formData.age.toString()}
+              editable={false}
+            />
+          </View>
+
+          <View style={styles.divider} />
+          <View style={styles.column}>
+
+                  <Text style={styles.label}>Phone Number</Text>
             <TextInput
               style={styles.input}
               onChangeText={(text) =>
@@ -235,15 +353,6 @@ export default function RegisterNewPatient() {
               }
             />
 
-            <Text style={styles.label}>Age</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.age.toString()}
-              editable={false}
-            />
-          </View>
-          <View style={styles.divider} />
-          <View style={styles.column}>
             <Text style={styles.sectionTitle}>Emergency Contact Details</Text>
             <Text style={styles.label}>First Name</Text>
             <TextInput
@@ -275,6 +384,7 @@ export default function RegisterNewPatient() {
             />
           </View>
         </View>
+
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             onPress={() => handleNavigate("/directory")}

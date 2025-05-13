@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   formContainer: {
     flexDirection: 'row',
     backgroundColor: 'lightgrey',
-    padding: 40,
+    padding: 10,
     borderRadius: 10,
     justifyContent: 'space-between',
   },
@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
+    borderRadius: 10,
     borderColor: 'black',
     backgroundColor: 'white',
     padding: 8,
@@ -55,6 +56,7 @@ const styles = StyleSheet.create({
   },
   dobInput: {
     borderWidth: 1,
+    borderRadius: 10,
     borderColor: 'black',
     backgroundColor: 'white',
     padding: 8,
@@ -165,6 +167,73 @@ const styles = StyleSheet.create({
     marginVertical: 5, 
     marginHorizontal: 30,
     alignSelf: 'stretch'
+  },
+  heightRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  heightInputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 0, 
+  },
+  heightInput: {
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: "black",
+    backgroundColor: "white",
+    padding: 8,
+    width: 100,
+    textAlign: "center",
+  },
+  unitLabel: {
+    marginLeft: 5,
+    fontSize: 16,
+    color: "black",
+  },
+  ageInput: {
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: "black",
+    backgroundColor: "white",
+    padding: 8,
+    marginBottom: 5,
+    width: 50, 
+    textAlign: "left", 
+  },
+  weightRow: {
+  flexDirection: "row",
+  alignItems: "center",
+  marginBottom: 10,
+  },
+  weightInputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  weightInput: {
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: "black",
+    backgroundColor: "white",
+    padding: 8,
+    width: 100, 
+    textAlign: "center",
+  },
+  unitLabel: {
+    marginLeft: 5,
+    fontSize: 16,
+    color: "black",
+  },
+  inlineContainer: {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "flex-start",
+  marginBottom: 10,
+  },
+  inlineItem: {
+    flex: 1,
+    marginHorizontal: 0, 
   },
 });
 
