@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Modal, TextInput } from "react-native";
 import { useRouter } from "expo-router";
 import Sidebar from "./components/sidebar";
 import RNPickerSelect from "react-native-picker-select";
 import styles from "./registerstyle";
+import CustomAlert from "./components/alert"; // Import CustomAlert
 
 export default function RegisterNewPatient() {
   const router = useRouter();
@@ -27,9 +28,13 @@ export default function RegisterNewPatient() {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [warningModalVisible, setWarningModalVisible] = useState(false);
+  const [registrationSuccessVisible, setRegistrationSuccessVisible] =
+    useState(false); // State for success alert
+  const [registrationSuccessMessage, setRegistrationSuccessMessage] =
+    useState("");
   const isFormFilled = Object.values(formData).some((value) => value !== "");
-  const isFormComplete = Object.values(formData).every(
-    (value) => typeof value === "string" ? value.trim() !== "" : value !== ""
+  const isFormComplete = Object.values(formData).every((value) =>
+    typeof value === "string" ? value.trim() !== "" : value !== ""
   );
 
   const allowedDestinations = ["/directory", "/another-allowed-path"]; // Add allowed destinations here
@@ -125,13 +130,33 @@ export default function RegisterNewPatient() {
         });
 
         if (response.ok) {
-          router.push("/directory");
+          setRegistrationSuccessMessage("Patient registered successfully!");
+          setRegistrationSuccessVisible(true);
+          // Optionally reset the form after successful registration
+          setFormData({
+            firstName: "",
+            middleName: "",
+            surname: "",
+            birthMonth: "",
+            birthDay: "",
+            birthYear: "",
+            phoneNumber: "",
+            bedNumber: "",
+            roomNumber: "",
+            age: "",
+            emergencyFirstName: "",
+            emergencySurname: "",
+            relation: "",
+            emergencyPhone: "",
+          });
         } else {
           const errorData = await response.json();
           console.error("Error registering patient:", errorData);
+          // Optionally show an error message to the user
         }
       } catch (error) {
         console.error("Error registering patient:", error);
+        // Optionally show an error message to the user
       }
     }
   };
@@ -333,7 +358,7 @@ export default function RegisterNewPatient() {
                 style={[styles.modalButton, styles.stayButton]}
                 onPress={() => {
                   setWarningModalVisible(false);
-                  router.push("/directory");
+                  handleRegister(); // Consider if you want to attempt registration with missing fields
                 }}
               >
                 <Text style={styles.modalButtonText}>Proceed</Text>
@@ -348,6 +373,16 @@ export default function RegisterNewPatient() {
           </View>
         </View>
       </Modal>
+
+      {/* Patient Registered Successfully Alert */}
+      <CustomAlert
+        visible={registrationSuccessVisible}
+        message={registrationSuccessMessage}
+        onClose={() => {
+          setRegistrationSuccessVisible(false);
+          router.push("/directory"); // Redirect after successful registration
+        }}
+      />
     </View>
   );
 }
