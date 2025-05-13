@@ -10,6 +10,7 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import Sidebar from "./components/sidebar";
 import RNPickerSelect from "react-native-picker-select";
 import styles from "./updatepatientstyle"; // Assuming you have this file
+import CustomAlert from "./components/alert"; // Import CustomAlert (Corrected import)
 
 export default function UpdatePatientScreen() {
   const router = useRouter();
@@ -33,6 +34,8 @@ export default function UpdatePatientScreen() {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [updateSuccessVisible, setUpdateSuccessVisible] = useState(false); // State for success alert (Renamed for clarity)
+  const [updateSuccessMessage, setUpdateSuccessMessage] = useState(""); // State for success message
 
   const months = [
     { label: "January", value: "01" },
@@ -170,8 +173,11 @@ export default function UpdatePatientScreen() {
         }
       );
 
-      if (response.ok) {    
-        router.push("/viewpatient?patient_number=" + patient_number); 
+      if (response.ok) {
+        setUpdateSuccessMessage("Patient updated successfully!");
+        setUpdateSuccessVisible(true);
+        // Optionally, you can navigate back or show a success message
+        // router.push("/viewpatient?patient_number=" + patient_number);
       } else {
         const errorData = await response.json();
         setError(`Failed to update patient: ${JSON.stringify(errorData)}`);
@@ -341,14 +347,15 @@ export default function UpdatePatientScreen() {
           </View>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
-              onPress={() => router.push("/viewpatient?patient_number=" + patient_number)}
+              onPress={() =>
+                router.push("/viewpatient?patient_number=" + patient_number)
+              }
               style={[styles.button, styles.leaveButton]}
             >
               <Text style={styles.buttonText}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={handleUpdate}
-
               style={[styles.button, styles.stayButton]}
             >
               <Text style={styles.buttonText}>Update Patient</Text>
@@ -356,6 +363,15 @@ export default function UpdatePatientScreen() {
           </View>
         </ScrollView>
       </View>
+      {/* Update Success Alert */}
+      <CustomAlert
+        visible={updateSuccessVisible}
+        message={updateSuccessMessage}
+        onClose={() => {
+          setUpdateSuccessVisible(false);
+          router.push("/viewpatient?patient_number=" + patient_number);
+        }}
+      />
     </View>
   );
 }

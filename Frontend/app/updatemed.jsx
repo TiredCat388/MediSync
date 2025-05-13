@@ -13,6 +13,7 @@ import RNPickerSelect from "react-native-picker-select";
 import Autocomplete from "react-native-autocomplete-input";
 import styles from "./updatemedstyle";
 import AsyncStorage from "@react-native-async-storage/async-storage"; // or your auth method
+import CustomAlert from "./components/alert"; // Make sure the path is correct
 
 
 export default function NewMedSched() {
@@ -23,25 +24,33 @@ export default function NewMedSched() {
   const [warningModalVisible, setWarningModalVisible] = useState(false);
   const [patientName, setPatientName] = useState(null);
   const [checkingRole, setCheckingRole] = useState(true);
-
+  const [accessDeniedVisible, setAccessDeniedVisible] = useState(false);
+  const [accessDeniedMessage, setAccessDeniedMessage] = useState("");
+  const [addSuccessVisible, setAddSuccessVisible] = useState(false); // State for success alert
+  const [addSuccessMessage, setAddSuccessMessage] = useState(""); // State for success message
+  
 
   useEffect(() => {
-      const checkAccess = async () => {
-        try {
-          const role = await AsyncStorage.getItem("userRole"); 
-          if (role !== "physician") {
-            alert("Access denied: Only physicians can access this screen.");
-            router.replace("/viewpatient?patient_number=" + patient_number); 
-          }
-        } catch (error) {
-          console.error("Error checking user role:", error);
-        } finally {
-          setCheckingRole(false);
+    const checkAccess = async () => {
+      try {
+        const role = await AsyncStorage.getItem("userRole");
+        if (role !== "physician") {
+          setAccessDeniedMessage(
+            "Access denied: Only physicians can update medication."
+          );
+          setAccessDeniedVisible(true);
         }
-      };
-  
-      checkAccess();
-    }, []);
+      } catch (error) {
+        console.error("Error checking user role:", error);
+        setAccessDeniedMessage("An error occurred while checking access.");
+        setAccessDeniedVisible(true);
+      } finally {
+        setCheckingRole(false);
+      }
+    };
+
+    checkAccess();
+  }, [patient_number, router]);
 
   useEffect(() => {
     if (patient_number) {
@@ -175,11 +184,8 @@ export default function NewMedSched() {
 
     const convertTo24Hour = (hour, minute, period) => {
       let hour24 = parseInt(hour);
-      if (period === "PM" && hour24 !== 12) {
-        hour24 += 12;
-      } else if (period === "AM" && hour24 === 12) {
-        hour24 = 0;
-      }
+      if (period === "PM" && hour24 !== 12) hour24 += 12;
+      if (period === "AM" && hour24 === 12) hour24 = 0;
       return `${hour24.toString().padStart(2, "0")}:${minute.padStart(2, "0")}`;
     };
 
@@ -190,10 +196,7 @@ export default function NewMedSched() {
         formData.timePeriod,
       );
 
-      const frequency = `${formData.frequencyHour.padStart(
-        2,
-        "0"
-      )}:${formData.frequencyMinute.padStart(2, "0")}`;
+      const frequency = `${formData.frequencyHour.padStart(2,"0")}:${formData.frequencyMinute.padStart(2, "0")}`;
 
       const requestData = {
         Medication_name: formData.medicineName,
@@ -226,12 +229,8 @@ export default function NewMedSched() {
       console.log("Response Data:", responseData);
 
       if (response.ok) {
-        alert(
-          schedule_id
-            ? "Medication updated successfully!"
-            : "Medication added successfully!"
-        );
-        router.push(`/viewpatient?patient_number=${patient_number}`);
+        setAddSuccessMessage("Medication updated successfully!");
+        setAddSuccessVisible(true);
       } else {
         console.error("Error:", responseData);
         alert(
@@ -447,6 +446,16 @@ export default function NewMedSched() {
         </View>
       </View>
 
+      {/* Custom Access Denied Alert */}
+      <CustomAlert
+        visible={accessDeniedVisible}
+        message={accessDeniedMessage}
+        onClose={() => {
+          setAccessDeniedVisible(false);
+          router.replace("/viewpatient?patient_number=" + patient_number);
+        }}
+      />
+
       {/* Cancel Confirmation Modal */}
       <Modal visible={modalVisible} transparent animationType="fade">
         <View style={styles.modalOverlay}>
@@ -504,6 +513,14 @@ export default function NewMedSched() {
           </View>
         </View>
       </Modal>
+      <CustomAlert
+        visible={addSuccessVisible}
+        message={addSuccessMessage}
+        onClose={() => {
+          setAddSuccessVisible(false);
+          router.push(`/viewpatient?patient_number=${patient_number}`);
+        }}
+      />
     </View>
   );
 }

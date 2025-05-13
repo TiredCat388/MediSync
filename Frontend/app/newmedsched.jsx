@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -12,8 +12,8 @@ import Sidebar from "./components/sidebar";
 import RNPickerSelect from "react-native-picker-select";
 import Autocomplete from "react-native-autocomplete-input";
 import styles from "./newmedschedstyle";
-import AsyncStorage from "@react-native-async-storage/async-storage"; 
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import CustomAlert from "./components/alert"; // Corrected import path
 
 export default function NewMedSched() {
   const router = useRouter();
@@ -22,9 +22,12 @@ export default function NewMedSched() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [warningModalVisible, setWarningModalVisible] = useState(false);
+  const [accessDeniedVisible, setAccessDeniedVisible] = useState(false);
+  const [accessDeniedMessage, setAccessDeniedMessage] = useState("");
+  const [addSuccessVisible, setAddSuccessVisible] = useState(false); // State for success alert
+  const [addSuccessMessage, setAddSuccessMessage] = useState(""); // State for success message
 
-  const [patientName, setPatientName] = useState(null); 
-
+  const [patientName, setPatientName] = useState(null);
 
   const [formData, setFormData] = useState({
     medicineName: "",
@@ -42,34 +45,37 @@ export default function NewMedSched() {
   const [medications, setMedications] = useState([]);
   const [filteredMedications, setFilteredMedications] = useState([]);
   const [query, setQuery] = useState("");
-
   const [userRole, setUserRole] = useState(null);
   const [checkingRole, setCheckingRole] = useState(true);
 
   useEffect(() => {
     const checkAccess = async () => {
       try {
-        const role = await AsyncStorage.getItem("userRole"); 
+        const role = await AsyncStorage.getItem("userRole");
         if (role !== "physician") {
-          alert("Access denied: Only physicians can access this screen.");
-          router.replace("/viewpatient?patient_number=" + patient_number); 
+          setAccessDeniedMessage(
+            "Access denied: Only physicians can add medication."
+          );
+          setAccessDeniedVisible(true);
         }
+        setUserRole(role);
       } catch (error) {
         console.error("Error checking user role:", error);
+        setAccessDeniedMessage("An error occurred while checking access.");
+        setAccessDeniedVisible(true);
       } finally {
         setCheckingRole(false);
       }
     };
 
     checkAccess();
-  }, []);
-
+  }, [patient_number, router]);
 
   useEffect(() => {
     const fetchPatientDetails = async () => {
       try {
         const response = await fetch(
-          `http://127.0.0.1:8000/api/patients/${patient_number}/`
+          `http://127.0.0.1:8000/api/patients/by-number/${patient_number}/`
         );
         const data = await response.json();
         if (response.ok) {
@@ -108,6 +114,14 @@ export default function NewMedSched() {
   };
 
   const handleRegister = async () => {
+    if (userRole !== "physician") {
+      setAccessDeniedMessage(
+        "Access denied: Only physicians can add medication."
+      );
+      setAccessDeniedVisible(true);
+      return;
+    }
+
     const requiredFields = [
       "medicineName",
       "dosage",
@@ -134,6 +148,8 @@ export default function NewMedSched() {
       if (period === "AM" && hour24 === 12) hour24 = 0;
       return `${hour24.toString().padStart(2, "0")}:${minute.padStart(2, "0")}`;
     };
+      
+      
 
     try {
       const medicationTime = convertTo24Hour(
@@ -142,10 +158,7 @@ export default function NewMedSched() {
         formData.timePeriod
       );
 
-      const frequency = `${formData.frequencyHour.padStart(
-        2,
-        "0"
-      )}:${formData.frequencyMinute.padStart(2, "0")}`;
+      const frequency = `${formData.frequencyHour.padStart(2,"0")}:${formData.frequencyMinute.padStart(2, "0")}`;
 
       const requestData = {
         Medication_name: formData.medicineName,
@@ -155,6 +168,7 @@ export default function NewMedSched() {
         Frequency: frequency,
         Medication_notes: formData.medicationNotes,
         patient_number: parseInt(patient_number),
+        physicianID: formData.physicianID || "default_physician", // Add physician ID if available
       };
 
       const response = await fetch("http://127.0.0.1:8000/api/medications/", {
@@ -166,8 +180,22 @@ export default function NewMedSched() {
       const responseData = await response.json();
 
       if (response.ok) {
-        alert("Medication added successfully!");
-        router.push(`/viewpatient?patient_number=${patient_number}`);
+        setAddSuccessMessage("Medication added successfully!");
+        setAddSuccessVisible(true);
+        // Optionally reset the form
+        setFormData({
+          medicineName: "",
+          dosage: "",
+          dosageUnit: "",
+          timeHour: "",
+          timeMinute: "",
+          timePeriod: "",
+          medicationNotes: "",
+          physicianID: "",
+          frequencyHour: "",
+          frequencyMinute: "",
+        });
+        setQuery("");
       } else {
         const errorMessage =
           responseData.detail ||
@@ -233,6 +261,7 @@ export default function NewMedSched() {
                 onChangeText={(text) =>
                   setFormData({ ...formData, dosage: text })
                 }
+                value={formData.dosage}
               />
               <View style={{ width: 70 }}>
                 <RNPickerSelect
@@ -361,6 +390,7 @@ export default function NewMedSched() {
               onChangeText={(text) =>
                 setFormData({ ...formData, medicationNotes: text })
               }
+              value={formData.medicationNotes}
             />
             <Text style={styles.label}>Physician ID</Text>
             <TextInput
@@ -368,6 +398,7 @@ export default function NewMedSched() {
               onChangeText={(text) =>
                 setFormData({ ...formData, physicianID: text })
               }
+              value={formData.physicianID}
             />
           </View>
         </View>
@@ -387,6 +418,16 @@ export default function NewMedSched() {
           </TouchableOpacity>
         </View>
       </View>
+
+      {/* Custom Access Denied Alert */}
+      <CustomAlert
+        visible={accessDeniedVisible}
+        message={accessDeniedMessage}
+        onClose={() => {
+          setAccessDeniedVisible(false);
+          router.replace("/viewpatient?patient_number=" + patient_number);
+        }}
+      />
 
       {/* Cancel Confirmation Modal */}
       <Modal visible={modalVisible} transparent animationType="fade">
@@ -430,7 +471,7 @@ export default function NewMedSched() {
                 style={[styles.modalButton, styles.stayButton]}
                 onPress={() => {
                   setWarningModalVisible(false);
-                  router.back();
+                  handleRegister(); // Proceed with registration despite missing fields
                 }}
               >
                 <Text style={styles.modalButtonText}>Proceed</Text>
@@ -445,6 +486,16 @@ export default function NewMedSched() {
           </View>
         </View>
       </Modal>
+
+      {/* Medication Added Successfully Alert */}
+      <CustomAlert
+        visible={addSuccessVisible}
+        message={addSuccessMessage}
+        onClose={() => {
+          setAddSuccessVisible(false);
+          router.push(`/viewpatient?patient_number=${patient_number}`);
+        }}
+      />
     </View>
   );
 }
