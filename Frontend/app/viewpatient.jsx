@@ -123,10 +123,10 @@ export default function PatientDetails() {
     );
   });
 
-  const deleteSchedule = async (scheduleId) => {
+  const deleteSchedule = async (schedule_id, patient_number) => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/medications/${scheduleId}/`,
+        `http://127.0.0.1:8000/api/medications/${patient_number}/${schedule_id}/`,
         {
           method: "DELETE",
         }

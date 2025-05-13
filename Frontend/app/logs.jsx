@@ -8,6 +8,10 @@ import Sidebar from './components/sidebar';
 const { width } = Dimensions.get("window");
 const isTablet = width > 900;
 
+const formatTime = (timeString) => {
+  return timeString.split(".")[0];
+};
+
 export default function LogsScreen() {
   const router = useRouter();
   const [logs, setLogs] = useState([]);
@@ -23,7 +27,8 @@ export default function LogsScreen() {
   const fetchData = async () => {
     try {
       const response = await fetch("http://127.0.0.1:8000/api/logs/");
-      const logs = await response.json();
+      let logs = await response.json();
+      logs = logs.sort((a, b) => a.log_id - b.log_id);
       setLogs(logs);
     } catch (error) {
       console.error("Error fetching logs:", error);
@@ -48,13 +53,13 @@ export default function LogsScreen() {
       <View style={[styles.mainContent, { marginLeft: sidebarWidth }]}>
         <Text style={styles.title}>Logs</Text>
         <ScrollView contentContainerStyle={styles.listContainer}>
-          {logs.map((item) => (
-            <View key={item.id} style={styles.card}>
+          {logs.map((item, index) => (
+            <View key={item.id || index} style={styles.card}>
               <View style={styles.cardContent}>
-                <View style={styles.row}>
+                <View style={styles.dateTimeContainer}>
                   <FontAwesome name="clock-o" size={24} color="#666" style={styles.iconClock} />
                   <Text style={styles.date}>{item.log_date}</Text>
-                  <Text style={styles.time}>{item.log_time}</Text>
+                  <Text style={styles.time}> - {formatTime(item.log_time)}</Text>
                 </View>
                 <Text style={styles.changes}>{item.log_message}</Text>
               </View>

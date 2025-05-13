@@ -2,14 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import Svg, { Line, Circle, Text as SvgText } from 'react-native-svg';
 import Sidebar from './components/sidebar';
+import { useNotification } from "../notifcontext";
 
 const { width } = Dimensions.get("window");
 const sidebarWidth = 70;
 
-const AnalogClock = () => {
+const AnalogClock = ({ route }) => {
   const [time, setTime] = useState(new Date());
   const [upcomingAlerts, setUpcomingAlerts] = useState([]);
   const [timeLeftUpdates, setTimeLeftUpdates] = useState(new Date()); // Tracks updates for time left
+  const { showNotification } = useNotification();
 
   useEffect(() => {
     const interval = setInterval(() => setTime(new Date()), 1000);
@@ -19,11 +21,40 @@ const AnalogClock = () => {
   useEffect(() => {
     const fetchAlerts = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/medications');
+        const response = await fetch("http://127.0.0.1:8000/api/medications");
         const data = await response.json();
         setUpcomingAlerts(data);
+
+        const now = new Date();
+        const upcoming = data.filter((alert) => {
+          const alertTime = new Date(`1970-01-01T${alert.Medication_Time}`);
+
+          return (
+            alertTime.getHours() === now.getHours() &&
+            alertTime.getMinutes() === now.getMinutes()
+          );
+        });
+
+        if (upcoming.length > 1) {
+          showNotification({
+            multiple: true,
+            message: "Multiple medications scheduled for this minute.",
+            scheduleIds: upcoming.map((alert) => alert.schedule_id),
+          });
+        } else if (upcoming.length === 1) {
+          const alert = upcoming[0];
+          showNotification({
+            scheduleId: alert.schedule_id,
+            patient: alert.patient_number,
+            medication: alert.Medication_name,
+            dosage: `${alert.Dosage} ${alert.Dosage_Unit}`,
+            room: alert.room_number || "N/A",
+            quantity: alert.quantity || "N/A",
+            notes: alert.Medication_notes,
+          });
+        }
       } catch (error) {
-        console.error('Error fetching alerts:', error);
+        console.error("Error fetching alerts:", error);
       }
     };
 
@@ -40,11 +71,11 @@ const AnalogClock = () => {
     const [alertHours, alertMinutes, alertSeconds] = alertTime.split(':').map(Number);
     const alertDate = new Date(now);
     alertDate.setHours(alertHours, alertMinutes, alertSeconds, 0);
-    
-    const diff = alertDate - now;
-    
 
-    if (diff <= 0) return 'Now';
+    const diff = alertDate - now;
+
+    if (diff < 0) return 'Passed';
+    if (diff === 0) return 'Now';
 
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
