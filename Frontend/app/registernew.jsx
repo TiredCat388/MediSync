@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import Sidebar from "./components/sidebar";
 import RNPickerSelect from "react-native-picker-select";
 import styles from "./registerstyle";
+import { ScrollView } from "react-native";
 
 export default function RegisterNewPatient() {
   const router = useRouter();
@@ -152,12 +153,14 @@ export default function RegisterNewPatient() {
   return (
     <View style={styles.container}>
       <Sidebar onNavigate={handleNavigate} />
-      <View
+      <ScrollView
         style={[
           styles.contentContainer,
           { marginLeft: isSidebarExpanded ? 200 : 70 },
         ]}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
       >
+
         <Text style={styles.screenTitle}>Register New Patient</Text>
         <View style={styles.formContainer}>
           <View style={styles.column}>
@@ -165,6 +168,9 @@ export default function RegisterNewPatient() {
             <Text style={styles.label}>First Name</Text>
             <TextInput
               style={styles.input}
+              placeholder="Enter first name"
+              placeholderTextColor="gray"
+              autoCapitalize="words"
               onChangeText={(text) =>
                 setFormData({ ...formData, firstName: text })
               }
@@ -172,6 +178,9 @@ export default function RegisterNewPatient() {
             <Text style={styles.label}>Middle Name</Text>
             <TextInput
               style={styles.input}
+              placeholder="Enter middle name"
+              placeholderTextColor="gray"
+              autoCapitalize="words"
               onChangeText={(text) =>
                 setFormData({ ...formData, middleName: text })
               }
@@ -179,6 +188,9 @@ export default function RegisterNewPatient() {
             <Text style={styles.label}>Surname</Text>
             <TextInput
               style={styles.input}
+              placeholder="Enter surname"
+              placeholderTextColor="gray"
+              autoCapitalize="words"
               onChangeText={(text) =>
                 setFormData({ ...formData, surname: text })
               }
@@ -231,7 +243,8 @@ export default function RegisterNewPatient() {
                   <TextInput
                     style={styles.heightInput}
                     keyboardType="numeric"
-                    placeholder=" "
+                    placeholder="Enter height"
+                    placeholderTextColor="gray"
                     value={formData.height}
                     onChangeText={(text) => setFormData({ ...formData, height: text })}
                   />
@@ -247,7 +260,8 @@ export default function RegisterNewPatient() {
                   <TextInput
                     style={styles.weightInput}
                     keyboardType="numeric"
-                    placeholder=" "
+                    placeholder="Enter weight"
+                    placeholderTextColor="gray"
                     value={formData.weight}
                     onChangeText={(text) => setFormData({ ...formData, weight: text })}
                   />
@@ -321,25 +335,17 @@ export default function RegisterNewPatient() {
             <Text style={styles.label}>Age</Text>
             <TextInput
               style={styles.ageInput}
+              placeholder="Age"
+              placeholderTextColor="gray"
               value={formData.age.toString()}
               editable={false}
-            />
-          </View>
-
-          <View style={styles.divider} />
-          <View style={styles.column}>
-
-                  <Text style={styles.label}>Phone Number</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(text) =>
-                setFormData({ ...formData, phoneNumber: text })
-              }
             />
 
             <Text style={styles.label}>Bed Number</Text>
             <TextInput
               style={styles.input}
+              placeholder="Enter bed number"
+              placeholderTextColor="gray"
               onChangeText={(text) =>
                 setFormData({ ...formData, bedNumber: text })
               }
@@ -348,15 +354,58 @@ export default function RegisterNewPatient() {
             <Text style={styles.label}>Room Number</Text>
             <TextInput
               style={styles.input}
+              placeholder="Enter room number"
+              placeholderTextColor="gray"
               onChangeText={(text) =>
                 setFormData({ ...formData, roomNumber: text })
               }
+            />
+          </View>
+          
+          <View style={styles.divider} />
+          <View style={styles.column}>
+            
+            <Text style={styles.label}>Phone Number</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter phone number"
+              placeholderTextColor="gray"
+              onChangeText={(text) =>
+                setFormData({ ...formData, phoneNumber: text })
+              }
+            />
+
+            <Text style={styles.label}>Chief Complaint</Text>
+            <TextInput
+              style={styles.chiefComplaintInput}
+              multiline={true}
+              numberOfLines={4} 
+              placeholderTextColor="gray"
+              placeholder="Enter chief complaint"
+              autoCapitalize="sentences"
+              value={formData.chiefComplaint}
+              onChangeText={(text) => setFormData({ ...formData, chiefComplaint: text })}
+            />
+
+            <Text style={styles.label}>Diagnosis</Text>
+            <TextInput
+              style={styles.diagnosisInput}
+              multiline={true}
+              numberOfLines={4} 
+              placeholderTextColor="gray"
+              placeholder="Enter diagnosis"
+              autoCapitalize="sentences"
+              value={formData.chiefComplaint}
+              onChangeText={(text) => setFormData({ ...formData, chiefComplaint: text })}
             />
 
             <Text style={styles.sectionTitle}>Emergency Contact Details</Text>
             <Text style={styles.label}>First Name</Text>
             <TextInput
               style={styles.input}
+              placeholder="Enter first name"
+              placeholderTextColor="gray"
+              autoCapitalize="words"
               onChangeText={(text) =>
                 setFormData({ ...formData, emergencyFirstName: text })
               }
@@ -364,6 +413,9 @@ export default function RegisterNewPatient() {
             <Text style={styles.label}>Surname</Text>
             <TextInput
               style={styles.input}
+              placeholder="Enter surname"
+              placeholderTextColor="gray"
+              autoCapitalize="words"
               onChangeText={(text) =>
                 setFormData({ ...formData, emergencySurname: text })
               }
@@ -371,6 +423,9 @@ export default function RegisterNewPatient() {
             <Text style={styles.label}>Relation to Patient</Text>
             <TextInput
               style={styles.input}
+              placeholder="Enter relation"
+              placeholderTextColor="gray"
+              autoCapitalize="words"
               onChangeText={(text) =>
                 setFormData({ ...formData, relation: text })
               }
@@ -378,6 +433,8 @@ export default function RegisterNewPatient() {
             <Text style={styles.label}>Phone Number</Text>
             <TextInput
               style={styles.input}
+              placeholder="Enter phone number"
+              placeholderTextColor="gray"
               onChangeText={(text) =>
                 setFormData({ ...formData, emergencyPhone: text })
               }
@@ -399,8 +456,8 @@ export default function RegisterNewPatient() {
             <Text style={styles.buttonText}>Register Patient</Text>
           </TouchableOpacity>
         </View>
-      </View>
-
+      </ScrollView>
+ 
       {/* Cancel Confirmation Modal */}
       <Modal visible={modalVisible} transparent animationType="fade">
         <View style={styles.modalOverlay}>

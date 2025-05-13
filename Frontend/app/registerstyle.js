@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     marginLeft: sidebarWidth, 
-    padding: 40, 
+    padding: 30, 
   },
   screenTitle: {
     fontSize: 25,
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   formContainer: {
     flexDirection: 'row',
     backgroundColor: 'lightgrey',
-    padding: 10,
+    padding: 30,
     borderRadius: 10,
     justifyContent: 'space-between',
   },
@@ -226,14 +226,35 @@ const styles = StyleSheet.create({
     color: "black",
   },
   inlineContainer: {
-  flexDirection: "row",
-  justifyContent: "space-between",
-  alignItems: "flex-start",
-  marginBottom: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: 10,
   },
   inlineItem: {
     flex: 1,
     marginHorizontal: 0, 
+  },
+  chiefComplaintInput: {
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: "black",
+    backgroundColor: "white",
+    padding: 10,
+    marginBottom: 10,
+    height: 100, 
+    textAlignVertical: "top", 
+  },
+
+  diagnosisInput: {
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: "black",
+    backgroundColor: "white",
+    padding: 10,
+    marginBottom: 10,
+    height: 100, 
+    textAlignVertical: "top", 
   },
 });
 
