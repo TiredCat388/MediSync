@@ -1,8 +1,8 @@
+# login/api/urls.py
 from django.urls import path
-from login.views import LoginView
+from .views import PhysicianLoginView, NurseLoginView
 
 urlpatterns = [
-    path('token/', LoginView.as_view(), name='token'),
-    path('api-token-auth/', LoginView.as_view(), name='api-token-auth'),  
-
+    path('login/physician/', PhysicianLoginView.as_view(), name='physician-login'),
+    path('login/nurse/', NurseLoginView.as_view(), name='nurse-login'),
 ]

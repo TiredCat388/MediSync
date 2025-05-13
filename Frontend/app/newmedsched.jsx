@@ -12,6 +12,8 @@ import Sidebar from "./components/sidebar";
 import RNPickerSelect from "react-native-picker-select";
 import Autocomplete from "react-native-autocomplete-input";
 import styles from "./newmedschedstyle";
+import AsyncStorage from "@react-native-async-storage/async-storage"; 
+
 
 export default function NewMedSched() {
   const router = useRouter();
@@ -21,7 +23,8 @@ export default function NewMedSched() {
   const [modalVisible, setModalVisible] = useState(false);
   const [warningModalVisible, setWarningModalVisible] = useState(false);
 
-  const [patientName, setPatientName] = useState(null); // ✅ for storing patient name
+  const [patientName, setPatientName] = useState(null); 
+
 
   const [formData, setFormData] = useState({
     medicineName: "",
@@ -39,6 +42,28 @@ export default function NewMedSched() {
   const [medications, setMedications] = useState([]);
   const [filteredMedications, setFilteredMedications] = useState([]);
   const [query, setQuery] = useState("");
+
+  const [userRole, setUserRole] = useState(null);
+  const [checkingRole, setCheckingRole] = useState(true);
+
+  useEffect(() => {
+    const checkAccess = async () => {
+      try {
+        const role = await AsyncStorage.getItem("userRole"); 
+        if (role !== "physician") {
+          alert("Access denied: Only physicians can access this screen.");
+          router.replace("/viewpatient?patient_number=" + patient_number); 
+        }
+      } catch (error) {
+        console.error("Error checking user role:", error);
+      } finally {
+        setCheckingRole(false);
+      }
+    };
+
+    checkAccess();
+  }, []);
+
 
   useEffect(() => {
     const fetchPatientDetails = async () => {
