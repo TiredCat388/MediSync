@@ -59,11 +59,11 @@ export default function PatientsDirectory() {
     return id.includes(search) || name.includes(search);
   });
 
-  patients.sort((a, b) =>
-    (a.patient_number ?? "")
-      .toString()
-      .localeCompare((b.patient_number ?? "").toString())
+  patients.sort(
+    (a, b) =>
+      (parseInt(a.patient_number) || 0) - (parseInt(b.patient_number) || 0)
   );
+  
 
   const totalRows = 12;
   const displayedPatients = [...filteredAndSortedPatients];
@@ -76,11 +76,17 @@ export default function PatientsDirectory() {
       <View style={styles.container}>
         <Sidebar onNavigate={(destination) => router.push(destination)} />
         <View style={styles.content}>
-          {/* Header */}
+          {/* Header and Button Row */}
           <View style={styles.header}>
             <Text style={styles.headerText}>Patients Directory</Text>
+            <TouchableOpacity
+              onPress={() => router.push("/registernew")}
+              style={styles.newPatientButton}
+            >
+              <Text style={styles.newPatientButtonText}>+ New Patient</Text>
+            </TouchableOpacity>
           </View>
-
+  
           {/* Search + Sort */}
           <View style={styles.searchSortContainer}>
             <TextInput
@@ -99,7 +105,7 @@ export default function PatientsDirectory() {
               </Text>
             </TouchableOpacity>
           </View>
-
+  
           {/* Table */}
           <View style={styles.table}>
             <View style={styles.tableHeader}>
@@ -110,7 +116,7 @@ export default function PatientsDirectory() {
                 <Text style={styles.tableHeaderText}>Patient Name</Text>
               </View>
             </View>
-
+  
             <FlatList
               data={displayedPatients}
               keyExtractor={(item, index) => index.toString()}
