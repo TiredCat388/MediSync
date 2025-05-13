@@ -81,6 +81,22 @@ export default StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
   },
+  newPatientButton: {
+    backgroundColor: "#5879a5",
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    minWidth: 180,
+    marginTop: 40,
+  },
+  newPatientButtonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+
   row: {
     flexDirection: "row",
     borderBottomWidth: 1,

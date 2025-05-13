@@ -55,15 +55,11 @@ export default function PatientsDirectory() {
     return id.includes(search) || name.includes(search);
   });
 
-  filteredAndSortedPatients.sort((a, b) => {
-    const aValue = a.patient_number ?? "";
-    const bValue = b.patient_number ?? "";
-    return sortAscending
-      ? aValue.toString().localeCompare(bValue.toString())
-      : bValue.toString().localeCompare(aValue.toString());
-  });
+  patients.sort(
+    (a, b) =>
+      (parseInt(a.patient_number) || 0) - (parseInt(b.patient_number) || 0)
+  );
 
-  // Now use the sorted list for display
   const totalRows = 12;
   const displayedPatients = [...filteredAndSortedPatients];
   while (displayedPatients.length < totalRows) {

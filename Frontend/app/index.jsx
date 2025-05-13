@@ -1,58 +1,94 @@
 import React, { useState, useEffect } from "react";
-import {View, Text, TextInput, TouchableOpacity, Alert, Dimensions, Image} from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  Dimensions,
+  Image,
+} from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import styles from "./loginstyles";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 const { width } = Dimensions.get("window");
 
 const LoginScreen = () => {
   const [role, setRole] = useState(null);
-  const [id, setId] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState(""); // Add state for error message
+  const [id, setId] = useState(""); 
+  const [password, setPassword] = useState(""); 
+  const [errorMessage, setErrorMessage] = useState(""); 
   const router = useRouter();
 
   useEffect(() => {
-    if (role === "nurse") {
-      router.push("/directory");
-    }
+    const redirectIfNurse = async () => {
+      if (role === "nurse") {
+        await AsyncStorage.setItem("userRole", "nurse");
+        router.push("/directory");
+      }
+    };
+
+    redirectIfNurse();
   }, [role]);
 
   const handleLogin = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/api-token-auth/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: id,
-          password: password,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          setErrorMessage("Invalid ID or password. Please try again."); // Set error message
-        } else {
-          setErrorMessage("Invalid ID or password. Please try again.");
-        }
+      if (!role) {
+        setErrorMessage("Please select a role.");
         return;
       }
 
-      console.log("Token:", data.token);
-      Alert.alert("Login successful!");
-      // Navigate to logs screen
-      router.push("/directory");
+      if (role === "nurse") {
+        return;
+      }
+
+      if (role === "physician") {
+        if (!id || !password) {
+          setErrorMessage("ID and Password are required.");
+          return;
+        }
+
+        const response = await fetch("http://127.0.0.1:8000/api/token/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: id,
+            password: password,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            setErrorMessage("Invalid ID or password. Please try again.");
+          } else {
+            setErrorMessage("An error occurred. Please try again later.");
+          }
+          return;
+        }
+
+        const token = data.access;
+        console.log("Token:", token);
+
+        await AsyncStorage.setItem("userRole", "physician");
+
+        Alert.alert("Login successful!");
+        router.push("/directory");
+      } else {
+        setErrorMessage("Invalid role selected.");
+      }
     } catch (error) {
       console.error("Login error:", error);
-      setErrorMessage("An error occurred. Please try again later."); // Set error message
+      setErrorMessage("An error occurred. Please try again later.");
     }
   };
-
+    
   return (
     <View style={styles.container}>
       <View style={styles.upperHalf}>
@@ -112,7 +148,7 @@ const LoginScreen = () => {
               secureTextEntry
             />
 
-            {errorMessage ? ( // Conditionally render error message
+            {errorMessage ? (
               <Text style={styles.errorText}>{errorMessage}</Text>
             ) : null}
 
