@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, FlatList, Modal, Button } from 'react-nat
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import Sidebar from './components/sidebar';
+import { ScrollView } from 'react-native';
 
 const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 const months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
@@ -59,6 +60,7 @@ export default function CalendarApp() {
   }, []);
 
   return (
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
     <View style={{ flex: 1, flexDirection: 'row' }}>
       {/* Reusable Sidebar Component */}
       <Sidebar setSidebarWidth={setSidebarWidth} />
@@ -135,5 +137,6 @@ export default function CalendarApp() {
         </Modal>
       </View>
     </View>
+  </ScrollView>
   );
 }
