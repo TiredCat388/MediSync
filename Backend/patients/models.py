@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 Blood_Group_Choices = (
     ('A+', 'A+'),
@@ -10,7 +11,23 @@ Blood_Group_Choices = (
     ('AB-', 'AB-'),
     ('O+', 'O+'),
     ('O-', 'O-'),
-    ('Other', 'Other')
+    ('Rhnull', 'Rhnull')
+)
+
+Diet_Choices = (
+    ('DAT', 'Diet As Tolerated'),
+    ('DB', 'Diabetic Diet'),
+    ('HPD', 'High Protein Diet'),
+    ('LPD', 'Low Protein Diet'),
+    ('LSLFD', 'Low Sodium, Low Fat Diet'),
+    ('LPTD', 'Low Potassium Diet'),
+    ('SD', 'Soft Diet'),
+    ('FL', 'Full Liquid'),
+    ('CL', 'Clear Liquid'),
+    ('NGTF', 'NGT Feeding'),
+    ('TPN', 'Total Parenteral Nutrition (TPN)'),
+    ('NPO', 'Nothing By Mouth'),
+    ('other', 'Other')
 )
 
 class Emergencycontactdetails(models.Model):
@@ -37,6 +54,23 @@ class Patients(models.Model):
         blank=False,
         help_text='Patient\'s age in years'
     )
+    sex = models.CharField(
+        blank=False,
+        max_length=10,
+        choices=(('M','Male'),('F','Female')),
+        default='Male',
+        help_text='Patient\'s sex'
+    )
+    admitting_diagnosis = models.TextField(
+        blank=False,
+        default='Pain',
+        help_text='Patient\'s initial diagnosis'
+    )
+    Final_diagnosis = models.TextField(
+        blank=False,
+        default='Pain',
+        help_text='Patient\'s final diagnosis'
+    )
     contact_number = models.BigIntegerField(
         blank=False,
         help_text='Patient\'s contact number'
@@ -48,13 +82,6 @@ class Patients(models.Model):
     room_number = models.IntegerField(
         blank=False,
         help_text='Patient\'s assigned room number'
-    )
-    gender = models.CharField(
-        max_length=1,
-        choices=[('M','Male'),('F','Female')],
-        default='M',
-        blank=False,
-        help_text='Patient\'s gender'
     )
     blood_group = models.CharField(
         max_length=100,
@@ -76,7 +103,7 @@ class Patients(models.Model):
     )
     bed_number = models.IntegerField(
         default=1,
-        blank=True,
+        blank=False,
         help_text='Patient\'s assigned bed number'
     )
     religion = models.CharField(
@@ -86,20 +113,21 @@ class Patients(models.Model):
     )
     diet = models.CharField(
         max_length=100,
-        blank=True,
+        blank=False,
+        default='DAT',
         help_text='Patient\'s dietary requirements or restrictions'
     )
     height = models.DecimalField(
         max_digits=5,
         decimal_places=2,
-        blank=True,
+        blank=False,
         default=0,
         help_text='Patient\'s height in centimeters'
     )
     weight = models.DecimalField(
         max_digits=5,
         decimal_places=2,
-        blank=True,
+        blank=False,
         default=0,
         help_text='Patient\'s weight in kilograms'
     )
@@ -113,7 +141,21 @@ class Patients(models.Model):
         help_text='Date and time when the patient record was archived'
     )
 
+    def clean(self):
+        super().clean()
+        # Validate diet format
+        if self.diet:
+            if self.diet.startswith('ngt:'):
+                if len(self.diet) <= 4:  # Only contains 'ngt:'
+                    raise ValidationError({'diet': 'NGT Feeding details are required'})
+            elif self.diet.startswith('other:'):
+                if len(self.diet) <= 6:  # Only contains 'other:'
+                    raise ValidationError({'diet': 'Other diet details are required'})
+            elif self.diet not in dict(Diet_Choices).keys():
+                raise ValidationError({'diet': 'Invalid diet selection'})
+
     def save(self, *args, **kwargs):
+        self.full_clean()  # This will run the clean() method
         if self.is_archived and not self.date_archived:
             self.date_archived = timezone.now()
         elif not self.is_archived:

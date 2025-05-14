@@ -95,6 +95,7 @@ const LoginScreen = () => {
         <View style={styles.logoContainer}>
           <View style={styles.circleBackground}>
             <Image
+              resizeMode = 'contain'
               source={require("../assets/images/medisync-logo.png")}
               style={styles.logo}
             />

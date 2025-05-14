@@ -65,22 +65,19 @@ export default function UpdatePatientScreen() {
   ];
 
   const dietOptions = [
-    { label: "DAT (Diet As Tolerated)", value: "DAT" },
-    { label: "Diabetic Diet", value: "Diabetic Diet" },   
-    { label: "High Protein Diet", value: "High Protein Diet" },
-    { label: "Low Protein Diet", value: "Low Protein Diet" },
-    { label: "Low Sodium, Low Fat Diet", value: "Low Sodium, Low Fat Diet" },
-    { label: "Low Potassium Diet", value: "Low Potassium Diet" },
-    { label: "Soft Diet", value: "Soft Diet" },
-    { label: "Full Liquid", value: "Full liquid" },
-    { label: "Clear Liquid", value: "Clear liquid" },
-    { label: "NGT Feeding", value: "NGT feeding" },
-    {
-      label: "Total Parenteral Nutrition (TPN)",
-      value: "Total parenteral Nutrition",
-    },
-    { label: "NPO (Nothing By Mouth)", value: "NPO" },
-    { label: "Others", value: "Others" },
+    { label: "Diet As Tolerated", value: "DAT" },
+    { label: "Diabetic Diet", value: "DB" },   
+    { label: "High Protein Diet", value: "HPD" },
+    { label: "Low Protein Diet", value: "LPD" },
+    { label: "Low Sodium, Low Fat Diet", value: "LSLFD" },
+    { label: "Low Potassium Diet", value: "LPTD" },
+    { label: "Soft Diet", value: "SD" },
+    { label: "Full Liquid", value: "FL" },
+    { label: "Clear Liquid", value: "CL" },
+    { label: "NGT Feeding", value: "NGTF" },
+    { label: "Total Parenteral Nutrition (TPN)", value: "TPN" },
+    { label: "Nothing By Mouth", value: "NPO" },
+    { label: "Other", value: "other" },
   ];
 
   const days = Array.from({ length: 31 }, (_, index) => ({
@@ -118,6 +115,36 @@ export default function UpdatePatientScreen() {
     }
   }, [formData.birthYear, formData.birthMonth, formData.birthDay]);
 
+  const handleDietChange = (value) => {
+    if (value === "NGTF") {
+      setFormData({ ...formData, diet: "ngt:", ngtSpecify: "" });
+    } else if (value === "other") {
+      setFormData({ ...formData, diet: "other:", otherDietSpecify: "" });
+    } else {
+      setFormData({ ...formData, diet: value, ngtSpecify: "", otherDietSpecify: "" });
+    }
+  };
+
+  const handleDietSpecifyChange = (text, type) => {
+    if (type === "ngt") {
+      setFormData({ ...formData, diet: `ngt:${text}`, ngtSpecify: text });
+    } else {
+      setFormData({ ...formData, diet: `other:${text}`, otherDietSpecify: text });
+    }
+  };
+
+  const displayDiet = (diet) => {
+    if (!diet) return "";
+    if (diet.startsWith("ngt:")) {
+      return `NGT Feeding - ${diet.replace("ngt:", "")}`;
+    }
+    if (diet.startsWith("other:")) {
+      return `Other - ${diet.replace("other:", "")}`;
+    }
+    const option = dietOptions.find(opt => opt.value === diet);
+    return option ? option.label : diet;
+  };
+
   useEffect(() => {
     const fetchPatientData = async () => {
       setLoading(true);
@@ -128,6 +155,17 @@ export default function UpdatePatientScreen() {
         );
         if (response.ok) {
           const data = await response.json();
+          // Handle diet data
+          let diet = data.diet || "";
+          let ngtSpecify = "";
+          let otherDietSpecify = "";
+
+          if (diet.startsWith("ngt:")) {
+            ngtSpecify = diet.replace("ngt:", "");
+          } else if (diet.startsWith("other:")) {
+            otherDietSpecify = diet.replace("other:", "");
+          }
+
           setFormData({
             firstName: data.first_name || "",
             middleName: data.middle_name || "",
@@ -146,14 +184,14 @@ export default function UpdatePatientScreen() {
             bedNumber: data.bed_number ? data.bed_number.toString() : "",
             roomNumber: data.room_number ? data.room_number.toString() : "",
             age: data.age ? data.age.toString() : "",
-            bloodType: data.blood_type || "",
+            bloodType: data.blood_group || "",
             religion: data.religion || "",
             otherReligionSpecify: data.other_religion_details || "",
             height: data.height || "",
             weight: data.weight || "",
-            diet: data.diet || "",
-            ngtSpecify: data.ngt_details || "",
-            otherDietSpecify: data.other_diet_details || "",
+            diet: diet,
+            ngtSpecify: ngtSpecify,
+            otherDietSpecify: otherDietSpecify,
             emergencyFirstName: data.emergency_contact?.first_name || "",
             emergencySurname: data.emergency_contact?.last_name || "",
             relation: data.emergency_contact?.relation_to_patient || "",
@@ -189,7 +227,7 @@ export default function UpdatePatientScreen() {
       const response = await fetch(
         `http://127.0.0.1:8000/api/patients/${patient_number}/`,
         {
-          method: "PUT", // Or "PATCH" for partial updates
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
@@ -207,7 +245,7 @@ export default function UpdatePatientScreen() {
               ? parseInt(formData.roomNumber)
               : null,
             age: formData.age ? parseInt(formData.age) : null,
-            blood_type: formData.bloodType,
+            blood_group: formData.bloodType,
             religion: formData.religion,
             height: formData.height,
             weight: formData.weight,
@@ -221,9 +259,6 @@ export default function UpdatePatientScreen() {
             chief_complaint: formData.chiefComplaint,
             admitting_diagnosis: formData.admittingDiagnosis,
             final_diagnosis: formData.finalDiagnosis,
-            ngt_details: formData.diet === "NGT insertion" || formData.diet === "NGT feeding" ? formData.ngtSpecify : undefined,
-            other_diet_details: formData.diet === "Others" ? formData.otherDietSpecify : undefined,
-            other_religion_details: formData.religion === "Other" ? formData.otherReligionSpecify : undefined,
           }),
         }
       );
@@ -231,8 +266,6 @@ export default function UpdatePatientScreen() {
       if (response.ok) {
         setUpdateSuccessMessage("Patient updated successfully!");
         setUpdateSuccessVisible(true);
-        // Optionally, you can navigate back or show a success message
-        // router.push("/viewpatient?patient_number=" + patient_number);
       } else {
         const errorData = await response.json();
         setError(`Failed to update patient: ${JSON.stringify(errorData)}`);
@@ -295,8 +328,8 @@ export default function UpdatePatientScreen() {
             <View>
               <RNPickerSelect
                 items={[
-                  { label: "Male", value: "Male" },
-                  { label: "Female", value: "Female" },
+                  { label: "Male", value: "M" },
+                  { label: "Female", value: "F" },
                 ]}
                 value={formData.sex}
                 onValueChange={(value) => handleInputChange("sex", value)}
@@ -384,6 +417,7 @@ export default function UpdatePatientScreen() {
                   { label: "AB-", value: "AB-" },
                   { label: "O+", value: "O+" },
                   { label: "O-", value: "O-" },
+                  { label: "Rhnull", value: "Rhnull"},
                 ]}
                 value={formData.bloodType}
                 onValueChange={(value) => handleInputChange("bloodType", value)}
@@ -461,8 +495,8 @@ export default function UpdatePatientScreen() {
             <View>
               <RNPickerSelect
                 items={dietOptions}
-                value={formData.diet}
-                onValueChange={(value) => handleInputChange("diet", value)}
+                value={formData.diet.split(":")[0]}
+                onValueChange={handleDietChange}
                 placeholder={formData.diet ? {} : { label: "Select Diet", value: "" }}
                 style={{
                   inputAndroid: styles.input,
@@ -474,24 +508,24 @@ export default function UpdatePatientScreen() {
                 }}
               />
             </View>
-            {formData.diet === "NGT insertion" || formData.diet === "NGT feeding" ? (
+            {formData.diet.startsWith("ngt:") ? (
               <>
                 <Text style={styles.label}>Specify NGT Details <Text style={{ color: 'red' }}>*</Text></Text>
                 <TextInput
                   style={styles.input}
                   value={formData.ngtSpecify}
-                  onChangeText={(text) => handleInputChange("ngtSpecify", text)}
-                  placeholder="e.g., Size, Insertion Date"
+                  onChangeText={(text) => handleDietSpecifyChange(text, "ngt")}
+                  placeholder="e.g., Formula"
                 />
               </>
             ) : null}
-            {formData.diet === "Others" ? (
+            {formData.diet.startsWith("other:") ? (
               <>
                 <Text style={styles.label}>Specify Other Diet <Text style={{ color: 'red' }}>*</Text></Text>
                 <TextInput
                   style={styles.input}
                   value={formData.otherDietSpecify}
-                  onChangeText={(text) => handleInputChange("otherDietSpecify", text)}
+                  onChangeText={(text) => handleDietSpecifyChange(text, "other")}
                   placeholder="Please specify the diet"
                 />
               </>

@@ -49,11 +49,61 @@ export default function RegisterNewPatient() {
   const isFormFilled = Object.values(formData).some(
     (value) => value !== null && value !== ""
   );
-  const isFormComplete = Object.values(formData).every((value) =>
-    typeof value === "string"
-      ? value.trim() !== ""
-      : value !== null && value !== ""
-  );
+
+  const requiredFields = {
+    firstName: "First Name",
+    surname: "Surname",
+    sex: "Sex",
+    birthYear: "Birth Year",
+    birthMonth: "Birth Month",
+    birthDay: "Birth Day",
+    phoneNumber: "Phone Number",
+    bedNumber: "Bed Number",
+    roomNumber: "Room Number",
+    bloodType: "Blood Type",
+    height: "Height",
+    weight: "Weight",
+    diet: "Diet",
+    emergencyFirstName: "Emergency Contact First Name",
+    emergencySurname: "Emergency Contact Surname",
+    relation: "Relation to Patient",
+    emergencyPhone: "Emergency Contact Phone",
+    chiefComplaint: "Chief Complaint",
+    admittingDiagnosis: "Admitting Diagnosis"
+  };
+
+  const isFormComplete = () => {
+    // Check required fields
+    for (const [field, label] of Object.entries(requiredFields)) {
+      const value = formData[field];
+      if (!value || (typeof value === "string" && value.trim() === "")) {
+        setWarningModalVisible(true);
+        setRegistrationSuccessMessage(`Please fill in the required field: ${label}`);
+        return false;
+      }
+    }
+
+    // Check conditional required fields
+    if (formData.religion === "Other" && !formData.otherReligionSpecify) {
+      setWarningModalVisible(true);
+      setRegistrationSuccessMessage("Please specify your religion");
+      return false;
+    }
+
+    if (formData.diet.startsWith("ngt:") && !formData.ngtSpecify) {
+      setWarningModalVisible(true);
+      setRegistrationSuccessMessage("Please specify NGT details");
+      return false;
+    }
+
+    if (formData.diet.startsWith("other:") && !formData.otherDietSpecify) {
+      setWarningModalVisible(true);
+      setRegistrationSuccessMessage("Please specify other diet details");
+      return false;
+    }
+
+    return true;
+  };
 
   const allowedDestinations = ["/directory"]; // Add allowed destinations here
 
@@ -73,22 +123,19 @@ export default function RegisterNewPatient() {
   })).reverse();
 
   const dietOptions = [
-    { label: "DAT (Diet As Tolerated)", value: "DAT" },
-    { label: "Diabetic Diet", value: "Diabetic Diet" },   
-    { label: "High Protein Diet", value: "High Protein Diet" },
-    { label: "Low Protein Diet", value: "Low Protein Diet" },
-    { label: "Low Sodium, Low Fat Diet", value: "Low Sodium, Low Fat Diet" },
-    { label: "Low Potassium Diet", value: "Low Potassium Diet" },
-    { label: "Soft Diet", value: "Soft Diet" },
-    { label: "Full Liquid", value: "Full liquid" },
-    { label: "Clear Liquid", value: "Clear liquid" },
-    { label: "NGT Feeding", value: "NGT feeding" },
-    {
-      label: "Total Parenteral Nutrition (TPN)",
-      value: "Total parenteral Nutrition",
-    },
-    { label: "NPO (Nothing By Mouth)", value: "NPO" },
-    { label: "Others", value: "Others" },
+    { label: "Diet As Tolerated", value: "DAT" },
+    { label: "Diabetic Diet", value: "DB" },   
+    { label: "High Protein Diet", value: "HPD" },
+    { label: "Low Protein Diet", value: "LPD" },
+    { label: "Low Sodium, Low Fat Diet", value: "LSLFD" },
+    { label: "Low Potassium Diet", value: "LPTD" },
+    { label: "Soft Diet", value: "SD" },
+    { label: "Full Liquid", value: "FL" },
+    { label: "Clear Liquid", value: "CL" },
+    { label: "NGT Feeding", value: "NGTF" },
+    { label: "Total Parenteral Nutrition (TPN)", value: "TPN" },
+    { label: "Nothing By Mouth", value: "NPO" },
+    { label: "Other", value: "other" },
   ];
 
   const calculateAge = (birthYear, birthMonth, birthDay) => {
@@ -108,11 +155,11 @@ export default function RegisterNewPatient() {
   useEffect(() => {
     if (formData.birthYear && formData.birthMonth && formData.birthDay) {
       const age = calculateAge(
-        formData.birthYear,
-        formData.birthMonth,
-        formData.birthDay
+        parseInt(formData.birthYear),
+        parseInt(formData.birthMonth),
+        parseInt(formData.birthDay)
       );
-      setFormData((prevData) => ({ ...prevData, age }));
+      setFormData((prevData) => ({ ...prevData, age: age.toString() }));
     }
   }, [formData.birthYear, formData.birthMonth, formData.birthDay]);
 
@@ -128,93 +175,134 @@ export default function RegisterNewPatient() {
     }
   };
 
-  const handleRegister = async () => {
-    if (!isFormComplete) {
-      setWarningModalVisible(true);
+  const handleDietChange = (value) => {
+    if (value === "NGTF") {
+      setFormData({ ...formData, diet: "ngt:", ngtSpecify: "" });
+    } else if (value === "other") {
+      setFormData({ ...formData, diet: "other:", otherDietSpecify: "" });
     } else {
-      const patientData = {
-        first_name: formData.firstName,
-        middle_name: formData.middleName,
-        last_name: formData.surname,
-        sex: formData.sex,
-        date_of_birth: `${formData.birthYear}-${formData.birthMonth}-${formData.birthDay}`,
-        contact_number: formData.phoneNumber,
-        bed_number: formData.bedNumber,
-        room_number: formData.roomNumber,
-        age: formData.age,
-        blood_type: formData.bloodType,
-        religion: formData.religion,
-        height: formData.height,
-        weight: formData.weight,
-        diet: formData.diet,
-        emergency_contact: {
-          first_name: formData.emergencyFirstName,
-          last_name: formData.emergencySurname,
-          relation_to_patient: formData.relation,
-          contact_number: formData.emergencyPhone,
+      setFormData({ ...formData, diet: value, ngtSpecify: "", otherDietSpecify: "" });
+    }
+  };
+
+  const handleDietSpecifyChange = (text, type) => {
+    if (type === "ngt") {
+      setFormData({ ...formData, diet: `ngt:${text}`, ngtSpecify: text });
+    } else {
+      setFormData({ ...formData, diet: `other:${text}`, otherDietSpecify: text });
+    }
+  };
+
+  const displayDiet = (diet) => {
+    if (!diet) return "";
+    if (diet.startsWith("ngt:")) {
+      return `NGT Feeding - ${diet.replace("ngt:", "")}`;
+    }
+    if (diet.startsWith("other:")) {
+      return `Other - ${diet.replace("other:", "")}`;
+    }
+    const option = dietOptions.find(opt => opt.value === diet);
+    return option ? option.label : diet;
+  };
+
+  const handleRegister = async () => {
+    if (!isFormComplete()) {
+      return;
+    }
+
+    // Calculate age one final time before submission
+    const age = calculateAge(
+      parseInt(formData.birthYear),
+      parseInt(formData.birthMonth),
+      parseInt(formData.birthDay)
+    );
+
+    const patientData = {
+      first_name: formData.firstName,
+      middle_name: formData.middleName,
+      last_name: formData.surname,
+      sex: formData.sex,
+      date_of_birth: `${formData.birthYear}-${formData.birthMonth}-${formData.birthDay}`,
+      contact_number: formData.phoneNumber,
+      bed_number: parseInt(formData.bedNumber),
+      room_number: parseInt(formData.roomNumber),
+      age: age,
+      blood_group: formData.bloodType,
+      religion: formData.religion,
+      height: parseFloat(formData.height),
+      weight: parseFloat(formData.weight),
+      diet: formData.diet,
+      emergency_contact: {
+        first_name: formData.emergencyFirstName,
+        last_name: formData.emergencySurname,
+        relation_to_patient: formData.relation,
+        contact_number: formData.emergencyPhone,
+      },
+      chief_complaint: formData.chiefComplaint,
+      admitting_diagnosis: formData.admittingDiagnosis,
+      final_diagnosis: formData.finalDiagnosis,
+    };
+
+    if (
+      formData.diet === "NGT insertion" ||
+      formData.diet === "NGT feeding"
+    ) {
+      patientData.ngt_details = formData.ngtSpecify;
+    } else if (formData.diet === "Others") {
+      patientData.other_diet_details = formData.otherDietSpecify;
+    }
+
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/patients/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-        chief_complaint: formData.chiefComplaint,
-        admitting_diagnosis: formData.admittingDiagnosis,
-        final_diagnosis: formData.finalDiagnosis,
-      };
+        body: JSON.stringify(patientData),
+      });
 
-      if (
-        formData.diet === "NGT insertion" ||
-        formData.diet === "NGT feeding"
-      ) {
-        patientData.ngt_details = formData.ngtSpecify;
-      } else if (formData.diet === "Others") {
-        patientData.other_diet_details = formData.otherDietSpecify;
-      }
-
-      try {
-        const response = await fetch("http://127.0.0.1:8000/api/patients/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(patientData),
+      if (response.ok) {
+        setRegistrationSuccessMessage("Patient registered successfully!");
+        setRegistrationSuccessVisible(true);
+        // Reset form after successful registration
+        setFormData({
+          firstName: "",
+          middleName: "",
+          surname: "",
+          sex: "",
+          birthMonth: "",
+          birthDay: "",
+          birthYear: "",
+          phoneNumber: "",
+          bedNumber: "",
+          roomNumber: "",
+          age: "",
+          bloodType: "",
+          religion: "",
+          otherReligionSpecify: "",
+          height: "",
+          weight: "",
+          diet: "",
+          ngtSpecify: "",
+          otherDietSpecify: "",
+          emergencyFirstName: "",
+          emergencySurname: "",
+          relation: "",
+          emergencyPhone: "",
+          chiefComplaint: "",
+          admittingDiagnosis: "",
+          finalDiagnosis: "",
         });
-
-        if (response.ok) {
-          setRegistrationSuccessMessage("Patient registered successfully!");
-          setRegistrationSuccessVisible(true);
-          // Optionally reset the form after successful registration
-          setFormData({
-            firstName: "",
-            middleName: "",
-            surname: "",
-            sex: "",
-            birthMonth: "",
-            birthDay: "",
-            birthYear: "",
-            phoneNumber: "",
-            bedNumber: "",
-            roomNumber: "",
-            age: "",
-            bloodType: "",
-            religion: "",
-            otherReligionSpecify: "",
-            height: "",
-            weight: "",
-            diet: "",
-            ngtSpecify: "",
-            otherDietSpecify: "",
-            emergencyFirstName: "",
-            emergencySurname: "",
-            relation: "",
-            emergencyPhone: "",
-            chiefComplaint: "",
-            admittingDiagnosis: "",
-            finalDiagnosis: "", // Reset new field
-          });
-        } else {
-          const errorData = await response.json();
-          console.error("Error registering patient:", errorData);
-        }
-      } catch (error) {
-        console.error("Error registering patient:", error);
+      } else {
+        const errorData = await response.json();
+        console.error("Error registering patient:", errorData);
+        setRegistrationSuccessMessage("Failed to register patient. Please try again.");
+        setRegistrationSuccessVisible(true);
       }
+    } catch (error) {
+      console.error("Error registering patient:", error);
+      setRegistrationSuccessMessage("Failed to register patient. Please try again.");
+      setRegistrationSuccessVisible(true);
     }
   };
 
@@ -258,8 +346,8 @@ export default function RegisterNewPatient() {
               <View>
                 <RNPickerSelect
                   items={[
-                    { label: "Male", value: "Male" },
-                    { label: "Female", value: "Female" },
+                    { label: "Male", value: "M"},
+                    { label: "Female", value: "F"},
                   ]}
                   value={formData.sex}
                   onValueChange={(value) =>
@@ -360,6 +448,7 @@ export default function RegisterNewPatient() {
                     { label: "AB-", value: "AB-" },
                     { label: "O+", value: "O+" },
                     { label: "O-", value: "O-" },
+                    { label: "Rhnull", value: "Rhnull"},
                   ]}
                   value={formData.bloodType}
                   onValueChange={(value) =>
@@ -461,10 +550,8 @@ export default function RegisterNewPatient() {
               <View>
                 <RNPickerSelect
                   items={dietOptions}
-                  value={formData.diet}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, diet: value })
-                  }
+                  value={formData.diet.split(":")[0]}
+                  onValueChange={handleDietChange}
                   placeholder={formData.diet ? {} : { label: "Select Diet", value: "" }}
                   style={{
                     inputAndroid: styles.input,
@@ -477,33 +564,28 @@ export default function RegisterNewPatient() {
                 />
               </View>
 
-              {formData.diet === "NGT insertion" ||
-              formData.diet === "NGT feeding" ? (
+              {formData.diet.startsWith("ngt:") ? (
                 <>
                   <Text style={styles.label}>
                   Specify NGT Details <Text style={{ color: 'red' }}>*</Text>
                   </Text>
                   <TextInput
                     style={styles.input}
-                    onChangeText={(text) =>
-                      setFormData({ ...formData, ngtSpecify: text })
-                    }
+                    onChangeText={(text) => handleDietSpecifyChange(text, "ngt")}
                     value={formData.ngtSpecify}
                     placeholder="e.g., Formula"
                   />
                 </>
               ) : null}
 
-              {formData.diet === "Others" ? (
+              {formData.diet.startsWith("other:") ? (
                 <>
                   <Text style={styles.label}>
                   Specify Other Diet <Text style={{ color: 'red' }}>*</Text>
                   </Text>
                   <TextInput
                     style={styles.input}
-                    onChangeText={(text) =>
-                      setFormData({ ...formData, otherDietSpecify: text })
-                    }
+                    onChangeText={(text) => handleDietSpecifyChange(text, "other")}
                     value={formData.otherDietSpecify}
                     placeholder="Please specify the diet"
                   />
@@ -661,7 +743,7 @@ export default function RegisterNewPatient() {
             <View style={styles.modalContainer}>
               <Text style={styles.modalTitle}>Incomplete Form</Text>
               <Text style={styles.modalMessage}>
-                Some details are missing. Are you sure you want to proceed?
+                {registrationSuccessMessage}
               </Text>
               <View style={styles.modalButtonContainer}>
                 <TouchableOpacity
