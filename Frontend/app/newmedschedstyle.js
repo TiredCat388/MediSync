@@ -52,6 +52,9 @@ const styles = StyleSheet.create({
   dobContainer: {
     flexDirection: "row",
     marginBottom: 10,
+    alignItems: "center",
+    width: 300,
+    justifyContent: "space-between", 
   },
   dobInput: {
     borderWidth: 1,
@@ -60,23 +63,31 @@ const styles = StyleSheet.create({
     padding: 8,
     width: 50,
     marginRight: 5,
-    textAlign: "center",
+    flex: 1,
+    borderWidth: 1,
+    marginRight: 5,
+    fontSize: 16,
+    height: "100%",
   },
   dobSelect: {
     borderWidth: 1,
-    borderColor: "black",
     backgroundColor: "white",
-    paddingHorizontal: 70,
-    width: 60,
+    paddingHorizontal: 0,
+    width: "100%",
     marginRight: 8,
     textAlign: "center",
     fontSize: 18,
     borderRadius: 8,
+    height: 40,
   },
   dobSelectContainer: {
-    flexDirection: "row",
-    marginBottom: 10,
-    justifyContent: "space-between",
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: "black",
+    borderRadius: 1,
+    fontSize: 16,
+    height: 36,
   },
   dobSelectLabel: {
     fontSize: 18,
@@ -165,6 +176,77 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     marginHorizontal: 30,
     alignSelf: "stretch",
+  },
+  daysContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginVertical: 10,
+    gap: 8,
+  },
+
+  dayButton: {
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 360,
+    backgroundColor: "#989898",
+  },
+
+  dayButtonSelected: {
+    backgroundColor: "#5879a5",
+  },
+
+  dayButtonText: {
+    fontSize: 14,
+    color: "#000",
+  },
+
+  dayButtonTextSelected: {
+    color: "black",
+    fontWeight: "bold",
+  },
+  timePickerContainer: {
+    flex: 1, // Each picker takes equal width
+    height: 36, // Consistent height
+  },
+  timePicker: {
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: "black",
+    borderRadius: 1,
+    fontSize: 16,
+    height: 36,
+  },
+  timePickerWeb: {
+    paddingVertical: 8,
+    paddingHorizontal: 8,
+    borderWidth: 1,
+    borderColor: "black",
+    borderRadius: 1,
+    fontSize: 16,
+    height: 36,
+  },
+  frequencyPickerContainer: {
+    flex: 1, // Each picker takes equal width
+    height: 36, // Consistent height
+  },
+  frequencyPicker: {
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: "black",
+    borderRadius: 1,
+    fontSize: 16,
+    height: 36,
+  },
+  frequencyPickerWeb: {
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: "black",
+    borderRadius: 1,
+    fontSize: 16,
+    height: 36,
   },
 });
 

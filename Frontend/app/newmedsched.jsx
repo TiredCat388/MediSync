@@ -26,7 +26,7 @@ export default function NewMedSched() {
   const [accessDeniedMessage, setAccessDeniedMessage] = useState("");
   const [addSuccessVisible, setAddSuccessVisible] = useState(false); // State for success alert
   const [addSuccessMessage, setAddSuccessMessage] = useState(""); // State for success message
-
+  const [selectedDays, setSelectedDays] = useState([]);
   const [patientName, setPatientName] = useState(null);
 
   const [formData, setFormData] = useState({
@@ -40,6 +40,9 @@ export default function NewMedSched() {
     physicianID: "",
     frequencyHour: "",
     frequencyMinute: "",
+    medicationMonth: "",
+    medicationDay: "",
+    medicationYear: "",
   });
 
   const [medications, setMedications] = useState([]);
@@ -93,6 +96,14 @@ export default function NewMedSched() {
     }
   }, [patient_number]);
 
+  const toggleDay = (day) => {
+    setSelectedDays((prevDays) =>
+      prevDays.includes(day)
+        ? prevDays.filter((d) => d !== day)
+        : [...prevDays, day]
+    );
+  };
+  
   const handleInputChange = (text) => {
     setQuery(text);
     setFormData({ ...formData, medicineName: text });
@@ -111,6 +122,31 @@ export default function NewMedSched() {
     setQuery(medName);
     setFormData({ ...formData, medicineName: medName });
     setFilteredMedications([]);
+  };
+
+  const months = Array.from({ length: 12 }, (_, i) => ({
+    label: String(i + 1).padStart(2, "0"),
+    value: String(i + 1).padStart(2, "0"),
+  }));
+
+  const days = Array.from({ length: 31 }, (_, i) => ({
+    label: String(i + 1).padStart(2, "0"),
+    value: String(i + 1).padStart(2, "0"),
+  }));
+
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 100 }, (_, i) => ({
+    label: String(currentYear - i),
+    value: String(currentYear - i),
+  }));
+
+  const pickerSelectStyles = {
+    inputAndroid: styles.input,
+    inputIOS: styles.input,
+    inputWeb: styles.input,
+    placeholder: {
+      color: "#999",
+    },
   };
 
   const handleRegister = async () => {
@@ -142,6 +178,7 @@ export default function NewMedSched() {
       return;
     }
 
+    
     const convertTo24Hour = (hour, minute, period) => {
       let hour24 = parseInt(hour);
       if (period === "PM" && hour24 !== 12) hour24 += 12;
@@ -166,6 +203,7 @@ export default function NewMedSched() {
         Dosage_Unit: formData.dosageUnit,
         Medication_Time: medicationTime,
         Frequency: frequency,
+        Days_of_Week: selectedDays, // Include this
         Medication_notes: formData.medicationNotes,
         patient_number: parseInt(patient_number),
         physicianID: formData.physicianID || "default_physician", // Add physician ID if available
@@ -253,17 +291,17 @@ export default function NewMedSched() {
               />
             </View>
 
-            <Text style={[styles.label, { marginTop: 50 }]}>Dosage</Text>
+            <Text style={[styles.label, { marginTop: 10 }]}>Dosage</Text>
             <View style={styles.dobContainer}>
               <TextInput
-                style={[styles.dobInput, { width: 60 }]}
+                style={styles.dobInput}
                 keyboardType="numeric"
                 onChangeText={(text) =>
                   setFormData({ ...formData, dosage: text })
                 }
                 value={formData.dosage}
               />
-              <View style={{ width: 70 }}>
+              <View style={styles.dobSelectContainer}>
                 <RNPickerSelect
                   items={[
                     { label: "ml", value: "ml" },
@@ -286,95 +324,173 @@ export default function NewMedSched() {
               </View>
             </View>
 
+            <Text style={styles.label}>Date of Medication</Text>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              {/* Month */}
+              <View style={{ flex: 1, marginRight: 10 }}>
+                <RNPickerSelect
+                  items={months}
+                  value={formData.medicationMonth}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, medicationMonth: value })
+                  }
+                  placeholder={{ label: "MM", value: "" }}
+                  style={pickerSelectStyles}
+                />
+              </View>
+              {/* Day */}
+              <View style={{ flex: 1, marginRight: 10 }}>
+                <RNPickerSelect
+                  items={days}
+                  value={formData.medicationDay}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, medicationDay: value })
+                  }
+                  placeholder={{ label: "DD", value: "" }}
+                  style={pickerSelectStyles}
+                />
+              </View>
+              {/* Year */}
+              <View style={{ flex: 1 }}>
+                <RNPickerSelect
+                  items={years}
+                  value={formData.medicationYear}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, medicationYear: value })
+                  }
+                  placeholder={{ label: "YYYY", value: "" }}
+                  style={pickerSelectStyles}
+                />
+              </View>
+            </View>
+
             <Text style={styles.label}>Time of Medication</Text>
             <View style={styles.dobContainer}>
-              <RNPickerSelect
-                items={Array.from({ length: 12 }, (_, index) => ({
-                  label: (index + 1).toString().padStart(2, "0"),
-                  value: (index + 1).toString().padStart(2, "0"),
-                }))}
-                value={formData.timeHour}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, timeHour: value })
-                }
-                placeholder={{ label: "HH", value: "" }}
-                style={{
-                  inputAndroid: styles.dobSelect,
-                  inputIOS: styles.dobSelect,
-                  inputWeb: styles.dobSelectWeb,
-                }}
-              />
-
-              <RNPickerSelect
-                items={Array.from({ length: 60 }, (_, index) => ({
-                  label: index.toString().padStart(2, "0"),
-                  value: index.toString().padStart(2, "0"),
-                }))}
-                value={formData.timeMinute}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, timeMinute: value })
-                }
-                placeholder={{ label: "MM", value: "" }}
-                style={{
-                  inputAndroid: styles.dobSelect,
-                  inputIOS: styles.dobSelect,
-                  inputWeb: styles.dobSelectWeb,
-                }}
-              />
-
-              <RNPickerSelect
-                items={[
-                  { label: "AM", value: "AM" },
-                  { label: "PM", value: "PM" },
-                ]}
-                value={formData.timePeriod}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, timePeriod: value })
-                }
-                placeholder={{ label: "AM/PM", value: "" }}
-                style={{
-                  inputAndroid: styles.dobSelect,
-                  inputIOS: styles.dobSelect,
-                  inputWeb: styles.dobSelectWeb,
-                }}
-              />
+              <View style={styles.timePickerContainer}>
+                <RNPickerSelect
+                  items={Array.from({ length: 12 }, (_, index) => ({
+                    label: (index + 1).toString().padStart(2, "0"),
+                    value: (index + 1).toString().padStart(2, "0"),
+                  }))}
+                  value={formData.timeHour}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, timeHour: value })
+                  }
+                  placeholder={{ label: "HH", value: "" }}
+                  style={{
+                    inputAndroid: styles.timePicker,
+                    inputIOS: styles.timePicker,
+                    inputWeb: styles.timePickerWeb,
+                  }}
+                />
+              </View>
+              <View style={{ width: 10 }} /> {/* Spacer */}
+              <View style={styles.timePickerContainer}>
+                <RNPickerSelect
+                  items={Array.from({ length: 60 }, (_, index) => ({
+                    label: index.toString().padStart(2, "0"),
+                    value: index.toString().padStart(2, "0"),
+                  }))}
+                  value={formData.timeMinute}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, timeMinute: value })
+                  }
+                  placeholder={{ label: "MM", value: "" }}
+                  style={{
+                    inputAndroid: styles.timePicker,
+                    inputIOS: styles.timePicker,
+                    inputWeb: styles.timePickerWeb,
+                  }}
+                />
+              </View>
+              <View style={{ width: 10 }} /> {/* Spacer */}
+              <View style={styles.timePickerContainer}>
+                <RNPickerSelect
+                  items={[
+                    { label: "AM", value: "AM" },
+                    { label: "PM", value: "PM" },
+                  ]}
+                  value={formData.timePeriod}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, timePeriod: value })
+                  }
+                  placeholder={{ label: "AM/PM", value: "" }}
+                  style={{
+                    inputAndroid: styles.timePicker,
+                    inputIOS: styles.timePicker,
+                    inputWeb: styles.timePickerWeb,
+                  }}
+                />
+              </View>
             </View>
 
             <Text style={styles.label}>Frequency</Text>
-            <View style={styles.dobContainer}>
-              <RNPickerSelect
-                items={Array.from({ length: 24 }, (_, index) => ({
-                  label: index.toString().padStart(2, "0"),
-                  value: index.toString().padStart(2, "0"),
-                }))}
-                value={formData.frequencyHour}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, frequencyHour: value })
-                }
-                placeholder={{ label: "HH", value: "" }}
-                style={{
-                  inputAndroid: styles.dobSelect,
-                  inputIOS: styles.dobSelect,
-                  inputWeb: styles.dobSelectWeb,
-                }}
-              />
+      <View style={styles.dobContainer}>
+        <View style={styles.frequencyPickerContainer}>
+          <RNPickerSelect
+            items={Array.from({ length: 24 }, (_, index) => ({
+              label: index.toString().padStart(2, "0"),
+              value: index.toString().padStart(2, "0"),
+            }))}
+            value={formData.frequencyHour}
+            onValueChange={(value) =>
+              setFormData({ ...formData, frequencyHour: value })
+            }
+            placeholder={{ label: "HH", value: "" }}
+            style={{
+              inputAndroid: styles.frequencyPicker,
+              inputIOS: styles.frequencyPicker,
+              inputWeb: styles.frequencyPickerWeb,
+            }}
+          />
+        </View>
 
-              <RNPickerSelect
-                items={Array.from({ length: 12 }, (_, index) => ({
-                  label: (index * 5).toString().padStart(2, "0"),
-                  value: (index * 5).toString().padStart(2, "0"),
-                }))}
-                value={formData.frequencyMinute}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, frequencyMinute: value })
-                }
-                placeholder={{ label: "MM", value: "" }}
-                style={{
-                  inputAndroid: styles.dobSelect,
-                  inputIOS: styles.dobSelect,
-                  inputWeb: styles.dobSelectWeb,
-                }}
-              />
+        <View style={{ width: 10 }} /> {/* Spacer */}
+
+        <View style={styles.frequencyPickerContainer}>
+          <RNPickerSelect
+            items={Array.from({ length: 12 }, (_, index) => ({
+              label: (index * 5).toString().padStart(2, "0"),
+              value: (index * 5).toString().padStart(2, "0"),
+            }))}
+            value={formData.frequencyMinute}
+            onValueChange={(value) =>
+              setFormData({ ...formData, frequencyMinute: value })
+            }
+            placeholder={{ label: "MM", value: "" }}
+            style={{
+              inputAndroid: styles.frequencyPicker,
+              inputIOS: styles.frequencyPicker,
+              inputWeb: styles.frequencyPickerWeb,
+            }}
+          />
+        </View>
+      </View>
+
+            <Text style={styles.label}>Days of the Week</Text>
+            <View style={styles.daysContainer}>
+              {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+                <TouchableOpacity
+                  key={day}
+                  style={[
+                    styles.dayButton,
+                    selectedDays.includes(day) && styles.dayButtonSelected,
+                  ]}
+                  onPress={() => toggleDay(day)}
+                >
+                  <Text
+                    style={[
+                      styles.dayButtonText,
+                      selectedDays.includes(day) &&
+                        styles.dayButtonTextSelected,
+                    ]}
+                  >
+                    {day}
+                  </Text>
+                </TouchableOpacity>
+              ))}
             </View>
           </View>
 
