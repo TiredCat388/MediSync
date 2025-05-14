@@ -9,8 +9,8 @@ import {
 import { useRouter, useLocalSearchParams } from "expo-router";
 import Sidebar from "./components/sidebar";
 import RNPickerSelect from "react-native-picker-select";
-import styles from "./updatepatientstyle"
-import CustomAlert from "./components/alert"; 
+import styles from "./updatepatientstyle";
+import CustomAlert from "./components/alert";
 
 export default function UpdatePatientScreen() {
   const router = useRouter();
@@ -66,7 +66,7 @@ export default function UpdatePatientScreen() {
 
   const dietOptions = [
     { label: "Diet As Tolerated", value: "DAT" },
-    { label: "Diabetic Diet", value: "DB" },   
+    { label: "Diabetic Diet", value: "DB" },
     { label: "High Protein Diet", value: "HPD" },
     { label: "Low Protein Diet", value: "LPD" },
     { label: "Low Sodium, Low Fat Diet", value: "LSLFD" },
@@ -121,7 +121,12 @@ export default function UpdatePatientScreen() {
     } else if (value === "other") {
       setFormData({ ...formData, diet: "other:", otherDietSpecify: "" });
     } else {
-      setFormData({ ...formData, diet: value, ngtSpecify: "", otherDietSpecify: "" });
+      setFormData({
+        ...formData,
+        diet: value,
+        ngtSpecify: "",
+        otherDietSpecify: "",
+      });
     }
   };
 
@@ -129,7 +134,11 @@ export default function UpdatePatientScreen() {
     if (type === "ngt") {
       setFormData({ ...formData, diet: `ngt:${text}`, ngtSpecify: text });
     } else {
-      setFormData({ ...formData, diet: `other:${text}`, otherDietSpecify: text });
+      setFormData({
+        ...formData,
+        diet: `other:${text}`,
+        otherDietSpecify: text,
+      });
     }
   };
 
@@ -141,7 +150,7 @@ export default function UpdatePatientScreen() {
     if (diet.startsWith("other:")) {
       return `Other - ${diet.replace("other:", "")}`;
     }
-    const option = dietOptions.find(opt => opt.value === diet);
+    const option = dietOptions.find((opt) => opt.value === diet);
     return option ? option.label : diet;
   };
 
@@ -304,9 +313,12 @@ export default function UpdatePatientScreen() {
       >
         <Text style={styles.screenTitle}>Update Patient</Text>
         <View style={styles.formContainer}>
-          <ScrollView style={styles.column}>
-            <Text style={styles.sectionTitle}>Patient Details <Text style={{ color: 'red', fontSize: 16 }}>* Required</Text></Text>
-            <Text style={styles.label}>First Name <Text style={{ color: 'red' }}>*</Text></Text>
+          <ScrollView style={styles.column}>  
+            <Text style={styles.sectionTitle}>Patient Details <Text style={{ color: 'red', fontSize: 16 }}>* Required</Text>
+            </Text>
+            <Text style={styles.label}>
+              First Name <Text style={{ color: "red" }}>*</Text>
+            </Text>
             <TextInput
               style={styles.input}
               value={formData.firstName}
@@ -318,13 +330,17 @@ export default function UpdatePatientScreen() {
               value={formData.middleName}
               onChangeText={(text) => handleInputChange("middleName", text)}
             />
-            <Text style={styles.label}>Surname <Text style={{ color: 'red' }}>*</Text></Text>
+            <Text style={styles.label}>
+              Surname <Text style={{ color: "red" }}>*</Text>
+            </Text>
             <TextInput
               style={styles.input}
               value={formData.surname}
               onChangeText={(text) => handleInputChange("surname", text)}
             />
-            <Text style={styles.label}>Sex <Text style={{ color: 'red' }}>*</Text></Text>
+            <Text style={styles.label}>
+              Sex <Text style={{ color: "red" }}>*</Text>
+            </Text>
             <View>
               <RNPickerSelect
                 items={[
@@ -333,7 +349,9 @@ export default function UpdatePatientScreen() {
                 ]}
                 value={formData.sex}
                 onValueChange={(value) => handleInputChange("sex", value)}
-                placeholder={formData.sex ? {} : { label: "Select Sex", value: "" }}
+                placeholder={
+                  formData.sex ? {} : { label: "Select Sex", value: "" }
+                }
                 style={{
                   inputAndroid: styles.input,
                   inputIOS: styles.input,
@@ -345,58 +363,70 @@ export default function UpdatePatientScreen() {
               />
             </View>
             <Text style={styles.label}>
-            Date of Birth <Text style={{ color: 'red' }}>*</Text>
+              Date of Birth <Text style={{ color: "red" }}>*</Text>
             </Text>
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
-            <View style={{ flex: 1, marginRight: 10 }}>
-              <RNPickerSelect
-                items={months}
-                value={formData.birthMonth}
-                onValueChange={(value) => handleInputChange("birthMonth", value)}
-                placeholder={formData.birthMonth ? {} : { label: "MM", value: "" }}
-                style={{
-                  inputAndroid: styles.input,
-                  inputIOS: styles.input,
-                  inputWeb: styles.input,
-                  placeholder: {
-                    color: "#999",
-                  },
-                }}
-              />
+              <View style={{ flex: 1, marginRight: 10 }}>
+                <RNPickerSelect
+                  items={months}
+                  value={formData.birthMonth}
+                  onValueChange={(value) =>
+                    handleInputChange("birthMonth", value)
+                  }
+                  placeholder={
+                    formData.birthMonth ? {} : { label: "MM", value: "" }
+                  }
+                  style={{
+                    inputAndroid: styles.input,
+                    inputIOS: styles.input,
+                    inputWeb: styles.input,
+                    placeholder: {
+                      color: "#999",
+                    },
+                  }}
+                />
               </View>
               <View style={{ flex: 1, marginRight: 10 }}>
-              <RNPickerSelect
-                items={days}
-                value={formData.birthDay}
-                onValueChange={(value) => handleInputChange("birthDay", value)}
-                placeholder={formData.birthDay ? {} : { label: "DD", value: "" }}
-                style={{
-                  inputAndroid: styles.input,
-                  inputIOS: styles.input,
-                  inputWeb: styles.input,
-                  placeholder: {
-                    color: "#999",
-                  },
-                }}
-              />
+                <RNPickerSelect
+                  items={days}
+                  value={formData.birthDay}
+                  onValueChange={(value) =>
+                    handleInputChange("birthDay", value)
+                  }
+                  placeholder={
+                    formData.birthDay ? {} : { label: "DD", value: "" }
+                  }
+                  style={{
+                    inputAndroid: styles.input,
+                    inputIOS: styles.input,
+                    inputWeb: styles.input,
+                    placeholder: {
+                      color: "#999",
+                    },
+                  }}
+                />
               </View>
-              <View style={{ flex: 1}}>
-              <RNPickerSelect
-                items={years}
-                value={formData.birthYear}
-                onValueChange={(value) => handleInputChange("birthYear", value)}
-                placeholder={formData.birthYear ? {} : { label: "YYYY", value: "" }}
-                style={{
-                  inputAndroid: styles.input,
-                  inputIOS: styles.input,
-                  inputWeb: styles.input,
-                  placeholder: {
-                    color: "#999",
-                  },
-                }}
-              />
+              <View style={{ flex: 1 }}>
+                <RNPickerSelect
+                  items={years}
+                  value={formData.birthYear}
+                  onValueChange={(value) =>
+                    handleInputChange("birthYear", value)
+                  }
+                  placeholder={
+                    formData.birthYear ? {} : { label: "YYYY", value: "" }
+                  }
+                  style={{
+                    inputAndroid: styles.input,
+                    inputIOS: styles.input,
+                    inputWeb: styles.input,
+                    placeholder: {
+                      color: "#999",
+                    },
+                  }}
+                />
               </View>
             </View>
             <Text style={styles.label}>Age</Text>
@@ -405,7 +435,9 @@ export default function UpdatePatientScreen() {
               value={formData.age.toString()}
               editable={false}
             />
-            <Text style={styles.label}>Blood Type <Text style={{ color: 'red' }}>*</Text></Text>
+            <Text style={styles.label}>
+              Blood Type <Text style={{ color: "red" }}>*</Text>
+            </Text>
             <View>
               <RNPickerSelect
                 items={[
@@ -417,11 +449,15 @@ export default function UpdatePatientScreen() {
                   { label: "AB-", value: "AB-" },
                   { label: "O+", value: "O+" },
                   { label: "O-", value: "O-" },
-                  { label: "Rhnull", value: "Rhnull"},
+                  { label: "Rhnull", value: "Rhnull" },
                 ]}
                 value={formData.bloodType}
                 onValueChange={(value) => handleInputChange("bloodType", value)}
-                placeholder={formData.bloodType ? {} : { label: "Select Blood Type", value: "" }}
+                placeholder={
+                  formData.bloodType
+                    ? {}
+                    : { label: "Select Blood Type", value: "" }
+                }
                 style={{
                   inputAndroid: styles.input,
                   inputIOS: styles.input,
@@ -447,7 +483,11 @@ export default function UpdatePatientScreen() {
                 ]}
                 value={formData.religion}
                 onValueChange={(value) => handleInputChange("religion", value)}
-                placeholder={formData.religion ? {} : { label: "Select Religion", value: "" }}
+                placeholder={
+                  formData.religion
+                    ? {}
+                    : { label: "Select Religion", value: "" }
+                }
                 style={{
                   inputAndroid: styles.input,
                   inputIOS: styles.input,
@@ -460,18 +500,26 @@ export default function UpdatePatientScreen() {
             </View>
             {formData.religion === "Other" ? (
               <>
-                <Text style={styles.label}>Specify Other Religion <Text style={{ color: 'red' }}>*</Text></Text>
+                <Text style={styles.label}>
+                  Specify Other Religion <Text style={{ color: "red" }}>*</Text>
+                </Text>
                 <TextInput
                   style={styles.input}
                   value={formData.otherReligionSpecify}
-                  onChangeText={(text) => handleInputChange("otherReligionSpecify", text)}
+                  onChangeText={(text) =>
+                    handleInputChange("otherReligionSpecify", text)
+                  }
                   placeholder="Please specify your religion"
                 />
               </>
             ) : null}
-            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
               <View style={{ flex: 1, marginRight: 10 }}>
-                <Text style={styles.label}>Height (meters) <Text style={{ color: 'red' }}>*</Text></Text>
+                <Text style={styles.label}>
+                  Height (meters) <Text style={{ color: "red" }}>*</Text>
+                </Text>
                 <TextInput
                   style={styles.input}
                   keyboardType="numeric"
@@ -481,7 +529,9 @@ export default function UpdatePatientScreen() {
                 />
               </View>
               <View style={{ flex: 1 }}>
-                <Text style={styles.label}>Weight (kg) <Text style={{ color: 'red' }}>*</Text></Text>
+                <Text style={styles.label}>
+                  Weight (kg) <Text style={{ color: "red" }}>*</Text>
+                </Text>
                 <TextInput
                   style={styles.input}
                   keyboardType="numeric"
@@ -491,13 +541,17 @@ export default function UpdatePatientScreen() {
                 />
               </View>
             </View>
-            <Text style={styles.label}>Diet <Text style={{ color: 'red' }}>*</Text></Text>
+            <Text style={styles.label}>
+              Diet <Text style={{ color: "red" }}>*</Text>
+            </Text>
             <View>
               <RNPickerSelect
                 items={dietOptions}
                 value={formData.diet.split(":")[0]}
                 onValueChange={handleDietChange}
-                placeholder={formData.diet ? {} : { label: "Select Diet", value: "" }}
+                placeholder={
+                  formData.diet ? {} : { label: "Select Diet", value: "" }
+                }
                 style={{
                   inputAndroid: styles.input,
                   inputIOS: styles.input,
@@ -510,7 +564,9 @@ export default function UpdatePatientScreen() {
             </View>
             {formData.diet.startsWith("ngt:") ? (
               <>
-                <Text style={styles.label}>Specify NGT Details <Text style={{ color: 'red' }}>*</Text></Text>
+                <Text style={styles.label}>
+                  Specify NGT Details <Text style={{ color: "red" }}>*</Text>
+                </Text>
                 <TextInput
                   style={styles.input}
                   value={formData.ngtSpecify}
@@ -521,37 +577,49 @@ export default function UpdatePatientScreen() {
             ) : null}
             {formData.diet.startsWith("other:") ? (
               <>
-                <Text style={styles.label}>Specify Other Diet <Text style={{ color: 'red' }}>*</Text></Text>
+                <Text style={styles.label}>
+                  Specify Other Diet <Text style={{ color: "red" }}>*</Text>
+                </Text>
                 <TextInput
                   style={styles.input}
                   value={formData.otherDietSpecify}
-                  onChangeText={(text) => handleDietSpecifyChange(text, "other")}
+                  onChangeText={(text) =>
+                    handleDietSpecifyChange(text, "other")
+                  }
                   placeholder="Please specify the diet"
                 />
               </>
             ) : null}
-            <Text style={styles.label}>Phone Number</Text>
+            <Text style={styles.label}>
+            Contact Number <Text style={{ color: "red" }}>*</Text>
+            </Text>
             <TextInput
               style={styles.input}
               value={formData.phoneNumber}
               onChangeText={(text) => handleInputChange("phoneNumber", text)}
               keyboardType="phone-pad"
             />
-            <Text style={styles.label}>Bed Number <Text style={{ color: 'red' }}>*</Text></Text>
+            <Text style={styles.label}>
+              Bed Number <Text style={{ color: "red" }}>*</Text>
+            </Text>
             <TextInput
               style={styles.input}
               value={formData.bedNumber}
               onChangeText={(text) => handleInputChange("bedNumber", text)}
               keyboardType="numeric"
             />
-            <Text style={styles.label}>Room Number <Text style={{ color: 'red' }}>*</Text></Text>
+            <Text style={styles.label}>
+              Room Number <Text style={{ color: "red" }}>*</Text>
+            </Text>
             <TextInput
               style={styles.input}
               value={formData.roomNumber}
               onChangeText={(text) => handleInputChange("roomNumber", text)}
               keyboardType="numeric"
             />
-            <Text style={styles.label}>Chief Complaint <Text style={{ color: 'red' }}>*</Text></Text>
+            <Text style={styles.label}>
+              Chief Complaint/s <Text style={{ color: "red" }}>*</Text>
+            </Text>
             <TextInput
               style={[styles.input, { height: 150, textAlignVertical: "top" }]}
               multiline
@@ -559,13 +627,17 @@ export default function UpdatePatientScreen() {
               value={formData.chiefComplaint}
               onChangeText={(text) => handleInputChange("chiefComplaint", text)}
             />
-            <Text style={styles.label}>Admitting Diagnosis <Text style={{ color: 'red' }}>*</Text></Text>
+            <Text style={styles.label}>
+              Admitting Diagnosis <Text style={{ color: "red" }}>*</Text>
+            </Text>
             <TextInput
               style={[styles.input, { height: 150, textAlignVertical: "top" }]}
               multiline
               numberOfLines={4}
               value={formData.admittingDiagnosis}
-              onChangeText={(text) => handleInputChange("admittingDiagnosis", text)}
+              onChangeText={(text) =>
+                handleInputChange("admittingDiagnosis", text)
+              }
             />
             <Text style={styles.label}>Final Diagnosis</Text>
             <TextInput
@@ -579,25 +651,37 @@ export default function UpdatePatientScreen() {
           <View style={styles.divider} />
           <View style={styles.column}>
             <Text style={styles.sectionTitle}>Emergency Contact Details</Text>
-            <Text style={styles.label}>First Name <Text style={{ color: 'red' }}>*</Text></Text>
+            <Text style={styles.label}>
+              First Name <Text style={{ color: "red" }}>*</Text>
+            </Text>
             <TextInput
               style={styles.input}
               value={formData.emergencyFirstName}
-              onChangeText={(text) => handleInputChange("emergencyFirstName", text)}
+              onChangeText={(text) =>
+                handleInputChange("emergencyFirstName", text)
+              }
             />
-            <Text style={styles.label}>Surname <Text style={{ color: 'red' }}>*</Text></Text>
+            <Text style={styles.label}>
+              Surname <Text style={{ color: "red" }}>*</Text>
+            </Text>
             <TextInput
               style={styles.input}
               value={formData.emergencySurname}
-              onChangeText={(text) => handleInputChange("emergencySurname", text)}
+              onChangeText={(text) =>
+                handleInputChange("emergencySurname", text)
+              }
             />
-            <Text style={styles.label}>Relation to Patient <Text style={{ color: 'red' }}>*</Text></Text>
+            <Text style={styles.label}>
+              Relation to Patient <Text style={{ color: "red" }}>*</Text>
+            </Text>
             <TextInput
               style={styles.input}
               value={formData.relation}
               onChangeText={(text) => handleInputChange("relation", text)}
             />
-            <Text style={styles.label}>Contact Number <Text style={{ color: 'red' }}>*</Text></Text>
+            <Text style={styles.label}>
+              Contact Number <Text style={{ color: "red" }}>*</Text>
+            </Text>
             <TextInput
               style={styles.input}
               value={formData.emergencyPhone}
@@ -623,7 +707,6 @@ export default function UpdatePatientScreen() {
           </TouchableOpacity>
         </View>
       </View>
-      {/* Update Success Alert */}
       <CustomAlert
         visible={updateSuccessVisible}
         message={updateSuccessMessage}

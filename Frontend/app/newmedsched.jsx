@@ -199,14 +199,15 @@ export default function NewMedSched() {
 
       const requestData = {
         Medication_name: formData.medicineName,
+        Medicationform: formData.Medication_form,
         Dosage: formData.dosage,
         Dosage_Unit: formData.dosageUnit,
         Medication_Time: medicationTime,
         Frequency: frequency,
-        Days_of_Week: selectedDays, // Include this
+        Days_of_Week: selectedDays,
         Medication_notes: formData.medicationNotes,
         patient_number: parseInt(patient_number),
-        physicianID: formData.physicianID || "default_physician", // Add physician ID if available
+        physicianID: formData.physicianID || "default_physician",
       };
 
       const response = await fetch("http://127.0.0.1:8000/api/medications/", {
@@ -220,20 +221,6 @@ export default function NewMedSched() {
       if (response.ok) {
         setAddSuccessMessage("Medication added successfully!");
         setAddSuccessVisible(true);
-        // Optionally reset the form
-        setFormData({
-          medicineName: "",
-          dosage: "",
-          dosageUnit: "",
-          timeHour: "",
-          timeMinute: "",
-          timePeriod: "",
-          medicationNotes: "",
-          physicianID: "",
-          frequencyHour: "",
-          frequencyMinute: "",
-        });
-        setQuery("");
       } else {
         const errorMessage =
           responseData.detail ||

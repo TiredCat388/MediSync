@@ -19,7 +19,6 @@ Medications_Choices = (
 )
 
 class Medications(models.Model):
-    # Required fields with no defaults
     Medication_name = models.CharField(max_length=100, blank=False)
     Medication_form = models.CharField(max_length=100, blank=False)
     Medication_Time = models.TimeField(blank=False)
@@ -27,7 +26,6 @@ class Medications(models.Model):
     Medication_notes = models.TextField(blank=False)
     patient_number = models.ForeignKey(Patients, on_delete=models.CASCADE, db_column='patient_number')
 
-    # Fields with sensible defaults
     Medication_unit = models.CharField(
         max_length=100, 
         blank=False, 

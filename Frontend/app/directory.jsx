@@ -115,7 +115,6 @@ export default function PatientsDirectory() {
               </View>
             </View>
             <ScrollView style={{ maxHeight: 500 }}>
-              {" "}
               {/* Added maxHeight for visual scroll */}
               <FlatList
                 data={displayedPatients}

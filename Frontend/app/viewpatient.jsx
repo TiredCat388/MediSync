@@ -213,7 +213,7 @@ export default function PatientDetails() {
           <View style={styles.dividers} />
 
           <View style={styles.detailsSection}>
-            <Text style={styles.sectionTitle}></Text>
+            <Text style={styles.sectionTitle}>  </Text>
             <View style={styles.section}>
               <Text style={styles.boldLabel}>Height</Text>
               <Text>{patient?.height}</Text>
@@ -231,9 +231,9 @@ export default function PatientDetails() {
           <View style={styles.dividers} />
           
           <View style={styles.subsdetailsSection}>
-            <Text style={styles.sectionTitle}></Text>
+            <Text style={styles.sectionTitle}> </Text>
             <View style={styles.section}>
-              <Text style={styles.boldLabel}>Chief's Complaint</Text>
+              <Text style={styles.boldLabel}>Chief Complaint/s</Text>
               <Text>{patient?.chief_complaint}</Text>
               <Text style={styles.boldLabel}>Admitting Diagnosis</Text>
               <Text>{patient?.admitting_diagnosis}</Text>
