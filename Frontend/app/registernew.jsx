@@ -4,7 +4,12 @@ import { useRouter } from "expo-router";
 import Sidebar from "./components/sidebar";
 import RNPickerSelect from "react-native-picker-select";
 import styles from "./registerstyle";
+<<<<<<< Updated upstream
 import { ScrollView } from "react-native";
+=======
+import CustomAlert from "./components/alert"; // Import CustomAlert
+import { ScrollView } from "react-native-web";
+>>>>>>> Stashed changes
 
 export default function RegisterNewPatient() {
   const router = useRouter();
@@ -463,7 +468,11 @@ export default function RegisterNewPatient() {
           </TouchableOpacity>
         </View>
       </ScrollView>
+<<<<<<< Updated upstream
  
+=======
+
+>>>>>>> Stashed changes
       {/* Cancel Confirmation Modal */}
       <Modal visible={modalVisible} transparent animationType="fade">
         <View style={styles.modalOverlay}>
