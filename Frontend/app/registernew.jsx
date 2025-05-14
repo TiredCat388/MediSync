@@ -207,7 +207,7 @@ export default function RegisterNewPatient() {
   return (
     <View style={styles.container}>
       <Sidebar onNavigate={handleNavigate} />
-      <View
+      <ScrollView
         style={[
           styles.contentContainer,
           { marginLeft: isSidebarExpanded ? 200 : 70 },
@@ -549,6 +549,8 @@ export default function RegisterNewPatient() {
             <Text style={styles.buttonText}>Register Patient</Text>
           </TouchableOpacity>
         </View>
+      </View>
+            </ScrollView>
       </View>
 
       {/* Cancel Confirmation Modal */}
