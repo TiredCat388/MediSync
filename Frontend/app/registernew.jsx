@@ -210,6 +210,7 @@ export default function RegisterNewPatient() {
                 style={{
                   inputAndroid: styles.input,
                   inputIOS: styles.input,
+                  inputWeb: { marginBottom: 10, padding: 10, borderWidth: 1, borderRadius: 10, borderColor: "black" },
                 }}
               />
 
@@ -233,6 +234,7 @@ export default function RegisterNewPatient() {
                   style={{
                     inputAndroid: styles.input,
                     inputIOS: styles.input,
+                    inputWeb: { marginBottom: 10, padding: 10, borderWidth: 1, borderRadius: 10, borderColor: "black" },
                   }}
                 />
            <View style={styles.inlineContainer}>
@@ -289,6 +291,7 @@ export default function RegisterNewPatient() {
               style={{
                 inputAndroid: styles.input,
                 inputIOS: styles.input,
+                inputWeb: { marginBottom: 10, padding: 10, borderWidth: 1, borderRadius: 10, borderColor: "black" },
               }}
             />
             
@@ -304,6 +307,7 @@ export default function RegisterNewPatient() {
                 style={{
                   inputAndroid: styles.dobSelect,
                   inputIOS: styles.dobSelect,
+                  inputWeb: { marginBottom: 10, marginRight: 10, padding: 10, borderWidth: 1, borderRadius: 10, borderColor: "black" },
                 }}
               />
               <RNPickerSelect
@@ -316,6 +320,7 @@ export default function RegisterNewPatient() {
                 style={{
                   inputAndroid: styles.dobSelect,
                   inputIOS: styles.dobSelect,
+                  inputWeb: { marginBottom: 10, marginRight: 10, padding: 10, borderWidth: 1, borderRadius: 10, borderColor: "black" },
                 }}
               />
               <RNPickerSelect
@@ -328,6 +333,7 @@ export default function RegisterNewPatient() {
                 style={{
                   inputAndroid: styles.dobSelect,
                   inputIOS: styles.dobSelect,
+                  inputWeb: { marginBottom: 10, padding: 10, borderWidth: 1, borderRadius: 10, borderColor: "black" },
                 }}
               />
             </View>

@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: 'black',
+    borderRadius: 10,
     backgroundColor: 'white',
     padding: 8,
     marginBottom: 10,
@@ -179,8 +180,8 @@ const styles = StyleSheet.create({
   },
   autocompleteContainer: {
     position: 'relative',
-    zIndex: 1,
-    marginBottom: 100,
+    zIndex: 0,
+    marginBottom: 20,
   },
   autocompleteWrapper: {
     borderWidth: 1,
@@ -206,6 +207,30 @@ const styles = StyleSheet.create({
   },
   autocompleteText: {
     fontSize: 16,
+  },
+  checkboxContainer: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  marginVertical: 10,
+  zIndex: 1,
+  },
+  checkbox: {
+    width: 40,
+    height: 40,
+    borderWidth: 1,
+    borderColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+    backgroundColor: 'white',
+  },
+  checkboxSelected: {
+    backgroundColor: 'black',
+  },
+  checkmark: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
 

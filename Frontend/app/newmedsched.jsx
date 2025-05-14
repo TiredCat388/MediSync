@@ -13,6 +13,41 @@ export default function NewMedSched() {
   const [modalVisible, setModalVisible] = useState(false);
   const [warningModalVisible, setWarningModalVisible] = useState(false);
 
+  const months = [
+  { label: 'January', value: '01' },
+  { label: 'February', value: '02' },
+  { label: 'March', value: '03' },
+  { label: 'April', value: '04' },
+  { label: 'May', value: '05' },
+  { label: 'June', value: '06' },
+  { label: 'July', value: '07' },
+  { label: 'August', value: '08' },
+  { label: 'September', value: '09' },
+  { label: 'October', value: '10' },
+  { label: 'November', value: '11' },
+  { label: 'December', value: '12' },
+];
+
+const days = Array.from({ length: 31 }, (_, index) => ({
+  label: (index + 1).toString().padStart(2, '0'),
+  value: (index + 1).toString().padStart(2, '0'),
+}));
+
+const years = Array.from({ length: 100 }, (_, index) => ({
+  label: (new Date().getFullYear() - index).toString(),
+  value: (new Date().getFullYear() - index).toString(),
+}));
+
+const [selectedDays, setSelectedDays] = useState({
+  S: false,
+  M: false,
+  T: false,
+  W: false,
+  T2: false, 
+  F: false,
+  S2: false, 
+});
+
   const [formData, setFormData] = useState({
     medicineName: '',
     dosage: '',
@@ -188,7 +223,7 @@ export default function NewMedSched() {
             <Text style={styles.label}>Dosage</Text>
             <View style={styles.dobContainer}>
               <TextInput
-                style={[styles.dobInput, { width: 60 }]}
+                style={[styles.dobInput, { width: 60, height: 38 }]}
                 keyboardType="numeric"
                 onChangeText={(text) => setFormData({ ...formData, dosage: text })}
               />
@@ -204,9 +239,51 @@ export default function NewMedSched() {
                 value={formData.dosageUnit}
                 onValueChange={(value) => setFormData({ ...formData, dosageUnit: value })}
                 placeholder={{ label: 'Unit', value: '' }}
-                style={{ inputAndroid: styles.dobSelect, inputIOS: styles.dobSelect, inputWeb: styles.dobSelectWeb }}
+                style={{ 
+                  inputAndroid: styles.dobSelect, 
+                  inputIOS: styles.dobSelect, 
+                  inputWeb: { marginBottom: 20, padding: 10, borderWidth: 1, borderRadius: 10, borderColor: "black" },
+                }}
                 />
               </View>
+            </View>
+
+            <Text style={styles.label}>Start Date of Medication</Text>
+            <View style={styles.dobContainer}>
+              <RNPickerSelect
+                items={months}
+                
+                value={formData.startMonth}
+                onValueChange={(value) => setFormData({ ...formData, startMonth: value })}
+                placeholder={{ label: 'MM', value: '' }}
+                style={{
+                  inputAndroid: styles.dobSelect,
+                  inputIOS: styles.dobSelect,
+                  inputWeb: { marginBottom: 20, marginRight: 10, padding: 10, borderWidth: 1, borderRadius: 10, borderColor: 'black' },
+                }}
+              />
+              <RNPickerSelect
+                items={days}
+                value={formData.startDay}
+                onValueChange={(value) => setFormData({ ...formData, startDay: value })}
+                placeholder={{ label: 'DD', value: '' }}
+                style={{
+                  inputAndroid: styles.dobSelect,
+                  inputIOS: styles.dobSelect,
+                  inputWeb: { marginBottom: 20, marginRight: 10, padding: 10, borderWidth: 1, borderRadius: 10, borderColor: 'black' },
+                }}
+              />
+              <RNPickerSelect
+                items={years}
+                value={formData.startYear}
+                onValueChange={(value) => setFormData({ ...formData, startYear: value })}
+                placeholder={{ label: 'YYYY', value: '' }}
+                style={{
+                  inputAndroid: styles.dobSelect,
+                  inputIOS: styles.dobSelect,
+                  inputWeb: { marginBottom: 20, padding: 10, borderWidth: 1, borderRadius: 10, borderColor: 'black' },
+                }}
+              />
             </View>
 
             <Text style={styles.label}>Time of Medication</Text>
@@ -219,7 +296,11 @@ export default function NewMedSched() {
             value={formData.timeHour}
             onValueChange={value => setFormData({ ...formData, timeHour: value })}
             placeholder={{ label: 'HH', value: '' }}
-            style={{ inputAndroid: styles.dobSelect, inputIOS: styles.dobSelect, inputWeb: styles.dobSelectWeb }}
+            style={{ 
+              inputAndroid: styles.dobSelect, 
+              inputIOS: styles.dobSelect, 
+              inputWeb: { marginBottom: 20, marginRight: 10, padding: 10, borderWidth: 1, borderRadius: 10, borderColor: "black" }, 
+            }}
             />
 
             <RNPickerSelect
@@ -230,7 +311,11 @@ export default function NewMedSched() {
             value={formData.timeMinute}
             onValueChange={value => setFormData({ ...formData, timeMinute: value })}
             placeholder={{ label: 'MM', value: '' }}
-            style={{ inputAndroid: styles.dobSelect, inputIOS: styles.dobSelect, inputWeb: styles.dobSelectWeb }}
+            style={{ 
+              inputAndroid: styles.dobSelect, 
+              inputIOS: styles.dobSelect, 
+              inputWeb: { marginBottom: 20, marginRight: 10, padding: 10, borderWidth: 1, borderRadius: 10, borderColor: "black" }, 
+            }}
             />
 
             <RNPickerSelect
@@ -238,7 +323,11 @@ export default function NewMedSched() {
             value={formData.timePeriod}
             onValueChange={value => setFormData({ ...formData, timePeriod: value })}
             placeholder={{ label: 'AM/PM', value: '' }}
-            style={{ inputAndroid: styles.dobSelect, inputIOS: styles.dobSelect, inputWeb: styles.dobSelectWeb }}
+            style={{ 
+              inputAndroid: styles.dobSelect, 
+              inputIOS: styles.dobSelect, 
+              inputWeb: { marginBottom: 10, padding: 10, borderWidth: 1, borderRadius: 10, borderColor: "black" },
+            }}
             />
             </View>
 
@@ -252,7 +341,11 @@ export default function NewMedSched() {
                 value={formData.frequencyHour}
                 onValueChange={value => setFormData({ ...formData, frequencyHour: value })}
                 placeholder={{ label: 'HH', value: '' }}
-                style={{ inputAndroid: styles.dobSelect, inputIOS: styles.dobSelect, inputWeb: styles.dobSelectWeb }}
+                style={{ 
+                  inputAndroid: styles.dobSelect, 
+                  inputIOS: styles.dobSelect, 
+                  inputWeb: { marginBottom: 20, marginRight: 10, padding: 10, borderWidth: 1, borderRadius: 10, borderColor: "black" },
+                }}
               />
 
               <RNPickerSelect
@@ -263,9 +356,32 @@ export default function NewMedSched() {
                 value={formData.frequencyMinute}
                 onValueChange={value => setFormData({ ...formData, frequencyMinute: value })}
                 placeholder={{ label: 'MM', value: '' }}
-                style={{ inputAndroid: styles.dobSelect, inputIOS: styles.dobSelect, inputWeb: styles.dobSelectWeb }}
+                style={{ 
+                  inputAndroid: styles.dobSelect, 
+                  inputIOS: styles.dobSelect, 
+                  inputWeb: { marginBottom: 20, padding: 10, borderWidth: 1, borderRadius: 10, borderColor: "black" },
+                }}
               />
             </View>
+
+            <Text style={styles.label}>Frequency (Days of the Week)</Text>
+            <View style={styles.checkboxContainer}>
+              {['S', 'M', 'T', 'W', 'T2', 'F', 'S2'].map((day, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.checkbox,
+                    selectedDays[day] && styles.checkboxSelected, 
+                  ]}
+                  onPress={() =>
+                    setSelectedDays((prev) => ({ ...prev, [day]: !prev[day] }))
+                  }
+                >
+                  {selectedDays[day] && <Text style={styles.checkmark}>✓</Text>}
+                </TouchableOpacity>
+              ))}
+            </View>
+
           </View>
 
           <View style={styles.divider} />
