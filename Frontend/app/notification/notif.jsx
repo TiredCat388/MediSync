@@ -1,29 +1,30 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Animated, TouchableWithoutFeedback, View, Text, StyleSheet, Dimensions, Pressable } from "react-native";
+import { TouchableWithoutFeedback, View, Text, StyleSheet, Dimensions, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import Animated, { 
+  useAnimatedStyle, 
+  withTiming,
+  useSharedValue
+} from 'react-native-reanimated';
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
 export default function NotificationToast({ data, visible, onHide, isMultiple }) {
-  const slideAnim = useRef(new Animated.Value(-150)).current;
+  const translateY = useSharedValue(-150);
   const navigation = useNavigation();
   const [expanded, setExpanded] = useState(false);  
 
   useEffect(() => {
-    if (visible) {
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    } else {
-      Animated.timing(slideAnim, {
-        toValue: -150,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    }
+    translateY.value = withTiming(visible ? 0 : -150, {
+      duration: 300
+    });
   }, [visible]);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: translateY.value }]
+    };
+  });
 
   const handleHide = () => {
     setExpanded(false);  
@@ -37,14 +38,7 @@ export default function NotificationToast({ data, visible, onHide, isMultiple })
   const cardStyle = isMultiple ? styles.multipleCard : styles.card;
 
   return (
-    <Animated.View
-      style={[
-        styles.container,
-        {
-          transform: [{ translateY: slideAnim }],
-        },
-      ]}
-    >
+    <Animated.View style={[styles.container, animatedStyle]}>
       <View style={cardStyle}>
         <TouchableWithoutFeedback onPress={() => setExpanded((prev) => !prev)}>
           <View style={bannerStyle}>

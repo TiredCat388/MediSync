@@ -112,10 +112,7 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     elevation: 10,
     zIndex: 9999,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.25)",
     width: 130,
   },
 
@@ -141,3 +138,4 @@ export const styles = StyleSheet.create({
   },
 });
   
+export default styles;

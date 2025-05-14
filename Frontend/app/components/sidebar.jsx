@@ -152,6 +152,7 @@ const Sidebar = () => {
         {/* Logo */}
         <View style={styles.logoContainer}>
           <Image
+            resizeMode = 'contain'
             source={isSidebarExpanded
               ? require('../../assets/images/medisync-logo.png')
               : require('../../assets/images/medisync-logo-bw.png')}

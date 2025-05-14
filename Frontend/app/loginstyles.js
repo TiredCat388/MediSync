@@ -42,7 +42,6 @@ const styles = StyleSheet.create({
   logo: {
     width: logoSize,
     height: logoSize,
-    resizeMode: "contain",
     zIndex: 3,
   },
   title: {

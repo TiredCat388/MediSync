@@ -106,10 +106,7 @@ export default function PatientsDirectory() {
                 marginRight: 12,
                 backgroundColor: "#fff",
                 fontSize: 16,
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 1 },
-                shadowOpacity: 0.1,
-                shadowRadius: 2,
+                boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.1)",
                 elevation: 2,
               }}
               placeholder="Search by name or patient number or date"
@@ -124,10 +121,7 @@ export default function PatientsDirectory() {
                 paddingVertical: 10,
                 paddingHorizontal: 16,
                 borderRadius: 10,
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 1 },
-                shadowOpacity: 0.1,
-                shadowRadius: 2,
+                boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.1)",
                 elevation: 2,
               }}
             >

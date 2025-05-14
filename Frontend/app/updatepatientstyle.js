@@ -33,10 +33,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 28,
+    fontWeight: "bold",
     marginBottom: 15,
-    marginTop: 10, 
+    marginTop: 10,
   },
   label: {
     fontSize: 18,

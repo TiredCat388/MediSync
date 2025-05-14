@@ -6,6 +6,7 @@ import RNPickerSelect from "react-native-picker-select";
 import styles from "./registerstyle";
 import CustomAlert from "./components/alert"; // Import CustomAlert
 import { ScrollView } from "react-native-gesture-handler";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function RegisterNewPatient() {
   const router = useRouter();
@@ -14,7 +15,7 @@ export default function RegisterNewPatient() {
     firstName: "",
     middleName: "",
     surname: "",
-    sex: null,
+    sex: "",
     birthMonth: "",
     birthDay: "",
     birthYear: "",
@@ -22,11 +23,12 @@ export default function RegisterNewPatient() {
     bedNumber: "",
     roomNumber: "",
     age: "",
-    bloodType: null,
-    religion: null,
+    bloodType: "",
+    religion: "",
+    otherReligionSpecify: "",
     height: "",
     weight: "",
-    diet: "DAT", // Default to DAT
+    diet: "",
     ngtSpecify: "", // For specifying NGT details
     otherDietSpecify: "", // For specifying other diet details
     emergencyFirstName: "",
@@ -34,6 +36,8 @@ export default function RegisterNewPatient() {
     relation: "",
     emergencyPhone: "",
     chiefComplaint: "",
+    admittingDiagnosis: "", // Add new field for admitting diagnosis
+    finalDiagnosis: "", // Add new field for final diagnosis
   });
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -51,7 +55,7 @@ export default function RegisterNewPatient() {
       : value !== null && value !== ""
   );
 
-  const allowedDestinations = ["/directory", "/another-allowed-path"]; // Add allowed destinations here
+  const allowedDestinations = ["/directory"]; // Add allowed destinations here
 
   const months = Array.from({ length: 12 }, (_, index) => ({
     label: (index + 1).toString().padStart(2, "0"),
@@ -63,23 +67,27 @@ export default function RegisterNewPatient() {
     value: (index + 1).toString().padStart(2, "0"),
   }));
 
-  const years = Array.from({ length: 100 }, (_, index) => ({
+  const years = Array.from({ length: 150 }, (_, index) => ({
     label: (new Date().getFullYear() - index).toString(),
     value: (new Date().getFullYear() - index).toString(),
   })).reverse();
 
   const dietOptions = [
-    { label: "Therapeutic diet", value: "Therapeutic diet" },
-    { label: "Clear liquid", value: "Clear liquid" },
-    { label: "Full liquid", value: "Full liquid" },
-    { label: "Soft diet", value: "Soft diet" },
     { label: "DAT (Diet As Tolerated)", value: "DAT" },
-    { label: "NGT insertion", value: "NGT insertion" },
-    { label: "NGT feeding", value: "NGT feeding" },
+    { label: "Diabetic Diet", value: "Diabetic Diet" },   
+    { label: "High Protein Diet", value: "High Protein Diet" },
+    { label: "Low Protein Diet", value: "Low Protein Diet" },
+    { label: "Low Sodium, Low Fat Diet", value: "Low Sodium, Low Fat Diet" },
+    { label: "Low Potassium Diet", value: "Low Potassium Diet" },
+    { label: "Soft Diet", value: "Soft Diet" },
+    { label: "Full Liquid", value: "Full liquid" },
+    { label: "Clear Liquid", value: "Clear liquid" },
+    { label: "NGT Feeding", value: "NGT feeding" },
     {
-      label: "Total parenteral Nutrition (TPN)",
+      label: "Total Parenteral Nutrition (TPN)",
       value: "Total parenteral Nutrition",
     },
+    { label: "NPO (Nothing By Mouth)", value: "NPO" },
     { label: "Others", value: "Others" },
   ];
 
@@ -146,6 +154,8 @@ export default function RegisterNewPatient() {
           contact_number: formData.emergencyPhone,
         },
         chief_complaint: formData.chiefComplaint,
+        admitting_diagnosis: formData.admittingDiagnosis,
+        final_diagnosis: formData.finalDiagnosis,
       };
 
       if (
@@ -174,7 +184,7 @@ export default function RegisterNewPatient() {
             firstName: "",
             middleName: "",
             surname: "",
-            sex: null,
+            sex: "",
             birthMonth: "",
             birthDay: "",
             birthYear: "",
@@ -182,11 +192,12 @@ export default function RegisterNewPatient() {
             bedNumber: "",
             roomNumber: "",
             age: "",
-            bloodType: null,
-            religion: null,
+            bloodType: "",
+            religion: "",
+            otherReligionSpecify: "",
             height: "",
             weight: "",
-            diet: "DAT", // Reset diet to default
+            diet: "",
             ngtSpecify: "",
             otherDietSpecify: "",
             emergencyFirstName: "",
@@ -194,6 +205,8 @@ export default function RegisterNewPatient() {
             relation: "",
             emergencyPhone: "",
             chiefComplaint: "",
+            admittingDiagnosis: "",
+            finalDiagnosis: "", // Reset new field
           });
         } else {
           const errorData = await response.json();
@@ -206,418 +219,481 @@ export default function RegisterNewPatient() {
   };
 
   return (
-    <View style={styles.container}>
-      <Sidebar onNavigate={handleNavigate} />
-      <ScrollView
-        style={[
-          styles.contentContainer,
-          { marginLeft: isSidebarExpanded ? 200 : 70 },
-        ]}
-      >
-        <Text style={styles.screenTitle}>Register New Patient</Text>
-        <View style={styles.formContainer}>
-          <View style={styles.column}>
-            <Text style={styles.sectionTitle}>Patient Details</Text>
-            <Text style={styles.label}>First Name</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(text) =>
-                setFormData({ ...formData, firstName: text })
-              }
-            />
-            <Text style={styles.label}>Middle Name</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(text) =>
-                setFormData({ ...formData, middleName: text })
-              }
-            />
-            <Text style={styles.label}>Surname</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(text) =>
-                setFormData({ ...formData, surname: text })
-              }
-            />
-
-            <Text style={styles.label}>Sex</Text>
-            <View>
-              <RNPickerSelect
-                items={[
-                  { label: "Male", value: "Male" },
-                  { label: "Female", value: "Female" },
-                ]}
-                value={formData.sex}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, sex: value })
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <Sidebar onNavigate={handleNavigate} />
+        <View style={[styles.contentContainer, { marginLeft: isSidebarExpanded ? 200 : 70 }]}>
+          <Text style={styles.screenTitle}>Register New Patient</Text>
+          <View style={styles.formContainer}>
+            <ScrollView style={styles.column}>
+              <Text style={styles.sectionTitle}>Patient Details <Text style={{ color: 'red', fontSize: 16 }}>* Required</Text>
+              </Text>
+              <Text style={styles.label}>
+                First Name <Text style={{ color: 'red' }}>*</Text>
+              </Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, firstName: text })
                 }
-                placeholder={{ label: "Select Sex", value: null }}
-                style={{
-                  inputAndroid: styles.input,
-                  inputIOS: styles.input,
-                  inputWeb: styles.input,
-                  placeholder: {
-                    color: "#999",
-                  },
-                }}
+              />
+              <Text style={styles.label}>Middle Name</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, middleName: text })
+                }
+              />
+              <Text style={styles.label}>Surname <Text style={{ color: 'red' }}>*</Text></Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, surname: text })
+                }
+              />
+
+              <Text style={styles.label}>
+              Sex <Text style={{ color: 'red' }}>*</Text>
+              </Text>
+              <View>
+                <RNPickerSelect
+                  items={[
+                    { label: "Male", value: "Male" },
+                    { label: "Female", value: "Female" },
+                  ]}
+                  value={formData.sex}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, sex: value })
+                  }
+                  placeholder={formData.sex ? {} : { label: "Select Sex", value: "" }}
+                  style={{
+                    inputAndroid: styles.input,
+                    inputIOS: styles.input,
+                    inputWeb: styles.input,
+                    placeholder: {
+                      color: "#999",
+                    },
+                  }}
+                />
+              </View>
+
+              <Text style={styles.label}>
+              Date of Birth <Text style={{ color: 'red' }}>*</Text>
+              </Text>
+              <View
+                style={{ flexDirection: "row", justifyContent: "space-between" }}
+              >
+                <View style={{ flex: 1, marginRight: 10 }}>
+                  <RNPickerSelect
+                    items={months}
+                    value={formData.birthMonth}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, birthMonth: value })
+                    }
+                    placeholder={formData.birthMonth ? {} : { label: "MM", value: "" }}
+                    style={{
+                      inputAndroid: styles.input,
+                      inputIOS: styles.input,
+                      inputWeb: styles.input,
+                      placeholder: {
+                        color: "#999",
+                      },
+                    }}
+                  />
+                </View>
+                <View style={{ flex: 1, marginRight: 10 }}>
+                  <RNPickerSelect
+                    items={days}
+                    value={formData.birthDay}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, birthDay: value })
+                    }
+                    placeholder={formData.birthDay ? {} : { label: "DD", value: "" }}
+                    style={{
+                      inputAndroid: styles.input,
+                      inputIOS: styles.input,
+                      inputWeb: styles.input,
+                      placeholder: {
+                        color: "#999",
+                      },
+                    }}
+                  />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <RNPickerSelect
+                    items={years}
+                    value={formData.birthYear}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, birthYear: value })
+                    }
+                    placeholder={formData.birthYear ? {} : { label: "YYYY", value: "" }}
+                    style={{
+                      inputAndroid: styles.input,
+                      inputIOS: styles.input,
+                      inputWeb: styles.input,
+                      placeholder: {
+                        color: "#999",
+                      },
+                    }}
+                  />
+                </View>
+              </View>
+
+              <Text style={styles.label}>Age</Text>
+              <TextInput
+                style={styles.input}
+                value={formData.age.toString()}
+                editable={false}
+              />
+
+              <Text style={styles.label}>
+              Blood Type <Text style={{ color: 'red' }}>*</Text>
+              </Text>
+              <View>
+                <RNPickerSelect
+                  items={[
+                    { label: "A+", value: "A+" },
+                    { label: "A-", value: "A-" },
+                    { label: "B+", value: "B+" },
+                    { label: "B-", value: "B-" },
+                    { label: "AB+", value: "AB+" },
+                    { label: "AB-", value: "AB-" },
+                    { label: "O+", value: "O+" },
+                    { label: "O-", value: "O-" },
+                  ]}
+                  value={formData.bloodType}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, bloodType: value })
+                  }
+                  placeholder={formData.bloodType ? {} : { label: "Select Blood Type", value: "" }}
+                  style={{
+                    inputAndroid: styles.input,
+                    inputIOS: styles.input,
+                    inputWeb: styles.input,
+                    placeholder: {
+                      color: "#999",
+                    },
+                  }}
+                />
+              </View>
+
+              <Text style={styles.label}>Religion</Text>
+              <View>
+                <RNPickerSelect
+                  items={[
+                    { label: "Catholic", value: "Catholic" },
+                    { label: "Protestant", value: "Protestant" },
+                    { label: "Muslim", value: "Muslim" },
+                    { label: "Buddhist", value: "Buddhist" },
+                    { label: "Hindu", value: "Hindu" },
+                    { label: "Atheist", value: "Atheist" },
+                    { label: "Agnostic", value: "Agnostic" },
+                    { label: "Other", value: "Other" },
+                  ]}
+                  value={formData.religion}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, religion: value })
+                  }
+                  placeholder={{ label: "Select Religion", value: "" }}
+                  style={{
+                    inputAndroid: styles.input,
+                    inputIOS: styles.input,
+                    inputWeb: styles.input,
+                    placeholder: {
+                      color: "#999",
+                    },
+                  }}
+                />
+              </View>
+
+              {formData.religion === "Other" ? (
+                <>
+                  <Text style={styles.label}>
+                  Specify Other Religion <Text style={{ color: 'red' }}>*</Text>
+                  </Text>
+                  <TextInput
+                    style={styles.input}
+                    onChangeText={(text) =>
+                      setFormData({ ...formData, otherReligionSpecify: text })
+                    }
+                    value={formData.otherReligionSpecify}
+                    placeholder="Please specify your religion"
+                  />
+                </>
+              ) : null}
+
+              <View
+                style={{ flexDirection: "row", justifyContent: "space-between" }}
+              >
+                <View style={{ flex: 1, marginRight: 10 }}>
+                  <Text style={styles.label}>
+                  Height (meters) <Text style={{ color: 'red' }}>*</Text>
+                  </Text>
+                  <TextInput
+                    style={styles.input}
+                    keyboardType="numeric"
+                    placeholder="e.g., 1.70"
+                    value={formData.height}
+                    onChangeText={(text) =>
+                      setFormData({ ...formData, height: text })
+                    }
+                  />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.label}>
+                  Weight (kg) <Text style={{ color: 'red' }}>*</Text>
+                  </Text>
+                  <TextInput
+                    style={styles.input}
+                    keyboardType="numeric"
+                    placeholder="e.g., 65"
+                    value={formData.weight}
+                    onChangeText={(text) =>
+                      setFormData({ ...formData, weight: text })
+                    }
+                  />
+                </View>
+              </View>
+
+              <Text style={styles.label}>
+              Diet <Text style={{ color: 'red' }}>*</Text>
+              </Text>
+              <View>
+                <RNPickerSelect
+                  items={dietOptions}
+                  value={formData.diet}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, diet: value })
+                  }
+                  placeholder={formData.diet ? {} : { label: "Select Diet", value: "" }}
+                  style={{
+                    inputAndroid: styles.input,
+                    inputIOS: styles.input,
+                    inputWeb: styles.input,
+                    placeholder: {
+                      color: "#999",
+                    },
+                  }}
+                />
+              </View>
+
+              {formData.diet === "NGT insertion" ||
+              formData.diet === "NGT feeding" ? (
+                <>
+                  <Text style={styles.label}>
+                  Specify NGT Details <Text style={{ color: 'red' }}>*</Text>
+                  </Text>
+                  <TextInput
+                    style={styles.input}
+                    onChangeText={(text) =>
+                      setFormData({ ...formData, ngtSpecify: text })
+                    }
+                    value={formData.ngtSpecify}
+                    placeholder="e.g., Formula"
+                  />
+                </>
+              ) : null}
+
+              {formData.diet === "Others" ? (
+                <>
+                  <Text style={styles.label}>
+                  Specify Other Diet <Text style={{ color: 'red' }}>*</Text>
+                  </Text>
+                  <TextInput
+                    style={styles.input}
+                    onChangeText={(text) =>
+                      setFormData({ ...formData, otherDietSpecify: text })
+                    }
+                    value={formData.otherDietSpecify}
+                    placeholder="Please specify the diet"
+                  />
+                </>
+              ) : null}
+
+              <Text style={styles.label}>Contact Number <Text style={{ color: 'red' }}>*</Text></Text> 
+              <TextInput
+                style={styles.input}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, phoneNumber: text })
+                }
+              />
+
+              <Text style={styles.label}>
+              Bed Number <Text style={{ color: 'red' }}>*</Text>
+              </Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, bedNumber: text })
+                }
+              />
+
+              <Text style={styles.label}>
+              Room Number <Text style={{ color: 'red' }}>*</Text>
+              </Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, roomNumber: text })
+                }
+              />
+
+              <Text style={styles.label}>
+              Chief Complaint/s <Text style={{ color: 'red' }}>*</Text>
+              </Text>
+              <TextInput
+                style={[styles.input, { height: 150, textAlignVertical: "top" }]}
+                multiline
+                numberOfLines={4}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, chiefComplaint: text })
+                }
+              />
+
+              <Text style={styles.label}>
+              Admitting Diagnosis <Text style={{ color: 'red' }}>*</Text>
+              </Text>
+              <TextInput
+                style={[styles.input, { height: 150, textAlignVertical: "top" }]}
+                multiline
+                numberOfLines={4}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, admittingDiagnosis: text })
+                }
+              />
+
+              <Text style={styles.label}>Final Diagnosis</Text>
+              <TextInput
+                style={[styles.input, { height: 150, textAlignVertical: "top" }]}
+                multiline
+                numberOfLines={4}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, finalDiagnosis: text })
+                }
+              />
+            </ScrollView>
+
+            <View style={styles.divider} />
+            
+            <View style={styles.column}>
+              <Text style={styles.sectionTitle}>Emergency Contact Details</Text>
+              <Text style={styles.label}>
+              First Name <Text style={{ color: 'red' }}>*</Text>
+              </Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, emergencyFirstName: text })
+                }
+              />
+              <Text style={styles.label}>Surname <Text style={{ color: 'red' }}>*</Text></Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, emergencySurname: text })
+                }
+              />
+              <Text style={styles.label}>
+              Relation to Patient <Text style={{ color: 'red' }}>*</Text>
+              </Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, relation: text })
+                }
+              />
+              <Text style={styles.label}>Contact Number <Text style={{ color: 'red' }}>*</Text></Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, emergencyPhone: text })
+                }
               />
             </View>
-
-            <Text style={styles.label}>Date of Birth</Text>
-            <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              onPress={() => handleNavigate("/directory")}
+              style={[styles.button, styles.leaveButton]}
             >
-              <View style={{ flex: 1, marginRight: 10 }}>
-                <RNPickerSelect
-                  items={months}
-                  value={formData.birthMonth}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, birthMonth: value })
-                  }
-                  placeholder={{ label: "MM", value: "" }}
-                  style={{
-                    inputAndroid: styles.input,
-                    inputIOS: styles.input,
-                    inputWeb: styles.input,
-                    placeholder: {
-                      color: "#999",
-                    },
-                  }}
-                />
-              </View>
-              <View style={{ flex: 1, marginRight: 10 }}>
-                <RNPickerSelect
-                  items={days}
-                  value={formData.birthDay}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, birthDay: value })
-                  }
-                  placeholder={{ label: "DD", value: "" }}
-                  style={{
-                    inputAndroid: styles.input,
-                    inputIOS: styles.input,
-                    inputWeb: styles.input,
-                    placeholder: {
-                      color: "#999",
-                    },
-                  }}
-                />
-              </View>
-              <View style={{ flex: 1 }}>
-                <RNPickerSelect
-                  items={years}
-                  value={formData.birthYear}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, birthYear: value })
-                  }
-                  placeholder={{ label: "YYYY", value: "" }}
-                  style={{
-                    inputAndroid: styles.input,
-                    inputIOS: styles.input,
-                    inputWeb: styles.input,
-                    placeholder: {
-                      color: "#999",
-                    },
-                  }}
-                />
-              </View>
-            </View>
-
-            <Text style={styles.label}>Age</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.age.toString()}
-              editable={false}
-            />
-
-            <Text style={styles.label}>Blood Type</Text>
-            <View>
-              <RNPickerSelect
-                items={[
-                  { label: "A+", value: "A+" },
-                  { label: "A-", value: "A-" },
-                  { label: "B+", value: "B+" },
-                  { label: "B-", value: "B-" },
-                  { label: "AB+", value: "AB+" },
-                  { label: "AB-", value: "AB-" },
-                  { label: "O+", value: "O+" },
-                  { label: "O-", value: "O-" },
-                ]}
-                value={formData.bloodType}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, bloodType: value })
-                }
-                placeholder={{ label: "Select Blood Type", value: null }}
-                style={{
-                  inputAndroid: styles.input,
-                  inputIOS: styles.input,
-                  inputWeb: styles.input,
-                  placeholder: {
-                    color: "#999",
-                  },
-                }}
-              />
-            </View>
-
-            <Text style={styles.label}>Religion</Text>
-            <View>
-              <RNPickerSelect
-                items={[
-                  { label: "Catholic", value: "Catholic" },
-                  { label: "Protestant", value: "Protestant" },
-                  { label: "Muslim", value: "Muslim" },
-                  { label: "Buddhist", value: "Buddhist" },
-                  { label: "Hindu", value: "Hindu" },
-                  { label: "Atheist", value: "Atheist" },
-                  { label: "Agnostic", value: "Agnostic" },
-                  { label: "Other", value: "Other" },
-                  // Add more religions as needed
-                ]}
-                value={formData.religion}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, religion: value })
-                }
-                placeholder={{ label: "Select Religion", value: null }}
-                style={{
-                  inputAndroid: styles.input,
-                  inputIOS: styles.input,
-                  inputWeb: styles.input,
-                  placeholder: {
-                    color: "#999",
-                  },
-                }}
-              />
-            </View>
-
-            <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
+              <Text style={styles.buttonText}>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={handleRegister}
+              style={[styles.button, styles.stayButton]}
             >
-              <View style={{ flex: 1, marginRight: 10 }}>
-                <Text style={styles.label}>Height (cm)</Text>
-                <TextInput
-                  style={styles.input}
-                  keyboardType="numeric"
-                  placeholder="e.g., 170"
-                  value={formData.height}
-                  onChangeText={(text) =>
-                    setFormData({ ...formData, height: text })
-                  }
-                />
+              <Text style={styles.buttonText}>Register Patient</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Cancel Confirmation Modal */}
+        <Modal visible={modalVisible} transparent animationType="fade">
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContainer}>
+              <Text style={styles.modalTitle}>Cancel Patient Registration</Text>
+              <Text style={styles.modalMessage}>
+                Are you sure you want to cancel patient registration?
+              </Text>
+              <View style={styles.modalButtonContainer}>
+                <TouchableOpacity
+                  style={[styles.modalButton, styles.stayButton]}
+                  onPress={() => setModalVisible(false)}
+                >
+                  <Text style={styles.modalButtonText}>Stay</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.modalButton, styles.leaveButton]}
+                  onPress={() => {
+                    setModalVisible(false);
+                    router.push("/directory");
+                  }}
+                >
+                  <Text style={styles.modalButtonText}>Leave</Text>
+                </TouchableOpacity>
               </View>
-              <View style={{ flex: 1 }}>
-                <Text style={styles.label}>Weight (kg)</Text>
-                <TextInput
-                  style={styles.input}
-                  keyboardType="numeric"
-                  placeholder="e.g., 65"
-                  value={formData.weight}
-                  onChangeText={(text) =>
-                    setFormData({ ...formData, weight: text })
-                  }
-                />
+            </View>
+          </View>
+        </Modal>
+
+        <Modal visible={warningModalVisible} transparent animationType="fade">
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContainer}>
+              <Text style={styles.modalTitle}>Incomplete Form</Text>
+              <Text style={styles.modalMessage}>
+                Some details are missing. Are you sure you want to proceed?
+              </Text>
+              <View style={styles.modalButtonContainer}>
+                <TouchableOpacity
+                  style={[styles.modalButton, styles.stayButton]}
+                  onPress={() => {
+                    setWarningModalVisible(false);
+                    handleRegister(); // Consider if you want to attempt registration with missing fields
+                  }}
+                >
+                  <Text style={styles.modalButtonText}>Proceed</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.modalButton, styles.leaveButton]}
+                  onPress={() => setWarningModalVisible(false)}
+                >
+                  <Text style={styles.modalButtonText}>Go Back</Text>
+                </TouchableOpacity>
               </View>
             </View>
-
-            <Text style={styles.label}>Diet</Text>
-            <View>
-              <RNPickerSelect
-                items={dietOptions}
-                value={formData.diet}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, diet: value })
-                }
-                placeholder={{ label: "DAT (Diet as Tolerated)", value: "DAT" }} 
-                style={{
-                  inputAndroid: styles.input,
-                  inputIOS: styles.input,
-                  inputWeb: styles.input,
-                  placeholder: {
-                    color: "#999",
-                  },
-                }}
-              />
-            </View>
-
-            {formData.diet === "NGT insertion" ||
-            formData.diet === "NGT feeding" ? (
-              <>
-                <Text style={styles.label}>Specify NGT Details</Text>
-                <TextInput
-                  style={styles.input}
-                  onChangeText={(text) =>
-                    setFormData({ ...formData, ngtSpecify: text })
-                  }
-                  value={formData.ngtSpecify}
-                  placeholder="e.g., Size, Insertion Date"
-                />
-              </>
-            ) : null}
-
-            {formData.diet === "Others" ? (
-              <>
-                <Text style={styles.label}>Specify Other Diet</Text>
-                <TextInput
-                  style={styles.input}
-                  onChangeText={(text) =>
-                    setFormData({ ...formData, otherDietSpecify: text })
-                  }
-                  value={formData.otherDietSpecify}
-                  placeholder="Please specify the diet"
-                />
-              </>
-            ) : null}
-
-            <Text style={styles.label}>Phone Number</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(text) =>
-                setFormData({ ...formData, phoneNumber: text })
-              }
-            />
-
-            <Text style={styles.label}>Bed Number</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(text) =>
-                setFormData({ ...formData, bedNumber: text })
-              }
-            />
-
-            <Text style={styles.label}>Room Number</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(text) =>
-                setFormData({ ...formData, roomNumber: text })
-              }
-            />
           </View>
-          <View style={styles.divider} />
-          <View style={styles.column}>
-            <Text style={styles.sectionTitle}>Emergency Contact Details</Text>
-            <Text style={styles.label}>First Name</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(text) =>
-                setFormData({ ...formData, emergencyFirstName: text })
-              }
-            />
-            <Text style={styles.label}>Surname</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(text) =>
-                setFormData({ ...formData, emergencySurname: text })
-              }
-            />
-            <Text style={styles.label}>Relation to Patient</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(text) =>
-                setFormData({ ...formData, relation: text })
-              }
-            />
-            <Text style={styles.label}>Phone Number</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(text) =>
-                setFormData({ ...formData, emergencyPhone: text })
-              }
-            />
+        </Modal>
 
-            <Text style={styles.sectionsubTitle}>
-              Chief's Complaint/Admitting Diagnosis
-            </Text>
-            <TextInput
-              style={[styles.input, { height: 300, textAlignVertical: "top" }]}
-              multiline
-              numberOfLines={4} // Optional: Specify the initial number of visible lines
-              onChangeText={(text) =>
-                setFormData({ ...formData, chiefComplaint: text })
-              }
-            />
-          </View>
-        </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            onPress={() => handleNavigate("/directory")}
-            style={[styles.button, styles.leaveButton]}
-          >
-            <Text style={styles.buttonText}>Cancel</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={handleRegister}
-            style={[styles.button, styles.stayButton]}
-          >
-            <Text style={styles.buttonText}>Register Patient</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-
-      {/* Cancel Confirmation Modal */}
-      <Modal visible={modalVisible} transparent animationType="fade">
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Cancel Patient Registration</Text>
-            <Text style={styles.modalMessage}>
-              Are you sure you want to cancel patient registration?
-            </Text>
-            <View style={styles.modalButtonContainer}>
-              <TouchableOpacity
-                style={[styles.modalButton, styles.stayButton]}
-                onPress={() => setModalVisible(false)}
-              >
-                <Text style={styles.modalButtonText}>Stay</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.modalButton, styles.leaveButton]}
-                onPress={() => {
-                  setModalVisible(false);
-                  router.push("/directory");
-                }}
-              >
-                <Text style={styles.modalButtonText}>Leave</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
-
-      <Modal visible={warningModalVisible} transparent animationType="fade">
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Incomplete Form</Text>
-            <Text style={styles.modalMessage}>
-              Some details are missing. Are you sure you want to proceed?
-            </Text>
-            <View style={styles.modalButtonContainer}>
-              <TouchableOpacity
-                style={[styles.modalButton, styles.stayButton]}
-                onPress={() => {
-                  setWarningModalVisible(false);
-                  handleRegister(); // Consider if you want to attempt registration with missing fields
-                }}
-              >
-                <Text style={styles.modalButtonText}>Proceed</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.modalButton, styles.leaveButton]}
-                onPress={() => setWarningModalVisible(false)}
-              >
-                <Text style={styles.modalButtonText}>Go Back</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
-
-      {/* Patient Registered Successfully Alert */}
-      <CustomAlert
-        visible={registrationSuccessVisible}
-        message={registrationSuccessMessage}
-        onClose={() => {
-          setRegistrationSuccessVisible(false);
-          router.push("/directory"); // Redirect after successful registration
-        }}
-      />
-    </View>
+        {/* Patient Registered Successfully Alert */}
+        <CustomAlert
+          visible={registrationSuccessVisible}
+          message={registrationSuccessMessage}
+          onClose={() => {
+            setRegistrationSuccessVisible(false);
+            router.push("/directory"); // Redirect after successful registration
+          }}
+        />
+      </View>
+    </GestureHandlerRootView>
   );
 }
