@@ -111,7 +111,7 @@ export default function CalendarApp() {
         {/* Calendar Section */}
         <View
           style={{
-            backgroundColor: "#3b82f6",
+            backgroundColor:"#5789a5",
             borderRadius: 8,
             borderWidth: 1,
             borderColor: "#ccc",
@@ -121,12 +121,13 @@ export default function CalendarApp() {
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.1,
             shadowRadius: 4,
+            maxHeight: 650,
           }}
         >
           {/* Calendar Header */}
           <View
             style={{
-              backgroundColor: "#3b82f6",
+              backgroundColor: "#5789a5",
               borderTopLeftRadius: 8,
               borderTopRightRadius: 8,
               padding: 8,

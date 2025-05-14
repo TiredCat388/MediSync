@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   FlatList,
   TextInput,
+  ScrollView, // Import ScrollView
 } from "react-native";
 import { useRouter } from "expo-router";
 import Sidebar from "./components/sidebar";
@@ -60,13 +61,11 @@ export default function PatientsDirectory() {
       (parseInt(a.patient_number) || 0) - (parseInt(b.patient_number) || 0)
   );
 
-  const totalRows = 12;
+  const totalRows = 25;
   const displayedPatients = [...filteredAndSortedPatients];
   while (displayedPatients.length < totalRows) {
     displayedPatients.push({ id: "", name: "" });
   }
-
-  
 
   return (
     <Provider>
@@ -83,7 +82,7 @@ export default function PatientsDirectory() {
               alignItems: "center",
             }}
           >
-            <Text style={{ fontSize: 25, fontWeight: "bold" }}>
+            <Text style={{ fontSize: 30, fontWeight: "bold"}}>
               Archive History
             </Text>
           </View>
@@ -138,7 +137,7 @@ export default function PatientsDirectory() {
             </TouchableOpacity>
           </View>
 
-          {/* Table */}
+          {/* Table with ScrollView */}
           <View
             style={{
               marginTop: 20,
@@ -147,6 +146,7 @@ export default function PatientsDirectory() {
               borderWidth: 1,
               borderColor: "black",
               overflow: "hidden",
+              maxHeight: 560, // Added maxHeight for table scroll
             }}
           >
             {/* Table Header */}
@@ -196,99 +196,102 @@ export default function PatientsDirectory() {
               {/* Empty view for the removed button space */}
             </View>
 
-            {/* Table Rows */}
-            <FlatList
-              data={displayedPatients}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item, index }) => (
-                <TouchableOpacity
-                  disabled={!item.patient_number}
-                  onPress={() => {
-                    if (item.patient_number) {
-                      router.push(
-                        `/history?patient_number=${item.patient_number}`
-                      );
-                    }
-                  }}
-                  style={{
-                    flexDirection: "row",
-                    backgroundColor: item.patient_number
-                      ? "white"
-                      : "lightgrey",
-                    borderBottomWidth: 1,
-                    borderColor: "black",
-                    minHeight: 35,
-                  }}
-                >
-                  {/* Patient ID */}
-                  <View
+            {/* ScrollView for Table Rows */}
+            <ScrollView>
+              <FlatList
+                data={displayedPatients}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item, index }) => (
+                  <TouchableOpacity
+                    disabled={!item.patient_number}
+                    onPress={() => {
+                      if (item.patient_number) {
+                        router.push(
+                          `/history?patient_number=${item.patient_number}`
+                        );
+                      }
+                    }}
                     style={{
-                      flex: 1,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      borderRightWidth: 1,
+                      flexDirection: "row",
+                      backgroundColor: item.patient_number
+                        ? "white"
+                        : "lightgrey",
+                      borderBottomWidth: 1,
                       borderColor: "black",
-                      paddingHorizontal: 5,
+                      minHeight: 35,
                     }}
                   >
-                    <Text style={{ fontSize: 15 }}>
-                      {item.patient_number || ""}
-                    </Text>
-                  </View>
+                    {/* Patient ID */}
+                    <View
+                      style={{
+                        flex: 1,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRightWidth: 1,
+                        borderColor: "black",
+                        paddingHorizontal: 5,
+                      }}
+                    >
+                      <Text style={{ fontSize: 15 }}>
+                        {item.patient_number || ""}
+                      </Text>
+                    </View>
 
-                  {/* Patient Name */}
-                  <View
-                    style={{
-                      flex: 2,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      borderRightWidth: 1,
-                      borderColor: "black",
-                      paddingHorizontal: 5,
-                    }}
-                  >
-                    <Text style={{ fontSize: 15, textAlign: "center" }}>
-                      {item.first_name && item.last_name
-                        ? formatName(
-                            item.first_name,
-                            item.middle_name,
-                            item.last_name
-                          )
-                        : ""}
-                    </Text>
-                  </View>
+                    {/* Patient Name */}
+                    <View
+                      style={{
+                        flex: 2,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRightWidth: 1,
+                        borderColor: "black",
+                        paddingHorizontal: 5,
+                      }}
+                    >
+                      <Text style={{ fontSize: 15, textAlign: "center" }}>
+                        {item.first_name && item.last_name
+                          ? formatName(
+                              item.first_name,
+                              item.middle_name,
+                              item.last_name
+                            )
+                          : ""}
+                      </Text>
+                    </View>
 
-                  {/* Archived Date */}
-                  <View
-                    style={{
-                      flex: 2,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      borderColor: "black",
-                      paddingHorizontal: 5,
-                    }}
-                  >
-                    <Text style={{ fontSize: 15 }}>
-                      {item.date_archived
-                        ? new Date(item.date_archived).toLocaleString("en-PH", {
-                            timeZone: "Asia/Manila",
-                          })
-                        : ""}
-                    </Text>
-                  </View>
+                    {/* Archived Date */}
+                    <View
+                      style={{
+                        flex: 2,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderColor: "black",
+                        paddingHorizontal: 5,
+                      }}
+                    >
+                      <Text style={{ fontSize: 15 }}>
+                        {item.date_archived
+                          ? new Date(item.date_archived).toLocaleString(
+                              "en-PH",
+                              {
+                                timeZone: "Asia/Manila",
+                              }
+                            )
+                          : ""}
+                      </Text>
+                    </View>
 
-                  <View
-                    style={{
-                      width: 50,
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                   
-                  </View>
-                </TouchableOpacity>
-              )}
-            />
+                    <View
+                      style={{
+                        width: 50,
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    />
+                  </TouchableOpacity>
+                )}
+              />
+            </ScrollView>
           </View>
         </View>
       </View>

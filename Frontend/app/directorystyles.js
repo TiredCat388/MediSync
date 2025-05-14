@@ -17,7 +17,7 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   headerText: {
-    fontSize: 25,
+    fontSize: 30,
     fontWeight: "bold",
   },
   searchSortContainer: {
@@ -64,6 +64,7 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderColor: "black",
     overflow: "hidden",
+    height: 500,
   },
   tableHeader: {
     flexDirection: "row",
@@ -72,8 +73,13 @@ export default StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: "black",
   },
-  tableHeaderCell: {
-    flex: 1,
+  tableHeaderCellID: {
+    flex: 0.34,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  tableHeaderCellName: {
+    flex: 0.66,
     alignItems: "center",
     justifyContent: "center",
   },

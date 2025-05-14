@@ -4,13 +4,13 @@ import {
   TouchableOpacity,
   FlatList,
   TextInput,
+  ScrollView, // Import ScrollView
 } from "react-native";
 import { useRouter } from "expo-router";
 import Sidebar from "./components/sidebar";
 import { useState, useEffect } from "react";
 import { Menu, Divider, Provider } from "react-native-paper";
 import styles from "./directorystyles";
-
 
 const TESTING_PATIENT = { id: "0123456", name: "TESTING PURPOSES ONLY" };
 
@@ -63,9 +63,8 @@ export default function PatientsDirectory() {
     (a, b) =>
       (parseInt(a.patient_number) || 0) - (parseInt(b.patient_number) || 0)
   );
-  
 
-  const totalRows = 12;
+  const totalRows = 25;
   const displayedPatients = [...filteredAndSortedPatients];
   while (displayedPatients.length < totalRows) {
     displayedPatients.push({ id: "", name: "" });
@@ -76,7 +75,6 @@ export default function PatientsDirectory() {
       <View style={styles.container}>
         <Sidebar onNavigate={(destination) => router.push(destination)} />
         <View style={styles.content}>
-          {/* Header and Button Row */}
           <View style={styles.header}>
             <Text style={styles.headerText}>Patients Directory</Text>
             <TouchableOpacity
@@ -86,7 +84,7 @@ export default function PatientsDirectory() {
               <Text style={styles.newPatientButtonText}>+ New Patient</Text>
             </TouchableOpacity>
           </View>
-  
+
           {/* Search + Sort */}
           <View style={styles.searchSortContainer}>
             <TextInput
@@ -105,58 +103,61 @@ export default function PatientsDirectory() {
               </Text>
             </TouchableOpacity>
           </View>
-  
-          {/* Table */}
+
+          {/* Table with ScrollView */}
           <View style={styles.table}>
             <View style={styles.tableHeader}>
-              <View style={styles.tableHeaderCell}>
+              <View style={[styles.tableHeaderCellID]}>
                 <Text style={styles.tableHeaderText}>Patient ID</Text>
               </View>
-              <View style={styles.tableHeaderCell}>
+              <View style={[styles.tableHeaderCellName]}>
                 <Text style={styles.tableHeaderText}>Patient Name</Text>
               </View>
             </View>
-  
-            <FlatList
-              data={displayedPatients}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  onPress={() =>
-                    item.patient_number &&
-                    router.push(
-                      `/viewpatient?patient_number=${item.patient_number}`
-                    )
-                  }
-                  style={[
-                    styles.row,
-                    {
-                      backgroundColor: item.patient_number
-                        ? "white"
-                        : "lightgrey",
-                    },
-                  ]}
-                >
-                  <View style={styles.rowCellID}>
-                    <Text style={styles.rowText}>
-                      {item.patient_number || ""}
-                    </Text>
-                  </View>
-                  <View style={styles.rowDivider} />
-                  <View style={styles.rowCellName}>
-                    <Text style={styles.rowTextCentered}>
-                      {item.first_name && item.last_name
-                        ? formatName(
-                            item.first_name,
-                            item.middle_name,
-                            item.last_name
-                          )
-                        : ""}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              )}
-            />
+            <ScrollView style={{ maxHeight: 500 }}>
+              {" "}
+              {/* Added maxHeight for visual scroll */}
+              <FlatList
+                data={displayedPatients}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    onPress={() =>
+                      item.patient_number &&
+                      router.push(
+                        `/viewpatient?patient_number=${item.patient_number}`
+                      )
+                    }
+                    style={[
+                      styles.row,
+                      {
+                        backgroundColor: item.patient_number
+                          ? "white"
+                          : "lightgrey",
+                      },
+                    ]}
+                  >
+                    <View style={styles.rowCellID}>
+                      <Text style={styles.rowText}>
+                        {item.patient_number || ""}
+                      </Text>
+                    </View>
+                    <View style={styles.rowDivider} />
+                    <View style={styles.rowCellName}>
+                      <Text style={styles.rowTextCentered}>
+                        {item.first_name && item.last_name
+                          ? formatName(
+                              item.first_name,
+                              item.middle_name,
+                              item.last_name
+                            )
+                          : ""}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                )}
+              />
+            </ScrollView>
           </View>
         </View>
       </View>
