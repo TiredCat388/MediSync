@@ -155,11 +155,11 @@ export default function RegisterNewPatient() {
   useEffect(() => {
     if (formData.birthYear && formData.birthMonth && formData.birthDay) {
       const age = calculateAge(
-        parseInt(formData.birthYear),
-        parseInt(formData.birthMonth),
-        parseInt(formData.birthDay)
+        formData.birthYear,
+        formData.birthMonth,
+        formData.birthDay
       );
-      setFormData((prevData) => ({ ...prevData, age: age.toString() }));
+      setFormData((prevData) => ({ ...prevData, age }));
     }
   }, [formData.birthYear, formData.birthMonth, formData.birthDay]);
 
@@ -226,7 +226,7 @@ export default function RegisterNewPatient() {
       contact_number: formData.phoneNumber,
       bed_number: parseInt(formData.bedNumber),
       room_number: parseInt(formData.roomNumber),
-      age: age,
+      age: formData.age,
       blood_group: formData.bloodType,
       religion: formData.religion,
       height: parseFloat(formData.height),

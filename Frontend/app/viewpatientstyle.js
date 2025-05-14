@@ -35,8 +35,14 @@ export const styles = StyleSheet.create({
     backgroundColor: "#e0e0e0",
     padding: 15,
     borderRadius: 8,
+    maxHeight: 320,
   },
-  detailsSection: { flex: 1, paddingHorizontal: 10 },
+  detailsSection: { 
+    flex: 1, 
+    paddingHorizontal: 10, 
+    maxHeight: 300, 
+    overflow: "hidden",
+  },
   divider: { width: 1, backgroundColor: "gray", marginHorizontal: 10 },
   sectionTitle: { fontWeight: "bold", fontSize: 20, marginBottom: 5 },
   medicationToggleButton: {
