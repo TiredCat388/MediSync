@@ -5,6 +5,7 @@ import Sidebar from "./components/sidebar";
 import RNPickerSelect from "react-native-picker-select";
 import styles from "./registerstyle";
 import CustomAlert from "./components/alert"; // Import CustomAlert
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function RegisterNewPatient() {
   const router = useRouter();
@@ -549,9 +550,7 @@ export default function RegisterNewPatient() {
             <Text style={styles.buttonText}>Register Patient</Text>
           </TouchableOpacity>
         </View>
-      </View>
-            </ScrollView>
-      </View>
+      </ScrollView>
 
       {/* Cancel Confirmation Modal */}
       <Modal visible={modalVisible} transparent animationType="fade">
