@@ -13,6 +13,7 @@ export default function RegisterNewPatient() {
     firstName: "",
     middleName: "",
     surname: "",
+    sex: null,
     birthMonth: "",
     birthDay: "",
     birthYear: "",
@@ -20,10 +21,18 @@ export default function RegisterNewPatient() {
     bedNumber: "",
     roomNumber: "",
     age: "",
+    bloodType: null,
+    religion: null,
+    height: "",
+    weight: "",
+    diet: "DAT", // Default to DAT
+    ngtSpecify: "", // For specifying NGT details
+    otherDietSpecify: "", // For specifying other diet details
     emergencyFirstName: "",
     emergencySurname: "",
     relation: "",
     emergencyPhone: "",
+    chiefComplaint: "",
   });
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -32,27 +41,21 @@ export default function RegisterNewPatient() {
     useState(false); // State for success alert
   const [registrationSuccessMessage, setRegistrationSuccessMessage] =
     useState("");
-  const isFormFilled = Object.values(formData).some((value) => value !== "");
+  const isFormFilled = Object.values(formData).some(
+    (value) => value !== null && value !== ""
+  );
   const isFormComplete = Object.values(formData).every((value) =>
-    typeof value === "string" ? value.trim() !== "" : value !== ""
+    typeof value === "string"
+      ? value.trim() !== ""
+      : value !== null && value !== ""
   );
 
   const allowedDestinations = ["/directory", "/another-allowed-path"]; // Add allowed destinations here
 
-  const months = [
-    { label: "January", value: "01" },
-    { label: "February", value: "02" },
-    { label: "March", value: "03" },
-    { label: "April", value: "04" },
-    { label: "May", value: "05" },
-    { label: "June", value: "06" },
-    { label: "July", value: "07" },
-    { label: "August", value: "08" },
-    { label: "September", value: "09" },
-    { label: "October", value: "10" },
-    { label: "November", value: "11" },
-    { label: "December", value: "12" },
-  ];
+  const months = Array.from({ length: 12 }, (_, index) => ({
+    label: (index + 1).toString().padStart(2, "0"),
+    value: (index + 1).toString().padStart(2, "0"),
+  }));
 
   const days = Array.from({ length: 31 }, (_, index) => ({
     label: (index + 1).toString().padStart(2, "0"),
@@ -62,7 +65,22 @@ export default function RegisterNewPatient() {
   const years = Array.from({ length: 100 }, (_, index) => ({
     label: (new Date().getFullYear() - index).toString(),
     value: (new Date().getFullYear() - index).toString(),
-  }));
+  })).reverse();
+
+  const dietOptions = [
+    { label: "Therapeutic diet", value: "Therapeutic diet" },
+    { label: "Clear liquid", value: "Clear liquid" },
+    { label: "Full liquid", value: "Full liquid" },
+    { label: "Soft diet", value: "Soft diet" },
+    { label: "DAT (Diet As Tolerated)", value: "DAT" },
+    { label: "NGT insertion", value: "NGT insertion" },
+    { label: "NGT feeding", value: "NGT feeding" },
+    {
+      label: "Total parenteral Nutrition (TPN)",
+      value: "Total parenteral Nutrition",
+    },
+    { label: "Others", value: "Others" },
+  ];
 
   const calculateAge = (birthYear, birthMonth, birthDay) => {
     const today = new Date();
@@ -105,28 +123,46 @@ export default function RegisterNewPatient() {
     if (!isFormComplete) {
       setWarningModalVisible(true);
     } else {
+      const patientData = {
+        first_name: formData.firstName,
+        middle_name: formData.middleName,
+        last_name: formData.surname,
+        sex: formData.sex,
+        date_of_birth: `${formData.birthYear}-${formData.birthMonth}-${formData.birthDay}`,
+        contact_number: formData.phoneNumber,
+        bed_number: formData.bedNumber,
+        room_number: formData.roomNumber,
+        age: formData.age,
+        blood_type: formData.bloodType,
+        religion: formData.religion,
+        height: formData.height,
+        weight: formData.weight,
+        diet: formData.diet,
+        emergency_contact: {
+          first_name: formData.emergencyFirstName,
+          last_name: formData.emergencySurname,
+          relation_to_patient: formData.relation,
+          contact_number: formData.emergencyPhone,
+        },
+        chief_complaint: formData.chiefComplaint,
+      };
+
+      if (
+        formData.diet === "NGT insertion" ||
+        formData.diet === "NGT feeding"
+      ) {
+        patientData.ngt_details = formData.ngtSpecify;
+      } else if (formData.diet === "Others") {
+        patientData.other_diet_details = formData.otherDietSpecify;
+      }
+
       try {
         const response = await fetch("http://127.0.0.1:8000/api/patients/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            first_name: formData.firstName,
-            middle_name: formData.middleName,
-            last_name: formData.surname,
-            date_of_birth: `${formData.birthYear}-${formData.birthMonth}-${formData.birthDay}`,
-            contact_number: formData.phoneNumber,
-            bed_number: formData.bedNumber,
-            room_number: formData.roomNumber,
-            age: formData.age,
-            emergency_contact: {
-              first_name: formData.emergencyFirstName,
-              last_name: formData.emergencySurname,
-              relation_to_patient: formData.relation,
-              contact_number: formData.emergencyPhone,
-            },
-          }),
+          body: JSON.stringify(patientData),
         });
 
         if (response.ok) {
@@ -137,6 +173,7 @@ export default function RegisterNewPatient() {
             firstName: "",
             middleName: "",
             surname: "",
+            sex: null,
             birthMonth: "",
             birthDay: "",
             birthYear: "",
@@ -144,19 +181,25 @@ export default function RegisterNewPatient() {
             bedNumber: "",
             roomNumber: "",
             age: "",
+            bloodType: null,
+            religion: null,
+            height: "",
+            weight: "",
+            diet: "DAT", // Reset diet to default
+            ngtSpecify: "",
+            otherDietSpecify: "",
             emergencyFirstName: "",
             emergencySurname: "",
             relation: "",
             emergencyPhone: "",
+            chiefComplaint: "",
           });
         } else {
           const errorData = await response.json();
           console.error("Error registering patient:", errorData);
-          // Optionally show an error message to the user
         }
       } catch (error) {
         console.error("Error registering patient:", error);
-        // Optionally show an error message to the user
       }
     }
   };
@@ -196,45 +239,232 @@ export default function RegisterNewPatient() {
               }
             />
 
-            <Text style={styles.label}>Date of Birth</Text>
-            <View style={styles.dobContainer}>
+            <Text style={styles.label}>Sex</Text>
+            <View>
               <RNPickerSelect
-                items={months}
-                value={formData.birthMonth}
+                items={[
+                  { label: "Male", value: "Male" },
+                  { label: "Female", value: "Female" },
+                ]}
+                value={formData.sex}
                 onValueChange={(value) =>
-                  setFormData({ ...formData, birthMonth: value })
+                  setFormData({ ...formData, sex: value })
                 }
-                placeholder={{ label: "MM", value: "" }}
+                placeholder={{ label: "Select Sex", value: null }}
                 style={{
-                  inputAndroid: styles.dobSelect,
-                  inputIOS: styles.dobSelect,
-                }}
-              />
-              <RNPickerSelect
-                items={days}
-                value={formData.birthDay}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, birthDay: value })
-                }
-                placeholder={{ label: "DD", value: "" }}
-                style={{
-                  inputAndroid: styles.dobSelect,
-                  inputIOS: styles.dobSelect,
-                }}
-              />
-              <RNPickerSelect
-                items={years}
-                value={formData.birthYear}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, birthYear: value })
-                }
-                placeholder={{ label: "YYYY", value: "" }}
-                style={{
-                  inputAndroid: styles.dobSelect,
-                  inputIOS: styles.dobSelect,
+                  inputAndroid: styles.input,
+                  inputIOS: styles.input,
+                  inputWeb: styles.input,
+                  placeholder: {
+                    color: "#999",
+                  },
                 }}
               />
             </View>
+
+            <Text style={styles.label}>Date of Birth</Text>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <View style={{ flex: 1, marginRight: 10 }}>
+                <RNPickerSelect
+                  items={months}
+                  value={formData.birthMonth}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, birthMonth: value })
+                  }
+                  placeholder={{ label: "MM", value: "" }}
+                  style={{
+                    inputAndroid: styles.input,
+                    inputIOS: styles.input,
+                    inputWeb: styles.input,
+                    placeholder: {
+                      color: "#999",
+                    },
+                  }}
+                />
+              </View>
+              <View style={{ flex: 1, marginRight: 10 }}>
+                <RNPickerSelect
+                  items={days}
+                  value={formData.birthDay}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, birthDay: value })
+                  }
+                  placeholder={{ label: "DD", value: "" }}
+                  style={{
+                    inputAndroid: styles.input,
+                    inputIOS: styles.input,
+                    inputWeb: styles.input,
+                    placeholder: {
+                      color: "#999",
+                    },
+                  }}
+                />
+              </View>
+              <View style={{ flex: 1 }}>
+                <RNPickerSelect
+                  items={years}
+                  value={formData.birthYear}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, birthYear: value })
+                  }
+                  placeholder={{ label: "YYYY", value: "" }}
+                  style={{
+                    inputAndroid: styles.input,
+                    inputIOS: styles.input,
+                    inputWeb: styles.input,
+                    placeholder: {
+                      color: "#999",
+                    },
+                  }}
+                />
+              </View>
+            </View>
+
+            <Text style={styles.label}>Age</Text>
+            <TextInput
+              style={styles.input}
+              value={formData.age.toString()}
+              editable={false}
+            />
+
+            <Text style={styles.label}>Blood Type</Text>
+            <View>
+              <RNPickerSelect
+                items={[
+                  { label: "A+", value: "A+" },
+                  { label: "A-", value: "A-" },
+                  { label: "B+", value: "B+" },
+                  { label: "B-", value: "B-" },
+                  { label: "AB+", value: "AB+" },
+                  { label: "AB-", value: "AB-" },
+                  { label: "O+", value: "O+" },
+                  { label: "O-", value: "O-" },
+                ]}
+                value={formData.bloodType}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, bloodType: value })
+                }
+                placeholder={{ label: "Select Blood Type", value: null }}
+                style={{
+                  inputAndroid: styles.input,
+                  inputIOS: styles.input,
+                  inputWeb: styles.input,
+                  placeholder: {
+                    color: "#999",
+                  },
+                }}
+              />
+            </View>
+
+            <Text style={styles.label}>Religion</Text>
+            <View>
+              <RNPickerSelect
+                items={[
+                  { label: "Catholic", value: "Catholic" },
+                  { label: "Protestant", value: "Protestant" },
+                  { label: "Muslim", value: "Muslim" },
+                  { label: "Buddhist", value: "Buddhist" },
+                  { label: "Hindu", value: "Hindu" },
+                  { label: "Atheist", value: "Atheist" },
+                  { label: "Agnostic", value: "Agnostic" },
+                  { label: "Other", value: "Other" },
+                  // Add more religions as needed
+                ]}
+                value={formData.religion}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, religion: value })
+                }
+                placeholder={{ label: "Select Religion", value: null }}
+                style={{
+                  inputAndroid: styles.input,
+                  inputIOS: styles.input,
+                  inputWeb: styles.input,
+                  placeholder: {
+                    color: "#999",
+                  },
+                }}
+              />
+            </View>
+
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <View style={{ flex: 1, marginRight: 10 }}>
+                <Text style={styles.label}>Height (cm)</Text>
+                <TextInput
+                  style={styles.input}
+                  keyboardType="numeric"
+                  placeholder="e.g., 170"
+                  value={formData.height}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, height: text })
+                  }
+                />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.label}>Weight (kg)</Text>
+                <TextInput
+                  style={styles.input}
+                  keyboardType="numeric"
+                  placeholder="e.g., 65"
+                  value={formData.weight}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, weight: text })
+                  }
+                />
+              </View>
+            </View>
+
+            <Text style={styles.label}>Diet</Text>
+            <View>
+              <RNPickerSelect
+                items={dietOptions}
+                value={formData.diet}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, diet: value })
+                }
+                placeholder={{ label: "DAT (Diet as Tolerated)", value: "DAT" }} 
+                style={{
+                  inputAndroid: styles.input,
+                  inputIOS: styles.input,
+                  inputWeb: styles.input,
+                  placeholder: {
+                    color: "#999",
+                  },
+                }}
+              />
+            </View>
+
+            {formData.diet === "NGT insertion" ||
+            formData.diet === "NGT feeding" ? (
+              <>
+                <Text style={styles.label}>Specify NGT Details</Text>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, ngtSpecify: text })
+                  }
+                  value={formData.ngtSpecify}
+                  placeholder="e.g., Size, Insertion Date"
+                />
+              </>
+            ) : null}
+
+            {formData.diet === "Others" ? (
+              <>
+                <Text style={styles.label}>Specify Other Diet</Text>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, otherDietSpecify: text })
+                  }
+                  value={formData.otherDietSpecify}
+                  placeholder="Please specify the diet"
+                />
+              </>
+            ) : null}
 
             <Text style={styles.label}>Phone Number</Text>
             <TextInput
@@ -258,13 +488,6 @@ export default function RegisterNewPatient() {
               onChangeText={(text) =>
                 setFormData({ ...formData, roomNumber: text })
               }
-            />
-
-            <Text style={styles.label}>Age</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.age.toString()}
-              editable={false}
             />
           </View>
           <View style={styles.divider} />
@@ -296,6 +519,18 @@ export default function RegisterNewPatient() {
               style={styles.input}
               onChangeText={(text) =>
                 setFormData({ ...formData, emergencyPhone: text })
+              }
+            />
+
+            <Text style={styles.sectionsubTitle}>
+              Chief's Complaint/Admitting Diagnosis
+            </Text>
+            <TextInput
+              style={[styles.input, { height: 300, textAlignVertical: "top" }]}
+              multiline
+              numberOfLines={4} // Optional: Specify the initial number of visible lines
+              onChangeText={(text) =>
+                setFormData({ ...formData, chiefComplaint: text })
               }
             />
           </View>
@@ -345,7 +580,6 @@ export default function RegisterNewPatient() {
         </View>
       </Modal>
 
-      {/* Warning Modal for Incomplete Form */}
       <Modal visible={warningModalVisible} transparent animationType="fade">
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
