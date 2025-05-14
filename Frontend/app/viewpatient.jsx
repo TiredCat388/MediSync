@@ -190,7 +190,6 @@ export default function PatientDetails() {
 
         <View style={styles.infoContainer}>
           <View style={styles.detailsSection}>
-          <ScrollView></ScrollView>
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Patient Details</Text>
               <Text style={styles.boldLabel}>Name</Text>
@@ -208,6 +207,14 @@ export default function PatientDetails() {
               <Text>{patient?.blood_group}</Text>
               <Text style={styles.boldLabel}>Religion</Text>
               <Text>{patient?.religion}</Text>
+            </View>
+          </View>
+
+          <View style={styles.dividers} />
+
+          <View style={styles.detailsSection}>
+            <Text style={styles.sectionTitle}></Text>
+            <View style={styles.section}>
               <Text style={styles.boldLabel}>Height</Text>
               <Text>{patient?.height}</Text>
               <Text style={styles.boldLabel}>Weight</Text>
@@ -218,6 +225,14 @@ export default function PatientDetails() {
               <Text>{patient?.contact_number}</Text>
               <Text style={styles.boldLabel}>Room No</Text>
               <Text>{patient?.room_number}</Text>
+            </View>
+          </View>
+
+          <View style={styles.dividers} />
+          
+          <View style={styles.subsdetailsSection}>
+            <Text style={styles.sectionTitle}></Text>
+            <View style={styles.section}>
               <Text style={styles.boldLabel}>Chief's Complaint</Text>
               <Text>{patient?.chief_complaint}</Text>
               <Text style={styles.boldLabel}>Admitting Diagnosis</Text>
@@ -225,12 +240,11 @@ export default function PatientDetails() {
               <Text style={styles.boldLabel}>Final Diagnosis</Text>
               <Text>{patient?.Final_diagnosis}</Text>
             </View>
-            <ScrollView/>
           </View>
 
           <View style={styles.divider} />
 
-          <View style={styles.detailsSection}>
+          <View style={styles.subdetailsSection}>
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Emergency Contact Details</Text>
               <Text style={styles.boldLabel}>Name</Text>
