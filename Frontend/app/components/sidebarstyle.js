@@ -1,6 +1,5 @@
 import { StyleSheet, Dimensions } from "react-native";
 
-// Check if it's a tablet (screen width greater than 900px)
 const { width } = Dimensions.get("window");
 const isTablet = width > 900;
 
@@ -9,17 +8,17 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: "#e0e0e0",
     justifyContent: 'flex-start',
-    alignItems: 'flex-start', // Keep items aligned to the start for consistency
+    alignItems: 'flex-start',
     position: 'absolute',
     zIndex: 999,
     flexDirection: 'column',
-    width: isTablet ? 200 : 70, // Adjust width based on tablet or not
+    width: isTablet ? 200 : 70, 
   },
   sidebarContent: {
     flexDirection: 'row',
     flex: 1,
     justifyContent: 'flex-start',
-    alignItems: 'flex-start', // Keep items aligned to the start for consistency
+    alignItems: 'flex-start', 
   },
   textContainer: {
     flex: 1, 
@@ -32,7 +31,7 @@ const styles = StyleSheet.create({
   iconsContainer: {
     width: 'auto',  
     justifyContent: 'flex-start',
-    alignItems: 'flex-start', // Align items to the left
+    alignItems: 'flex-start',
     paddingTop: 30,
     paddingLeft: 20, 
     flexDirection: 'column',
