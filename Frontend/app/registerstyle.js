@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
     padding: 40,
     borderRadius: 10,
     justifyContent: "space-between",
+    maxHeight: 580,
   },
   column: {
     flex: 1,

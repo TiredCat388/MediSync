@@ -32,7 +32,7 @@ export default function PatientDetails() {
 
   useEffect(() => {
     fetchPatientDetails();
-    fetchMedications(); // load meds right away
+    fetchMedications(); 
   }, [patient_number]);
 
   const fetchPatientDetails = async () => {
@@ -197,8 +197,30 @@ export default function PatientDetails() {
                 {patient?.last_name}, {patient?.first_name}{" "}
                 {patient?.middle_name}
               </Text>
+              <Text style={styles.boldLabel}>Sex</Text>
+              <Text>{patient?.sex}</Text>
               <Text style={styles.boldLabel}>Birth Date</Text>
               <Text>{patient?.date_of_birth}</Text>
+              <Text style={styles.boldLabel}>Age</Text>
+              <Text>{patient?.age}</Text>
+              <Text style={styles.boldLabel}>Blood Type</Text>
+              <Text>{patient?.blood_group}</Text>
+              <Text style={styles.boldLabel}>Religion</Text>
+              <Text>{patient?.religion}</Text>
+            </View>
+          </View>
+
+          <View style={styles.dividers} />
+
+          <View style={styles.detailsSection}>
+            <Text style={styles.sectionTitle}></Text>
+            <View style={styles.section}>
+              <Text style={styles.boldLabel}>Height</Text>
+              <Text>{patient?.height}</Text>
+              <Text style={styles.boldLabel}>Weight</Text>
+              <Text>{patient?.weight}</Text>
+              <Text style={styles.boldLabel}>Diet</Text>
+              <Text>{patient?.diet}</Text>
               <Text style={styles.boldLabel}>Contact Details</Text>
               <Text>{patient?.contact_number}</Text>
               <Text style={styles.boldLabel}>Room No</Text>
@@ -206,9 +228,23 @@ export default function PatientDetails() {
             </View>
           </View>
 
+          <View style={styles.dividers} />
+          
+          <View style={styles.subsdetailsSection}>
+            <Text style={styles.sectionTitle}></Text>
+            <View style={styles.section}>
+              <Text style={styles.boldLabel}>Chief's Complaint</Text>
+              <Text>{patient?.chief_complaint}</Text>
+              <Text style={styles.boldLabel}>Admitting Diagnosis</Text>
+              <Text>{patient?.admitting_diagnosis}</Text>
+              <Text style={styles.boldLabel}>Final Diagnosis</Text>
+              <Text>{patient?.Final_diagnosis}</Text>
+            </View>
+          </View>
+
           <View style={styles.divider} />
 
-          <View style={styles.detailsSection}>
+          <View style={styles.subdetailsSection}>
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Emergency Contact Details</Text>
               <Text style={styles.boldLabel}>Name</Text>
@@ -248,11 +284,7 @@ export default function PatientDetails() {
 
         {showMedications && (
           <View>
-            <View
-              style={[
-                styles.tableContainer 
-              ]}
-            >
+            <View style={[styles.tableContainer]}>
               <ScrollView nestedScrollEnabled={true}>
                 <DataTable>
                   <View style={styles.headerRowContainer}>
