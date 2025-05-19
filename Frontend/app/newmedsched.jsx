@@ -84,7 +84,7 @@ export default function NewMedSched() {
     const fetchPatientDetails = async () => {
       try {
         const response = await fetch(
-          `http://127.0.0.1:8000/api/patients/by-number/${patient_number}/`
+          `${config('BASE_API')}/api/patients/by-number/${patient_number}/`
         );
         const data = await response.json();
         if (response.ok) {
@@ -216,7 +216,7 @@ export default function NewMedSched() {
         physicianID: formData.physicianID || "default_physician",
       };
 
-      const response = await fetch("http://127.0.0.1:8000/api/medications/", {
+      const response = await fetch("${config('BASE_API')}/api/medications/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestData),

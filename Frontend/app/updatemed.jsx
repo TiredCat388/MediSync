@@ -57,7 +57,7 @@ export default function NewMedSched() {
       const fetchPatientName = async () => {
         try {
           const response = await fetch(
-            `http://127.0.0.1:8000/api/patients/${patient_number}/`
+            `${config('BASE_API')}/api/patients/${patient_number}/`
           );
           if (response.ok) {
             const data = await response.json();
@@ -101,7 +101,7 @@ export default function NewMedSched() {
       const fetchMedicationDetails = async () => {
         try {
           const response = await fetch(
-            `http://127.0.0.1:8000/api/medications/${patient_number}/${schedule_id}/`
+            `${config('BASE_API')}/api/medications/${patient_number}/${schedule_id}/`
           );
           console.log("Fetch Response:", response);
           if (response.ok) {
@@ -209,8 +209,8 @@ export default function NewMedSched() {
       };
 
       const url = schedule_id
-        ? `http://127.0.0.1:8000/api/medications/${patient_number}/${schedule_id}/`
-        : `http://127.0.0.1:8000/api/medications/${patient_number}/`;
+        ? `${config('BASE_API')}/api/medications/${patient_number}/${schedule_id}/`
+        : `${config('BASE_API')}/api/medications/${patient_number}/`;
       const method = schedule_id ? "PUT" : "POST";
 
       console.log("Request URL:", url);

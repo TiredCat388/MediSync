@@ -253,7 +253,7 @@ export default function RegisterNewPatient() {
     }
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/patients/", {
+      const response = await fetch("${config('BASE_API')}/api/patients/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

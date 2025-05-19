@@ -22,7 +22,7 @@ export default function CalendarApp() {
   // Fetch medication data for all patients
   const fetchMedicationData = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/medications`);
+      const response = await fetch(`${config('BASE_API')}/api/medications`);
       if (!response.ok) {
         throw new Error("Failed to fetch medication data");
       }
@@ -35,7 +35,7 @@ export default function CalendarApp() {
       for (const med of data) {
         if (!patientNames[med.patient_number]) {
           const patientResponse = await fetch(
-            `http://127.0.0.1:8000/api/patients/${med.patient_number}`
+            `${config('BASE_API')}/api/patients/${med.patient_number}`
           );
           const patientData = await patientResponse.json();
           patientNames[

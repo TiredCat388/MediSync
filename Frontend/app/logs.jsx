@@ -26,7 +26,7 @@ export default function LogsScreen() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/logs/");
+      const response = await fetch("${config('BASE_API')}/api/logs/");
       let logs = await response.json();
       logs = logs.sort((a, b) => a.log_id - b.log_id);
       setLogs(logs);

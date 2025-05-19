@@ -25,7 +25,7 @@ export default function PatientsDirectory() {
 
   const fetchPatients = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/patients/");
+      const response = await fetch("${config('BASE_API')}/api/patients/");
       const data = await response.json();
       const archivedPatients = data.filter((patient) => patient.is_archived);
       setPatients(
