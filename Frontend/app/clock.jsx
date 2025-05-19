@@ -11,6 +11,9 @@ import Sidebar from "./components/sidebar";
 import { useNotification } from "../notifcontext";
 import { Checkbox } from "react-native-paper";
 import styles from "./clockstyle";
+import Constants from 'expo-constants';
+
+const BASE_API = Constants.expoConfig.extra.BASE_API;
 
 const AnalogClock = () => {
   const sidebarWidth = 70;
@@ -126,7 +129,7 @@ const AnalogClock = () => {
   useEffect(() => {
     const fetchAlerts = async () => {
       try {
-        const response = await fetch("${config('BASE_API')}/api/medications");
+        const response = await fetch(`${BASE_API}/api/medications`);
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }

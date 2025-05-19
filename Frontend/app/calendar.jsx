@@ -3,6 +3,9 @@ import { View, Text, TouchableOpacity, FlatList, Modal, Button,ScrollView } from
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import Sidebar from './components/sidebar';
+import Constants from 'expo-constants';
+
+const BASE_API = Constants.expoConfig.extra.BASE_API;
 
 const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 const months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
@@ -22,7 +25,7 @@ export default function CalendarApp() {
   // Fetch medication data for all patients
   const fetchMedicationData = async () => {
     try {
-      const response = await fetch(`${config('BASE_API')}/api/medications`);
+      const response = await fetch(`${BASE_API}/api/medications`);
       if (!response.ok) {
         throw new Error("Failed to fetch medication data");
       }
@@ -35,7 +38,7 @@ export default function CalendarApp() {
       for (const med of data) {
         if (!patientNames[med.patient_number]) {
           const patientResponse = await fetch(
-            `${config('BASE_API')}/api/patients/${med.patient_number}`
+            `${BASE_API}/api/patients/${med.patient_number}`
           );
           const patientData = await patientResponse.json();
           patientNames[

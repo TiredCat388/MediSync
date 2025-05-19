@@ -4,6 +4,9 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import styles from "./logstyles";
 import Sidebar from './components/sidebar';
+import Constants from 'expo-constants';
+
+const BASE_API = Constants.expoConfig.extra.BASE_API;
 
 const { width } = Dimensions.get("window");
 const isTablet = width > 900;
@@ -26,7 +29,7 @@ export default function LogsScreen() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("${config('BASE_API')}/api/logs/");
+      const response = await fetch(`${BASE_API}/api/logs/`);
       let logs = await response.json();
       logs = logs.sort((a, b) => a.log_id - b.log_id);
       setLogs(logs);

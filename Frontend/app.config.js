@@ -1,6 +1,10 @@
-import 'dotenv/config';
+const dotenv = require('dotenv');
+const path = require('path');
 
-export default {
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+
+
+module.exports = {
   expo: {
     name: "Frontend",
     slug: "Frontend",
@@ -22,7 +26,7 @@ export default {
     web: {
       bundler: "metro",
       output: "static",
-      favicon: "./assets/images/favicon.png",
+      favicon: "./assets/images/medisync-logo.png",
     },
     plugins: [
       "expo-router",

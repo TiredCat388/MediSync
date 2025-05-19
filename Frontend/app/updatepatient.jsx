@@ -163,7 +163,7 @@ export default function UpdatePatientScreen() {
       setError(null);
       try {
         const response = await fetch(
-          `${config('BASE_API')}/api/patients/by-number/${patient_number}/`
+          `${BASE_API}/api/patients/by-number/${patient_number}/`
         );
         if (response.ok) {
           const data = await response.json();
