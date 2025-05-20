@@ -15,6 +15,9 @@ import { Feather } from "@expo/vector-icons";
 import { Alert } from "react-native";
 import { styles } from "./historystyle";
 import { useNavigation } from "@react-navigation/native";
+import Constants from 'expo-constants';
+
+const BASE_API = Constants.expoConfig.extra.BASE_API;
 
 const { width } = Dimensions.get("window");
 const isTablet = width > 900;
@@ -39,7 +42,7 @@ export default function PatientDetails() {
   const fetchPatientDetails = async () => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/patients/by-number/${patient_number}/`
+        `${BASE_API}/api/patients/by-number/${patient_number}/`
       );
       if (!response.ok) {
         throw new Error("Patient not found");
@@ -71,7 +74,7 @@ export default function PatientDetails() {
   const activatePatient = async (patient_number) => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/patients/${patient_number}/`,
+        `${BASE_API}/api/patients/${patient_number}/`,
         {
           method: "PATCH",
           headers: {
@@ -98,7 +101,7 @@ export default function PatientDetails() {
   const fetchMedications = async () => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/medications/?patient_number=${patient_number}`
+        `${BASE_API}/api/medications/?patient_number=${patient_number}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch medications");

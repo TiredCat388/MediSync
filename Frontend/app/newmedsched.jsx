@@ -13,7 +13,10 @@ import RNPickerSelect from "react-native-picker-select";
 import Autocomplete from "react-native-autocomplete-input";
 import styles from "./newmedschedstyle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import CustomAlert from "./components/alert"; // Corrected import path
+import CustomAlert from "./components/alert";
+import Constants from 'expo-constants';
+
+const BASE_API = Constants.expoConfig.extra.BASE_API;
 
 export default function NewMedSched() {
   const router = useRouter();
@@ -31,8 +34,10 @@ export default function NewMedSched() {
 
   const [formData, setFormData] = useState({
     medicineName: "",
-    dosage: "",
-    dosageUnit: "",
+    medicationForm: "",
+    medicationStrength: "",
+    medicationUnit: "",
+    medicationRoute: "",
     timeHour: "",
     timeMinute: "",
     timePeriod: "",
@@ -40,9 +45,13 @@ export default function NewMedSched() {
     physicianID: "",
     frequencyHour: "",
     frequencyMinute: "",
+    frequencyPeriod: "",
     medicationMonth: "",
     medicationDay: "",
     medicationYear: "",
+    medicationEndMonth: "",
+    medicationEndDay: "",
+    medicationEndYear: "",
   });
 
   const [medications, setMedications] = useState([]);
@@ -78,7 +87,7 @@ export default function NewMedSched() {
     const fetchPatientDetails = async () => {
       try {
         const response = await fetch(
-          `http://127.0.0.1:8000/api/patients/by-number/${patient_number}/`
+          `${BASE_API}/api/patients/by-number/${patient_number}/`
         );
         const data = await response.json();
         if (response.ok) {
@@ -103,7 +112,7 @@ export default function NewMedSched() {
         : [...prevDays, day]
     );
   };
-  
+
   const handleInputChange = (text) => {
     setQuery(text);
     setFormData({ ...formData, medicineName: text });
@@ -178,15 +187,12 @@ export default function NewMedSched() {
       return;
     }
 
-    
     const convertTo24Hour = (hour, minute, period) => {
       let hour24 = parseInt(hour);
       if (period === "PM" && hour24 !== 12) hour24 += 12;
       if (period === "AM" && hour24 === 12) hour24 = 0;
       return `${hour24.toString().padStart(2, "0")}:${minute.padStart(2, "0")}`;
     };
-      
-      
 
     try {
       const medicationTime = convertTo24Hour(
@@ -195,7 +201,10 @@ export default function NewMedSched() {
         formData.timePeriod
       );
 
-      const frequency = `${formData.frequencyHour.padStart(2,"0")}:${formData.frequencyMinute.padStart(2, "0")}`;
+      const frequency = `${formData.frequencyHour.padStart(
+        2,
+        "0"
+      )}:${formData.frequencyMinute.padStart(2, "0")}`;
 
       const requestData = {
         Medication_name: formData.medicineName,
@@ -210,7 +219,7 @@ export default function NewMedSched() {
         physicianID: formData.physicianID || "default_physician",
       };
 
-      const response = await fetch("http://127.0.0.1:8000/api/medications/", {
+      const response = await fetch(`${BASE_API}/api/medications/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestData),
@@ -278,40 +287,62 @@ export default function NewMedSched() {
               />
             </View>
 
-            <Text style={[styles.label, { marginTop: 10 }]}>Dosage</Text>
-            <View style={styles.dobContainer}>
-              <TextInput
-                style={styles.dobInput}
-                keyboardType="numeric"
-                onChangeText={(text) =>
-                  setFormData({ ...formData, dosage: text })
+            <Text style={[styles.label, { marginTop: 10 }]}>
+              Medication form
+            </Text>
+            <View>
+              <RNPickerSelect
+                items={[
+                  { label: "Tablet", value: "Tablet" },
+                  { label: "Syrup", value: "Syrup" },
+                  { label: "Injection", value: "Injection" },
+                  { label: "Cream", value: "Cream" },
+                  { label: "Ointment", value: "Ointment" },
+                  { label: "Drops", value: "Drops" },
+                  { label: "Inhaler", value: "Inhaler" },
+                  { label: "Patch", value: "Patch" },
+                  { label: "Other", value: "Other" },
+                ]}
+                value={formData.medicationForm}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, medicationForm: value })
                 }
-                value={formData.dosage}
+                placeholder={{ label: "Select Medication form...", value: "" }}
+                style={pickerSelectStyles}
               />
-              <View style={styles.dobSelectContainer}>
+            </View>
+
+            <Text style={styles.label}>Medication Strength</Text>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <TextInput
+                style={{ marginRight: 10, borderWidth: 1, borderColor: "black", backgroundColor: "white", marginBottom: 10, flex: 1}}
+                value={formData.medicationStrength}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, medicationStrength: text })
+                }
+              />
+              <View style={{ flex: 1 }}>
                 <RNPickerSelect
                   items={[
-                    { label: "ml", value: "ml" },
-                    { label: "tablets", value: "tablets" },
-                    { label: "pills", value: "pills" },
+                    { label: "mL", value: "ml" },
+                    { label: "mcg", value: "mcg" },
                     { label: "mg", value: "mg" },
-                    { label: "drops", value: "drops" },
+                    { label: "%", value: "%" },
+                    { label: "g", value: "g" },
                   ]}
                   value={formData.dosageUnit}
                   onValueChange={(value) =>
                     setFormData({ ...formData, dosageUnit: value })
                   }
-                  placeholder={{ label: "Unit", value: "" }}
-                  style={{
-                    inputAndroid: styles.dobSelect,
-                    inputIOS: styles.dobSelect,
-                    inputWeb: styles.dobSelectWeb,
-                  }}
+                  placeholder={formData.dosageUnit ? {} : { label: "Unit", value: "" }}
+                  style={pickerSelectStyles}
                 />
               </View>
             </View>
-
-            <Text style={styles.label}>Date of Medication</Text>
+            
+            <Text style={styles.label}>Medication Start Date</Text>
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
@@ -353,6 +384,48 @@ export default function NewMedSched() {
               </View>
             </View>
 
+            <Text style={styles.label}>Medication End Date</Text>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              {/* Month */}
+              <View style={{ flex: 1, marginRight: 10 }}>
+                <RNPickerSelect
+                  items={months}
+                  value={formData.medicationEndMonth}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, medicationEndMonth: value })
+                  }
+                  placeholder={{ label: "MM", value: "" }}
+                  style={pickerSelectStyles}
+                />
+              </View>
+              {/* Day */}
+              <View style={{ flex: 1, marginRight: 10 }}>
+                <RNPickerSelect
+                  items={days}
+                  value={formData.medicationEndDay}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, medicationEndDay: value })
+                  }
+                  placeholder={{ label: "DD", value: "" }}
+                  style={pickerSelectStyles}
+                />
+              </View>
+              {/* Year */}
+              <View style={{ flex: 1 }}>
+                <RNPickerSelect
+                  items={years}
+                  value={formData.medicationEndYear}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, medicationEndYear: value })
+                  }
+                  placeholder={{ label: "YYYY", value: "" }}
+                  style={pickerSelectStyles}
+                />
+              </View>
+            </View>
+
             <Text style={styles.label}>Time of Medication</Text>
             <View style={styles.dobContainer}>
               <View style={styles.timePickerContainer}>
@@ -373,7 +446,7 @@ export default function NewMedSched() {
                   }}
                 />
               </View>
-              <View style={{ width: 10 }} /> {/* Spacer */}
+              <View style={{ width: 10 }} />
               <View style={styles.timePickerContainer}>
                 <RNPickerSelect
                   items={Array.from({ length: 60 }, (_, index) => ({
@@ -392,7 +465,7 @@ export default function NewMedSched() {
                   }}
                 />
               </View>
-              <View style={{ width: 10 }} /> {/* Spacer */}
+              <View style={{ width: 10 }} />
               <View style={styles.timePickerContainer}>
                 <RNPickerSelect
                   items={[
@@ -414,47 +487,45 @@ export default function NewMedSched() {
             </View>
 
             <Text style={styles.label}>Frequency</Text>
-      <View style={styles.dobContainer}>
-        <View style={styles.frequencyPickerContainer}>
-          <RNPickerSelect
-            items={Array.from({ length: 24 }, (_, index) => ({
-              label: index.toString().padStart(2, "0"),
-              value: index.toString().padStart(2, "0"),
-            }))}
-            value={formData.frequencyHour}
-            onValueChange={(value) =>
-              setFormData({ ...formData, frequencyHour: value })
-            }
-            placeholder={{ label: "HH", value: "" }}
-            style={{
-              inputAndroid: styles.frequencyPicker,
-              inputIOS: styles.frequencyPicker,
-              inputWeb: styles.frequencyPickerWeb,
-            }}
-          />
-        </View>
-
-        <View style={{ width: 10 }} /> {/* Spacer */}
-
-        <View style={styles.frequencyPickerContainer}>
-          <RNPickerSelect
-            items={Array.from({ length: 12 }, (_, index) => ({
-              label: (index * 5).toString().padStart(2, "0"),
-              value: (index * 5).toString().padStart(2, "0"),
-            }))}
-            value={formData.frequencyMinute}
-            onValueChange={(value) =>
-              setFormData({ ...formData, frequencyMinute: value })
-            }
-            placeholder={{ label: "MM", value: "" }}
-            style={{
-              inputAndroid: styles.frequencyPicker,
-              inputIOS: styles.frequencyPicker,
-              inputWeb: styles.frequencyPickerWeb,
-            }}
-          />
-        </View>
-      </View>
+            <View style={styles.dobContainer}>
+              <View style={styles.frequencyPickerContainer}>
+                <RNPickerSelect
+                  items={Array.from({ length: 24 }, (_, index) => ({
+                    label: index.toString().padStart(2, "0"),
+                    value: index.toString().padStart(2, "0"),
+                  }))}
+                  value={formData.frequencyHour}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, frequencyHour: value })
+                  }
+                  placeholder={{ label: "HH", value: "" }}
+                  style={{
+                    inputAndroid: styles.frequencyPicker,
+                    inputIOS: styles.frequencyPicker,
+                    inputWeb: styles.frequencyPickerWeb,
+                  }}
+                />
+              </View>
+              <View style={{ width: 10 }} />
+              <View style={styles.frequencyPickerContainer}>
+                <RNPickerSelect
+                  items={Array.from({ length: 12 }, (_, index) => ({
+                    label: (index * 5).toString().padStart(2, "0"),
+                    value: (index * 5).toString().padStart(2, "0"),
+                  }))}
+                  value={formData.frequencyMinute}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, frequencyMinute: value })
+                  }
+                  placeholder={{ label: "MM", value: "" }}
+                  style={{
+                    inputAndroid: styles.frequencyPicker,
+                    inputIOS: styles.frequencyPicker,
+                    inputWeb: styles.frequencyPickerWeb,
+                  }}
+                />
+              </View>
+            </View>
 
             <Text style={styles.label}>Days of the Week</Text>
             <View style={styles.daysContainer}>

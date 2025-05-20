@@ -12,8 +12,11 @@ import Sidebar from "./components/sidebar";
 import RNPickerSelect from "react-native-picker-select";
 import Autocomplete from "react-native-autocomplete-input";
 import styles from "./updatemedstyle";
-import AsyncStorage from "@react-native-async-storage/async-storage"; // or your auth method
-import CustomAlert from "./components/alert"; // Make sure the path is correct
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import CustomAlert from "./components/alert";
+import Constants from 'expo-constants';
+
+const BASE_API = Constants.expoConfig.extra.BASE_API;
 
 
 export default function NewMedSched() {
@@ -57,7 +60,7 @@ export default function NewMedSched() {
       const fetchPatientName = async () => {
         try {
           const response = await fetch(
-            `http://127.0.0.1:8000/api/patients/${patient_number}/`
+            `${BASE_API}/api/patients/${patient_number}/`
           );
           if (response.ok) {
             const data = await response.json();
@@ -101,7 +104,7 @@ export default function NewMedSched() {
       const fetchMedicationDetails = async () => {
         try {
           const response = await fetch(
-            `http://127.0.0.1:8000/api/medications/${patient_number}/${schedule_id}/`
+            `${BASE_API}/api/medications/${patient_number}/${schedule_id}/`
           );
           console.log("Fetch Response:", response);
           if (response.ok) {
@@ -209,8 +212,8 @@ export default function NewMedSched() {
       };
 
       const url = schedule_id
-        ? `http://127.0.0.1:8000/api/medications/${patient_number}/${schedule_id}/`
-        : `http://127.0.0.1:8000/api/medications/${patient_number}/`;
+        ? `${BASE_API}/api/medications/${patient_number}/${schedule_id}/`
+        : `${BASE_API}/api/medications/${patient_number}/`;
       const method = schedule_id ? "PUT" : "POST";
 
       console.log("Request URL:", url);

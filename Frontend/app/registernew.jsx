@@ -7,6 +7,9 @@ import styles from "./registerstyle";
 import CustomAlert from "./components/alert"; // Import CustomAlert
 import { ScrollView } from "react-native-gesture-handler";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import Constants from 'expo-constants';
+
+const BASE_API = Constants.expoConfig.extra.BASE_API;
 
 export default function RegisterNewPatient() {
   const router = useRouter();
@@ -253,7 +256,7 @@ export default function RegisterNewPatient() {
     }
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/patients/", {
+      const response = await fetch(`${BASE_API}/api/patients/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

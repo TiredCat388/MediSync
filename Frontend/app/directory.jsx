@@ -11,6 +11,9 @@ import Sidebar from "./components/sidebar";
 import { useState, useEffect } from "react";
 import { Menu, Divider, Provider } from "react-native-paper";
 import styles from "./directorystyles";
+import Constants from 'expo-constants';
+
+const BASE_API = Constants.expoConfig.extra.BASE_API;
 
 const TESTING_PATIENT = { id: "0123456", name: "TESTING PURPOSES ONLY" };
 
@@ -27,7 +30,7 @@ export default function PatientsDirectory() {
 
   const fetchPatients = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/patients/");
+      const response = await fetch(`${BASE_API}/api/patients/`);
       const data = await response.json();
 
       const activePatients = data.filter((patient) => !patient.is_archived);

@@ -11,6 +11,9 @@ import Sidebar from "./components/sidebar";
 import RNPickerSelect from "react-native-picker-select";
 import styles from "./updatepatientstyle";
 import CustomAlert from "./components/alert";
+import Constants from 'expo-constants';
+
+const BASE_API = Constants.expoConfig.extra.BASE_API;
 
 export default function UpdatePatientScreen() {
   const router = useRouter();
@@ -160,7 +163,7 @@ export default function UpdatePatientScreen() {
       setError(null);
       try {
         const response = await fetch(
-          `http://127.0.0.1:8000/api/patients/by-number/${patient_number}/`
+          `${BASE_API}/api/patients/by-number/${patient_number}/`
         );
         if (response.ok) {
           const data = await response.json();
@@ -234,7 +237,7 @@ export default function UpdatePatientScreen() {
     setError(null);
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/patients/${patient_number}/`,
+        `${BASE_API}/api/patients/${patient_number}/`,
         {
           method: "PUT",
           headers: {

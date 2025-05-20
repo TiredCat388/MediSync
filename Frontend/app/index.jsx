@@ -12,6 +12,9 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import styles from "./loginstyles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Constants from 'expo-constants';
+
+const BASE_API = Constants.expoConfig.extra.BASE_API;
 
 
 const { width } = Dimensions.get("window");
@@ -51,7 +54,7 @@ const LoginScreen = () => {
           return;
         }
 
-        const response = await fetch("http://127.0.0.1:8000/api/token/", {
+        const response = await fetch(`${BASE_API}/api/token/`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

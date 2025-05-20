@@ -12,6 +12,9 @@ import Sidebar from "./components/sidebar";
 import RNPickerSelect from "react-native-picker-select";
 import Autocomplete from "react-native-autocomplete-input";
 import styles from "./viewmedstyle";
+import Constants from 'expo-constants';
+
+const BASE_API = Constants.expoConfig.extra.BASE_API;
 
 export default function NewMedSched() {
   const router = useRouter();
@@ -44,7 +47,7 @@ export default function NewMedSched() {
     const fetchPatientName = async () => {
       try {
         const response = await fetch(
-          `http://127.0.0.1:8000/api/patients/by-number/${patient_number}/`
+          `${BASE_API}/api/patients/by-number/${patient_number}/`
         );
         if (response.ok) {
           const data = await response.json();
@@ -67,7 +70,7 @@ export default function NewMedSched() {
       const fetchMedicationDetails = async () => {
         try {
           const response = await fetch(
-            `http://127.0.0.1:8000/api/medications/${patient_number}/${schedule_id}/`
+            `${BASE_API}/api/medications/${patient_number}/${schedule_id}/`
           );
           console.log("Fetch Response:", response);
           if (response.ok) {

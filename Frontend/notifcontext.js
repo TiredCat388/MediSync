@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import Constants from 'expo-constants';
 
+const BASE_API = Constants.expoConfig.extra.BASE_API;
 const NotificationContext = createContext();
 
 export const NotificationProvider = ({ children }) => {
@@ -19,7 +21,7 @@ export const NotificationProvider = ({ children }) => {
   useEffect(() => {
     const interval = setInterval(async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/medications/');
+        const response = await fetch(`${BASE_API}/api/medications/`);
         const schedules = await response.json();
 
         const now = new Date();
