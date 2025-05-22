@@ -102,11 +102,10 @@ export default function CalendarApp() {
 
   return (
     <View style={{ flex: 1, flexDirection: "row" }}>
-      {/* Reusable Sidebar Component */}
       <Sidebar setSidebarWidth={setSidebarWidth} />
 
       {/* Main Calendar Content */}
-      <View style={{ flex: 1, padding: 8, marginLeft: sidebarWidth }}>
+      <View style={{ flex: 1, padding: 40, marginLeft: sidebarWidth }}>
         <Text style={{ fontSize: 30, fontWeight: "bold", margin: 8 }}>
           Calendar
         </Text>
@@ -114,7 +113,7 @@ export default function CalendarApp() {
         {/* Calendar Section */}
         <View
           style={{
-            backgroundColor:"#5789a5",
+            backgroundColor:"#5879A5",
             borderRadius: 8,
             borderWidth: 1,
             borderColor: "#ccc",
@@ -126,7 +125,7 @@ export default function CalendarApp() {
           {/* Calendar Header */}
           <View
             style={{
-              backgroundColor: "#5789a5",
+              backgroundColor: "#5879A5",
               borderTopLeftRadius: 8,
               borderTopRightRadius: 8,
               padding: 8,
@@ -136,13 +135,13 @@ export default function CalendarApp() {
             }}
           >
             <TouchableOpacity onPress={() => handleMonthChange(-1)}>
-              <Feather name="arrow-left-circle" size={24} color="white" />
+              <Feather name="arrow-left-circle" size={30} color="white" />
             </TouchableOpacity>
             <Text style={{ color: "white", fontSize: 16, fontWeight: "600" }}>
               {months[currentMonth]} {currentYear}
             </Text>
             <TouchableOpacity onPress={() => handleMonthChange(1)}>
-              <Feather name="arrow-right-circle" size={24} color="white" />
+              <Feather name="arrow-right-circle" size={30} color="white" />
             </TouchableOpacity>
           </View>
 
@@ -235,7 +234,7 @@ export default function CalendarApp() {
                             >
                               <Text
                                 style={{
-                                  fontSize: 10,
+                                  fontSize: 16,
                                   textAlign: "flex-start",
                                   color: "#000",
                                   fontWeight: "bold",
@@ -250,7 +249,7 @@ export default function CalendarApp() {
                           )
                         )}
                         {medications.length > 3 && (
-                          <Text style={{ fontSize: 8, color: "blue" }}>
+                          <Text style={{ fontSize: 14, color: "#5879A5" }}>
                             +{medications.length - 3} more
                           </Text>
                         )}
@@ -264,7 +263,7 @@ export default function CalendarApp() {
         </View>
 
         {/* Date Details Modal */}
-        <Modal visible={modalVisible} transparent={true} animationType="slide">
+        <Modal visible={modalVisible} transparent={true} animationType="fade">
           <View
             style={{
               flex: 1,
@@ -324,7 +323,17 @@ export default function CalendarApp() {
                 )}
               </ScrollView>
 
-              <Button title="Close" onPress={() => setModalVisible(false)} />
+              <TouchableOpacity
+                onPress={() => setModalVisible(false)}
+                style={{
+                  backgroundColor: '#ccc',
+                  paddingVertical: 10,
+                  borderRadius: 5,
+                  alignItems: 'center',
+                }}
+              >
+                <Text style={{ color: '#000', fontSize: 16 }}>Close</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </Modal>

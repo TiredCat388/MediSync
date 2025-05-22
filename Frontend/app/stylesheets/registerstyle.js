@@ -1,8 +1,8 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions } from 'react-native';
 
-const { width } = Dimensions.get("window");
+const { width } = Dimensions.get('window');
 const isTablet = width > 900;
-const sidebarWidth = isTablet ? 200 : 70;
+const sidebarWidth = isTablet ? 200 : 70; 
 
 const styles = StyleSheet.create({
   container: {
@@ -23,20 +23,27 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     flexDirection: "row",
-    backgroundColor: "lightgrey",
+    backgroundColor: "#CCCCCC",
     padding: 40,
     borderRadius: 10,
     justifyContent: "space-between",
+    maxHeight: 580,
   },
   column: {
     flex: 1,
     paddingHorizontal: 10,
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 28,
     fontWeight: "bold",
     marginBottom: 15,
     marginTop: 10,
+  },
+  sectionsubTitle: {
+    fontSize: 25,
+    fontWeight: "bold",
+    marginBottom: 15,
+    marginTop: 50,
   },
   label: {
     fontSize: 18,
@@ -45,49 +52,38 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: "black",
-    backgroundColor: "white",
+    backgroundColor: "#F8F8F8",
     padding: 8,
     marginBottom: 10,
   },
   dobContainer: {
     flexDirection: "row",
     marginBottom: 10,
-    alignItems: "center",
-    width: 300,
-    justifyContent: "space-between", 
   },
   dobInput: {
     borderWidth: 1,
     borderColor: "black",
-    backgroundColor: "white",
+    backgroundColor: "#F8F8F8",
     padding: 8,
     width: 50,
     marginRight: 5,
-    flex: 1,
-    borderWidth: 1,
-    marginRight: 5,
-    fontSize: 16,
-    height: "100%",
+    textAlign: "center",
   },
   dobSelect: {
     borderWidth: 1,
-    backgroundColor: "white",
-    paddingHorizontal: 0,
-    width: "100%",
+    borderColor: "black",
+    backgroundColor: "#F8F8F8",
+    paddingHorizontal: 70,
+    width: 60,
     marginRight: 8,
     textAlign: "center",
     fontSize: 18,
     borderRadius: 8,
-    height: 40,
   },
   dobSelectContainer: {
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: "black",
-    borderRadius: 1,
-    fontSize: 16,
-    height: 36,
+    flexDirection: "row",
+    marginBottom: 10,
+    justifyContent: "space-between",
   },
   dobSelectLabel: {
     fontSize: 18,
@@ -96,10 +92,10 @@ const styles = StyleSheet.create({
   },
   dobSelectDropdown: {
     width: "100%",
-    backgroundColor: "#ffffff",
+    backgroundColor: "#F8F8F8",
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "#CCCCCC",
   },
   dobSelectOption: {
     paddingVertical: 5,
@@ -125,7 +121,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "white",
+    color: "#F8F8F8",
   },
   modalOverlay: {
     flex: 1,
@@ -136,7 +132,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     width: 300,
     padding: 20,
-    backgroundColor: "white",
+    backgroundColor: "#F8F8F8",
     borderRadius: 10,
   },
   modalTitle: {
@@ -160,15 +156,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   stayButton: {
-    backgroundColor: "#5879a5",
+    backgroundColor: "#5879A5",
   },
   leaveButton: {
-    backgroundColor: "#989898",
+    backgroundColor: "#999999",
   },
   modalButtonText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "white",
+    color: "#F8F8F8",
   },
   divider: {
     width: 2,
@@ -176,77 +172,6 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     marginHorizontal: 30,
     alignSelf: "stretch",
-  },
-  daysContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginVertical: 10,
-    gap: 8,
-  },
-
-  dayButton: {
-    paddingVertical: 6,
-    paddingHorizontal: 10,
-    borderRadius: 360,
-    backgroundColor: "#989898",
-  },
-
-  dayButtonSelected: {
-    backgroundColor: "#5879a5",
-  },
-
-  dayButtonText: {
-    fontSize: 14,
-    color: "#000",
-  },
-
-  dayButtonTextSelected: {
-    color: "black",
-    fontWeight: "bold",
-  },
-  timePickerContainer: {
-    flex: 1, // Each picker takes equal width
-    height: 36, // Consistent height
-  },
-  timePicker: {
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: "black",
-    borderRadius: 1,
-    fontSize: 16,
-    height: 36,
-  },
-  timePickerWeb: {
-    paddingVertical: 8,
-    paddingHorizontal: 8,
-    borderWidth: 1,
-    borderColor: "black",
-    borderRadius: 1,
-    fontSize: 16,
-    height: 36,
-  },
-  frequencyPickerContainer: {
-    flex: 1, // Each picker takes equal width
-    height: 36, // Consistent height
-  },
-  frequencyPicker: {
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: "black",
-    borderRadius: 1,
-    fontSize: 16,
-    height: 36,
-  },
-  frequencyPickerWeb: {
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: "black",
-    borderRadius: 1,
-    fontSize: 16,
-    height: 36,
   },
 });
 

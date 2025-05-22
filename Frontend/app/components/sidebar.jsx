@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Animated, TouchableOpacity, Modal, Text, View, Image } from 'react-native';
 import { FontAwesome, Feather } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useRouter, usePathname } from 'expo-router';
 import styles from './sidebarstyle';
 import { useNotification } from '../../notifcontext';
 
 const Sidebar = () => {
+  const pathname = usePathname();
+  const router = useRouter();
+
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const [sidebarWidth] = useState(new Animated.Value(70));
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
@@ -16,7 +19,19 @@ const Sidebar = () => {
   const [isDirectoryExpanded, setIsDirectoryExpanded] = useState(false);
   const { showNotification } = useNotification();
 
-  const router = useRouter();
+  const directoryPaths = ['/directory', '/archive', '/logs'];
+
+  useEffect(() => {
+    const inDirectory = directoryPaths.some((path) => pathname.startsWith(path));
+
+    if (inDirectory && isSidebarExpanded) {
+      setShowSubOptions(true);
+      setIsDirectoryExpanded(true);
+    } else {
+      setShowSubOptions(false);
+      setIsDirectoryExpanded(false);
+    }
+  }, [pathname, isSidebarExpanded]);
 
   const handleSidebarPress = (icon) => {
     if (icon === 'menu') {
@@ -30,12 +45,16 @@ const Sidebar = () => {
       const newColor = isSidebarExpanded ? 'gray' : 'white';
       setIconColor(newColor);
       setTextColor(newColor);
-      setShowSubOptions(false); // collapse sub-options when collapsing
+      if (isSidebarExpanded) {
+        setShowSubOptions(false);
+        setIsDirectoryExpanded(false);
+      }
     } else if (icon === 'file') {
       if (!isSidebarExpanded) {
         router.push('/directory');
       } else {
-        setShowSubOptions(!showSubOptions); // toggle sub-options
+        setShowSubOptions((prev) => !prev);
+        setIsDirectoryExpanded((prev) => !prev);
       }
     } else if (icon === 'calendar') {
       router.push('/calendar');
@@ -52,11 +71,6 @@ const Sidebar = () => {
     router.replace('/');
   };
 
-  const handleSubOptionPress = (path) => {
-    router.push(path);
-    setShowSubOptions(false); // optional: collapse after navigating
-  };
-
   return (
     <Animated.View style={[styles.sidebar, { width: sidebarWidth, backgroundColor: sidebarColor }]}>
       <View style={styles.sidebarContent}>
@@ -68,16 +82,13 @@ const Sidebar = () => {
 
           <TouchableOpacity
             onPress={() => {
-              setIsDirectoryExpanded(!isDirectoryExpanded);
               handleSidebarPress('file');
             }}
             style={[styles.iconLabelContainer, { width: '100%' }]}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <FontAwesome name="file-text-o" size={24} color={iconColor} />
-              {isSidebarExpanded && (
-                <Text style={[styles.iconLabel, { color: textColor }]}>Directory</Text>
-              )}
+              {isSidebarExpanded && <Text style={[styles.iconLabel, { color: textColor }]}>Directory</Text>}
             </View>
 
             {isSidebarExpanded && (
@@ -90,34 +101,53 @@ const Sidebar = () => {
             )}
           </TouchableOpacity>
 
-          {/* Sub-options under Directory */}
           {isSidebarExpanded && showSubOptions && (
             <View style={{ marginLeft: 30 }}>
               <View style={styles.subOptionContainer}>
-                <TouchableOpacity onPress={() => router.push('/directory')} style={styles.subOption}>
+                <TouchableOpacity
+                  onPress={() => router.push('/directory')}
+                  style={[styles.subOption, pathname === '/directory' && styles.activesubItem]}
+                >
                   <Text style={styles.subOptionText}>Patients</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => router.push('/archive')} style={styles.subOption}>
+
+                <TouchableOpacity
+                  onPress={() => router.push('/archive')}
+                  style={[styles.subOption, pathname === '/archive' && styles.activesubItem]}
+                >
                   <Text style={styles.subOptionText}>Archive</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => router.push('/logs')} style={styles.subOption}>
+
+                <TouchableOpacity
+                  onPress={() => router.push('/logs')}
+                  style={[styles.subOption, pathname === '/logs' && styles.activesubItem]}
+                >
                   <Text style={styles.subOptionText}>Logs</Text>
                 </TouchableOpacity>
               </View>
             </View>
           )}
 
-          <TouchableOpacity onPress={() => handleSidebarPress('calendar')} style={styles.iconLabelContainer}>
+          <TouchableOpacity
+            onPress={() => handleSidebarPress('calendar')}
+            style={[styles.iconLabelContainer, pathname === '/calendar' && styles.activeItem]}
+          >
             <FontAwesome name="calendar" size={24} color={iconColor} />
             {isSidebarExpanded && <Text style={[styles.iconLabel, { color: textColor }]}>Calendar</Text>}
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => handleSidebarPress('clock')} style={styles.iconLabelContainer}>
+          <TouchableOpacity
+            onPress={() => handleSidebarPress('clock')}
+            style={[styles.iconLabelContainer, pathname === '/clock' && styles.activeItem]}
+          >
             <Feather name="clock" size={24} color={iconColor} />
             {isSidebarExpanded && <Text style={[styles.iconLabel, { color: textColor }]}>Clock</Text>}
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => handleSidebarPress('settings')} style={styles.iconLabelContainer}>
+          <TouchableOpacity
+            onPress={() => handleSidebarPress('settings')}
+            style={[styles.iconLabelContainer, pathname === '/settings' && styles.activeItem]}
+          >
             <FontAwesome name="cog" size={27} color={iconColor} />
             {isSidebarExpanded && <Text style={[styles.iconLabel, { color: textColor }]}>Settings</Text>}
           </TouchableOpacity>
@@ -126,36 +156,16 @@ const Sidebar = () => {
             <Feather name="log-out" size={24} color={iconColor} />
             {isSidebarExpanded && <Text style={[styles.iconLabel, { color: textColor }]}>Logout</Text>}
           </TouchableOpacity>
-
-          {/*For testing the notification to see how it looks, delete when finalizing
-          <TouchableOpacity
-            onPress={() =>
-              showNotification({
-                scheduleId: 'A-129',
-                patient: 'John Smith',
-                medication: 'Amoxicillin',
-                dosage: '250mg',
-                room: 'Room 402',
-                quantity: '2 tablets',
-                notes: 'Take after meals',
-              })
-            }
-            style={styles.iconLabelContainer}
-          >
-            <Feather name="alert-circle" size={24} color={iconColor} />
-            {isSidebarExpanded && <Text style={[styles.iconLabel, { color: textColor }]}>Notif_Test</Text>}
-          </TouchableOpacity>
-          */}
-
         </View>
 
-        {/* Logo */}
         <View style={styles.logoContainer}>
           <Image
-            resizeMode = 'contain'
-            source={isSidebarExpanded
-              ? require('../../assets/images/medisync-logo.png')
-              : require('../../assets/images/medisync-logo-bw.png')}
+            resizeMode="contain"
+            source={
+              isSidebarExpanded
+                ? require('../../assets/images/medisync-logo.png')
+                : require('../../assets/images/medisync-logo-bw.png')
+            }
             style={styles.logo}
           />
           {isSidebarExpanded && <Text style={[styles.logoText, { color: textColor }]}>Medisync</Text>}

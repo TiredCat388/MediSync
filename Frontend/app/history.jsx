@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TouchableOpacity,
-  StyleSheet,
   ScrollView,
   Dimensions,
   TextInput,
@@ -13,7 +12,7 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import Sidebar from "./components/sidebar";
 import { Feather } from "@expo/vector-icons";
 import { Alert } from "react-native";
-import { styles } from "./historystyle";
+import { styles } from "./stylesheets/historystyle";
 import { useNavigation } from "@react-navigation/native";
 import Constants from 'expo-constants';
 
@@ -238,7 +237,7 @@ export default function PatientDetails() {
                         <TextInput
                           style={styles.searchInput}
                           placeholder="Search"
-                          placeholderTextColor="#888"
+                          placeholderTextColor="#999999"
                           value={searchQuery}
                           onChangeText={setSearchQuery}
                         />

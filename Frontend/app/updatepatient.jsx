@@ -9,7 +9,7 @@ import {
 import { useRouter, useLocalSearchParams } from "expo-router";
 import Sidebar from "./components/sidebar";
 import RNPickerSelect from "react-native-picker-select";
-import styles from "./updatepatientstyle";
+import styles from "./stylesheets/updatepatientstyle";
 import CustomAlert from "./components/alert";
 import Constants from 'expo-constants';
 

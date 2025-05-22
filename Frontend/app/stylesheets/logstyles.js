@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
   },
   sidebar: {
     width: isTablet ? 100 : 75,
-    backgroundColor: "#E0E0E0",
+    backgroundColor: "#CCCCCC",
     alignItems: "center",
     paddingVertical: 20,
   },
@@ -20,17 +20,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: isTablet ? 80 : 20,
     paddingTop: isTablet ? 60 : 30,
   },
-  title: {
-    fontSize: isTablet ? 40 : 24,
+  header: {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  },
+  headerText: {
+    fontSize: 30,
     fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "left",
   },
   listContainer: {
     flexGrow: 1,
   },
   card: {
-    backgroundColor: "#E0E0E0",
+    backgroundColor: "#CCCCCC",
     borderRadius: 18,
     padding: isTablet ? 20 : 15,
     flexDirection: "row",
@@ -56,7 +59,7 @@ const styles = StyleSheet.create({
     color: "#666",
   },
   button: {
-    backgroundColor: "#D9D9D9",
+    backgroundColor: "#CCCCCC",
     paddingVertical: isTablet ? 15 : 10,
     paddingHorizontal: isTablet ? 30 : 20,
     borderRadius: 8,
@@ -66,7 +69,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   backButton: {
-    backgroundColor: "#BDBDBD",
+    backgroundColor: "#CCCCCC",
     paddingVertical: 18,
     paddingHorizontal: isTablet ? 80 : 40,
     alignItems: "center",
@@ -103,7 +106,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   closeButton: {
-    backgroundColor: "#ccc",
+    backgroundColor: "#CCCCCC",
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 5,
@@ -129,15 +132,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   cancelButton: {
-    backgroundColor: "#ccc",
+    backgroundColor: "#CCCCCC",
   },
   logoutButton: {
-    backgroundColor: "#d9534f",
+    backgroundColor: "#D9534F",
   },
   modalButtonText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "white",
+    color: "#F8F8F8",
   },
   modalButtonContainer: {
     flexDirection: "row",
@@ -154,17 +157,17 @@ const styles = StyleSheet.create({
   },
   
   cancelButton: {
-    backgroundColor: "#ccc",
+    backgroundColor: "#CCCCCC",
   },
   
   logoutButton: {
-    backgroundColor: "#d9534f",
+    backgroundColor: "#D9534F",
   },
   
   modalButtonText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "white",
+    color: "#F8F8F8",
   },
   dateTimeContainer: {
     flexDirection: "row",

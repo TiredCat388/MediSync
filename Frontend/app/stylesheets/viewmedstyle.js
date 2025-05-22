@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     flexDirection: 'row',
-    backgroundColor: 'lightgrey',
+    backgroundColor: '#999999',
     padding: 40,
     borderRadius: 10,
     justifyContent: 'space-between',
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: 'black',
-    backgroundColor: 'white',
+    backgroundColor: '#F8F8F8',
     padding: 8,
     marginBottom: 10,
   },
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   dobInput: {
     borderWidth: 1,
     borderColor: 'black',
-    backgroundColor: 'white',
+    backgroundColor: '#F8F8F8',
     padding: 8,
     width: 50,
     marginRight: 5,
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   dobSelect: {
     borderWidth: 1,
     borderColor: 'black',
-    backgroundColor: 'white',
+    backgroundColor: '#F8F8F8',
     paddingHorizontal: 70,
     width: 60,
     marginRight: 8,
@@ -85,10 +85,10 @@ const styles = StyleSheet.create({
   },
   dobSelectDropdown: {
     width: '100%',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#F8F8F8',
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#CCCCCC',
   },
   dobSelectOption: {
     paddingVertical: 5, 
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: 'white',
+    color: '#F8F8F8',
   },
   modalOverlay: {
     flex: 1,
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     width: 300,
     padding: 20,
-    backgroundColor: "white",
+    backgroundColor: "#F8F8F8",
     borderRadius: 10,
   },
   modalTitle: {
@@ -149,15 +149,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   stayButton: {
-    backgroundColor: "#5879a5",
+    backgroundColor: "#5879A5",
   },
   leaveButton: {
-    backgroundColor: "#989898",
+    backgroundColor: "#999999",
   },
   modalButtonText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "white",
+    color: "#F8F8F8",
   },
   divider: {
     width: 2, 

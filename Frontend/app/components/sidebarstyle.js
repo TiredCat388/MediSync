@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     paddingTop: 30,
-    paddingLeft: 20, 
     flexDirection: 'column',
   },
   
@@ -41,6 +40,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 35,
+    paddingLeft: 20,
+  },
+
+  activeItem: {
+  backgroundColor: '#ffffff33', // translucent white
+  width: '100%',
+  padding: 10,
+  alignSelf: 'center',
   },
   
   iconLabel: {
@@ -112,18 +119,22 @@ const styles = StyleSheet.create({
     color: "white",
   },
   subOptionContainer: {
-    paddingLeft: 11,
+    paddingLeft: 10,
     marginTop: -20,
     marginBottom: 20,
   },
   subOption: {
-    marginBottom: 15,
+    padding: 15,
   },
   subOptionText: {
-    color: '#B8CBDB',
+    color: '#D3E8F9',
     fontSize: 18,
     fontWeight: '600',
-  }
+  },
+  activesubItem: {
+  backgroundColor: '#FFFFFF33',
+  alignSelf: 'center',
+  },
 });
 
 export default styles;

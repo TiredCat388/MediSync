@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import styles from "./loginstyles";
+import styles from "./stylesheets/loginstyles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constants from 'expo-constants';
 
@@ -116,7 +116,7 @@ const LoginScreen = () => {
                 onPress={() => setRole("nurse")}
                 activeOpacity={0.6}
               >
-                <FontAwesome5 name="user-nurse" size={28} color="white" />
+                <FontAwesome5 name="user-nurse" size={28} color="#F8F8F8" />
                 <Text style={styles.roleText}>Nurse Log-In</Text>
               </TouchableOpacity>
 
@@ -125,7 +125,7 @@ const LoginScreen = () => {
                 onPress={() => setRole("physician")}
                 activeOpacity={0.6}
               >
-                <FontAwesome5 name="user-md" size={28} color="white" />
+                <FontAwesome5 name="user-md" size={28} color="#F8F8F8" />
                 <Text style={styles.roleText}>Physician Log-In</Text>
               </TouchableOpacity>
             </View>

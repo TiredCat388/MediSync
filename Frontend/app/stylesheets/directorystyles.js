@@ -2,9 +2,7 @@ import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
     flexDirection: "row",
-    backgroundColor: "#f8f8f8",
   },
   content: {
     flex: 1,
@@ -39,7 +37,7 @@ export default StyleSheet.create({
     elevation: 2,
   },
   sortButton: {
-    backgroundColor: "#5c87b2",
+    backgroundColor: "#4E84D3",
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 10,
@@ -53,19 +51,19 @@ export default StyleSheet.create({
   },
   table: {
     marginTop: 20,
-    backgroundColor: "white",
+    backgroundColor: "#F8F8F8",
     borderRadius: 15,
     borderWidth: 1,
-    borderColor: "black",
+    borderColor: "#000000",
     overflow: "hidden",
     height: 500,
   },
   tableHeader: {
     flexDirection: "row",
-    backgroundColor: "white",
+    backgroundColor: "#F8F8F8",
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderColor: "black",
+    borderColor: "#000000",
   },
   tableHeaderCellID: {
     flex: 0.34,
@@ -82,7 +80,7 @@ export default StyleSheet.create({
     fontWeight: "bold",
   },
   newPatientButton: {
-    backgroundColor: "#5879a5",
+    backgroundColor: "#4E84D3",
     paddingVertical: 8,
     paddingHorizontal: 20,
     borderRadius: 8,
@@ -92,7 +90,7 @@ export default StyleSheet.create({
     marginTop: 40,
   },
   newPatientButtonText: {
-    color: "white",
+    color: "#F8F8F8",
     fontSize: 18,
     fontWeight: "bold",
   },
@@ -100,7 +98,7 @@ export default StyleSheet.create({
   row: {
     flexDirection: "row",
     borderBottomWidth: 1,
-    borderColor: "black",
+    borderColor: "#000000",
     minHeight: 35,
   },
   rowCellID: {
@@ -118,7 +116,7 @@ export default StyleSheet.create({
   },
   rowDivider: {
     width: 2,
-    backgroundColor: "black",
+    backgroundColor: "#000000",
     alignSelf: "stretch",
   },
   rowText: {

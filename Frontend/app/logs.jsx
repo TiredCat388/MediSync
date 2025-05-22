@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Dimensions, ScrollView, Modal } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import styles from "./logstyles";
+import styles from "./stylesheets/logstyles";
 import Sidebar from './components/sidebar';
 import Constants from 'expo-constants';
 
@@ -54,7 +54,9 @@ export default function LogsScreen() {
 
       {/* Main Content */}
       <View style={[styles.mainContent, { marginLeft: sidebarWidth }]}>
-        <Text style={styles.title}>Logs</Text>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Logs</Text>
+        </View>
         <ScrollView contentContainerStyle={styles.listContainer}>
           {logs.map((item, index) => (
             <View key={item.id || index} style={styles.card}>

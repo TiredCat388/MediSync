@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Modal, TextInput } from "react-native";
 import { useRouter } from "expo-router";
 import Sidebar from "./components/sidebar";
 import RNPickerSelect from "react-native-picker-select";
-import styles from "./registerstyle";
+import styles from "./stylesheets/registerstyle";
 import CustomAlert from "./components/alert"; // Import CustomAlert
 import { ScrollView } from "react-native-gesture-handler";
 import { GestureHandlerRootView } from "react-native-gesture-handler";

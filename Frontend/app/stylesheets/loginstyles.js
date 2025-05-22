@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   },
   upperHalf: {
     flex: 1.5,
-    backgroundColor: "#5879a5",
+    backgroundColor: "#5879A5",
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   },
   lowerHalf: {
     flex: 2,
-    backgroundColor: "white",
+    backgroundColor: "#F8F8F8",
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     width: circleSize,
     height: circleSize,
     borderRadius: circleSize / 2, // Always keeps it a perfect circle
-    backgroundColor: "white",
+    backgroundColor: "#F8F8F8",
     alignItems: "center",
     justifyContent: "center",
     marginTop: 70,
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#5879a5",
+    backgroundColor: "#5879A5",
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 15,
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     width: width * 0.45,
   },
   roleText: {
-    color: "white",
+    color: "#F8F8F8",
     fontSize: 18,
     fontWeight: "bold",
     marginLeft: 25,
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "#CCCCCC",
     padding: 10,
     marginTop: 5,
     borderRadius: 5,
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   cancelButton: {
-    backgroundColor: "#BDBDBD",
+    backgroundColor: "#CCCCCC",
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 8,
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   loginButton: {
-    backgroundColor: "#5879a5",
+    backgroundColor: "#5879A5",
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 8,
