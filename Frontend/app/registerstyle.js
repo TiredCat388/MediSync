@@ -22,13 +22,6 @@ const styles = StyleSheet.create({
     textAlign: 'left', 
   },
   formContainer: {
-<<<<<<< Updated upstream
-    flexDirection: 'row',
-    backgroundColor: 'lightgrey',
-    padding: 30,
-    borderRadius: 10,
-    justifyContent: 'space-between',
-=======
     flexDirection: "row",
     backgroundColor: "#b8cbdb",
     padding: 40,
@@ -40,7 +33,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 8,
     elevation: 8,
->>>>>>> Stashed changes
   },
   column: {
     flex: 1,

@@ -66,8 +66,10 @@ export default function CalendarApp() {
       <Sidebar setSidebarWidth={setSidebarWidth} />
 
       {/* Main Calendar Content */}
-        <ScrollView style={{ flex: 1, padding: 8, marginLeft: sidebarWidth }}>
-          <Text style={{ fontSize: 30, fontWeight: 'bold', margin: 8 }}>Calendar</Text>
+      <ScrollView style={{ flex: 1, padding: 8, marginLeft: sidebarWidth }}>
+        <Text style={{ fontSize: 30, fontWeight: "bold", margin: 8 }}>
+          Calendar
+        </Text>
 
       {/* Calendar Section */}
         <View style={{ 
