@@ -3,7 +3,6 @@ import { Animated, TouchableOpacity, Modal, Text, View, Image, Dimensions } from
 import { FontAwesome, Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import styles from './sidebarstyle';
-import { useNotification } from 'some-notification-library';
 
 const Sidebar = () => {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
@@ -14,9 +13,6 @@ const Sidebar = () => {
   const [textColor, setTextColor] = useState('white');
   const [showSubOptions, setShowSubOptions] = useState(false);
   const [isDirectoryExpanded, setIsDirectoryExpanded] = useState(false);
-  const { showNotification } = useNotification();
-  const [hoveredIcon, setHoveredIcon] = useState(null);
-
   const router = useRouter();
 
   const handleSidebarPress = (icon) => {
