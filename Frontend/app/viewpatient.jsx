@@ -13,7 +13,7 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import Sidebar from "./components/sidebar";
 import { Feather } from "@expo/vector-icons";
 import { Alert } from "react-native";
-import { styles } from "./viewpatientstyle.js";
+import { styles } from "./stylesheets/viewpatientstyle";
 
 const { width } = Dimensions.get("window");
 const isTablet = width > 900;
@@ -305,7 +305,7 @@ export default function PatientDetails() {
                         <TextInput
                           style={styles.searchInput}
                           placeholder="Search"
-                          placeholderTextColor="#888"
+                          placeholderTextColor="#999999"
                           value={searchQuery}
                           onChangeText={setSearchQuery}
                         />

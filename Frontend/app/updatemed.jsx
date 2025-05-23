@@ -11,7 +11,7 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import Sidebar from "./components/sidebar";
 import RNPickerSelect from "react-native-picker-select";
 import Autocomplete from "react-native-autocomplete-input";
-import styles from "./updatemedstyle";
+import styles from "./stylesheets/updatemedstyle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CustomAlert from "./components/alert";
 import Constants from 'expo-constants';

@@ -10,7 +10,7 @@ import Svg, { Line, Circle, Text as SvgText } from "react-native-svg";
 import Sidebar from "./components/sidebar";
 import { useNotification } from "../notifcontext";
 import { Checkbox } from "react-native-paper";
-import styles from "./clockstyle";
+import styles from "./stylesheets/clockstyle";
 import Constants from 'expo-constants';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
@@ -96,7 +96,7 @@ const AnalogClock = () => {
       if (isCurrentTime(alertTime)) {
         return { backgroundColor: "#FAFAFA" };
       }
-      return { backgroundColor: "#89A6C2" };
+      return { backgroundColor: "#B8CBDB" };
     }
     if (activeTab === "history") {
       return { backgroundColor: "#9a9a9a" };
@@ -106,7 +106,7 @@ const AnalogClock = () => {
 
   const getTextColor = (alertTime, status) => {
     if (status === "pending") return "#333";
-    return isCurrentTime(alertTime) ? "#333" : "#FAFAFA";
+    return isCurrentTime(alertTime) ? "#333" : "#FFFFFF";
   };
 
   const isCurrentTime = (alertTime) => {
@@ -177,7 +177,7 @@ const AnalogClock = () => {
         medicationNotes: "ABC",
         room_number: "103",
         quantity: "7",
-        Medication_Time: "21:39",
+        Medication_Time: "4:09",
       },
     ];
 
@@ -230,7 +230,7 @@ const AnalogClock = () => {
       if (
         activatedAt &&
         !checkedAlerts[id] &&
-        now - new Date(activatedAt) >= 5 * 60 * 1000 //adjust for testing
+        now - new Date(activatedAt) >= 1 * 60 * 1000 //adjust for testing
       ) {
         moveAlertToPending(id);
 
@@ -338,6 +338,9 @@ const AnalogClock = () => {
   return (
     <View style={styles.container}>
       <Sidebar />
+      <View style={[styles.header,  { marginLeft: sidebarWidth }]}>
+        <Text style={styles.headerText}>Alerts List</Text>
+      </View>
       <View style={[styles.mainRow, { marginLeft: sidebarWidth }]}>
         <View style={styles.alertPanel}>
           <View style={styles.tabHeader}>
@@ -393,7 +396,7 @@ const AnalogClock = () => {
                               ? () => toggleCheckbox(scheduleId)
                               : null
                           }
-                          color={checkedAlerts[scheduleId] ? "#333" : "#cccccc"}
+                          color={checkedAlerts[scheduleId] ? "#333" : "#CCCCCC"}
                           style={styles.checkboxPosition}
                         />
                         <View style={{ marginLeft: 10, flex: 1 }}>
@@ -415,9 +418,8 @@ const AnalogClock = () => {
                                   },
                                 ]}
                               >
-                                {alert.patient_first_name}
-                                {alert.patient_middle_name}
-                                {alert.patient_last_name}
+                                {alert.patient_first_name} {alert.patient_middle_name} {alert.patient_last_name}
+                                {/* pls keep like this para naay space in between the names */}
                               </Text>
                               <Text
                                 style={[
@@ -477,7 +479,7 @@ const AnalogClock = () => {
                                   <TouchableOpacity
                                     style={[
                                       styles.button,
-                                      { backgroundColor: "#5c87b2" },
+                                      { backgroundColor: "#5879A5" },
                                     ]}
                                     onPress={() => {
                                       if (activeTab === "upcoming") {

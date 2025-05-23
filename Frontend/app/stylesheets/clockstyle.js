@@ -5,21 +5,31 @@ const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      flexDirection: 'row',
+      flexDirection: 'column',
     },
     mainRow: {
       flexDirection: 'row',
       flex: 1,
-      padding: 20,
+      marginLeft: 70,
+      paddingTop: 0,
+      padding: 40,
     },
     alertPanel: {
       flex: 1,
       marginRight: 20,
-      backgroundColor: '#D9D9D9',
+      backgroundColor: '#CCCCCC',
       borderRadius: 10,
       padding: 10,
       minWidth: 350,
       maxWidth: width * 1.3,
+    },
+    header: {
+      padding: 40,
+      paddingBottom: 20,
+    },
+    headerText: {
+      fontSize: 30,
+      fontWeight: "bold",
     },
     tabHeader: {
       flexDirection: 'row',
@@ -38,16 +48,16 @@ const styles = StyleSheet.create({
       color: '#333',
     },
     activeTab: {
-      backgroundColor: '#5c87b2',
-      color: '#FFFFFF',
+      backgroundColor: '#5879A5',
+      color: '#F8F8F8',
     },
     inactiveTab: {
       backgroundColor: '#999999',
-      color: '#FFFFFF',
+      color: '#F8F8F8',
     },
     tabContent: {
       flex: 1,
-      backgroundColor: '#5c87b2',
+      backgroundColor: '#5879A5',
       borderBottomLeftRadius: 10,
       borderBottomRightRadius: 10,
       padding: 10,
@@ -127,7 +137,7 @@ const styles = StyleSheet.create({
     modalContainer: {
       width: 300,
       padding: 20,
-      backgroundColor: "white",
+      backgroundColor: "#F8F8F8",
       borderRadius: 10,
     },
     modalTitle: {
@@ -137,7 +147,7 @@ const styles = StyleSheet.create({
     },
     modalInput: {
       borderWidth: 1,
-      borderColor: '#ccc',
+      borderColor: '#CCCCCC',
       borderRadius: 5,
       height: 80,
       padding: 10,
@@ -157,7 +167,7 @@ const styles = StyleSheet.create({
       marginHorizontal: 5,
     },
     cancelButton: {
-      backgroundColor: "#5c87b2",
+      backgroundColor: "#5879A5",
     },
     confirmButton: {
       backgroundColor: "#999999",
@@ -165,7 +175,7 @@ const styles = StyleSheet.create({
     modalButton: {
       fontSize: 16,
       fontWeight: "bold",
-      color: "white",
+      color: "#F8F8F8",
     },
   });
 

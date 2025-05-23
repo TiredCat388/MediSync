@@ -96,14 +96,14 @@ export default function SettingsScreen() {
 
       {/* Main Settings Content */}
       <View style={[styles.container, { marginLeft: sidebarWidth }]}>
-        <Text style={styles.heading}>SETTINGS</Text>
+        <Text style={styles.heading}>Settings</Text>
 
         <Text style={styles.label}>Volume</Text>
         <View style={styles.volumeContainer}>
           <Ionicons
-            name="volume-low"
-            size={24}
-            color="#333"
+            name="volume-low-outline"
+            size={40}
+            color="#808080"
             style={{ marginRight: 10 }}
           />
           <View style={styles.sliderWrapper}>
@@ -114,16 +114,16 @@ export default function SettingsScreen() {
                 maximumValue={100}
                 value={volume}
                 onValueChange={handleVolumeChange}
-                minimumTrackTintColor="#3b5f8a"
+                minimumTrackTintColor="#5879A5"
                 maximumTrackTintColor="transparent"
-                thumbTintColor="#3b5f8a"
+                thumbTintColor="#5879A5"
               />
             </View>
           </View>
           <Ionicons
-            name="volume-high"
-            size={24}
-            color="#333"
+            name="volume-high-outline"
+            size={40}
+            color="#808080"
             style={{ marginLeft: 10 }}
           />
         </View>
@@ -149,7 +149,7 @@ export default function SettingsScreen() {
           <TouchableOpacity
             style={[
               styles.saveButton,
-              { backgroundColor: isSaving ? "#A0C4FF" : "#3b5f8a" },
+              { backgroundColor: isSaving ? "#A0C4FF" : "#4E84D3" },
             ]}
             onPress={saveSettings}
             disabled={isSaving} // Disable the button while saving
@@ -167,27 +167,25 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 10,
-    padding: 90,
+    padding: 40,
     backgroundColor: "#fff",
   },
   heading: {
-    fontSize: 40,
+    fontSize: 30,
     fontWeight: "bold",
     marginBottom: 50,
     color: "#000",
   },
   sliderWrapper: {
     borderWidth: 2,
-    borderColor: "#3b5f8a",
-    borderRadius: 12,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
+    borderColor: "#808080",
+    borderRadius: 15,
   },
   thumbStyle: {
     width: 20,
     height: 20,
     borderRadius: 15,
-    backgroundColor: "#3b5f8a",
+    backgroundColor: "#5879A5",
   },
   label: {
     fontSize: 25,
@@ -207,7 +205,7 @@ const styles = StyleSheet.create({
   slider: {
     flex: 1,
     width: 900,
-    height: 40,
+    height: 50,
     marginHorizontal: 10,
     borderRadius: 15,
     backgroundColor: "e0e0e0",
@@ -215,21 +213,23 @@ const styles = StyleSheet.create({
   pickerWrapper: {
     alignSelf: "left",
     width: 1000,
-    borderWidth: 1,
-    borderColor: "#3b5f8a",
-    borderRadius: 3,
+    borderWidth: 2,
+    borderColor: "#5879A5",
+    borderRadius: 12,
     overflow: "hidden",
   },
   picker: {
     height: 50,
+    fontSize: 16,
+    paddingLeft: 15,
+    borderWidth: 0,
     width: "100%",
     color: "#000",
   },
   trackBackground: {
     width: 900,
     height: 25,
-    borderRadius: 15,
-    backgroundColor: "#e0e0e0",
+    borderRadius: 12,
     justifyContent: "center",
   },
   saveButtonWrapper: {
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
   saveButton: {
     paddingVertical: 12,
     paddingHorizontal: 40,
-    borderRadius: 5,
+    borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
   },

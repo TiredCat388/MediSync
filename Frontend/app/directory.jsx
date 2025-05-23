@@ -10,7 +10,7 @@ import { useRouter } from "expo-router";
 import Sidebar from "./components/sidebar";
 import { useState, useEffect } from "react";
 import { Menu, Divider, Provider } from "react-native-paper";
-import styles from "./directorystyles";
+import styles from "./stylesheets/directorystyles";
 import Constants from 'expo-constants';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
