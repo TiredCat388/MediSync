@@ -1,32 +1,37 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions } from 'react-native';
 
-const { width } = Dimensions.get("window");
+const { width } = Dimensions.get('window');
 const isTablet = width > 900;
-const sidebarWidth = isTablet ? 200 : 70;
+const sidebarWidth = isTablet ? 200 : 70; 
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "row",
-    backgroundColor: "#f8f8f8",
+    flexDirection: 'row',
+    backgroundColor: '#f8f8f8', 
   },
   contentContainer: {
     flex: 1,
-    marginLeft: sidebarWidth,
-    padding: 40,
+    marginLeft: sidebarWidth, 
+    padding: 40, 
   },
   screenTitle: {
     fontSize: 25,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 10,
-    textAlign: "left",
+    textAlign: 'left', 
   },
   formContainer: {
     flexDirection: "row",
-    backgroundColor: "lightgrey",
+    backgroundColor: "#b8cbdb",
     padding: 40,
     borderRadius: 10,
     justifyContent: "space-between",
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 8,
   },
   column: {
     flex: 1,
@@ -34,9 +39,9 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 15,
-    marginTop: 10,
+    marginTop: 10, 
   },
   label: {
     fontSize: 18,
@@ -44,76 +49,77 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: "black",
-    backgroundColor: "white",
+    borderColor: 'black',
+    borderRadius: 10,
+    backgroundColor: 'white',
     padding: 8,
     marginBottom: 10,
+    fontSize: 16,
+    minHeight: 40, 
+    textAlignVertical: 'top',
   },
   dobContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginBottom: 10,
-    alignItems: "center",
-    width: 300,
-    justifyContent: "space-between", 
   },
   dobInput: {
     borderWidth: 1,
-    borderColor: "black",
-    backgroundColor: "white",
+    borderColor: 'black',
+    backgroundColor: 'white',
     padding: 8,
     width: 50,
     marginRight: 5,
-    flex: 1,
-    borderWidth: 1,
-    marginRight: 5,
-    fontSize: 16,
-    height: "100%",
+    textAlign: 'center',
   },
   dobSelect: {
     borderWidth: 1,
-    backgroundColor: "white",
-    paddingHorizontal: 0,
-    width: "100%",
+    borderColor: 'black',
+    backgroundColor: 'white',
+    paddingHorizontal: 70,
+    width: 60,
+    height: 40,
     marginRight: 8,
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 18,
     borderRadius: 8,
-    height: 40,
   },
+  dobSelectWeb: {
+    width: 'auto', 
+    minWidth: 80,
+    height: 50,
+    justifyContent: 'center', 
+    alignItems: 'center',
+  },  
   dobSelectContainer: {
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: "black",
-    borderRadius: 1,
-    fontSize: 16,
-    height: 36,
+    flexDirection: 'row',
+    marginBottom: 10,
+    justifyContent: 'space-between', 
   },
   dobSelectLabel: {
     fontSize: 18,
     marginBottom: 5,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   dobSelectDropdown: {
-    width: "100%",
-    backgroundColor: "#ffffff",
+    width: '100%',
+    backgroundColor: '#ffffff',
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: '#ccc',
   },
   dobSelectOption: {
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingVertical: 5, 
+    paddingHorizontal: 10, 
     fontSize: 18,
   },
   dobSelectOptionSelected: {
-    backgroundColor: "#4e84d3",
-    color: "#fff",
+    backgroundColor: '#4e84d3',
+    color: '#fff',
   },
   buttonContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 20,
-    justifyContent: "flex-end",
+    justifyContent: 'flex-end',
   },
   button: {
     width: 200,
@@ -125,7 +131,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "white",
+    color: 'white',
   },
   modalOverlay: {
     flex: 1,
@@ -171,82 +177,65 @@ const styles = StyleSheet.create({
     color: "white",
   },
   divider: {
-    width: 2,
-    backgroundColor: "gray",
-    marginVertical: 5,
+    width: 2, 
+    backgroundColor: "gray", 
+    marginVertical: 5, 
     marginHorizontal: 30,
-    alignSelf: "stretch",
+    alignSelf: 'stretch'
   },
-  daysContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginVertical: 10,
-    gap: 8,
+  autocompleteContainer: {
+    position: 'relative',
+    zIndex: 0,
+    marginBottom: 20,
   },
-
-  dayButton: {
-    paddingVertical: 6,
-    paddingHorizontal: 10,
-    borderRadius: 360,
-    backgroundColor: "#989898",
-  },
-
-  dayButtonSelected: {
-    backgroundColor: "#5879a5",
-  },
-
-  dayButtonText: {
-    fontSize: 14,
-    color: "#000",
-  },
-
-  dayButtonTextSelected: {
-    color: "black",
-    fontWeight: "bold",
-  },
-  timePickerContainer: {
-    flex: 1, // Each picker takes equal width
-    height: 36, // Consistent height
-  },
-  timePicker: {
-    paddingVertical: 8,
-    paddingHorizontal: 10,
+  autocompleteWrapper: {
     borderWidth: 1,
-    borderColor: "black",
-    borderRadius: 1,
+    borderColor: 'black',
+    backgroundColor: 'white',
+    padding: 8,
     fontSize: 16,
-    height: 36,
+    minHeight: 40,
   },
-  timePickerWeb: {
-    paddingVertical: 8,
-    paddingHorizontal: 8,
+  autocompleteInput: {
     borderWidth: 1,
-    borderColor: "black",
-    borderRadius: 1,
+    borderColor: 'black',
+    backgroundColor: 'white',
+    padding: 8,
     fontSize: 16,
-    height: 36,
+    minHeight: 40,
   },
-  frequencyPickerContainer: {
-    flex: 1, // Each picker takes equal width
-    height: 36, // Consistent height
+  autocompleteItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    backgroundColor: '#fff',
   },
-  frequencyPicker: {
-    paddingVertical: 8,
-    paddingHorizontal: 10,
+  autocompleteText: {
+    fontSize: 16,
+  },
+  checkboxContainer: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  marginVertical: 10,
+  zIndex: 1,
+  },
+  checkbox: {
+    width: 40,
+    height: 40,
     borderWidth: 1,
-    borderColor: "black",
-    borderRadius: 1,
-    fontSize: 16,
-    height: 36,
+    borderColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+    backgroundColor: 'white',
   },
-  frequencyPickerWeb: {
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: "black",
-    borderRadius: 1,
-    fontSize: 16,
-    height: 36,
+  checkboxSelected: {
+    backgroundColor: 'black',
+  },
+  checkmark: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
 

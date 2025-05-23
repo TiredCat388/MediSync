@@ -106,7 +106,7 @@ export default function CalendarApp() {
       <Sidebar setSidebarWidth={setSidebarWidth} />
 
       {/* Main Calendar Content */}
-      <View style={{ flex: 1, padding: 8, marginLeft: sidebarWidth }}>
+      <ScrollView style={{ flex: 1, padding: 8, marginLeft: sidebarWidth }}>
         <Text style={{ fontSize: 30, fontWeight: "bold", margin: 8 }}>
           Calendar
         </Text>
@@ -328,7 +328,7 @@ export default function CalendarApp() {
             </View>
           </View>
         </Modal>
-      </View>
+      </ScrollView>
     </View>
   );
 }

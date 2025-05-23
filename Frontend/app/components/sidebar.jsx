@@ -9,9 +9,9 @@ const Sidebar = () => {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const [sidebarWidth] = useState(new Animated.Value(70));
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
-  const [sidebarColor, setSidebarColor] = useState('#e0e0e0');
-  const [iconColor, setIconColor] = useState('gray');
-  const [textColor, setTextColor] = useState('gray');
+  const [sidebarColor, setSidebarColor] = useState('#5c87b2');
+  const [iconColor, setIconColor] = useState('white');
+  const [textColor, setTextColor] = useState('white');
   const [showSubOptions, setShowSubOptions] = useState(false);
   const [isDirectoryExpanded, setIsDirectoryExpanded] = useState(false);
   const { showNotification } = useNotification();
@@ -26,8 +26,8 @@ const Sidebar = () => {
         useNativeDriver: false,
       }).start();
       setIsSidebarExpanded(!isSidebarExpanded);
-      setSidebarColor(isSidebarExpanded ? '#e0e0e0' : '#5879a5');
-      const newColor = isSidebarExpanded ? 'gray' : 'white';
+      setSidebarColor(isSidebarExpanded ? '#5879a5' : '#5879a5');
+      const newColor = isSidebarExpanded ? 'white' : 'white';
       setIconColor(newColor);
       setTextColor(newColor);
       setShowSubOptions(false); // collapse sub-options when collapsing
@@ -82,7 +82,7 @@ const Sidebar = () => {
 
             {isSidebarExpanded && (
               <Feather
-                name={isDirectoryExpanded ? 'chevron-down' : 'chevron-left'}
+                name={isDirectoryExpanded ? 'chevron-down' : 'chevron-right'}
                 size={20}
                 color="white"
                 style={{ marginLeft: 35 }}
@@ -155,7 +155,7 @@ const Sidebar = () => {
             resizeMode = 'contain'
             source={isSidebarExpanded
               ? require('../../assets/images/medisync-logo.png')
-              : require('../../assets/images/medisync-logo-bw.png')}
+              : require('../../assets/images/medisync-logo.png')}
             style={styles.logo}
           />
           {isSidebarExpanded && <Text style={[styles.logoText, { color: textColor }]}>Medisync</Text>}

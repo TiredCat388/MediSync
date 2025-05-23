@@ -23,10 +23,15 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     flexDirection: 'row',
-    backgroundColor: 'lightgrey',
+    backgroundColor: '#b8cbdb',
     padding: 40,
     borderRadius: 10,
     justifyContent: 'space-between',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 8,
   },
   column: {
     flex: 1,

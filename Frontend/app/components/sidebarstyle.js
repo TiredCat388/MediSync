@@ -1,5 +1,6 @@
 import { StyleSheet, Dimensions } from "react-native";
 
+// Check if it's a tablet (screen width greater than 900px)
 const { width } = Dimensions.get("window");
 const isTablet = width > 900;
 
@@ -8,17 +9,17 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: "#e0e0e0",
     justifyContent: 'flex-start',
-    alignItems: 'flex-start',
+    alignItems: 'flex-start', // Keep items aligned to the start for consistency
     position: 'absolute',
     zIndex: 999,
     flexDirection: 'column',
-    width: isTablet ? 200 : 70, 
+    width: isTablet ? 200 : 70, // Adjust width based on tablet or not
   },
   sidebarContent: {
     flexDirection: 'row',
     flex: 1,
     justifyContent: 'flex-start',
-    alignItems: 'flex-start', 
+    alignItems: 'flex-start', // Keep items aligned to the start for consistency
   },
   textContainer: {
     flex: 1, 
@@ -31,7 +32,7 @@ const styles = StyleSheet.create({
   iconsContainer: {
     width: 'auto',  
     justifyContent: 'flex-start',
-    alignItems: 'flex-start',
+    alignItems: 'flex-start', // Align items to the left
     paddingTop: 30,
     paddingLeft: 20, 
     flexDirection: 'column',
@@ -55,12 +56,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     width: 'auto',
-    alignItems: 'center', 
+    alignItems: 'center', // Keep logo centered horizontally
     flexDirection: 'row',
   },
   logo: {
     width: 70,
     height: 70,
+    resizeMode: 'contain',
   },
   logoText: {
     fontSize: 20,
@@ -101,7 +103,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   cancelButton: {
-    backgroundColor: "grey",
+    backgroundColor: "#ccc",
   },
   logoutButton: {
     backgroundColor: "#d9534f",
@@ -112,15 +114,21 @@ const styles = StyleSheet.create({
     color: "white",
   },
   subOptionContainer: {
-    paddingLeft: 11,
     marginTop: -20,
     marginBottom: 20,
+    marginLeft: -45,
+    backgroundColor: 'white',
+    alignSelf: 'stretch',
+    paddingLeft: 65,
+    paddingRight: 65,
+    paddingVertical: 10,
+    opacity: 0.9,
   },
   subOption: {
     marginBottom: 15,
   },
   subOptionText: {
-    color: '#B8CBDB',
+    color: '#5c87b2',
     fontSize: 18,
     fontWeight: '600',
   }
