@@ -66,8 +66,15 @@ export default function CalendarApp() {
       <Sidebar setSidebarWidth={setSidebarWidth} />
 
       {/* Main Calendar Content */}
+<<<<<<< Updated upstream
       <View style={{ flex: 1, padding: 8, marginLeft: sidebarWidth }}>
         <Text style={{ fontSize: 30, fontWeight: 'bold', margin: 8 }}>Calendar</Text>
+=======
+      <ScrollView style={{ flex: 1, padding: 8, marginLeft: sidebarWidth }}>
+        <Text style={{ fontSize: 30, fontWeight: "bold", margin: 8 }}>
+          Calendar
+        </Text>
+>>>>>>> Stashed changes
 
     {/* Calendar Section */}
     <View style={{ 
@@ -135,7 +142,7 @@ export default function CalendarApp() {
             </View>
           </View>
         </Modal>
-      </View>
+      </ScrollView>
     </View>
   </ScrollView>
   );

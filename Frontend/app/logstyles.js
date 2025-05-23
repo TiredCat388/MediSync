@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   card: {
-    backgroundColor: "#E0E0E0",
+    backgroundColor: "#b8cbdb",
     borderRadius: 18,
     padding: isTablet ? 20 : 15,
     flexDirection: "row",
@@ -38,6 +38,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 25,
     width: "100%",
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 8,
   },
   cardContent: {
     flex: 1,

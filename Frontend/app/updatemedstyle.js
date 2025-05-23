@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     marginLeft: sidebarWidth, 
-    padding: 30, 
+    padding: 40,
   },
   screenTitle: {
     fontSize: 25,
@@ -22,25 +22,16 @@ const styles = StyleSheet.create({
     textAlign: 'left', 
   },
   formContainer: {
-<<<<<<< Updated upstream
     flexDirection: 'row',
-    backgroundColor: 'lightgrey',
-    padding: 30,
-    borderRadius: 10,
-    justifyContent: 'space-between',
-=======
-    flexDirection: "row",
-    backgroundColor: "#b8cbdb",
+    backgroundColor: '#b8cbdb',
     padding: 40,
     borderRadius: 10,
-    justifyContent: "space-between",
-    maxHeight: 580,
-    shadowColor: "#000",
+    justifyContent: 'space-between',
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.15,
     shadowRadius: 8,
     elevation: 8,
->>>>>>> Stashed changes
   },
   column: {
     flex: 1,
@@ -58,7 +49,6 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderRadius: 10,
     borderColor: 'black',
     backgroundColor: 'white',
     padding: 8,
@@ -70,7 +60,6 @@ const styles = StyleSheet.create({
   },
   dobInput: {
     borderWidth: 1,
-    borderRadius: 10,
     borderColor: 'black',
     backgroundColor: 'white',
     padding: 8,
@@ -181,94 +170,6 @@ const styles = StyleSheet.create({
     marginVertical: 5, 
     marginHorizontal: 30,
     alignSelf: 'stretch'
-  },
-  heightRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  heightInputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginLeft: 0, 
-  },
-  heightInput: {
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: "black",
-    backgroundColor: "white",
-    padding: 8,
-    width: 100,
-    textAlign: "center",
-  },
-  unitLabel: {
-    marginLeft: 5,
-    fontSize: 16,
-    color: "black",
-  },
-  ageInput: {
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: "black",
-    backgroundColor: "white",
-    padding: 8,
-    marginBottom: 5,
-    width: 50, 
-    textAlign: "left", 
-  },
-  weightRow: {
-  flexDirection: "row",
-  alignItems: "center",
-  marginBottom: 10,
-  },
-  weightInputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  weightInput: {
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: "black",
-    backgroundColor: "white",
-    padding: 8,
-    width: 100, 
-    textAlign: "center",
-  },
-  unitLabel: {
-    marginLeft: 5,
-    fontSize: 16,
-    color: "black",
-  },
-  inlineContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    marginBottom: 10,
-  },
-  inlineItem: {
-    flex: 1,
-    marginHorizontal: 0, 
-  },
-  chiefComplaintInput: {
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: "black",
-    backgroundColor: "white",
-    padding: 10,
-    marginBottom: 10,
-    height: 100, 
-    textAlignVertical: "top", 
-  },
-
-  diagnosisInput: {
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: "black",
-    backgroundColor: "white",
-    padding: 10,
-    marginBottom: 10,
-    height: 100, 
-    textAlignVertical: "top", 
   },
 });
 

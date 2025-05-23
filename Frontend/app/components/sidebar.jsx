@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Animated, TouchableOpacity, Modal, Text, View, Image } from 'react-native';
+import { Animated, TouchableOpacity, Modal, Text, View, Image, Dimensions } from 'react-native';
 import { FontAwesome, Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import styles from './sidebarstyle';
@@ -8,9 +8,19 @@ const Sidebar = () => {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const [sidebarWidth] = useState(new Animated.Value(70));
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
+<<<<<<< Updated upstream
   const [sidebarColor, setSidebarColor] = useState('#e0e0e0');
   const [iconColor, setIconColor] = useState('gray'); 
   const [textColor, setTextColor] = useState('gray');
+=======
+  const [sidebarColor, setSidebarColor] = useState('#5c87b2');
+  const [iconColor, setIconColor] = useState('white');
+  const [textColor, setTextColor] = useState('white');
+  const [showSubOptions, setShowSubOptions] = useState(false);
+  const [isDirectoryExpanded, setIsDirectoryExpanded] = useState(false);
+  const { showNotification } = useNotification();
+  const [hoveredIcon, setHoveredIcon] = useState(null);
+>>>>>>> Stashed changes
 
   const router = useRouter();
 
@@ -22,8 +32,13 @@ const Sidebar = () => {
         useNativeDriver: false,
       }).start();
       setIsSidebarExpanded(!isSidebarExpanded);
+<<<<<<< Updated upstream
       setSidebarColor(isSidebarExpanded ? '#e0e0e0' : '#5879a5');
       const newColor = isSidebarExpanded ? 'gray' : 'white'; 
+=======
+      setSidebarColor(isSidebarExpanded ? '#5c87b2' : '#5c87b2');
+      const newColor = isSidebarExpanded ? 'white' : 'white';
+>>>>>>> Stashed changes
       setIconColor(newColor);
       setTextColor(newColor); 
 
@@ -45,8 +60,12 @@ const Sidebar = () => {
   };
 
   return (
+<<<<<<< Updated upstream
     <Animated.View style={[styles.sidebar, { width: sidebarWidth, backgroundColor: sidebarColor }]}>
       {/* Sidebar Container */}
+=======
+    <Animated.View style={[styles.sidebar, { width: sidebarWidth, backgroundColor: sidebarColor, zIndex: 999 }]}>
+>>>>>>> Stashed changes
       <View style={styles.sidebarContent}>
         {/* Icons Container (Fixed Width) */}
         <View style={styles.iconsContainer}>
@@ -55,9 +74,34 @@ const Sidebar = () => {
             {isSidebarExpanded && <Text style={[styles.iconLabel, { color: textColor }]}>Menu</Text>}
           </TouchableOpacity>
 
+<<<<<<< Updated upstream
           <TouchableOpacity onPress={() => handleSidebarPress('file')} style={styles.iconLabelContainer}>
             <FontAwesome name="file-text-o" size={24} color={iconColor} />
             {isSidebarExpanded && <Text style={[styles.iconLabel, { color: textColor }]}>Directory</Text>}
+=======
+          <TouchableOpacity
+            onPress={() => {
+              setIsDirectoryExpanded(!isDirectoryExpanded);
+              handleSidebarPress('file');
+            }}
+            style={[styles.iconLabelContainer, { width: '100%' }]}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <FontAwesome name="file-text-o" size={24} color={iconColor} />
+              {isSidebarExpanded && (
+                <Text style={[styles.iconLabel, { color: textColor }]}>Directory</Text>
+              )}
+            </View>
+
+            {isSidebarExpanded && (
+              <Feather
+                name={isDirectoryExpanded ? 'chevron-down' : 'chevron-right'}
+                size={20}
+                color="white"
+                style={{ marginLeft: 35 }}
+              />
+            )}
+>>>>>>> Stashed changes
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => handleSidebarPress('calendar')} style={styles.iconLabelContainer}>
@@ -85,8 +129,13 @@ const Sidebar = () => {
         <View style={styles.logoContainer}>
           <Image
             source={isSidebarExpanded
+<<<<<<< Updated upstream
               ? require('../../assets/images/medisync-logo.png')  //new image when expanded
               : require('../../assets/images/medisync-logo-bw.png')}  //origina image when collapsed
+=======
+              ? require('../../assets/images/medisync-logo.png')
+              : require('../../assets/images/medisync-logo.png')}
+>>>>>>> Stashed changes
             style={styles.logo}
           />
           {isSidebarExpanded && (

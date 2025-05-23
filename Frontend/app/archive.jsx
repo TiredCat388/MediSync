@@ -87,6 +87,171 @@ export default function ArchiveScreen() {
               <Text style={styles.closeButtonText}>Cancel</Text>
             </TouchableOpacity>
           </View>
+<<<<<<< Updated upstream
+=======
+
+          {/* Table with ScrollView */}
+          <View
+            style={{
+              marginTop: 20,
+              backgroundColor: "white",
+              borderRadius: 15,
+              borderWidth: 1,
+              borderColor: "black",
+              overflow: "hidden",
+              maxHeight: 560, // Added maxHeight for table scroll
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.25,
+              shadowRadius: 8,
+              elevation: 8,
+            }}
+          >
+            {/* Table Header */}
+            <View
+              style={{
+                flexDirection: "row",
+                backgroundColor: "white",
+                paddingVertical: 10,
+                borderBottomWidth: 1,
+                borderColor: "black",
+              }}
+            >
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                  Patient ID
+                </Text>
+              </View>
+              <View
+                style={{
+                  flex: 2,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                  Patient Name
+                </Text>
+              </View>
+              <View
+                style={{
+                  flex: 2,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                  Archived Date
+                </Text>
+              </View>
+              <View style={{ width: 50 }} />{" "}
+              {/* Empty view for the removed button space */}
+            </View>
+
+            {/* ScrollView for Table Rows */}
+            <ScrollView>
+              <FlatList
+                data={displayedPatients}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item, index }) => (
+                  <TouchableOpacity
+                    disabled={!item.patient_number}
+                    onPress={() => {
+                      if (item.patient_number) {
+                        router.push(
+                          `/history?patient_number=${item.patient_number}`
+                        );
+                      }
+                    }}
+                    style={{
+                      flexDirection: "row",
+                      backgroundColor: item.patient_number
+                        ? "white"
+                        : "lightgrey",
+                      borderBottomWidth: 1,
+                      borderColor: "black",
+                      minHeight: 35,
+                    }}
+                  >
+                    {/* Patient ID */}
+                    <View
+                      style={{
+                        flex: 1,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRightWidth: 1,
+                        borderColor: "black",
+                        paddingHorizontal: 5,
+                      }}
+                    >
+                      <Text style={{ fontSize: 15 }}>
+                        {item.patient_number || ""}
+                      </Text>
+                    </View>
+
+                    {/* Patient Name */}
+                    <View
+                      style={{
+                        flex: 2,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRightWidth: 1,
+                        borderColor: "black",
+                        paddingHorizontal: 5,
+                      }}
+                    >
+                      <Text style={{ fontSize: 15, textAlign: "center" }}>
+                        {item.first_name && item.last_name
+                          ? formatName(
+                              item.first_name,
+                              item.middle_name,
+                              item.last_name
+                            )
+                          : ""}
+                      </Text>
+                    </View>
+
+                    {/* Archived Date */}
+                    <View
+                      style={{
+                        flex: 2,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderColor: "black",
+                        paddingHorizontal: 5,
+                      }}
+                    >
+                      <Text style={{ fontSize: 15 }}>
+                        {item.date_archived
+                          ? new Date(item.date_archived).toLocaleString(
+                              "en-PH",
+                              {
+                                timeZone: "Asia/Manila",
+                              }
+                            )
+                          : ""}
+                      </Text>
+                    </View>
+
+                    <View
+                      style={{
+                        width: 50,
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    />
+                  </TouchableOpacity>
+                )}
+              />
+            </ScrollView>
+          </View>
+>>>>>>> Stashed changes
         </View>
       </Modal>
     </View>

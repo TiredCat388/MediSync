@@ -113,6 +113,28 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "white",
   },
+<<<<<<< Updated upstream
+=======
+  subOptionContainer: {
+    marginTop: -20,
+    marginBottom: 20,
+    marginLeft: -45,
+    backgroundColor: 'white',
+    alignSelf: 'stretch',
+    paddingLeft: 65,
+    paddingRight: 65,
+    paddingVertical: 10,
+    opacity: 0.9,
+  },
+  subOption: {
+    marginBottom: 15,
+  },
+  subOptionText: {
+    color: '#5c87b2',
+    fontSize: 18,
+    fontWeight: '600',
+  }
+>>>>>>> Stashed changes
 });
 
 export default styles;
