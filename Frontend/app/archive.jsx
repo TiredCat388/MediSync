@@ -87,8 +87,6 @@ export default function ArchiveScreen() {
               <Text style={styles.closeButtonText}>Cancel</Text>
             </TouchableOpacity>
           </View>
-<<<<<<< Updated upstream
-=======
 
           {/* Table with ScrollView */}
           <View
@@ -251,7 +249,6 @@ export default function ArchiveScreen() {
               />
             </ScrollView>
           </View>
->>>>>>> Stashed changes
         </View>
       </Modal>
     </View>
