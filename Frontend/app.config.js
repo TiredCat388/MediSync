@@ -33,7 +33,7 @@ module.exports = {
       [
         "expo-splash-screen",
         {
-          image: "./assets/images/splash-icon.png",
+          image: "./assets/images/medisync-logo-bw.png",
           imageWidth: 200,
           resizeMode: "contain",
           backgroundColor: "#ffffff",

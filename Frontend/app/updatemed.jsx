@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   Modal,
   TextInput,
-  FlatList,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import Sidebar from "./components/sidebar";
