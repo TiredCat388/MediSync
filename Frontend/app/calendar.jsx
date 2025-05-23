@@ -66,29 +66,23 @@ export default function CalendarApp() {
       <Sidebar setSidebarWidth={setSidebarWidth} />
 
       {/* Main Calendar Content */}
-<<<<<<< Updated upstream
-      <View style={{ flex: 1, padding: 8, marginLeft: sidebarWidth }}>
-        <Text style={{ fontSize: 30, fontWeight: 'bold', margin: 8 }}>Calendar</Text>
-=======
-      <ScrollView style={{ flex: 1, padding: 8, marginLeft: sidebarWidth }}>
-        <Text style={{ fontSize: 30, fontWeight: "bold", margin: 8 }}>
-          Calendar
-        </Text>
->>>>>>> Stashed changes
+        <ScrollView style={{ flex: 1, padding: 8, marginLeft: sidebarWidth }}>
+          <Text style={{ fontSize: 30, fontWeight: 'bold', margin: 8 }}>Calendar</Text>
 
-    {/* Calendar Section */}
-    <View style={{ 
-      backgroundColor: '#3b82f6', 
-      borderRadius: 8, 
-      borderWidth: 1, 
-      borderColor: '#ccc', 
-      padding: 8, 
-      margin: 8, 
-      shadowColor: "#000",
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 4,
-    }}>
+      {/* Calendar Section */}
+        <View style={{ 
+          backgroundColor: '#3b82f6', 
+          borderRadius: 8, 
+          borderWidth: 1, 
+          borderColor: '#ccc', 
+          padding: 8, 
+          margin: 8, 
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 4,
+        }}>
+          
       {/* Calendar Header */}
       <View style={{ 
         backgroundColor: '#3b82f6', 
