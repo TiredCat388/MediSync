@@ -35,28 +35,25 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     flexDirection: 'column',
   },
-  
   iconLabelContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 35,
+    marginBottom: 30,
     paddingLeft: 20,
   },
-
+  iconLabel: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'gray',
+    opacity: 1,
+    paddingLeft: 15,
+    paddingRight: 15,
+  },
   activeItem: {
   backgroundColor: '#ffffff33', // translucent white
   width: '100%',
   padding: 10,
   alignSelf: 'center',
-  },
-  
-  iconLabel: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: 'gray',
-    marginLeft: 10,
-    opacity: 1,
-    paddingLeft: 10,
   },
   logoContainer: {
     position: 'absolute',
@@ -119,12 +116,17 @@ const styles = StyleSheet.create({
     color: "white",
   },
   subOptionContainer: {
-    paddingLeft: 10,
     marginTop: -20,
-    marginBottom: 20,
+    marginLeft: 20,
+    marginBottom: 10,
+    width: "100%",
   },
   subOption: {
-    padding: 15,
+    paddingVertical: 8,
+    marginBottom: 5,
+    paddingLeft: 15,
+    paddingRight: 70,
+    width: '100%',
   },
   subOptionText: {
     color: '#D3E8F9',
@@ -133,7 +135,7 @@ const styles = StyleSheet.create({
   },
   activesubItem: {
   backgroundColor: '#FFFFFF33',
-  alignSelf: 'center',
+  width: "100%",
   },
 });
 

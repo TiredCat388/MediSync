@@ -15,7 +15,12 @@ import Constants from 'expo-constants';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
-const TESTING_PATIENT = { id: "0123456", name: "TESTING PURPOSES ONLY" };
+const TESTING_PATIENT = {
+  patient_number: "0123456",
+  first_name: "TESTING",
+  middle_name: "ABC",
+  last_name: "PURPOSES ONLY",
+};
 
 export default function PatientsDirectory() {
   const router = useRouter();

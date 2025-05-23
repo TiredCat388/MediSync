@@ -4,7 +4,10 @@ const { width } = Dimensions.get("window");
 const isTablet = width > 900;
 
 export const styles = StyleSheet.create({
-  container: { flex: 1, flexDirection: "row", backgroundColor: "#f0f0f0" },
+  container: {
+    flex: 1, 
+    flexDirection: "row", 
+    backgroundColor: "#f0f0f0" },
   mainContent: { flex: 1, padding: 20 },
   boldLabel: { fontWeight: "bold", fontSize: 16, marginTop: 10 },
   headerButtons: {
@@ -13,13 +16,13 @@ export const styles = StyleSheet.create({
     marginBottom: 10,
   },
   backButton: {
-    backgroundColor: "#CCCCCC",
+    backgroundColor: "#808080",
     padding: 10,
     borderRadius: 5,
     marginRight: 10,
   },
   UpdateButton: {
-    backgroundColor: "#5879A5",
+    backgroundColor: "#4E84D3",
     padding: 10,
     borderRadius: 5,
     marginRight: 10,
@@ -71,9 +74,14 @@ export const styles = StyleSheet.create({
   },
   buttonText: {
     fontWeight: "bold",
+    paddingHorizontal: 10, 
     color: "#F8F8F8",
   },
-  deactbuttonText: { fontWeight: "bold", color: "#F8F8F8" },
+  deactbuttonText: { 
+    fontWeight: "bold",
+    paddingHorizontal: 10, 
+    color: "#F8F8F8" 
+  },
   tableContainer: {
     marginTop: 10,
     borderWidth: 1,
@@ -83,27 +91,37 @@ export const styles = StyleSheet.create({
     overflow: "hidden",
   },
   tableHeader: {
+    fontSize: 16,
     backgroundColor: "#F8F8F8",
     flexDirection: "row",
     alignItems: "center",
   },
-  row: { borderBottomWidth: 2, borderColor: "#CCCCCC" },
-  buttonWrapper: { alignItems: "flex-end", marginTop: 10 },
+  row: { 
+    borderBottomWidth: 2, 
+    borderColor: "#CCCCCC" 
+  },
+  buttonWrapper: { 
+    alignItems: "flex-end", 
+    marginTop: 10 
+  },
   addMedicationButton: {
-    backgroundColor: "#5879A5",
+    backgroundColor: "#4E84D3",
     paddingHorizontal: 10,
-    borderRadius: 10,
+    borderRadius: 7,
+  },
+  searchBarColumn:{
+    paddingVertical: 21,
   },
   searchInput: {
     backgroundColor: "#fff",
     borderWidth: 1,
     borderColor: "#999999",
     borderRadius: 5,
-    paddingVertical: 4,
+    paddingVertical: 5,
     paddingHorizontal: 10,
-    fontSize: 14,
+    fontSize: 16,
     width: 140,
-    height: 24.5,
+    height: 25,
   },
 
   columnId: {

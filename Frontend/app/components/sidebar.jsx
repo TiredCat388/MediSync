@@ -130,7 +130,7 @@ const Sidebar = () => {
 
           <TouchableOpacity
             onPress={() => handleSidebarPress('calendar')}
-            style={[styles.iconLabelContainer, pathname === '/calendar' && styles.activeItem]}
+            style={[styles.iconLabelContainer, pathname === '/calendar' && isSidebarExpanded  && styles.activeItem]}
           >
             <FontAwesome name="calendar" size={24} color={iconColor} />
             {isSidebarExpanded && <Text style={[styles.iconLabel, { color: textColor }]}>Calendar</Text>}
@@ -138,7 +138,7 @@ const Sidebar = () => {
 
           <TouchableOpacity
             onPress={() => handleSidebarPress('clock')}
-            style={[styles.iconLabelContainer, pathname === '/clock' && styles.activeItem]}
+            style={[styles.iconLabelContainer, pathname === '/clock' && isSidebarExpanded && styles.activeItem]}
           >
             <Feather name="clock" size={24} color={iconColor} />
             {isSidebarExpanded && <Text style={[styles.iconLabel, { color: textColor }]}>Clock</Text>}
@@ -146,7 +146,7 @@ const Sidebar = () => {
 
           <TouchableOpacity
             onPress={() => handleSidebarPress('settings')}
-            style={[styles.iconLabelContainer, pathname === '/settings' && styles.activeItem]}
+            style={[styles.iconLabelContainer, pathname === '/settings' && isSidebarExpanded && styles.activeItem]}
           >
             <FontAwesome name="cog" size={27} color={iconColor} />
             {isSidebarExpanded && <Text style={[styles.iconLabel, { color: textColor }]}>Settings</Text>}

@@ -1,36 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   Text,
   ScrollView,
-  TextInput,
   TouchableOpacity,
+  TextInput,
+  Modal,
+  Button,
 } from "react-native";
-import Svg, { Line, Circle, Text as SvgText } from "react-native-svg";
 import Sidebar from "./components/sidebar";
-import { useNotification } from "../notifcontext";
 import { Checkbox } from "react-native-paper";
 import styles from "./stylesheets/clockstyle";
-import Constants from 'expo-constants';
+import Constants from "expo-constants";
+import Clock from "./components/analogclock";
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
 const AnalogClock = () => {
   const sidebarWidth = 70;
+  const upcomingRef = useRef([]);
   const [time, setTime] = useState(new Date());
   const [upcomingAlerts, setUpcomingAlerts] = useState([]);
   const [pendingAlerts, setPendingAlerts] = useState([]);
   const [historyAlerts, setHistoryAlerts] = useState([]);
-  const [timeLeftUpdates, setTimeLeftUpdates] = useState(new Date());
   const [activeTab, setActiveTab] = useState("upcoming");
   const [expandedAlerts, setExpandedAlerts] = useState({});
   const [checkedAlerts, setCheckedAlerts] = useState({});
-  const { showNotification } = useNotification();
   const [isCancelModalVisible, setIsCancelModalVisible] = useState(false);
   const [cancelReason, setCancelReason] = useState("");
   const [selectedCancelId, setSelectedCancelId] = useState(null);
-  const upcomingRef = React.useRef([]);
-  const [activationTimes, setActivationTimes] = useState({});
 
   const toggleExpand = (id) => {
     setExpandedAlerts((prev) => ({
@@ -39,56 +37,21 @@ const AnalogClock = () => {
     }));
   };
 
-  const toggleCheckbox = (id) => {
-    const updatedStatus = checkedAlerts[id] ? "pending" : "administered";
-
+  const handleAdministerPress = (scheduleId) => {
+    setUpcomingAlerts((prev) =>
+      prev.filter((alert) => alert.schedule_id !== scheduleId)
+    );
+    setHistoryAlerts((prev) => [
+      ...prev,
+      {
+        ...upcomingAlerts.find((a) => a.schedule_id === scheduleId),
+        status: "administered",
+      },
+    ]);
     setCheckedAlerts((prev) => ({
       ...prev,
-      [id]: !prev[id],
+      [scheduleId]: true,
     }));
-  };
-
-  const handleAdministeredPress = (id) => {
-    const alert = upcomingAlerts.find((a) => a.schedule_id === id);
-    if (!alert) return;
-
-    setUpcomingAlerts((prev) => prev.filter((a) => a.schedule_id !== id));
-    setHistoryAlerts((prev) => [...prev, { ...alert, status: "administered" }]);
-    setCheckedAlerts((prev) => ({
-      ...prev,
-      [id]: true,
-    }));
-  };
-
-  const handlePendingAdministered = (id) => {
-    const alert = pendingAlerts.find((a) => a.schedule_id === id);
-
-    if (alert) {
-      setPendingAlerts((prev) => prev.filter((a) => a.schedule_id !== id));
-      setHistoryAlerts((prev) => [
-        ...prev,
-        { ...alert, status: "administered" },
-      ]);
-      setCheckedAlerts((prev) => ({
-        ...prev,
-        [id]: true,
-      }));
-    }
-  };
-
-  const moveAlertToPending = (id) => {
-    const alert = upcomingAlerts.find((a) => a.schedule_id === id);
-    if (!alert) return;
-
-    const updatedAlert = { ...alert, status: "pending" };
-    setUpcomingAlerts((prev) => prev.filter((a) => a.schedule_id !== id));
-    setPendingAlerts((prev) => [...prev, updatedAlert]);
-  };
-
-  const moveAlertToHistory = (id) => {
-    const alert = pendingAlerts.find((a) => a.schedule_id === id);
-    setPendingAlerts((prev) => prev.filter((a) => a.schedule_id !== id));
-    setHistoryAlerts((prev) => [...prev, alert]);
   };
 
   const getCardStyle = (alertTime) => {
@@ -104,15 +67,9 @@ const AnalogClock = () => {
     return { backgroundColor: "#FAFAFA" };
   };
 
-  const getTextColor = (alertTime, status) => {
-    if (status === "pending") return "#333";
-    return isCurrentTime(alertTime) ? "#333" : "#FFFFFF";
-  };
-
   const isCurrentTime = (alertTime) => {
     const now = new Date();
     const [alertHours, alertMinutes] = alertTime.split(":").map(Number);
-
     return now.getHours() === alertHours && now.getMinutes() === alertMinutes;
   };
 
@@ -121,11 +78,7 @@ const AnalogClock = () => {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => setTimeLeftUpdates(new Date()), 60000); // Update every minute
-    return () => clearInterval(interval);
-  }, []);
-
+  // Fetch alerts once (can keep mock fallback)
   useEffect(() => {
     const fetchAlerts = async () => {
       try {
@@ -138,7 +91,6 @@ const AnalogClock = () => {
         if (Array.isArray(data) && data.length > 0) {
           setUpcomingAlerts(data);
         } else {
-          // if API returned empty data, uses mock data
           setUpcomingAlerts([...mockData1, ...mockData2]);
         }
       } catch (error) {
@@ -157,10 +109,10 @@ const AnalogClock = () => {
         medicationName: "Ibuprofen",
         dosage: "2",
         dosageUnit: "tablets",
-        medicationNotes: "ABC",
+        medicationNotes: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ",
         room_number: "102",
         quantity: "5",
-        Medication_Time: "21:41",
+        Medication_Time: "13:12",
       },
     ];
 
@@ -174,105 +126,24 @@ const AnalogClock = () => {
         medicationName: "Paracetamol",
         dosage: "500",
         dosageUnit: "mg",
-        medicationNotes: "ABC",
+        medicationNotes: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
         room_number: "103",
         quantity: "7",
-        Medication_Time: "4:09",
+        Medication_Time: "13:12",
       },
     ];
 
     fetchAlerts();
   }, []);
 
-  const isActiveAlert = (alert) => {
-    const now = new Date();
-    const [alertHours, alertMinutes] =
-      alert.Medication_Time.split(":").map(Number);
-    const isNow =
-      now.getHours() === alertHours && now.getMinutes() === alertMinutes;
-
-    if (isNow && !activationTimes[alert.schedule_id]) {
-      setActivationTimes((prev) => ({
-        ...prev,
-        [alert.schedule_id]: new Date(),
-      }));
-    }
-
-    return isNow;
-  };
-
-  const calculateTimeLeft = (alertTime) => {
-    const now = timeLeftUpdates;
-    const [alertHours, alertMinutes] = alertTime.split(":").map(Number);
-
-    const alertDate = new Date(now);
-    alertDate.setHours(alertHours, alertMinutes, 0, 0);
-
-    const diff = alertDate - now;
-
-    if (diff < 0) return "Administered";
-    if (diff === 0) return "Now";
-
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-
-    return `${hours > 0 ? `${hours}h ` : ""}${minutes}m`;
-  };
-
-  const checkAlertStatus = () => {
-    const now = new Date();
-
-    upcomingAlerts.forEach((alert) => {
-      const id = alert.schedule_id;
-      const activatedAt = activationTimes[id];
-
-      // If active for >= 1 minute and not administered
-      if (
-        activatedAt &&
-        !checkedAlerts[id] &&
-        now - new Date(activatedAt) >= 1 * 60 * 1000 //adjust for testing
-      ) {
-        moveAlertToPending(id);
-
-        // Clean up activation time
-        setActivationTimes((prev) => {
-          const updated = { ...prev };
-          delete updated[id];
-          return updated;
-        });
-      }
-    });
-  };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const now = new Date();
-    }, 30000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      checkAlertStatus();
-    }, 60000);
-
-    return () => clearInterval(interval);
-  }, [activationTimes, checkedAlerts]);
-
-  const getRotation = (unit, max) => (unit / max) * 360;
-  const hours = time.getHours() % 12;
-  const minutes = time.getMinutes();
-  const seconds = time.getSeconds();
-
   const activeAlerts =
     activeTab === "upcoming"
       ? upcomingAlerts
       : activeTab === "pending"
-        ? pendingAlerts
-        : activeTab === "history"
-          ? historyAlerts
-          : [];
+      ? pendingAlerts
+      : activeTab === "history"
+      ? historyAlerts
+      : [];
 
   const filteredAlerts = activeAlerts.filter((alert) => {
     if (activeTab === "upcoming") return true;
@@ -282,23 +153,22 @@ const AnalogClock = () => {
     return false;
   });
 
+  // Keep sorting by time and isActive if needed
   const sortedAlerts = [...filteredAlerts]
     .map((alert) => ({
       ...alert,
-      isActive: isActiveAlert(alert),
+      isActive: isCurrentTime(alert.Medication_Time),
     }))
     .sort((a, b) => {
-      // Put active alerts on top
       if (a.isActive !== b.isActive) {
         return a.isActive ? -1 : 1;
       }
-
-      // Otherwise sort by time
       const [h1, m1] = a.Medication_Time.split(":").map(Number);
       const [h2, m2] = b.Medication_Time.split(":").map(Number);
       return h1 * 60 + m1 - (h2 * 60 + m2);
     });
 
+  // Cancel modal handling stays but no moving of alerts between lists
   const handleCancelPress = (id) => {
     setSelectedCancelId(id);
     setCancelReason("");
@@ -306,18 +176,22 @@ const AnalogClock = () => {
   };
 
   const confirmCancellation = () => {
-    const allAlerts = [...upcomingAlerts, ...pendingAlerts];
-    const alert = allAlerts.find((a) => a.schedule_id === selectedCancelId);
+    const cancelledAlert = upcomingAlerts.find(
+      (a) => a.schedule_id === selectedCancelId
+    );
 
-    if (alert) {
-      const updatedAlert = { ...alert, status: "cancelled", cancelReason };
+    if (cancelledAlert) {
       setUpcomingAlerts((prev) =>
         prev.filter((a) => a.schedule_id !== selectedCancelId)
       );
-      setPendingAlerts((prev) =>
-        prev.filter((a) => a.schedule_id !== selectedCancelId)
-      );
-      setHistoryAlerts((prev) => [...prev, updatedAlert]);
+      setHistoryAlerts((prev) => [
+        ...prev,
+        {
+          ...cancelledAlert,
+          status: "cancelled",
+          cancelReason,
+        },
+      ]);
     }
 
     setIsCancelModalVisible(false);
@@ -332,13 +206,43 @@ const AnalogClock = () => {
   }, [activeTab]);
 
   useEffect(() => {
-    upcomingRef.current = upcomingAlerts;
-  }, [upcomingAlerts]);
+  upcomingRef.current = upcomingAlerts;
+}, [upcomingAlerts]);
+
+useEffect(() => {
+  const interval = setInterval(() => {
+    const now = new Date();
+    const updatedUpcoming = [];
+    const newlyPending = [];
+
+    upcomingRef.current.forEach((alert) => {
+      const [alertHour, alertMinute] = alert.Medication_Time.split(":").map(Number);
+      const alertDate = new Date();
+      alertDate.setHours(alertHour, alertMinute, 0, 0);
+
+      const diffInMinutes = (now - alertDate) / (1000 * 60);
+
+      if (diffInMinutes > 1) {
+        newlyPending.push({ ...alert, status: "pending" });
+      } else {
+        updatedUpcoming.push(alert);
+      }
+    });
+
+    if (newlyPending.length > 0) {
+      setUpcomingAlerts(updatedUpcoming);
+      setPendingAlerts((prev) => [...prev, ...newlyPending]);
+    }
+  }, 60 * 1000); // run every minute
+
+  return () => clearInterval(interval);
+}, []);
+
 
   return (
     <View style={styles.container}>
       <Sidebar />
-      <View style={[styles.header,  { marginLeft: sidebarWidth }]}>
+      <View style={[styles.header, { marginLeft: sidebarWidth }]}>
         <Text style={styles.headerText}>Alerts List</Text>
       </View>
       <View style={[styles.mainRow, { marginLeft: sidebarWidth }]}>
@@ -366,10 +270,7 @@ const AnalogClock = () => {
               ) : (
                 sortedAlerts.map((alert) => {
                   const scheduleId = alert.schedule_id;
-                  const isActive = alert.status === "active";
-                  const isHistoryTab = activeTab === "history";
                   const isExpanded = expandedAlerts[scheduleId];
-
                   return (
                     <TouchableOpacity
                       key={scheduleId}
@@ -381,117 +282,71 @@ const AnalogClock = () => {
                       activeOpacity={0.9}
                     >
                       <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                          flex: 1,
-                        }}
-                      >
-                        <Checkbox
-                          status={
-                            checkedAlerts[scheduleId] ? "checked" : "unchecked"
-                          }
-                          onPress={
-                            activeTab !== "history"
-                              ? () => toggleCheckbox(scheduleId)
-                              : null
-                          }
-                          color={checkedAlerts[scheduleId] ? "#333" : "#CCCCCC"}
-                          style={styles.checkboxPosition}
-                        />
+                        style={{flexDirection: "row", flex: 1}}>
+                        <View style={{ alignSelf: "flex-start" }}>
+                          <Checkbox
+                            status={activeTab === "history"
+                                    ? alert.status === "administered"
+                                      ? "checked"
+                                      : "unchecked"
+                                    : checkedAlerts[scheduleId]
+                                    ? "checked"
+                                    : "unchecked"}
+                            onPress={null}
+                            color={checkedAlerts[scheduleId] ? "#333" : "#CCCCCC"}
+                            style={styles.checkboxPosition}
+                          />
+                          </View>
                         <View style={{ marginLeft: 10, flex: 1 }}>
                           <Text
-                            style={[
-                              styles.alertText,
-                              { color: getTextColor(alert.Medication_Time) },
-                            ]}
+                            style={[ styles.alertText ]}
                           >
                             Schedule ID: {alert.patient_number} - {scheduleId}
                           </Text>
                           {isExpanded && (
                             <>
                               <Text
-                                style={[
-                                  styles.alertText,
-                                  {
-                                    color: getTextColor(alert.Medication_Time),
-                                  },
-                                ]}
+                                style={[ styles.alertText ]}
                               >
-                                {alert.patient_first_name} {alert.patient_middle_name} {alert.patient_last_name}
-                                {/* pls keep like this para naay space in between the names */}
+                                {alert.patient_first_name} {alert.patient_middle_name} {alert.patient_last_name} - Room {alert.room_number}
                               </Text>
                               <Text
-                                style={[
-                                  styles.alertText,
-                                  {
-                                    color: getTextColor(alert.Medication_Time),
-                                  },
-                                ]}
+                                style={[ styles.alertText ]}
                               >
-                                Room {alert.room_number}
+                                Medication: {alert.medicationName}
                               </Text>
                               <Text
-                                style={[
-                                  styles.alertText,
-                                  {
-                                    color: getTextColor(alert.Medication_Time),
-                                  },
-                                ]}
-                              >
-                                {alert.medicationName}
-                              </Text>
-                              <Text
-                                style={[
-                                  styles.alertText,
-                                  {
-                                    color: getTextColor(alert.Medication_Time),
-                                  },
-                                ]}
+                                style={[ styles.alertText ]}
                               >
                                 Dosage: {alert.dosage} {alert.dosageUnit}
                               </Text>
+                              <Text 
+                                style={[ styles.alertText ]}>
+                                Quantity: {alert.quantity}
+                              </Text>
                               <Text
-                                style={[
-                                  styles.alertText,
-                                  {
-                                    color: getTextColor(alert.Medication_Time),
-                                  },
-                                ]}
+                                style={[ styles.alertText ]}
                               >
                                 Notes: {alert.medicationNotes}
                               </Text>
                               {activeTab !== "history" && (
-                                <View style={styles.buttonContainer}>
+                                <View style={styles.tabButtonContainer}>
                                   <TouchableOpacity
-                                    style={[
-                                      styles.button,
-                                      { backgroundColor: "#D9534F" },
-                                    ]}
-                                    onPress={() =>
-                                      handleCancelPress(scheduleId)
-                                    }
+                                    style={[styles.tabButton, styles.confirmButton]}
+                                    onPress={() => {
+                                      // no logic here, buttons do nothing for now
+                                    }}
                                   >
-                                    <Text style={styles.buttonText}>
-                                      Cancel
+                                    <Text style={styles.buttonText}
+                                    onPress={() => handleAdministerPress(scheduleId)}>
+                                      Administer
                                     </Text>
                                   </TouchableOpacity>
                                   <TouchableOpacity
-                                    style={[
-                                      styles.button,
-                                      { backgroundColor: "#5879A5" },
-                                    ]}
-                                    onPress={() => {
-                                      if (activeTab === "upcoming") {
-                                        handleAdministeredPress(scheduleId);
-                                      } else if (activeTab === "pending") {
-                                        handlePendingAdministered(scheduleId);
-                                      }
-                                    }}
+                                    style={[styles.tabButton, styles.cancelButton]}
+                                    onPress={() => handleCancelPress(scheduleId)}
                                   >
-                                    <Text style={styles.buttonText}>
-                                      Administered
-                                    </Text>
+                                    <Text style={styles.buttonText}>Cancel</Text>
                                   </TouchableOpacity>
                                 </View>
                               )}
@@ -506,119 +361,53 @@ const AnalogClock = () => {
             </ScrollView>
           </View>
         </View>
-        <View style={styles.clockWrapper}>
-          <Svg height="350" width="350" viewBox="0 0 300 300">
-            <Circle
-              cx="150"
-              cy="150"
-              r="142.5"
-              stroke="black"
-              strokeWidth="3"
-              fill="none"
-            />
-            {[...Array(12)].map((_, i) => (
-              <React.Fragment key={`tick-${i}`}>
-                <Line
-                  x1={150 + 135 * Math.cos((i * 30 - 90) * (Math.PI / 180))}
-                  y1={150 + 135 * Math.sin((i * 30 - 90) * (Math.PI / 180))}
-                  x2={150 + 142.5 * Math.cos((i * 30 - 90) * (Math.PI / 180))}
-                  y2={150 + 142.5 * Math.sin((i * 30 - 90) * (Math.PI / 180))}
-                  stroke="black"
-                  strokeWidth="3"
-                />
-                <SvgText
-                  x={150 + 120 * Math.cos((i * 30 - 90) * (Math.PI / 180))}
-                  y={150 + 120 * Math.sin((i * 30 - 90) * (Math.PI / 180))}
-                  fontSize="18"
-                  fontWeight="bold"
-                  textAnchor="middle"
-                  alignmentBaseline="middle"
-                >
-                  {i === 0 ? 12 : i}
-                </SvgText>
-              </React.Fragment>
-            ))}
-            <Line
-              x1="150"
-              y1="150"
-              x2={
-                150 +
-                60 * Math.cos((getRotation(hours, 12) - 90) * (Math.PI / 180))
-              }
-              y2={
-                150 +
-                60 * Math.sin((getRotation(hours, 12) - 90) * (Math.PI / 180))
-              }
-              stroke="black"
-              strokeWidth="6"
-            />
-            <Line
-              x1="150"
-              y1="150"
-              x2={
-                150 +
-                90 * Math.cos((getRotation(minutes, 60) - 90) * (Math.PI / 180))
-              }
-              y2={
-                150 +
-                90 * Math.sin((getRotation(minutes, 60) - 90) * (Math.PI / 180))
-              }
-              stroke="black"
-              strokeWidth="4.5"
-            />
-            <Line
-              x1="150"
-              y1="150"
-              x2={
-                150 +
-                105 *
-                Math.cos((getRotation(seconds, 60) - 90) * (Math.PI / 180))
-              }
-              y2={
-                150 +
-                105 *
-                Math.sin((getRotation(seconds, 60) - 90) * (Math.PI / 180))
-              }
-              stroke="red"
-              strokeWidth="3"
-            />
-          </Svg>
-          <Text style={styles.digitalTime}>
-            {time.toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-          </Text>
+        <View style={styles.clockPanel}>
+          <Clock style={{ alignSelf: "center", marginVertical: 20 }} />
+          <View style={styles.clock}>
+          </View>
         </View>
-        {isCancelModalVisible && (
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalContainer}>
-              <Text style={styles.modalTitle}>Reason for Cancellation</Text>
-              <TextInput
-                style={styles.modalInput}
-                placeholder="Enter reason here"
-                value={cancelReason}
-                onChangeText={setCancelReason}
-                multiline
-              />
-              <View style={styles.modalButtonContainer}>
-                <TouchableOpacity
-                  onPress={() => setIsCancelModalVisible(false)}
-                  style={[styles.modalButtons, styles.cancelButton]}
-                >
-                  <Text style={[styles.modalButton]}>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={confirmCancellation}
-                  style={[styles.modalButtons, styles.confirmButton]}
-                >
-                  <Text style={[styles.modalButton]}>Confirm</Text>
-                </TouchableOpacity>
-              </View>
+      </View>
+
+      <Modal
+        visible={isCancelModalVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setIsCancelModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Cancel Medication</Text>
+            <Text>Please provide a reason for cancellation:</Text>
+            <TextInput
+              style={styles.modalInput}
+              multiline
+              placeholder="Enter reason"
+              value={cancelReason}
+              onChangeText={setCancelReason}
+            />
+            <View style={styles.modalButtonContainer}>
+              <TouchableOpacity
+                style={[styles.modalButtons]}
+                onPress={() => setIsCancelModalVisible(false)}
+              >
+                <Text style={styles.modalButton}>Back</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[
+                  styles.modalButtons,
+                  styles.confirmButton,
+                  !cancelReason.trim() && { backgroundColor: "#808080", opacity: 0.5 }
+                ]}
+                onPress={confirmCancellation}
+                disabled={!cancelReason.trim()}
+              >
+                <Text style={styles.modalButton}>Confirm</Text>
+              </TouchableOpacity>
             </View>
           </View>
-        )}
-      </View>
+        </View>
+      </Modal>
     </View>
   );
 };

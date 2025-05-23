@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     },
     tabText: {
       flex: 1,
-      fontSize: 18,
+      fontSize: 20,
       fontWeight: 'bold',
       paddingVertical: 8,
       paddingHorizontal: 12,
@@ -64,9 +64,9 @@ const styles = StyleSheet.create({
       width: '100%',
     },
     checkboxPosition: {
-      position: 'absolute',
-      top: 10,
-      left: 10,
+      alignSelf: 'flex-start',
+      marginTop: 5,
+      margineLeft: 5,
     },
     alertList: {
       flex: 1,
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     },
     alertText: {
       fontSize: 16,
-      color: '#FAFAFA',
+      color: '#333333',
     },
     alertTextActive: {
       fontSize: 16,
@@ -99,10 +99,10 @@ const styles = StyleSheet.create({
       fontStyle: 'italic',
       fontSize: 16,
     },
-    clockWrapper: {
-      flexShrink: 1,
-      alignItems: 'center',
+    clockPanel: { 
+      padding: 30,
       justifyContent: 'center',
+      alignItems: 'center',
     },
     digitalTime: {
       marginTop: 12,
@@ -110,12 +110,12 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
       color: '#333',
     },
-    buttonContainer: {
+    tabButtonContainer: {
       flexDirection: 'row',
       justifyContent: 'flex-end',
       marginTop: 20,
     },
-    button: {
+    tabButton: {
       paddingVertical: 8,
       paddingHorizontal: 25,
       borderRadius: 8,
@@ -165,12 +165,13 @@ const styles = StyleSheet.create({
       alignItems: "center",
       borderRadius: 8,
       marginHorizontal: 5,
+      backgroundColor: "#808080",
     },
     cancelButton: {
-      backgroundColor: "#5879A5",
+      backgroundColor: "#D9534F",
     },
     confirmButton: {
-      backgroundColor: "#999999",
+      backgroundColor: "#4E84D3",
     },
     modalButton: {
       fontSize: 16,
