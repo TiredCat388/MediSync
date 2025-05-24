@@ -188,9 +188,9 @@ export default function PatientDetails() {
 
         <Text style={styles.patientId}>
            PATIENT ID: {patient?.patient_number} |{" "}
-                    {patient?.last_name?.toUpperCase()},{patient?.first_name}
+                    {patient?.last_name?.toUpperCase()},{" "}{patient?.first_name}
         </Text>
-        
+
         <View style={styles.infoContainer}>
           <View style={styles.detailsSection}>
             <View style={styles.section}>
