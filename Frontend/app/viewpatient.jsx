@@ -14,6 +14,9 @@ import Sidebar from "./components/sidebar";
 import { Feather } from "@expo/vector-icons";
 import { Alert } from "react-native";
 import { styles } from "./stylesheets/viewpatientstyle";
+import Constants from "expo-constants";
+
+const BASE_API = Constants.expoConfig.extra.BASE_API;
 
 const { width } = Dimensions.get("window");
 const isTablet = width > 900;
@@ -38,7 +41,7 @@ export default function PatientDetails() {
   const fetchPatientDetails = async () => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/patients/by-number/${patient_number}/`
+        `${BASE_API}/api/patients/by-number/${patient_number}/`
       );
       if (!response.ok) {
         throw new Error("Patient not found");
@@ -70,7 +73,7 @@ export default function PatientDetails() {
   const archivePatient = async () => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/patients/${patient_number}/`,
+        `${BASE_API}/api/patients/${patient_number}/`,
         {
           method: "PATCH",
           headers: {
@@ -97,7 +100,7 @@ export default function PatientDetails() {
   const fetchMedications = async () => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/medications/?patient_number=${patient_number}`
+        `${BASE_API}/api/medications/?patient_number=${patient_number}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch medications");
@@ -126,7 +129,7 @@ export default function PatientDetails() {
   const deleteSchedule = async (schedule_id, patient_number) => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/medications/${patient_number}/${schedule_id}/`,
+        `${BASE_API}/api/medications/${patient_number}/${schedule_id}/`,
         {
           method: "DELETE",
         }
@@ -134,7 +137,6 @@ export default function PatientDetails() {
 
       if (response.ok) {
         console.log("Deleted successfully");
-        // Optionally, refresh the medications list
         fetchMedications();
       } else {
         console.error("Failed to delete medication");
@@ -185,17 +187,18 @@ export default function PatientDetails() {
         </View>
 
         <Text style={styles.patientId}>
-          PATIENT ID: {patient?.patient_number}
+           PATIENT ID: {patient?.patient_number} |{" "}
+                    {patient?.last_name?.toUpperCase()},{patient?.first_name}
         </Text>
-
+        
         <View style={styles.infoContainer}>
           <View style={styles.detailsSection}>
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Patient Details</Text>
               <Text style={styles.boldLabel}>Name</Text>
               <Text>
-                {patient?.last_name}, {patient?.first_name}{" "}
-                {patient?.middle_name}
+                {patient?.last_name?.toUpperCase()}, {patient?.first_name}{" "}
+                {patient?.middle_name}{" "}
               </Text>
               <Text style={styles.boldLabel}>Sex</Text>
               <Text>{patient?.sex}</Text>
@@ -205,16 +208,16 @@ export default function PatientDetails() {
               <Text>{patient?.age}</Text>
               <Text style={styles.boldLabel}>Blood Type</Text>
               <Text>{patient?.blood_group}</Text>
-              <Text style={styles.boldLabel}>Religion</Text>
-              <Text>{patient?.religion}</Text>
             </View>
           </View>
 
           <View style={styles.dividers} />
 
           <View style={styles.detailsSection}>
-            <Text style={styles.sectionTitle}>  </Text>
+            <Text style={styles.sectionTitle}> </Text>
             <View style={styles.section}>
+              <Text style={styles.boldLabel}>Religion</Text>
+              <Text>{patient?.religion}</Text>
               <Text style={styles.boldLabel}>Height</Text>
               <Text>{patient?.height}</Text>
               <Text style={styles.boldLabel}>Weight</Text>
@@ -223,16 +226,16 @@ export default function PatientDetails() {
               <Text>{patient?.diet}</Text>
               <Text style={styles.boldLabel}>Contact Details</Text>
               <Text>{patient?.contact_number}</Text>
-              <Text style={styles.boldLabel}>Room No</Text>
-              <Text>{patient?.room_number}</Text>
             </View>
           </View>
 
           <View style={styles.dividers} />
-          
+
           <View style={styles.subsdetailsSection}>
             <Text style={styles.sectionTitle}> </Text>
             <View style={styles.section}>
+              <Text style={styles.boldLabel}>Room No</Text>
+              <Text>{patient?.room_number}</Text>
               <Text style={styles.boldLabel}>Chief Complaint/s</Text>
               <Text>{patient?.chief_complaint}</Text>
               <Text style={styles.boldLabel}>Admitting Diagnosis</Text>

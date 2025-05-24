@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
     borderRadius: 5,
     marginRight: 10,
   },
-  
+
   activateButton: {
     backgroundColor: "#5879A5",
     padding: 10,
@@ -30,9 +30,24 @@ export const styles = StyleSheet.create({
     backgroundColor: "#CCCCCC",
     padding: 15,
     borderRadius: 8,
+    maxHeight: 320,
   },
-  detailsSection: { flex: 1, paddingHorizontal: 10 },
+  detailsSection: { flex: 1.5, paddingHorizontal: 10 },
+  subsdetailsSection: {
+    flex: 1.5,
+    paddingHorizontal: 10,
+    maxHeight: 300,
+    overflow: "hidden",
+  },
+
+  subdetailsSection: {
+    flex: 2.3,
+    paddingHorizontal: 10,
+    maxHeight: 300,
+    overflow: "hidden",
+  },
   divider: { width: 1, backgroundColor: "gray", marginHorizontal: 10 },
+  dividers: { width: 1, marginHorizontal: 10 },
   sectionTitle: { fontWeight: "bold", fontSize: 20, marginBottom: 5 },
   medicationToggleButton: {
     backgroundColor: "#5879A5",

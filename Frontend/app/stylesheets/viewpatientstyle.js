@@ -41,7 +41,7 @@ export const styles = StyleSheet.create({
     maxHeight: 320,
   },
   detailsSection: {
-    flex: 1,
+    flex: 1.5,
     paddingHorizontal: 10,
     maxHeight: 300,
     overflow: "hidden",
