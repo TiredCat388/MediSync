@@ -187,8 +187,8 @@ export default function PatientDetails() {
         </View>
 
         <Text style={styles.patientId}>
-           PATIENT ID: {patient?.patient_number} |{" "}
-                    {patient?.last_name?.toUpperCase()},{" "}{patient?.first_name}
+          PATIENT ID: {patient?.patient_number} |{" "}
+          {patient?.last_name?.toUpperCase()}, {patient?.first_name}
         </Text>
 
         <View style={styles.infoContainer}>
@@ -198,7 +198,9 @@ export default function PatientDetails() {
               <Text style={styles.boldLabel}>Name</Text>
               <Text>
                 {patient?.last_name?.toUpperCase()}, {patient?.first_name}{" "}
-                {patient?.middle_name}{" "}
+                {patient?.middle_name
+                  ? `${patient.middle_name.charAt(0)}.`
+                  : ""}
               </Text>
               <Text style={styles.boldLabel}>Sex</Text>
               <Text>{patient?.sex}</Text>
