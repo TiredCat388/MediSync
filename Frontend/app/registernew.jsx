@@ -8,6 +8,8 @@ import CustomAlert from "./components/alert"; // Import CustomAlert
 import { ScrollView } from "react-native-gesture-handler";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Constants from 'expo-constants';
+import Icon from 'react-native-vector-icons/MaterialIcons'; // Or FontAwesome, Feather, etc.
+
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
@@ -107,6 +109,17 @@ export default function RegisterNewPatient() {
 
     return true;
   };
+
+  const pickerSelectStyles = {
+      inputAndroid: styles.input,
+      placeholder: {
+        color: "#999", 
+      },
+      iconContainer: {
+        top: 10, 
+        right: 12,
+      },
+    }; 
 
   const allowedDestinations = ["/directory"]; // Add allowed destinations here
 
@@ -313,14 +326,23 @@ export default function RegisterNewPatient() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={styles.container}>
         <Sidebar onNavigate={handleNavigate} />
-        <View style={[styles.contentContainer, { marginLeft: isSidebarExpanded ? 200 : 70 }]}>
+        <View
+          style={[
+            styles.contentContainer,
+            { marginLeft: isSidebarExpanded ? 200 : 70 },
+          ]}
+        >
           <Text style={styles.screenTitle}>Register New Patient</Text>
           <View style={styles.formContainer}>
             <ScrollView style={styles.column}>
-              <Text style={styles.sectionTitle}>Patient Details <Text style={{ color: 'red', fontSize: 16 }}>* Required</Text>
+              <Text style={styles.sectionTitle}>
+                Patient Details{" "}
+                <Text style={{ color: "#5879A5", fontSize: 16 }}>
+                  * Required
+                </Text>
               </Text>
               <Text style={styles.label}>
-                First Name <Text style={{ color: 'red' }}>*</Text>
+                First Name <Text style={{ color: "#5879A5" }}>*</Text>
               </Text>
               <TextInput
                 style={styles.input}
@@ -335,7 +357,9 @@ export default function RegisterNewPatient() {
                   setFormData({ ...formData, middleName: text })
                 }
               />
-              <Text style={styles.label}>Surname <Text style={{ color: 'red' }}>*</Text></Text>
+              <Text style={styles.label}>
+                Surname <Text style={{ color: "#5879A5" }}>*</Text>
+              </Text>
               <TextInput
                 style={styles.input}
                 onChangeText={(text) =>
@@ -344,88 +368,87 @@ export default function RegisterNewPatient() {
               />
 
               <Text style={styles.label}>
-              Sex <Text style={{ color: 'red' }}>*</Text>
+                Sex <Text style={{ color: "#5879A5" }}>*</Text>
               </Text>
               <View>
                 <RNPickerSelect
+                  Icon={() => (
+                    <Icon name="arrow-drop-down" size={20} color="gray" />
+                  )}
                   items={[
-                    { label: "Male", value: "M"},
-                    { label: "Female", value: "F"},
+                    { label: "Male", value: "M" },
+                    { label: "Female", value: "F" },
                   ]}
                   value={formData.sex}
                   onValueChange={(value) =>
                     setFormData({ ...formData, sex: value })
                   }
-                  placeholder={formData.sex ? {} : { label: "Select Sex", value: "" }}
-                  style={{
-                    inputAndroid: styles.input,
-                    inputIOS: styles.input,
-                    inputWeb: styles.input,
-                    placeholder: {
-                      color: "#999",
-                    },
-                  }}
+                  placeholder={
+                    formData.sex ? {} : { label: "Select Sex", value: "" }
+                  }
+                  style={pickerSelectStyles}
+                  useNativeAndroidPickerStyle={false}
                 />
               </View>
 
               <Text style={styles.label}>
-              Date of Birth <Text style={{ color: 'red' }}>*</Text>
+                Date of Birth <Text style={{ color: "#5879A5" }}>*</Text>
               </Text>
               <View
-                style={{ flexDirection: "row", justifyContent: "space-between" }}
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
               >
                 <View style={{ flex: 1, marginRight: 10 }}>
                   <RNPickerSelect
+                    Icon={() => (
+                      <Icon name="arrow-drop-down" size={20} color="gray" />
+                    )}
                     items={months}
                     value={formData.birthMonth}
                     onValueChange={(value) =>
                       setFormData({ ...formData, birthMonth: value })
                     }
-                    placeholder={formData.birthMonth ? {} : { label: "MM", value: "" }}
-                    style={{
-                      inputAndroid: styles.input,
-                      inputIOS: styles.input,
-                      inputWeb: styles.input,
-                      placeholder: {
-                        color: "#999",
-                      },
-                    }}
+                    placeholder={
+                      formData.birthMonth ? {} : { label: "MM", value: "" }
+                    }
+                    style={pickerSelectStyles}
+                    useNativeAndroidPickerStyle={false}
                   />
                 </View>
                 <View style={{ flex: 1, marginRight: 10 }}>
                   <RNPickerSelect
+                    Icon={() => (
+                      <Icon name="arrow-drop-down" size={20} color="gray" />
+                    )}
                     items={days}
                     value={formData.birthDay}
                     onValueChange={(value) =>
                       setFormData({ ...formData, birthDay: value })
                     }
-                    placeholder={formData.birthDay ? {} : { label: "DD", value: "" }}
-                    style={{
-                      inputAndroid: styles.input,
-                      inputIOS: styles.input,
-                      inputWeb: styles.input,
-                      placeholder: {
-                        color: "#999",
-                      },
-                    }}
+                    placeholder={
+                      formData.birthDay ? {} : { label: "DD", value: "" }
+                    }
+                    style={pickerSelectStyles}
+                    useNativeAndroidPickerStyle={false}
                   />
                 </View>
                 <View style={{ flex: 1 }}>
                   <RNPickerSelect
+                    Icon={() => (
+                      <Icon name="arrow-drop-down" size={20} color="gray" />
+                    )}
                     items={years}
                     value={formData.birthYear}
                     onValueChange={(value) =>
                       setFormData({ ...formData, birthYear: value })
                     }
-                    placeholder={formData.birthYear ? {} : { label: "YYYY", value: "" }}
-                    style={{
-                      inputAndroid: styles.input,
-                      inputIOS: styles.input,
-                      inputWeb: styles.input,
-                      placeholder: {
-                        color: "#999",
-                      },
-                    }}
+                    placeholder={
+                      formData.birthYear ? {} : { label: "YYYY", value: "" }
+                    }
+                    style={pickerSelectStyles}
+                    useNativeAndroidPickerStyle={false}
                   />
                 </View>
               </View>
@@ -438,10 +461,13 @@ export default function RegisterNewPatient() {
               />
 
               <Text style={styles.label}>
-              Blood Type <Text style={{ color: 'red' }}>*</Text>
+                Blood Type <Text style={{ color: "#5879A5" }}>*</Text>
               </Text>
               <View>
                 <RNPickerSelect
+                  Icon={() => (
+                    <Icon name="arrow-drop-down" size={20} color="gray" />
+                  )}
                   items={[
                     { label: "A+", value: "A+" },
                     { label: "A-", value: "A-" },
@@ -451,27 +477,28 @@ export default function RegisterNewPatient() {
                     { label: "AB-", value: "AB-" },
                     { label: "O+", value: "O+" },
                     { label: "O-", value: "O-" },
-                    { label: "Rhnull", value: "Rhnull"},
+                    { label: "Rhnull", value: "Rhnull" },
                   ]}
                   value={formData.bloodType}
                   onValueChange={(value) =>
                     setFormData({ ...formData, bloodType: value })
                   }
-                  placeholder={formData.bloodType ? {} : { label: "Select Blood Type", value: "" }}
-                  style={{
-                    inputAndroid: styles.input,
-                    inputIOS: styles.input,
-                    inputWeb: styles.input,
-                    placeholder: {
-                      color: "#999",
-                    },
-                  }}
+                  placeholder={
+                    formData.bloodType
+                      ? {}
+                      : { label: "Select Blood Type", value: "" }
+                  }
+                  style={pickerSelectStyles}
+                  useNativeAndroidPickerStyle={false}
                 />
               </View>
 
               <Text style={styles.label}>Religion</Text>
               <View>
                 <RNPickerSelect
+                  Icon={() => (
+                    <Icon name="arrow-drop-down" size={20} color="gray" />
+                  )}
                   items={[
                     { label: "Catholic", value: "Catholic" },
                     { label: "Protestant", value: "Protestant" },
@@ -487,21 +514,16 @@ export default function RegisterNewPatient() {
                     setFormData({ ...formData, religion: value })
                   }
                   placeholder={{ label: "Select Religion", value: "" }}
-                  style={{
-                    inputAndroid: styles.input,
-                    inputIOS: styles.input,
-                    inputWeb: styles.input,
-                    placeholder: {
-                      color: "#999",
-                    },
-                  }}
+                  style={pickerSelectStyles}
+                  useNativeAndroidPickerStyle={false}
                 />
               </View>
 
               {formData.religion === "Other" ? (
                 <>
                   <Text style={styles.label}>
-                  Specify Other Religion <Text style={{ color: 'red' }}>*</Text>
+                    Specify Other Religion{" "}
+                    <Text style={{ color: "#5879A5" }}>*</Text>
                   </Text>
                   <TextInput
                     style={styles.input}
@@ -515,11 +537,14 @@ export default function RegisterNewPatient() {
               ) : null}
 
               <View
-                style={{ flexDirection: "row", justifyContent: "space-between" }}
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
               >
                 <View style={{ flex: 1, marginRight: 10 }}>
                   <Text style={styles.label}>
-                  Height (meters) <Text style={{ color: 'red' }}>*</Text>
+                    Height (meters) <Text style={{ color: "#5879A5" }}>*</Text>
                   </Text>
                   <TextInput
                     style={styles.input}
@@ -533,7 +558,7 @@ export default function RegisterNewPatient() {
                 </View>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.label}>
-                  Weight (kg) <Text style={{ color: 'red' }}>*</Text>
+                    Weight (kg) <Text style={{ color: "#5879A5" }}>*</Text>
                   </Text>
                   <TextInput
                     style={styles.input}
@@ -548,33 +573,34 @@ export default function RegisterNewPatient() {
               </View>
 
               <Text style={styles.label}>
-              Diet <Text style={{ color: 'red' }}>*</Text>
+                Diet <Text style={{ color: "#5879A5" }}>*</Text>
               </Text>
               <View>
                 <RNPickerSelect
+                  Icon={() => (
+                    <Icon name="arrow-drop-down" size={20} color="gray" />
+                  )}
                   items={dietOptions}
                   value={formData.diet.split(":")[0]}
                   onValueChange={handleDietChange}
-                  placeholder={formData.diet ? {} : { label: "Select Diet", value: "" }}
-                  style={{
-                    inputAndroid: styles.input,
-                    inputIOS: styles.input,
-                    inputWeb: styles.input,
-                    placeholder: {
-                      color: "#999",
-                    },
-                  }}
+                  placeholder={
+                    formData.diet ? {} : { label: "Select Diet", value: "" }
+                  }
+                  style={pickerSelectStyles}
+                  useNativeAndroidPickerStyle={false}
                 />
               </View>
 
               {formData.diet.startsWith("ngt:") ? (
                 <>
                   <Text style={styles.label}>
-                  Specify NGT Details <Text style={{ color: 'red' }}>*</Text>
+                    Specify NGT Details <Text style={{ color: "#5879A5" }}>*</Text>
                   </Text>
                   <TextInput
                     style={styles.input}
-                    onChangeText={(text) => handleDietSpecifyChange(text, "ngt")}
+                    onChangeText={(text) =>
+                      handleDietSpecifyChange(text, "ngt")
+                    }
                     value={formData.ngtSpecify}
                     placeholder="e.g., Formula"
                   />
@@ -584,18 +610,22 @@ export default function RegisterNewPatient() {
               {formData.diet.startsWith("other:") ? (
                 <>
                   <Text style={styles.label}>
-                  Specify Other Diet <Text style={{ color: 'red' }}>*</Text>
+                    Specify Other Diet <Text style={{ color: "#5879A5" }}>*</Text>
                   </Text>
                   <TextInput
                     style={styles.input}
-                    onChangeText={(text) => handleDietSpecifyChange(text, "other")}
+                    onChangeText={(text) =>
+                      handleDietSpecifyChange(text, "other")
+                    }
                     value={formData.otherDietSpecify}
                     placeholder="Please specify the diet"
                   />
                 </>
               ) : null}
 
-              <Text style={styles.label}>Contact Number <Text style={{ color: 'red' }}>*</Text></Text> 
+              <Text style={styles.label}>
+                Contact Number <Text style={{ color: "#5879A5" }}>*</Text>
+              </Text>
               <TextInput
                 style={styles.input}
                 onChangeText={(text) =>
@@ -604,7 +634,7 @@ export default function RegisterNewPatient() {
               />
 
               <Text style={styles.label}>
-              Bed Number <Text style={{ color: 'red' }}>*</Text>
+                Bed Number <Text style={{ color: "#5879A5" }}>*</Text>
               </Text>
               <TextInput
                 style={styles.input}
@@ -614,7 +644,7 @@ export default function RegisterNewPatient() {
               />
 
               <Text style={styles.label}>
-              Room Number <Text style={{ color: 'red' }}>*</Text>
+                Room Number <Text style={{ color: "#5879A5" }}>*</Text>
               </Text>
               <TextInput
                 style={styles.input}
@@ -624,10 +654,13 @@ export default function RegisterNewPatient() {
               />
 
               <Text style={styles.label}>
-              Chief Complaint/s <Text style={{ color: 'red' }}>*</Text>
+                Chief Complaint/s <Text style={{ color: "#5879A5" }}>*</Text>
               </Text>
               <TextInput
-                style={[styles.input, { height: 150, textAlignVertical: "top" }]}
+                style={[
+                  styles.input,
+                  { height: 150, textAlignVertical: "top" },
+                ]}
                 multiline
                 numberOfLines={4}
                 onChangeText={(text) =>
@@ -636,10 +669,13 @@ export default function RegisterNewPatient() {
               />
 
               <Text style={styles.label}>
-              Admitting Diagnosis <Text style={{ color: 'red' }}>*</Text>
+                Admitting Diagnosis <Text style={{ color: "#5879A5" }}>*</Text>
               </Text>
               <TextInput
-                style={[styles.input, { height: 150, textAlignVertical: "top" }]}
+                style={[
+                  styles.input,
+                  { height: 150, textAlignVertical: "top" },
+                ]}
                 multiline
                 numberOfLines={4}
                 onChangeText={(text) =>
@@ -649,7 +685,10 @@ export default function RegisterNewPatient() {
 
               <Text style={styles.label}>Final Diagnosis</Text>
               <TextInput
-                style={[styles.input, { height: 150, textAlignVertical: "top" }]}
+                style={[
+                  styles.input,
+                  { height: 150, textAlignVertical: "top" },
+                ]}
                 multiline
                 numberOfLines={4}
                 onChangeText={(text) =>
@@ -659,11 +698,11 @@ export default function RegisterNewPatient() {
             </ScrollView>
 
             <View style={styles.divider} />
-            
+
             <View style={styles.column}>
               <Text style={styles.sectionTitle}>Emergency Contact Details</Text>
               <Text style={styles.label}>
-              First Name <Text style={{ color: 'red' }}>*</Text>
+                First Name <Text style={{ color: "#5879A5" }}>*</Text>
               </Text>
               <TextInput
                 style={styles.input}
@@ -671,7 +710,9 @@ export default function RegisterNewPatient() {
                   setFormData({ ...formData, emergencyFirstName: text })
                 }
               />
-              <Text style={styles.label}>Surname <Text style={{ color: 'red' }}>*</Text></Text>
+              <Text style={styles.label}>
+                Surname <Text style={{ color: "#5879A5" }}>*</Text>
+              </Text>
               <TextInput
                 style={styles.input}
                 onChangeText={(text) =>
@@ -679,7 +720,7 @@ export default function RegisterNewPatient() {
                 }
               />
               <Text style={styles.label}>
-              Relation to Patient <Text style={{ color: 'red' }}>*</Text>
+                Relation to Patient <Text style={{ color: "#5879A5" }}>*</Text>
               </Text>
               <TextInput
                 style={styles.input}
@@ -687,7 +728,9 @@ export default function RegisterNewPatient() {
                   setFormData({ ...formData, relation: text })
                 }
               />
-              <Text style={styles.label}>Contact Number <Text style={{ color: 'red' }}>*</Text></Text>
+              <Text style={styles.label}>
+                Contact Number <Text style={{ color: "#5879A5" }}>*</Text>
+              </Text>
               <TextInput
                 style={styles.input}
                 onChangeText={(text) =>
