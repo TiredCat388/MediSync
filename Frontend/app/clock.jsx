@@ -38,21 +38,37 @@ const AnalogClock = () => {
   };
 
   const handleAdministerPress = (scheduleId) => {
-    setUpcomingAlerts((prev) =>
-      prev.filter((alert) => alert.schedule_id !== scheduleId)
-    );
-    setHistoryAlerts((prev) => [
-      ...prev,
-      {
-        ...upcomingAlerts.find((a) => a.schedule_id === scheduleId),
-        status: "administered",
-      },
-    ]);
-    setCheckedAlerts((prev) => ({
-      ...prev,
-      [scheduleId]: true,
-    }));
-  };
+  // Try to find alert in upcoming or pending
+  const alertToAdminister =
+    upcomingAlerts.find((a) => a.schedule_id === scheduleId) ||
+    pendingAlerts.find((a) => a.schedule_id === scheduleId);
+
+  if (!alertToAdminister) return; // nothing found
+
+  // Remove from upcoming and pending
+  setUpcomingAlerts((prev) =>
+    prev.filter((alert) => alert.schedule_id !== scheduleId)
+  );
+  setPendingAlerts((prev) =>
+    prev.filter((alert) => alert.schedule_id !== scheduleId)
+  );
+
+  // Add to history with status administered
+  setHistoryAlerts((prev) => [
+    ...prev,
+    {
+      ...alertToAdminister,
+      status: "administered",
+    },
+  ]);
+
+  // Check the alert
+  setCheckedAlerts((prev) => ({
+    ...prev,
+    [scheduleId]: true,
+  }));
+};
+
 
   const getCardStyle = (alertTime) => {
     if (activeTab === "upcoming") {
@@ -68,10 +84,12 @@ const AnalogClock = () => {
   };
 
   const isCurrentTime = (alertTime) => {
-    const now = new Date();
+    if (!alertTime) return false; // <-- Add this guard
     const [alertHours, alertMinutes] = alertTime.split(":").map(Number);
+    const now = new Date();
     return now.getHours() === alertHours && now.getMinutes() === alertMinutes;
   };
+
 
   useEffect(() => {
     const interval = setInterval(() => setTime(new Date()), 1000);
@@ -176,28 +194,35 @@ const AnalogClock = () => {
   };
 
   const confirmCancellation = () => {
-    const cancelledAlert = upcomingAlerts.find(
-      (a) => a.schedule_id === selectedCancelId
+  // Try to find alert in upcoming or pending
+  const cancelledAlert =
+    upcomingAlerts.find((a) => a.schedule_id === selectedCancelId) ||
+    pendingAlerts.find((a) => a.schedule_id === selectedCancelId);
+
+  if (cancelledAlert) {
+    // Remove from upcoming and pending
+    setUpcomingAlerts((prev) =>
+      prev.filter((a) => a.schedule_id !== selectedCancelId)
+    );
+    setPendingAlerts((prev) =>
+      prev.filter((a) => a.schedule_id !== selectedCancelId)
     );
 
-    if (cancelledAlert) {
-      setUpcomingAlerts((prev) =>
-        prev.filter((a) => a.schedule_id !== selectedCancelId)
-      );
-      setHistoryAlerts((prev) => [
-        ...prev,
-        {
-          ...cancelledAlert,
-          status: "cancelled",
-          cancelReason,
-        },
-      ]);
-    }
+    // Add to history with status cancelled and reason
+    setHistoryAlerts((prev) => [
+      ...prev,
+      {
+        ...cancelledAlert,
+        status: "cancelled",
+        cancelReason,
+      },
+    ]);
+  }
 
-    setIsCancelModalVisible(false);
-    setSelectedCancelId(null);
-    setCancelReason("");
-  };
+  setIsCancelModalVisible(false);
+  setSelectedCancelId(null);
+  setCancelReason("");
+};
 
   useEffect(() => {
     if (activeTab === "history") {
@@ -329,18 +354,13 @@ useEffect(() => {
                               >
                                 Notes: {alert.medicationNotes}
                               </Text>
-                              {activeTab !== "history" && (
+                              {(activeTab === "upcoming" || activeTab === "pending") && (
                                 <View style={styles.tabButtonContainer}>
                                   <TouchableOpacity
                                     style={[styles.tabButton, styles.confirmButton]}
-                                    onPress={() => {
-                                      // no logic here, buttons do nothing for now
-                                    }}
+                                    onPress={() => handleAdministerPress(scheduleId)}
                                   >
-                                    <Text style={styles.buttonText}
-                                    onPress={() => handleAdministerPress(scheduleId)}>
-                                      Administer
-                                    </Text>
+                                    <Text style={styles.buttonText}>Administer</Text>
                                   </TouchableOpacity>
                                   <TouchableOpacity
                                     style={[styles.tabButton, styles.cancelButton]}
