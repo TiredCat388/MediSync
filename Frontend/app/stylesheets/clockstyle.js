@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
       flex: 1,
       marginLeft: 70,
       paddingTop: 0,
-      padding: 40,
+      paddingHorizontal: 40,
     },
     alertPanel: {
       flex: 1,
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
       maxWidth: width * 1.3,
     },
     header: {
-      padding: 40,
+      paddingHorizontal: 40,
       paddingBottom: 20,
     },
     headerText: {

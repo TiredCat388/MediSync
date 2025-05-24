@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
+  ScrollView,
   Keyboard,
 } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -112,98 +113,102 @@ const LoginScreen = () => {
     }
   };
 
-  return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
+  return(
+  <KeyboardAvoidingView
+  style={{ flex: 1 }}
+  behavior={Platform.OS === "ios" ? "padding" : "height"}
+  keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
+  >
+  <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <ScrollView
+      contentContainerStyle={{ flexGrow: 1 }}
+      keyboardShouldPersistTaps="handled"
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.container}>
-          <View style={styles.upperHalf}>
-            <View style={styles.logoContainer}>
-              <View style={styles.circleBackground}>
-                <Image
-                  resizeMode="contain"
-                  source={require("../assets/images/medisync-logo.png")}
-                  style={styles.logo}
-                />
-              </View>
+      <View style={styles.container}>
+        <View style={styles.upperHalf}>
+          <View style={styles.logoContainer}>
+            <View style={styles.circleBackground}>
+              <Image
+                resizeMode="contain"
+                source={require("../assets/images/medisync-logo.png")}
+                style={styles.logo}
+              />
             </View>
           </View>
-
-          <View style={styles.lowerHalf}>
-            {!role ? (
-              <>
-                <Text style={styles.title}>Medisync</Text>
-                <View style={styles.roleContainer}>
-                  <TouchableOpacity
-                    style={styles.roleButton}
-                    onPress={() => setRole("nurse")}
-                    activeOpacity={0.6}
-                  >
-                    <FontAwesome5 name="user-nurse" size={28} color="#F8F8F8" />
-                    <Text style={styles.roleText}>Nurse Log-In</Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={styles.roleButton}
-                    onPress={() => setRole("physician")}
-                    activeOpacity={0.6}
-                  >
-                    <FontAwesome5 name="user-md" size={28} color="#F8F8F8" />
-                    <Text style={styles.roleText}>Physician Log-In</Text>
-                  </TouchableOpacity>
-                </View>
-              </>
-            ) : role === "physician" ? (
-              <>
-                <Text style={styles.title}>Physician Login</Text>
-
-                <TextInput
-                  style={styles.input}
-                  placeholder="Enter ID"
-                  placeholderTextColor="rgba(0, 0, 0, 0.4)"
-                  value={id}
-                  onChangeText={setId}
-                  keyboardType="numeric"
-                />
-
-                <TextInput
-                  style={styles.input}
-                  placeholder="Enter Password"
-                  placeholderTextColor="rgba(0, 0, 0, 0.4)"
-                  value={password}
-                  onChangeText={setPassword}
-                  secureTextEntry
-                />
-
-                {errorMessage ? (
-                  <Text style={styles.errorText}>{errorMessage}</Text>
-                ) : null}
-
-                <View style={styles.buttonContainer}>
-                  <TouchableOpacity
-                    style={styles.cancelButton}
-                    onPress={() => setRole(null)}
-                  >
-                    <Text style={styles.cancelText}>Cancel</Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={styles.loginButton}
-                    onPress={handleLogin}
-                  >
-                    <Text style={styles.loginText}>Login</Text>
-                  </TouchableOpacity>
-                </View>
-              </>
-            ) : null}
-          </View>
         </View>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
-  );
+
+        <View style={styles.lowerHalf}>
+          {role === null ? (
+  <>
+    <Text style={styles.title}>Medisync</Text>
+    <View style={styles.roleContainer}>
+      <TouchableOpacity
+        style={styles.roleButton}
+        onPress={() => setRole("nurse")}
+        activeOpacity={0.6}
+      >
+        <FontAwesome5 name="user-nurse" size={28} color="#F8F8F8" />
+        <Text style={styles.roleText}>Nurse Login</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.roleButton}
+        onPress={() => setRole("physician")}
+        activeOpacity={0.6}
+      >
+        <FontAwesome5 name="user-md" size={28} color="#F8F8F8" />
+        <Text style={styles.roleText}>Physician Login</Text>
+      </TouchableOpacity>
+    </View>
+  </>
+) : role === "physician" ? (
+  <>
+    <Text style={styles.title}>Physician Login</Text>
+
+    <TextInput
+      style={styles.input}
+      placeholder="Enter ID"
+      placeholderTextColor="rgba(0, 0, 0, 0.4)"
+      value={id}
+      onChangeText={setId}
+    />
+
+    <TextInput
+      style={styles.input}
+      placeholder="Enter Password"
+      placeholderTextColor="rgba(0, 0, 0, 0.4)"
+      value={password}
+      onChangeText={setPassword}
+      secureTextEntry
+    />
+
+    {errorMessage ? (
+      <Text style={styles.errorText}>{errorMessage}</Text>
+    ) : null}
+
+    <View style={styles.buttonContainer}>
+      <TouchableOpacity
+        style={styles.cancelButton}
+        onPress={() => setRole(null)}
+      >
+        <Text style={styles.cancelText}>Cancel</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.loginButton}
+        onPress={handleLogin}
+      >
+        <Text style={styles.loginText}>Login</Text>
+      </TouchableOpacity>
+    </View>
+  </>
+) : null}
+        </View>
+      </View>
+    </ScrollView>
+  </TouchableWithoutFeedback>
+</KeyboardAvoidingView>
+  )
 };
 
 export default LoginScreen;

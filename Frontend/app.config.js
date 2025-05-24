@@ -10,7 +10,7 @@ module.exports = {
     slug: "Frontend",
     version: "1.0.0",
     orientation: "landscape",
-    icon: "./assets/images/icon.png",
+    icon: "./assets/images/medisync-logo.png",
     scheme: "myapp",
     userInterfaceStyle: "automatic",
     newArchEnabled: true,
@@ -19,7 +19,7 @@ module.exports = {
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: "./assets/images/adaptive-icon.png",
+        foregroundImage: "./assets/images/medisync-logo.png",
         backgroundColor: "#ffffff",
       },
     },
