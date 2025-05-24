@@ -50,11 +50,11 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   input: {
-    borderWidth: 1,
     borderColor: "black",
     backgroundColor: "#F8F8F8",
     padding: 8,
     marginBottom: 10,
+    height: 38,
   },
   dobContainer: {
     flexDirection: "row",
