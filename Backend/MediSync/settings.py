@@ -80,7 +80,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'MediSync.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -95,8 +94,6 @@ DATABASES = {
     }
 
 }
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -149,4 +146,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
-ALLOWED_HOSTS = ['172.16.12.64', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['172.16.4.232', 'localhost', '127.0.0.1']

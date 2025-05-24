@@ -14,12 +14,26 @@ import Autocomplete from "react-native-autocomplete-input";
 import styles from "./stylesheets/newmedschedstyle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CustomAlert from "./components/alert";
-import Constants from 'expo-constants';
+import Constants from "expo-constants";
 import { ScrollView } from "react-native";
-import Icon from 'react-native-vector-icons/MaterialIcons'; // Or FontAwesome, Feather, etc.
-
+import Icon from "react-native-vector-icons/MaterialIcons"; // Or FontAwesome, Feather, etc.
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
+
+const frequencyOptions = [
+  { label: "OD (Once Daily)", value: "OD" },
+  { label: "BID (Twice Daily)", value: "BID" },
+  { label: "TID (Thrice Daily)", value: "TID" },
+  { label: "QID (Four times Daily)", value: "QID" },
+  { label: "Other", value: "Other" },
+];
+
+const frequencyIntervals = {
+  OD: { days: 1, hours: 0, minutes: 0 },
+  BID: { days: 0, hours: 10, minutes: 0 },
+  TID: { days: 0, hours: 5, minutes: 0 },
+  QID: { days: 0, hours: 4, minutes: 0 },
+};
 
 export default function NewMedSched() {
   const router = useRouter();
@@ -43,12 +57,12 @@ export default function NewMedSched() {
     medicationRoute: "",
     timeHour: "",
     timeMinute: "",
-    timePeriod: "",
     medicationNotes: "",
     physicianID: "",
+    frequencyDay: "",
+    frequencyType: "",
     frequencyHour: "",
     frequencyMinute: "",
-    frequencyPeriod: "",
     medicationMonth: "",
     medicationDay: "",
     medicationYear: "",
@@ -58,6 +72,7 @@ export default function NewMedSched() {
   });
 
   const [medications, setMedications] = useState([]);
+  const [frequencyType, setFrequencyType] = useState("");
   const [filteredMedications, setFilteredMedications] = useState([]);
   const [query, setQuery] = useState("");
   const [userRole, setUserRole] = useState(null);
@@ -155,6 +170,44 @@ export default function NewMedSched() {
     }
   };
 
+  const handleFrequencyChange = (value) => {
+    setFormData((prev) => ({
+      ...prev,
+      frequencyType: value,
+    }));
+
+    if (value !== "Other") {
+      // Set time to 08:00 AM for presets
+      setFormData({
+        frequencyType: value,
+        timeHour: "08",
+        timeMinute: "00",
+        timePeriod: "AM",
+      });
+    } 
+    if (value in frequencyIntervals) {
+      const { days, hours, minutes } = frequencyIntervals[value];
+      setFormData((prev) => ({
+        ...prev,
+        frequencyDay: days.toString(),
+        frequencyHour: hours.toString().padStart(2, "0"),
+        frequencyMinute: minutes.toString().padStart(2, "0"),
+      }));
+    }
+    else {
+      // Clear time for Other (or keep previous, your choice)
+      setFormData({
+        frequencyType: value,
+        timeHour: "",
+        timeMinute: "",
+        timePeriod: "",
+        frequencyDay: "",
+        frequencyHour: "",
+        frequencyMinute: "",
+      });
+    }
+  };
+
   const handleSelectMedication = (medName) => {
     setQuery(medName);
     setFormData({ ...formData, medicineName: medName });
@@ -180,10 +233,10 @@ export default function NewMedSched() {
   const pickerSelectStyles = {
     inputAndroid: styles.input,
     placeholder: {
-      color: "#999", 
+      color: "#999",
     },
     iconContainer: {
-      top: 10, 
+      top: 10,
       right: 12,
     },
   };
@@ -194,26 +247,6 @@ export default function NewMedSched() {
         "Access denied: Only physicians can add medication."
       );
       setAccessDeniedVisible(true);
-      return;
-    }
-
-    const requiredFields = [
-      "medicineName",
-      "dosage",
-      "dosageUnit",
-      "timeHour",
-      "timeMinute",
-      "timePeriod",
-      "medicationNotes",
-      "frequencyHour",
-      "frequencyMinute",
-    ];
-    const hasEmptyFields = requiredFields.some(
-      (field) => !formData[field] || formData[field].trim() === ""
-    );
-
-    if (hasEmptyFields) {
-      setWarningModalVisible(true);
       return;
     }
 
@@ -352,6 +385,38 @@ export default function NewMedSched() {
                   }}
                   style={pickerSelectStyles}
                   useNativeAndroidPickerStyle={false}
+                />
+              </View>
+
+              <Text style={[styles.label, { marginTop: 10 }]}>
+                Medication Route
+              </Text>
+              <View>
+                <RNPickerSelect
+                  items={[
+                    { label: "Oral", value: "Oral" },
+                    { label: "Intramuscular", value: "Intramuscular" },
+                    { label: "Intravenous", value: "Intravenous" },
+                    { label: "Subcutaneous", value: "Subcutaneous" },
+                    { label: "Topical", value: "Topical" },
+                    { label: "Inhalation", value: "Inhalation" },
+                    { label: "Sublingual", value: "Sublingual" },
+                    { label: "Transdermal", value: "Transdermal" },
+                    { label: "Rectal", value: "Rectal" },
+                    { label: "Intranasal", value: "Intranasal" },
+                    { label: "Ocular", value: "Ocular" },
+                    { label: "Vaginal", value: "Vaginal" },
+                    { label: "Other", value: "Other" },
+                  ]}
+                  value={formData.medicationRoute}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, medicationRoute: value })
+                  }
+                  placeholder={{
+                    label: "Select Medication route...",
+                    value: "",
+                  }}
+                  style={pickerSelectStyles}
                 />
               </View>
 
@@ -525,6 +590,7 @@ export default function NewMedSched() {
               <View style={styles.dobContainer}>
                 <View style={styles.PickerContainer}>
                   <RNPickerSelect
+                  disabled={formData.frequencyType != "Other"}
                     Icon={() => (
                       <Icon name="arrow-drop-down" size={20} color="gray" />
                     )}
@@ -544,6 +610,7 @@ export default function NewMedSched() {
 
                 <View style={styles.PickerContainer}>
                   <RNPickerSelect
+                  disabled={formData.frequencyType != "Other"}
                     Icon={() => (
                       <Icon name="arrow-drop-down" size={20} color="gray" />
                     )}
@@ -563,6 +630,7 @@ export default function NewMedSched() {
 
                 <View style={styles.PickerContainer}>
                   <RNPickerSelect
+                  disabled={formData.frequencyType != "Other"}
                     Icon={() => (
                       <Icon name="arrow-drop-down" size={20} color="gray" />
                     )}
@@ -584,65 +652,75 @@ export default function NewMedSched() {
               <Text style={styles.label}>
                 Frequency <Text style={{ color: "#5879A5" }}>*</Text>{" "}
               </Text>
-              <View style={styles.dobContainer}>
-                <View style={styles.PickerContainer}>
-                  <RNPickerSelect
-                    Icon={() => (
-                      <Icon name="arrow-drop-down" size={20} color="gray" />
-                    )}
-                    items={Array.from({ length: 32 }, (_, index) => ({
-                      label: index.toString().padStart(2, "0"), // 00-31
-                      value: index.toString(), // "0" to "31" (string values)
-                    }))}
-                    value={formData.day}
-                    onValueChange={(value) =>
-                      setFormData({ ...formData, day: value })
-                    }
-                    placeholder={{ label: "DD", value: "" }}
-                    style={pickerSelectStyles}
-                    useNativeAndroidPickerStyle={false}
-                  />
-                </View>
-                <View style={styles.PickerContainer}>
-                  <RNPickerSelect
-                    Icon={() => (
-                      <Icon name="arrow-drop-down" size={20} color="gray" />
-                    )}
-                    items={Array.from({ length: 24 }, (_, index) => ({
-                      label: index.toString().padStart(2, "0"),
-                      value: index.toString().padStart(2, "0"),
-                    }))}
-                    value={formData.frequencyHour}
-                    onValueChange={(value) =>
-                      setFormData({ ...formData, frequencyHour: value })
-                    }
-                    placeholder={{ label: "HH", value: "" }}
-                    style={pickerSelectStyles}
-                    useNativeAndroidPickerStyle={false}
-                  />
-                </View>
-                <View style={styles.PickerContainer}>
-                  <RNPickerSelect
-                    Icon={() => (
-                      <Icon name="arrow-drop-down" size={20} color="gray" />
-                    )}
-                    items={Array.from({ length: 12 }, (_, index) => ({
-                      label: (index * 5).toString().padStart(2, "0"),
-                      value: (index * 5).toString().padStart(2, "0"),
-                    }))}
-                    value={formData.frequencyMinute}
-                    onValueChange={(value) =>
-                      setFormData({ ...formData, frequencyMinute: value })
-                    }
-                    placeholder={{ label: "MM", value: "" }}
-                    style={pickerSelectStyles}
-                    useNativeAndroidPickerStyle={false}
-                  />
-                </View>
+              <RNPickerSelect
+        Icon={() => <Icon name="arrow-drop-down" size={20} color="gray" />}
+        items={frequencyOptions}
+        value={formData.frequencyType}
+        onValueChange={handleFrequencyChange}
+        placeholder={ formData.frequencyType ? {} :{ label: "Select frequency", value: "" }}
+        style={pickerSelectStyles}
+        useNativeAndroidPickerStyle={false}
+      />
+        <View style={{ marginTop: 20 }}>
+          <Text style={{ marginTop: 20 }}>Set Frequency Interval</Text>
+          <View style={styles.dobContainer}>
+            <View style={styles.PickerContainer}>
+              <RNPickerSelect
+              disabled={formData.frequencyType != "Other"}
+                Icon={() => <Icon name="arrow-drop-down" size={20} color="gray" />}
+                items={[{ label: "0", value: "0" }, ...Array.from({ length: 8 }, (_, i) => ({
+                  label: (i + 1).toString(),
+                  value: (i + 1).toString(),
+                }))]}
+                value={formData.frequencyDay}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, frequencyDay: value })
+                }
+                placeholder={{ label: "Days", value: "" }}
+                style={pickerSelectStyles}
+                useNativeAndroidPickerStyle={false}
+              />
+            </View>
+
+            <View style={styles.PickerContainer}>
+              <RNPickerSelect
+              disabled={formData.frequencyType != "Other"}
+                Icon={() => <Icon name="arrow-drop-down" size={20} color="gray" />}
+                items={[{ label: "0", value: "0" }, ...Array.from({ length: 24 }, (_, i) => ({
+                  label: i.toString().padStart(2, "0"),
+                  value: i.toString().padStart(2, "0"),
+                }))]}
+                value={formData.frequencyHour}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, frequencyHour: value })
+                }
+                placeholder={{ label: "Hours", value: "" }}
+                style={pickerSelectStyles}
+                useNativeAndroidPickerStyle={false}
+              />
+            </View>
+
+            <View style={styles.PickerContainer}>
+              <RNPickerSelect
+              disabled={formData.frequencyType != "Other"}
+                Icon={() => <Icon name="arrow-drop-down" size={20} color="gray" />}
+                items={[{ label: "0", value: "0" }, ...Array.from({ length: 60 }, (_, i) => ({
+                  label: i.toString().padStart(2, "0"),
+                  value: i.toString().padStart(2, "0"),
+                }))]}
+                value={formData.frequencyMinute}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, frequencyMinute: value })
+                }
+                placeholder={{ label: "Minutes", value: "" }}
+                style={pickerSelectStyles}
+                useNativeAndroidPickerStyle={false}
+              />
+              </View>
               </View>
             </View>
+            </View>
           </ScrollView>
-
           <View style={styles.divider} />
 
           <View style={styles.column}>

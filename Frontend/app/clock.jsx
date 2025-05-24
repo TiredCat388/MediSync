@@ -38,37 +38,36 @@ const AnalogClock = () => {
   };
 
   const handleAdministerPress = (scheduleId) => {
-  // Try to find alert in upcoming or pending
-  const alertToAdminister =
-    upcomingAlerts.find((a) => a.schedule_id === scheduleId) ||
-    pendingAlerts.find((a) => a.schedule_id === scheduleId);
+    // Try to find alert in upcoming or pending
+    const alertToAdminister =
+      upcomingAlerts.find((a) => a.schedule_id === scheduleId) ||
+      pendingAlerts.find((a) => a.schedule_id === scheduleId);
 
-  if (!alertToAdminister) return; // nothing found
+    if (!alertToAdminister) return; // nothing found
 
-  // Remove from upcoming and pending
-  setUpcomingAlerts((prev) =>
-    prev.filter((alert) => alert.schedule_id !== scheduleId)
-  );
-  setPendingAlerts((prev) =>
-    prev.filter((alert) => alert.schedule_id !== scheduleId)
-  );
+    // Remove from upcoming and pending
+    setUpcomingAlerts((prev) =>
+      prev.filter((alert) => alert.schedule_id !== scheduleId)
+    );
+    setPendingAlerts((prev) =>
+      prev.filter((alert) => alert.schedule_id !== scheduleId)
+    );
 
-  // Add to history with status administered
-  setHistoryAlerts((prev) => [
-    ...prev,
-    {
-      ...alertToAdminister,
-      status: "administered",
-    },
-  ]);
+    // Add to history with status administered
+    setHistoryAlerts((prev) => [
+      ...prev,
+      {
+        ...alertToAdminister,
+        status: "administered",
+      },
+    ]);
 
-  // Check the alert
-  setCheckedAlerts((prev) => ({
-    ...prev,
-    [scheduleId]: true,
-  }));
-};
-
+    // Check the alert
+    setCheckedAlerts((prev) => ({
+      ...prev,
+      [scheduleId]: true,
+    }));
+  };
 
   const getCardStyle = (alertTime) => {
     if (activeTab === "upcoming") {
@@ -90,7 +89,6 @@ const AnalogClock = () => {
     return now.getHours() === alertHours && now.getMinutes() === alertMinutes;
   };
 
-
   useEffect(() => {
     const interval = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(interval);
@@ -100,19 +98,43 @@ const AnalogClock = () => {
   useEffect(() => {
     const fetchAlerts = async () => {
       try {
-        const response = await fetch(`${BASE_API}/api/medications`);
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
+        // Fetch both medication schedules and patient info
+        const [medsResponse, patientsResponse] = await Promise.all([
+          fetch(`${BASE_API}/api/medications`),
+          fetch(`${BASE_API}/api/patients`),
+        ]);
 
-        if (Array.isArray(data) && data.length > 0) {
-          setUpcomingAlerts(data);
-        } else {
-          setUpcomingAlerts([...mockData1, ...mockData2]);
+        if (!medsResponse.ok || !patientsResponse.ok) {
+          throw new Error("Failed to fetch meds or patients");
         }
+
+        const medsData = await medsResponse.json();
+        console.log("Fetched medications:", medsData);
+        const patientsData = await patientsResponse.json();
+
+        // Index patients by patientID for fast lookup
+        const patientMap = {};
+        patientsData.forEach((p) => {
+          patientMap[p.patientID] = p;
+        });
+
+        // Combine the medication and patient data
+        const enrichedAlerts = medsData.map((med) => {
+          const patient = patientMap[med.patientID] || {};
+          return {
+            ...med,
+            patient_first_name: patient.first_name || "",
+            patient_middle_name: patient.middle_name || "",
+            patient_last_name: patient.last_name || "",
+            room_number: patient.room_number || "N/A",
+            // medicationName may already be in med, if not add fallback here
+          };
+        });
+
+        setUpcomingAlerts(enrichedAlerts);
       } catch (error) {
-        console.error("Fetch failed, using mock data instead:", error);
+        console.error("Fetch failed:", error);
+        // You may want to use mock data here as fallback
         setUpcomingAlerts([...mockData1, ...mockData2]);
       }
     };
@@ -127,7 +149,8 @@ const AnalogClock = () => {
         medicationName: "Ibuprofen",
         dosage: "2",
         dosageUnit: "tablets",
-        medicationNotes: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ",
+        medicationNotes:
+          "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ",
         room_number: "102",
         quantity: "5",
         Medication_Time: "13:12",
@@ -144,7 +167,8 @@ const AnalogClock = () => {
         medicationName: "Paracetamol",
         dosage: "500",
         dosageUnit: "mg",
-        medicationNotes: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        medicationNotes:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
         room_number: "103",
         quantity: "7",
         Medication_Time: "13:12",
@@ -194,35 +218,35 @@ const AnalogClock = () => {
   };
 
   const confirmCancellation = () => {
-  // Try to find alert in upcoming or pending
-  const cancelledAlert =
-    upcomingAlerts.find((a) => a.schedule_id === selectedCancelId) ||
-    pendingAlerts.find((a) => a.schedule_id === selectedCancelId);
+    // Try to find alert in upcoming or pending
+    const cancelledAlert =
+      upcomingAlerts.find((a) => a.schedule_id === selectedCancelId) ||
+      pendingAlerts.find((a) => a.schedule_id === selectedCancelId);
 
-  if (cancelledAlert) {
-    // Remove from upcoming and pending
-    setUpcomingAlerts((prev) =>
-      prev.filter((a) => a.schedule_id !== selectedCancelId)
-    );
-    setPendingAlerts((prev) =>
-      prev.filter((a) => a.schedule_id !== selectedCancelId)
-    );
+    if (cancelledAlert) {
+      // Remove from upcoming and pending
+      setUpcomingAlerts((prev) =>
+        prev.filter((a) => a.schedule_id !== selectedCancelId)
+      );
+      setPendingAlerts((prev) =>
+        prev.filter((a) => a.schedule_id !== selectedCancelId)
+      );
 
-    // Add to history with status cancelled and reason
-    setHistoryAlerts((prev) => [
-      ...prev,
-      {
-        ...cancelledAlert,
-        status: "cancelled",
-        cancelReason,
-      },
-    ]);
-  }
+      // Add to history with status cancelled and reason
+      setHistoryAlerts((prev) => [
+        ...prev,
+        {
+          ...cancelledAlert,
+          status: "cancelled",
+          cancelReason,
+        },
+      ]);
+    }
 
-  setIsCancelModalVisible(false);
-  setSelectedCancelId(null);
-  setCancelReason("");
-};
+    setIsCancelModalVisible(false);
+    setSelectedCancelId(null);
+    setCancelReason("");
+  };
 
   useEffect(() => {
     if (activeTab === "history") {
@@ -231,38 +255,38 @@ const AnalogClock = () => {
   }, [activeTab]);
 
   useEffect(() => {
-  upcomingRef.current = upcomingAlerts;
-}, [upcomingAlerts]);
+    upcomingRef.current = upcomingAlerts;
+  }, [upcomingAlerts]);
 
-useEffect(() => {
-  const interval = setInterval(() => {
-    const now = new Date();
-    const updatedUpcoming = [];
-    const newlyPending = [];
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date();
+      const updatedUpcoming = [];
+      const newlyPending = [];
 
-    upcomingRef.current.forEach((alert) => {
-      const [alertHour, alertMinute] = alert.Medication_Time.split(":").map(Number);
-      const alertDate = new Date();
-      alertDate.setHours(alertHour, alertMinute, 0, 0);
+      upcomingRef.current.forEach((alert) => {
+        const [alertHour, alertMinute] =
+          alert.Medication_Time.split(":").map(Number);
+        const alertDate = new Date();
+        alertDate.setHours(alertHour, alertMinute, 0, 0);
 
-      const diffInMinutes = (now - alertDate) / (1000 * 60);
+        const diffInMinutes = (now - alertDate) / (1000 * 60);
 
-      if (diffInMinutes > 1) {
-        newlyPending.push({ ...alert, status: "pending" });
-      } else {
-        updatedUpcoming.push(alert);
+        if (diffInMinutes > 1) {
+          newlyPending.push({ ...alert, status: "pending" });
+        } else {
+          updatedUpcoming.push(alert);
+        }
+      });
+
+      if (newlyPending.length > 0) {
+        setUpcomingAlerts(updatedUpcoming);
+        setPendingAlerts((prev) => [...prev, ...newlyPending]);
       }
-    });
+    }, 60 * 1000); // run every minute
 
-    if (newlyPending.length > 0) {
-      setUpcomingAlerts(updatedUpcoming);
-      setPendingAlerts((prev) => [...prev, ...newlyPending]);
-    }
-  }, 60 * 1000); // run every minute
-
-  return () => clearInterval(interval);
-}, []);
-
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -306,67 +330,77 @@ useEffect(() => {
                       onPress={() => toggleExpand(scheduleId)}
                       activeOpacity={0.9}
                     >
-                      <View
-                        style={{flexDirection: "row", flex: 1}}>
+                      <View style={{ flexDirection: "row", flex: 1 }}>
                         <View style={{ alignSelf: "flex-start" }}>
                           <Checkbox
-                            status={activeTab === "history"
-                                    ? alert.status === "administered"
-                                      ? "checked"
-                                      : "unchecked"
-                                    : checkedAlerts[scheduleId]
-                                    ? "checked"
-                                    : "unchecked"}
+                            status={
+                              activeTab === "history"
+                                ? alert.status === "administered"
+                                  ? "checked"
+                                  : "unchecked"
+                                : checkedAlerts[scheduleId]
+                                ? "checked"
+                                : "unchecked"
+                            }
                             onPress={null}
-                            color={checkedAlerts[scheduleId] ? "#333" : "#CCCCCC"}
+                            color={
+                              checkedAlerts[scheduleId] ? "#333" : "#CCCCCC"
+                            }
                             style={styles.checkboxPosition}
                           />
-                          </View>
+                        </View>
                         <View style={{ marginLeft: 10, flex: 1 }}>
-                          <Text
-                            style={[ styles.alertText ]}
-                          >
+                          <Text style={[styles.alertText]}>
                             Schedule ID: {alert.patient_number} - {scheduleId}
                           </Text>
                           {isExpanded && (
                             <>
-                              <Text
-                                style={[ styles.alertText ]}
-                              >
-                                {alert.patient_first_name} {alert.patient_middle_name} {alert.patient_last_name} - Room {alert.room_number}
+                              <Text style={[styles.alertText]}>
+                                {alert.patient_first_name}{" "}
+                                {alert.patient_middle_name}{" "}
+                                {alert.patient_last_name} - Room{" "}
+                                {alert.room_number}
                               </Text>
-                              <Text
-                                style={[ styles.alertText ]}
-                              >
-                                Medication: {alert.medicationName}
+                              <Text style={[styles.alertText]}>
+                                Medication: {alert.Medication_name}
                               </Text>
-                              <Text
-                                style={[ styles.alertText ]}
-                              >
-                                Dosage: {alert.dosage} {alert.dosageUnit}
+                              <Text style={[styles.alertText]}>
+                                Medication Form: {alert.Medication_form}
                               </Text>
-                              <Text 
-                                style={[ styles.alertText ]}>
-                                Quantity: {alert.quantity}
+                              <Text style={[styles.alertText]}>
+                                Strength: {alert.Medication_strength} {alert.Medication_unit}
                               </Text>
-                              <Text
-                                style={[ styles.alertText ]}
-                              >
-                                Notes: {alert.medicationNotes}
+                              <Text style={[styles.alertText]}>
+                                Notes: {alert.Medication_notes}
                               </Text>
-                              {(activeTab === "upcoming" || activeTab === "pending") && (
+                              {(activeTab === "upcoming" ||
+                                activeTab === "pending") && (
                                 <View style={styles.tabButtonContainer}>
                                   <TouchableOpacity
-                                    style={[styles.tabButton, styles.confirmButton]}
-                                    onPress={() => handleAdministerPress(scheduleId)}
+                                    style={[
+                                      styles.tabButton,
+                                      styles.confirmButton,
+                                    ]}
+                                    onPress={() =>
+                                      handleAdministerPress(scheduleId)
+                                    }
                                   >
-                                    <Text style={styles.buttonText}>Administer</Text>
+                                    <Text style={styles.buttonText}>
+                                      Administer
+                                    </Text>
                                   </TouchableOpacity>
                                   <TouchableOpacity
-                                    style={[styles.tabButton, styles.cancelButton]}
-                                    onPress={() => handleCancelPress(scheduleId)}
+                                    style={[
+                                      styles.tabButton,
+                                      styles.cancelButton,
+                                    ]}
+                                    onPress={() =>
+                                      handleCancelPress(scheduleId)
+                                    }
                                   >
-                                    <Text style={styles.buttonText}>Cancel</Text>
+                                    <Text style={styles.buttonText}>
+                                      Cancel
+                                    </Text>
                                   </TouchableOpacity>
                                 </View>
                               )}
@@ -383,8 +417,7 @@ useEffect(() => {
         </View>
         <View style={styles.clockPanel}>
           <Clock style={{ alignSelf: "center", marginVertical: 20 }} />
-          <View style={styles.clock}>
-          </View>
+          <View style={styles.clock}></View>
         </View>
       </View>
 
@@ -417,7 +450,10 @@ useEffect(() => {
                 style={[
                   styles.modalButtons,
                   styles.confirmButton,
-                  !cancelReason.trim() && { backgroundColor: "#808080", opacity: 0.5 }
+                  !cancelReason.trim() && {
+                    backgroundColor: "#808080",
+                    opacity: 0.5,
+                  },
                 ]}
                 onPress={confirmCancellation}
                 disabled={!cancelReason.trim()}
