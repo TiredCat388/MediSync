@@ -590,9 +590,9 @@ export default function NewMedSched() {
                     Icon={() => (
                       <Icon name="arrow-drop-down" size={20} color="gray" />
                     )}
-                    items={Array.from({ length: 31 }, (_, index) => ({
-                      label: (index + 1).toString().padStart(2, "0"), // Days 01-31
-                      value: (index + 1).toString(), // Values 1-31 (without leading zero)
+                    items={Array.from({ length: 32 }, (_, index) => ({
+                      label: index.toString().padStart(2, "0"), // 00-31
+                      value: index.toString(), // "0" to "31" (string values)
                     }))}
                     value={formData.day}
                     onValueChange={(value) =>

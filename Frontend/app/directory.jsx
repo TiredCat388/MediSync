@@ -54,7 +54,7 @@ export default function PatientsDirectory() {
     const formattedFirstName = firstName;
     const formattedMiddleInitial = middleName ? `${middleName.charAt(0)}.` : "";
     return `${formattedLastName}, ${formattedFirstName}${
-      formattedMiddleInitial ? `, ${formattedMiddleInitial}` : ""
+      formattedMiddleInitial ? ` ${formattedMiddleInitial}` : ""
     }`;
   };
 
