@@ -60,16 +60,41 @@ export default function NewMedSched() {
   const [userRole, setUserRole] = useState(null);
   const [checkingRole, setCheckingRole] = useState(true);
 
+  // Add this near your other state declarations
+  const [physicianId, setPhysicianId] = useState("");
+
+  // Update your checkAccess useEffect
   useEffect(() => {
     const checkAccess = async () => {
       try {
-        const role = await AsyncStorage.getItem("userRole");
+        const [role, userId] = await Promise.all([
+          AsyncStorage.getItem("userRole"),
+          AsyncStorage.getItem("userId"),
+        ]);
+
+        console.log("Retrieved from storage - Role:", role, "User ID:", userId);
+
         if (role !== "physician") {
           setAccessDeniedMessage(
             "Access denied: Only physicians can add medication."
           );
           setAccessDeniedVisible(true);
+        } else {
+          if (!userId) {
+            console.warn("No physician ID found in storage");
+            // Try alternative keys if needed
+            const altId =
+              (await AsyncStorage.getItem("physicianId")) ||
+              (await AsyncStorage.getItem("user_id")) ||
+              "unknown-physician";
+            setPhysicianId(altId);
+            setFormData((prev) => ({ ...prev, physicianID: altId }));
+          } else {
+            setPhysicianId(userId);
+            setFormData((prev) => ({ ...prev, physicianID: userId }));
+          }
         }
+
         setUserRole(role);
       } catch (error) {
         console.error("Error checking user role:", error);
@@ -155,6 +180,8 @@ export default function NewMedSched() {
     inputWeb: styles.input,
     placeholder: {
       color: "#999",
+      fontSize: 10,
+      fontStyle: "italic",
     },
   };
 
@@ -287,10 +314,8 @@ export default function NewMedSched() {
               />
             </View>
 
-            <Text style={[styles.label, { marginTop: 10 }]}>
-              Medication form
-            </Text>
-            <View>
+            <Text style={[styles.label]}>Medication form</Text>
+            <View style={{}}>
               <RNPickerSelect
                 items={[
                   { label: "Tablet", value: "Tablet" },
@@ -317,7 +342,13 @@ export default function NewMedSched() {
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
               <TextInput
-                style={{ marginRight: 10, borderWidth: 1, borderColor: "black", backgroundColor: "#F8F8F8", marginBottom: 10, flex: 1}}
+                style={{
+                  marginRight: 10,
+                  backgroundColor: "#F8F8F8",
+                  marginBottom: 10,
+                  flex: 1,
+                  height: 36,
+                }}
                 value={formData.medicationStrength}
                 onChangeText={(text) =>
                   setFormData({ ...formData, medicationStrength: text })
@@ -336,12 +367,14 @@ export default function NewMedSched() {
                   onValueChange={(value) =>
                     setFormData({ ...formData, dosageUnit: value })
                   }
-                  placeholder={formData.dosageUnit ? {} : { label: "Unit", value: "" }}
+                  placeholder={
+                    formData.dosageUnit ? {} : { label: "Unit", value: "" }
+                  }
                   style={pickerSelectStyles}
                 />
               </View>
             </View>
-            
+
             <Text style={styles.label}>Medication Start Date</Text>
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
@@ -568,11 +601,16 @@ export default function NewMedSched() {
             />
             <Text style={styles.label}>Physician ID</Text>
             <TextInput
-              style={styles.input}
-              onChangeText={(text) =>
-                setFormData({ ...formData, physicianID: text })
-              }
-              value={formData.physicianID}
+              style={[
+                styles.input,
+                {
+                  backgroundColor: "#f0f0f0", // Light gray background
+                  color: "#555", // Darker text
+                  fontStyle: formData.physicianID ? "normal" : "italic",
+                },
+              ]}
+              value={formData.physicianID || "Loading..."}
+              editable={false}
             />
           </View>
         </View>

@@ -16,7 +16,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import styles from "./stylesheets/loginstyles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Constants from 'expo-constants';
+import Constants from "expo-constants";
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
@@ -80,9 +80,26 @@ const LoginScreen = () => {
         }
 
         const token = data.access;
-        console.log("Token:", token);
 
-        await AsyncStorage.setItem("userRole", "physician");
+        // Store all user data including physician ID
+        await AsyncStorage.multiSet([
+          ["userRole", "physician"],
+          ["userId", id], // Using the login ID as physician ID
+          ["authToken", token],
+          ["username", id], // Also storing username for future use
+        ]);
+
+        // Verify storage
+        const storedData = await AsyncStorage.multiGet([
+          "userRole",
+          "userId",
+          "authToken",
+        ]);
+        console.log("Stored login data:", {
+          role: storedData[0][1],
+          id: storedData[1][1],
+          token: storedData[2][1],
+        });
 
         Alert.alert("Login successful!");
         router.push("/directory");

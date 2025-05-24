@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
     padding: 40,
     borderRadius: 10,
     justifyContent: "space-between",
+    maxHeight: 520,
   },
   column: {
     flex: 1,
@@ -48,13 +49,20 @@ const styles = StyleSheet.create({
     backgroundColor: "#F8F8F8",
     padding: 8,
     marginBottom: 10,
+    height: 36,
+    borderWidth: 1,
   },
   dobContainer: {
     flexDirection: "row",
     marginBottom: 10,
     alignItems: "center",
     width: 300,
-    justifyContent: "space-between", 
+    justifyContent: "space-between",
+    height: 36,
+    fontSize: 14,
+    backgroundColor: "#F8F8F8",
+    padding: 8,
+    gap: 10,
   },
   dobInput: {
     borderWidth: 1,
@@ -206,7 +214,7 @@ const styles = StyleSheet.create({
   },
   timePickerContainer: {
     flex: 1, // Each picker takes equal width
-    height: 36, // Consistent height
+    height: 36,
   },
   timePicker: {
     paddingVertical: 8,
@@ -247,6 +255,11 @@ const styles = StyleSheet.create({
     borderRadius: 1,
     fontSize: 16,
     height: 36,
+  },
+  autocompleteContainer: {
+    flex: 1,
+    zIndex: 10, // Make sure suggestions appear above other elements
+    minHeight: 50,
   },
 });
 
