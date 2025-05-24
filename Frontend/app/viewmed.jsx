@@ -186,8 +186,8 @@ export default function NewMedSched() {
       };
 
       const url = schedule_id
-        ? `http://127.0.0.1:8000/api/medications/${patient_number}/${schedule_id}/`
-        : `http://127.0.0.1:8000/api/medications/${patient_number}/`;
+        ? `${BASE_API}/api/medications/${patient_number}/${schedule_id}/`
+        : `${BASE_API}/api/medications/${patient_number}/`;
       const method = schedule_id ? "PUT" : "POST";
 
       console.log("Request URL:", url);
