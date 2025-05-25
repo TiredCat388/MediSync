@@ -575,6 +575,7 @@ export default function NewMedSched() {
                 </View>
               </View>
 
+                
               <Text style={styles.label}>
                 Time of Medication <Text style={{ color: "#5879A5" }}>*</Text>{" "}
               </Text>
@@ -667,8 +668,10 @@ export default function NewMedSched() {
                 style={pickerSelectStyles}
                 useNativeAndroidPickerStyle={false}
               />
+              {formData.frequencyType === "Other" && (
+              <View>
               <Text style={styles.label}>
-                Set Frequency Interval{" "}
+                Set Frequency Interval
                 <Text style={{ color: "#5879A5" }}>*</Text>{" "}
               </Text>
               <View style={styles.dobContainer}>
@@ -747,6 +750,8 @@ export default function NewMedSched() {
                   />
                 </View>
               </View>
+              </View>
+              )}
             </View>
           </ScrollView>
           <View style={styles.divider} />
