@@ -323,13 +323,13 @@ export default function CalendarApp() {
               <TouchableOpacity
                 onPress={() => setModalVisible(false)}
                 style={{
-                  backgroundColor: '#ccc',
+                  backgroundColor: '#ff0000',
                   paddingVertical: 10,
                   borderRadius: 5,
                   alignItems: 'center',
                 }}
               >
-                <Text style={{ color: '#000', fontSize: 16 }}>Close</Text>
+                <Text style={{ color: 'white', fontWeight:'bold', fontSize: 16 }}>Close</Text>
               </TouchableOpacity>
             </View>
           </View>
