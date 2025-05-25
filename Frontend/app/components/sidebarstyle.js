@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   iconLabel: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'gray',
+    color: 'white',
     opacity: 1,
     paddingLeft: 15,
     paddingRight: 15,
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   logoText: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: 'gray',
+    color: 'white',
     alignSelf: 'center', 
   },
   overlay: {
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   subOptionText: {
-    color: '#D3E8F9',
+    color: 'white',
     fontSize: 18,
     fontWeight: '600',
   },
