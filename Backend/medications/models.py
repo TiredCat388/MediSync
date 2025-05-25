@@ -41,6 +41,11 @@ Medication_form_Choices = (
 
 
 class Medications(models.Model):
+    physicianID = models.CharField(
+        max_length=100, 
+        blank=False,
+        help_text='ID of the physician prescribing the medication'
+    )
     Medication_name = models.CharField(max_length=100, blank=False)
     Medication_form = models.CharField(
         max_length=100, 

@@ -107,10 +107,12 @@ const AnalogClock = () => {
         if (!medsResponse.ok || !patientsResponse.ok) {
           throw new Error("Failed to fetch meds or patients");
         }
+        
 
         const medsData = await medsResponse.json();
         console.log("Fetched medications:", medsData);
         const patientsData = await patientsResponse.json();
+        console.log("Fetched patients:", patientsData);
 
         // Index patients by patientID for fast lookup
         const patientMap = {};
@@ -130,6 +132,7 @@ const AnalogClock = () => {
             // medicationName may already be in med, if not add fallback here
           };
         });
+        console.log("Enriched alerts:", enrichedAlerts);
 
         setUpcomingAlerts(enrichedAlerts);
       } catch (error) {
