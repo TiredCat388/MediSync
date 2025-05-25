@@ -10,6 +10,7 @@ class EmergencycontactdetailsModelSerializer(serializers.ModelSerializer):
 
 class PatientsModelSerializer(serializers.ModelSerializer):
     emergency_contact = EmergencycontactdetailsModelSerializer(source='emergencycontactdetails')
+    BMI = serializers.SerializerMethodField()
 
     class Meta:
         model = Patients
@@ -47,4 +48,12 @@ class PatientsModelSerializer(serializers.ModelSerializer):
             emergency_contact.save()
 
         return instance
+    
+    def get_BMI(self, obj):
+        if obj.height and obj.weight:
+            try:
+                return round(obj.weight / (obj.height ** 2), 2)
+            except ZeroDivisionError:
+                return None
+        return None
 
