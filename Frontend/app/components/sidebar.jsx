@@ -9,7 +9,11 @@ const Sidebar = () => {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const [sidebarWidth] = useState(new Animated.Value(70));
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
+<<<<<<< Updated upstream
   const [sidebarColor, setSidebarColor] = useState('#5c87b2');
+=======
+  const [sidebarColor, setSidebarColor] = useState('#5879a5');
+>>>>>>> Stashed changes
   const [iconColor, setIconColor] = useState('white');
   const [textColor, setTextColor] = useState('white');
   const [showSubOptions, setShowSubOptions] = useState(false);
@@ -152,10 +156,19 @@ const Sidebar = () => {
         {/* Logo */}
         <View style={styles.logoContainer}>
           <Image
+<<<<<<< Updated upstream
             resizeMode = 'contain'
             source={isSidebarExpanded
               ? require('../../assets/images/medisync-logo.png')
               : require('../../assets/images/medisync-logo.png')}
+=======
+            resizeMode="contain"
+            source={
+              isSidebarExpanded
+                ? require('../../assets/images/medisync-logo.png')
+                : require('../../assets/images/medisync-logo.png')
+            }
+>>>>>>> Stashed changes
             style={styles.logo}
           />
           {isSidebarExpanded && <Text style={[styles.logoText, { color: textColor }]}>Medisync</Text>}
