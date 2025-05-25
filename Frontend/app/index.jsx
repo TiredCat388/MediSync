@@ -166,7 +166,6 @@ const LoginScreen = () => {
                   placeholderTextColor="rgba(0, 0, 0, 0.4)"
                   value={id}
                   onChangeText={setId}
-                  keyboardType="numeric"
                 />
 
                 <TextInput
