@@ -12,9 +12,9 @@ const Sidebar = () => {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const [sidebarWidth] = useState(new Animated.Value(70));
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
-  const [sidebarColor, setSidebarColor] = useState('#e0e0e0');
-  const [iconColor, setIconColor] = useState('gray');
-  const [textColor, setTextColor] = useState('gray');
+  const [sidebarColor, setSidebarColor] = useState('#5879a5');
+  const [iconColor, setIconColor] = useState('white');
+  const [textColor, setTextColor] = useState('white');
   const [showSubOptions, setShowSubOptions] = useState(false);
   const [isDirectoryExpanded, setIsDirectoryExpanded] = useState(false);
   const { showNotification } = useNotification();
@@ -41,8 +41,8 @@ const Sidebar = () => {
         useNativeDriver: false,
       }).start();
       setIsSidebarExpanded(!isSidebarExpanded);
-      setSidebarColor(isSidebarExpanded ? '#e0e0e0' : '#5879a5');
-      const newColor = isSidebarExpanded ? 'gray' : 'white';
+      setSidebarColor(isSidebarExpanded ? '#5879a5' : '#5879a5');
+      const newColor = isSidebarExpanded ? 'white' : 'white';
       setIconColor(newColor);
       setTextColor(newColor);
       if (isSidebarExpanded) {
@@ -93,7 +93,7 @@ const Sidebar = () => {
 
             {isSidebarExpanded && (
               <Feather
-                name={isDirectoryExpanded ? 'chevron-down' : 'chevron-left'}
+                name={isDirectoryExpanded ? 'chevron-down' : 'chevron-right'}
                 size={20}
                 color="white"
                 style={{ marginLeft: 35 }}
@@ -164,7 +164,7 @@ const Sidebar = () => {
             source={
               isSidebarExpanded
                 ? require('../../assets/images/medisync-logo.png')
-                : require('../../assets/images/medisync-logo-bw.png')
+                : require('../../assets/images/medisync-logo.png')
             }
             style={styles.logo}
           />
