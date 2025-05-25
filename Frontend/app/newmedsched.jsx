@@ -20,6 +20,8 @@ import Icon from "react-native-vector-icons/MaterialIcons"; // Or FontAwesome, F
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
+const today = new Date();
+
 const frequencyOptions = [
   { label: "OD (Once Daily)", value: "OD" },
   { label: "BID (Twice Daily)", value: "BID" },
@@ -28,12 +30,20 @@ const frequencyOptions = [
   { label: "Other", value: "Other" },
 ];
 
-const frequencyIntervals = {
-  OD: { days: 1, hours: 0, minutes: 0 },
-  BID: { days: 0, hours: 10, minutes: 0 },
-  TID: { days: 0, hours: 5, minutes: 0 },
-  QID: { days: 0, hours: 4, minutes: 0 },
-};
+const months = [
+  { label: "January", value: "01" },
+  { label: "February", value: "02" },
+  { label: "March", value: "03" },
+  { label: "April", value: "04" },
+  { label: "May", value: "05" },
+  { label: "June", value: "06" },
+  { label: "July", value: "07" },
+  { label: "August", value: "08" },
+  { label: "September", value: "09" },
+  { label: "October", value: "10" },
+  { label: "November", value: "11" },
+  { label: "December", value: "12" },
+];
 
 export default function NewMedSched() {
   const router = useRouter();
@@ -62,9 +72,9 @@ export default function NewMedSched() {
     frequencyType: "",
     frequencyHour: "",
     frequencyMinute: "",
-    medicationMonth: "",
-    medicationDay: "",
-    medicationYear: "",
+    medicationDay: String(today.getDate()).padStart(2, "0"), // "25"
+    medicationMonth: String(today.getMonth() + 1).padStart(2, "0"), // "05"
+    medicationYear: String(today.getFullYear()), // "2025"
     medicationEndMonth: "",
     medicationEndDay: "",
     medicationEndYear: "",
@@ -159,7 +169,7 @@ export default function NewMedSched() {
   };
 
   const handleFrequencyChange = (value) => {
-    const updates ={
+    const updates = {
       frequencyType: value,
     };
 
@@ -167,31 +177,17 @@ export default function NewMedSched() {
       updates.timeHour = "08";
       updates.timeMinute = "00";
       updates.timePeriod = "AM";
-    } 
-    if (value in frequencyIntervals) {
-      const { days, hours, minutes } = frequencyIntervals[value];
-      updates.frequencyDay = days.toString();
-      updates.frequencyHour = hours.toString().padStart(2, "0");
-      updates.frequencyMinute = minutes.toString().padStart(2, "0");
-    }
-    else {
-      updates.timeHour = "";
-      updates.timeMinute = "";
-      updates.timePeriod = "";
+
       updates.frequencyDay = "";
       updates.frequencyHour = "";
       updates.frequencyMinute = "";
     }
-     setFormData((prev)=>({
+
+    setFormData((prev) => ({
       ...prev,
       ...updates,
     }));
   };
-
-  const months = Array.from({ length: 12 }, (_, i) => ({
-    label: String(i + 1).padStart(2, "0"),
-    value: String(i + 1).padStart(2, "0"),
-  }));
 
   const days = Array.from({ length: 31 }, (_, i) => ({
     label: String(i + 1).padStart(2, "0"),
@@ -238,7 +234,17 @@ export default function NewMedSched() {
         formData.timePeriod
       );
 
-      const frequency = `${formData.frequencyDay || "0"} ${formData.frequencyHour.padStart(2, "0")}:${formData.frequencyMinute.padStart(2, "0")}:00`;
+      const frequencyDay = formData.frequencyDay || "0";
+      const frequencyHour =
+        formData.frequencyHour != null
+          ? formData.frequencyHour.toString().padStart(2, "0")
+          : "00";
+      const frequencyMinute =
+        formData.frequencyMinute != null
+          ? formData.frequencyMinute.toString().padStart(2, "0")
+          : "00";
+
+      const frequency = `${frequencyDay} ${frequencyHour}:${frequencyMinute}:00`;
 
       const requestData = {
         Medication_name: formData.medicineName,
@@ -250,13 +256,16 @@ export default function NewMedSched() {
         Medication_start_date: `${formData.medicationYear}-${formData.medicationMonth}-${formData.medicationDay}`,
         Medication_end_date: `${formData.medicationEndYear}-${formData.medicationEndMonth}-${formData.medicationEndDay}`,
         Frequency: frequency,
-        Frequency_type:formData.frequencyType,
+        Frequency_type: formData.frequencyType,
         Medication_notes: formData.medicationNotes,
         patient_number: parseInt(patient_number),
         physicianID: formData.physicianID || "default_physician",
       };
 
-      console.log("🧾 Request data being sent to backend:", JSON.stringify(requestData, null, 2));
+      console.log(
+        "🧾 Request data being sent to backend:",
+        JSON.stringify(requestData, null, 2)
+      );
 
       const response = await fetch(`${BASE_API}/api/medications/`, {
         method: "POST",
@@ -579,7 +588,7 @@ export default function NewMedSched() {
                     Icon={() => (
                       <Icon name="arrow-drop-down" size={20} color="gray" />
                     )}
-                    items={Array.from({ length: 12 }, (_, index) => ({
+                    items={Array.from({ length: 13 }, (_, index) => ({
                       label: index.toString().padStart(2, "0"),
                       value: index.toString().padStart(2, "0"),
                     }))}
