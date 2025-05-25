@@ -20,7 +20,7 @@ Medications_Choices = (
 )
 
 Medication_strength_Choices = (
-    ('mL', 'mL'),
+    ('ml', 'mL'),
     ('mcg', 'mcg'),
     ('mg', 'mg'),
     ('%', '%'),
@@ -59,9 +59,9 @@ class Medications(models.Model):
         help_text='Default unit of measurement for medication strength'
     )
     Frequency = models.DurationField(
-    blank=False,
-    default=timedelta(hours=8),  # Default frequency of every 8 hours
-    help_text='Duration between medication administrations'
+        blank=False,
+        default=timedelta(hours=8),  # Default frequency of every 8 hours
+        help_text='Duration between medication administrations'
     )
     Medication_start_date = models.DateField(
         default=date.today,
@@ -70,7 +70,7 @@ class Medications(models.Model):
     )
     Medication_end_date = models.DateField(
         default=date.today,
-        blank=False,
+        blank=True,
         help_text='Date when medication regimen ends'
     )
     Medication_route = models.CharField(
@@ -89,13 +89,13 @@ class Medications(models.Model):
     Frequency_type = models.CharField(
         max_length=50,
         choices=[
-            ('Od', 'Once Daily'),
-            ('Bid', 'Twice Daily'),
-            ('Tid', 'Thrice Daily'),
-            ('Qid', 'Four times Daily'),
+            ('OD', 'Once Daily'),
+            ('BID', 'Twice Daily'),
+            ('TID', 'Thrice Daily'),
+            ('QID', 'Four times Daily'),
             ('Other', 'Other')
         ],
-        default='Od',
+        default='OD',
         help_text='Frequency type for medication administration'
     )
 

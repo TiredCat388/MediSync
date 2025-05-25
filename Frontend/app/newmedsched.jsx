@@ -46,7 +46,6 @@ export default function NewMedSched() {
   const [accessDeniedMessage, setAccessDeniedMessage] = useState("");
   const [addSuccessVisible, setAddSuccessVisible] = useState(false); // State for success alert
   const [addSuccessMessage, setAddSuccessMessage] = useState(""); // State for success message
-  const [selectedDays, setSelectedDays] = useState([]);
   const [patientName, setPatientName] = useState(null);
 
   const [formData, setFormData] = useState({
@@ -77,8 +76,6 @@ export default function NewMedSched() {
   const [query, setQuery] = useState("");
   const [userRole, setUserRole] = useState(null);
   const [checkingRole, setCheckingRole] = useState(true);
-
-  // Add this near your other state declarations
   const [physicianId, setPhysicianId] = useState("");
 
   // Update your checkAccess useEffect
@@ -100,7 +97,6 @@ export default function NewMedSched() {
         } else {
           if (!userId) {
             console.warn("No physician ID found in storage");
-            // Try alternative keys if needed
             const altId =
               (await AsyncStorage.getItem("physicianId")) ||
               (await AsyncStorage.getItem("user_id")) ||
@@ -148,14 +144,6 @@ export default function NewMedSched() {
     }
   }, [patient_number]);
 
-  const toggleDay = (day) => {
-    setSelectedDays((prevDays) =>
-      prevDays.includes(day)
-        ? prevDays.filter((d) => d !== day)
-        : [...prevDays, day]
-    );
-  };
-
   const handleInputChange = (text) => {
     setQuery(text);
     setFormData({ ...formData, medicineName: text });
@@ -171,47 +159,33 @@ export default function NewMedSched() {
   };
 
   const handleFrequencyChange = (value) => {
-    setFormData((prev) => ({
-      ...prev,
+    const updates ={
       frequencyType: value,
-    }));
+    };
 
     if (value !== "Other") {
-      // Set time to 08:00 AM for presets
-      setFormData({
-        frequencyType: value,
-        timeHour: "08",
-        timeMinute: "00",
-        timePeriod: "AM",
-      });
+      updates.timeHour = "08";
+      updates.timeMinute = "00";
+      updates.timePeriod = "AM";
     } 
     if (value in frequencyIntervals) {
       const { days, hours, minutes } = frequencyIntervals[value];
-      setFormData((prev) => ({
-        ...prev,
-        frequencyDay: days.toString(),
-        frequencyHour: hours.toString().padStart(2, "0"),
-        frequencyMinute: minutes.toString().padStart(2, "0"),
-      }));
+      updates.frequencyDay = days.toString();
+      updates.frequencyHour = hours.toString().padStart(2, "0");
+      updates.frequencyMinute = minutes.toString().padStart(2, "0");
     }
     else {
-      // Clear time for Other (or keep previous, your choice)
-      setFormData({
-        frequencyType: value,
-        timeHour: "",
-        timeMinute: "",
-        timePeriod: "",
-        frequencyDay: "",
-        frequencyHour: "",
-        frequencyMinute: "",
-      });
+      updates.timeHour = "";
+      updates.timeMinute = "";
+      updates.timePeriod = "";
+      updates.frequencyDay = "";
+      updates.frequencyHour = "";
+      updates.frequencyMinute = "";
     }
-  };
-
-  const handleSelectMedication = (medName) => {
-    setQuery(medName);
-    setFormData({ ...formData, medicineName: medName });
-    setFilteredMedications([]);
+     setFormData((prev)=>({
+      ...prev,
+      ...updates,
+    }));
   };
 
   const months = Array.from({ length: 12 }, (_, i) => ({
@@ -264,23 +238,25 @@ export default function NewMedSched() {
         formData.timePeriod
       );
 
-      const frequency = `${formData.frequencyHour.padStart(
-        2,
-        "0"
-      )}:${formData.frequencyMinute.padStart(2, "0")}`;
+      const frequency = `${formData.frequencyDay || "0"} ${formData.frequencyHour.padStart(2, "0")}:${formData.frequencyMinute.padStart(2, "0")}:00`;
 
       const requestData = {
         Medication_name: formData.medicineName,
-        Medicationform: formData.Medication_form,
-        Dosage: formData.dosage,
-        Dosage_Unit: formData.dosageUnit,
+        Medication_form: formData.medicationForm,
+        Medication_Route: formData.medicationRoute,
+        Medication_strength: formData.medicationStrength,
+        Medication_unit: formData.medicationUnit,
         Medication_Time: medicationTime,
+        Medication_start_date: `${formData.medicationYear}-${formData.medicationMonth}-${formData.medicationDay}`,
+        Medication_end_date: `${formData.medicationEndYear}-${formData.medicationEndMonth}-${formData.medicationEndDay}`,
         Frequency: frequency,
-        Days_of_Week: selectedDays,
+        Frequency_type:formData.frequencyType,
         Medication_notes: formData.medicationNotes,
         patient_number: parseInt(patient_number),
         physicianID: formData.physicianID || "default_physician",
       };
+
+      console.log("🧾 Request data being sent to backend:", JSON.stringify(requestData, null, 2));
 
       const response = await fetch(`${BASE_API}/api/medications/`, {
         method: "POST",
@@ -456,10 +432,10 @@ export default function NewMedSched() {
                     ]}
                     value={formData.dosageUnit}
                     onValueChange={(value) =>
-                      setFormData({ ...formData, dosageUnit: value })
+                      setFormData({ ...formData, medicationUnit: value })
                     }
                     placeholder={
-                      formData.dosageUnit ? {} : { label: "Unit", value: "" }
+                      formData.medicationUnit ? {} : { label: "Unit", value: "" }
                     }
                     style={pickerSelectStyles}
                     useNativeAndroidPickerStyle={false}
@@ -590,13 +566,13 @@ export default function NewMedSched() {
               <View style={styles.dobContainer}>
                 <View style={styles.PickerContainer}>
                   <RNPickerSelect
-                  disabled={formData.frequencyType != "Other"}
+                  disabled={formData.frequencyType != "Other" && formData.frequencyType != ""}
                     Icon={() => (
                       <Icon name="arrow-drop-down" size={20} color="gray" />
                     )}
                     items={Array.from({ length: 12 }, (_, index) => ({
-                      label: (index + 1).toString().padStart(2, "0"),
-                      value: (index + 1).toString().padStart(2, "0"),
+                      label: index.toString().padStart(2, "0"),
+                      value: index.toString().padStart(2, "0"),
                     }))}
                     value={formData.timeHour}
                     onValueChange={(value) =>
@@ -610,7 +586,7 @@ export default function NewMedSched() {
 
                 <View style={styles.PickerContainer}>
                   <RNPickerSelect
-                  disabled={formData.frequencyType != "Other"}
+                  disabled={formData.frequencyType != "Other" && formData.frequencyType != ""}
                     Icon={() => (
                       <Icon name="arrow-drop-down" size={20} color="gray" />
                     )}
@@ -630,7 +606,7 @@ export default function NewMedSched() {
 
                 <View style={styles.PickerContainer}>
                   <RNPickerSelect
-                  disabled={formData.frequencyType != "Other"}
+                  disabled={formData.frequencyType != "Other" && formData.frequencyType != ""}
                     Icon={() => (
                       <Icon name="arrow-drop-down" size={20} color="gray" />
                     )}
@@ -666,11 +642,11 @@ export default function NewMedSched() {
           <View style={styles.dobContainer}>
             <View style={styles.PickerContainer}>
               <RNPickerSelect
-              disabled={formData.frequencyType != "Other"}
+              disabled={formData.frequencyType != "Other" && formData.frequencyType != ""}
                 Icon={() => <Icon name="arrow-drop-down" size={20} color="gray" />}
-                items={[{ label: "0", value: "0" }, ...Array.from({ length: 8 }, (_, i) => ({
-                  label: (i + 1).toString(),
-                  value: (i + 1).toString(),
+                items={[...Array.from({ length: 31 }, (_, i) => ({
+                  label: i.toString().padStart(2,"0"),
+                  value: i.toString(),
                 }))]}
                 value={formData.frequencyDay}
                 onValueChange={(value) =>
@@ -684,9 +660,9 @@ export default function NewMedSched() {
 
             <View style={styles.PickerContainer}>
               <RNPickerSelect
-              disabled={formData.frequencyType != "Other"}
+              disabled={formData.frequencyType != "Other" && formData.frequencyType != ""}
                 Icon={() => <Icon name="arrow-drop-down" size={20} color="gray" />}
-                items={[{ label: "0", value: "0" }, ...Array.from({ length: 24 }, (_, i) => ({
+                items={[...Array.from({ length: 24 }, (_, i) => ({
                   label: i.toString().padStart(2, "0"),
                   value: i.toString().padStart(2, "0"),
                 }))]}
@@ -702,9 +678,9 @@ export default function NewMedSched() {
 
             <View style={styles.PickerContainer}>
               <RNPickerSelect
-              disabled={formData.frequencyType != "Other"}
+              disabled={formData.frequencyType != "Other" && formData.frequencyType != ""}
                 Icon={() => <Icon name="arrow-drop-down" size={20} color="gray" />}
-                items={[{ label: "0", value: "0" }, ...Array.from({ length: 60 }, (_, i) => ({
+                items={[...Array.from({ length: 60 }, (_, i) => ({
                   label: i.toString().padStart(2, "0"),
                   value: i.toString().padStart(2, "0"),
                 }))]}
