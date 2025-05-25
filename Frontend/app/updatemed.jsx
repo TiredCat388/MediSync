@@ -166,18 +166,18 @@ export default function NewMedSched() {
 
             const userId = await AsyncStorage.getItem("userId");
 
-
             // Parse the time into hours, minutes, and period
-            const [timeHour, timeMinute] = data.Medication_Time.split(":");
+            const [timeHour = "00", timeMinute = "00"] =
+              data.Medication_Time?.split(":") || ["00", "00"]; // Fallback to 00:00 if null
             let timePeriod = "AM";
             const hourNum = parseInt(timeHour);
             if (hourNum >= 12) {
               timePeriod = "PM";
             }
 
-            // Parse the frequency
-            const [frequencyHour, frequencyMinute] = data.Frequency.split(":");
-
+            const [frequencyHour = "00", frequencyMinute = "00"] = 
+            data.Frequency?.split(":") || ["00", "00"]; // Fallback to 00:00 if null
+    
             setFormData({
               medicineName: data.Medication_name,
               medicationForm: data.Medication_form,
