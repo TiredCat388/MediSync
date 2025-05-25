@@ -144,6 +144,11 @@ export default function PatientsDirectory() {
               borderColor: "black",
               overflow: "hidden",
               maxHeight: 560, // Added maxHeight for table scroll
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.25,
+              shadowRadius: 8,
+              elevation: 8,
             }}
           >
             {/* Table Header */}
