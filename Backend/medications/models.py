@@ -39,6 +39,7 @@ Medication_form_Choices = (
     ('Other', 'Other')
 )
 
+
 class Medications(models.Model):
     Medication_name = models.CharField(max_length=100, blank=False)
     Medication_form = models.CharField(
@@ -59,8 +60,8 @@ class Medications(models.Model):
         help_text='Default unit of measurement for medication strength'
     )
     Frequency = models.DurationField(
-        blank=False,
-        default=timedelta(hours=8),  # Default frequency of every 8 hours
+        blank=True,
+        null=True,
         help_text='Duration between medication administrations'
     )
     Medication_start_date = models.DateField(
@@ -71,6 +72,7 @@ class Medications(models.Model):
     Medication_end_date = models.DateField(
         default=date.today,
         blank=True,
+        null=True,
         help_text='Date when medication regimen ends'
     )
     Medication_route = models.CharField(
@@ -135,10 +137,26 @@ class Medications(models.Model):
         intervals_passed = int(elapsed.total_seconds() // self.Frequency.total_seconds()) + 1
         next_dose = start_datetime + (self.Frequency * intervals_passed)
 
-        # Optionally check if it’s beyond end date (optional logic)
         if self.Medication_end_date:
             end_datetime = timezone.make_aware(datetime.combine(self.Medication_end_date, time(23, 59)))
             if next_dose > end_datetime:
                 return None
 
         return next_dose
+    
+    def __str__(self):
+        return f"{self.Medication_name} ({self.Medication_form}) - {self.patient_number}"
+    
+class Administered(models.Model):
+    medication = models.ForeignKey(
+        Medications,
+        related_name='administered_doses',
+        on_delete=models.CASCADE
+    )
+    administered_time = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ['-administered_time']
+
+    def __str__(self):
+        return f"{self.medication.Medication_name} administered at {self.administered_time}"

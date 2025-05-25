@@ -35,10 +35,15 @@ export const styles = StyleSheet.create({
   patientId: { fontSize: 18, fontWeight: "bold", marginBottom: 10 },
   infoContainer: {
     flexDirection: "row",
-    backgroundColor: "#CCCCCC",
+    backgroundColor: "#b8cbdb",
     padding: 15,
     borderRadius: 8,
     maxHeight: 320,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 8,
   },
   detailsSection: {
     flex: 1.5,

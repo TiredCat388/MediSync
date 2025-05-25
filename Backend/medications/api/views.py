@@ -98,3 +98,8 @@ class MedicationsViewSet(viewsets.ModelViewSet):
             f"Archived medication with schedule ID {schedule_id} for patient {patient_number}.",
             log_type="Archive",
         )
+
+        return Response(
+            {"message": f"Successfully archived {count} medication(s) for patient {patient_number}."},
+            status=status.HTTP_204_NO_CONTENT,
+        )

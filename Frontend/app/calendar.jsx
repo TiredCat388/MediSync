@@ -102,7 +102,7 @@ export default function CalendarApp() {
       <Sidebar setSidebarWidth={setSidebarWidth} />
 
       {/* Main Calendar Content */}
-      <View style={{ flex: 1, padding: 40, marginLeft: sidebarWidth }}>
+      <ScrollView style={{ flex: 1, padding: 40, marginLeft: sidebarWidth }}>
         <Text style={{ fontSize: 30, fontWeight: "bold", margin: 8 }}>
           Calendar
         </Text>
@@ -323,18 +323,18 @@ export default function CalendarApp() {
               <TouchableOpacity
                 onPress={() => setModalVisible(false)}
                 style={{
-                  backgroundColor: '#ccc',
+                  backgroundColor: '#ff0000',
                   paddingVertical: 10,
                   borderRadius: 5,
                   alignItems: 'center',
                 }}
               >
-                <Text style={{ color: '#000', fontSize: 16 }}>Close</Text>
+                <Text style={{ color: 'white', fontWeight:'bold', fontSize: 16 }}>Close</Text>
               </TouchableOpacity>
             </View>
           </View>
         </Modal>
-      </View>
+      </ScrollView>
     </View>
   );
 }
