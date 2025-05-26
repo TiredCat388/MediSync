@@ -187,8 +187,8 @@ export default function PatientDetails() {
         </View>
 
         <Text style={styles.patientId}>
-           PATIENT ID: {patient?.patient_number} |{" "}
-                    {patient?.last_name?.toUpperCase()},{" "}{patient?.first_name}
+          PATIENT ID: {patient?.patient_number} |{" "}
+          {patient?.last_name?.toUpperCase()}, {patient?.first_name}
         </Text>
 
         <View style={styles.infoContainer}>
@@ -198,7 +198,9 @@ export default function PatientDetails() {
               <Text style={styles.boldLabel}>Name</Text>
               <Text>
                 {patient?.last_name?.toUpperCase()}, {patient?.first_name}{" "}
-                {patient?.middle_name}{" "}
+                {patient?.middle_name
+                  ? `${patient.middle_name.charAt(0)}.`
+                  : ""}
               </Text>
               <Text style={styles.boldLabel}>Sex</Text>
               <Text>{patient?.sex}</Text>
@@ -218,14 +220,14 @@ export default function PatientDetails() {
             <View style={styles.section}>
               <Text style={styles.boldLabel}>Religion</Text>
               <Text>{patient?.religion}</Text>
-              <Text style={styles.boldLabel}>Height</Text>
+              <Text style={styles.boldLabel}>Height (meters)</Text>
               <Text>{patient?.height}</Text>
-              <Text style={styles.boldLabel}>Weight</Text>
+              <Text style={styles.boldLabel}>Weight (kilograms)</Text>
               <Text>{patient?.weight}</Text>
+              <Text style={styles.boldLabel}>BMI (kg/m²)</Text>
+              <Text>{patient?.BMI}</Text>
               <Text style={styles.boldLabel}>Diet</Text>
               <Text>{patient?.diet}</Text>
-              <Text style={styles.boldLabel}>Contact Details</Text>
-              <Text>{patient?.contact_number}</Text>
             </View>
           </View>
 
@@ -234,6 +236,8 @@ export default function PatientDetails() {
           <View style={styles.subsdetailsSection}>
             <Text style={styles.sectionTitle}> </Text>
             <View style={styles.section}>
+              <Text style={styles.boldLabel}>Contact Details</Text>
+              <Text>{patient?.contact_number}</Text>
               <Text style={styles.boldLabel}>Room No</Text>
               <Text>{patient?.room_number}</Text>
               <Text style={styles.boldLabel}>Chief Complaint/s</Text>

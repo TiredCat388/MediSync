@@ -67,8 +67,7 @@ class Patients(models.Model):
         help_text='Patient\'s initial diagnosis'
     )
     Final_diagnosis = models.TextField(
-        blank=False,
-        default='Pain',
+        blank=True,
         help_text='Patient\'s final diagnosis'
     )
     contact_number = models.BigIntegerField(

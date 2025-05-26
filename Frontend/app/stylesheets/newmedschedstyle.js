@@ -23,11 +23,16 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     flexDirection: "row",
-    backgroundColor: "#CCCCCC",
+    backgroundColor: "#b8cbdb",
     padding: 40,
     borderRadius: 10,
     justifyContent: "space-between",
-    maxHeight: 520,
+    maxHeight: 590,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 8,
   },
   column: {
     flex: 1,
@@ -44,30 +49,27 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   input: {
-    borderWidth: 1,
     borderColor: "black",
-    backgroundColor: "#F8F8F8",
+    borderWidth: 1,
+    borderRadius: 10,
+    backgroundColor: "white",
     padding: 8,
+    fontSize: 16,
     marginBottom: 10,
     height: 36,
-    borderWidth: 1,
+    borderColor: "black",
+    paddingRight: 30,
   },
+
   dobContainer: {
     flexDirection: "row",
-    marginBottom: 10,
-    alignItems: "center",
-    width: 300,
     justifyContent: "space-between",
-    height: 36,
-    fontSize: 14,
-    backgroundColor: "#F8F8F8",
-    padding: 8,
-    gap: 10,
   },
   dobInput: {
     borderWidth: 1,
     borderColor: "black",
-    backgroundColor: "#F8F8F8",
+    borderRadius: 10,
+    backgroundColor: "white",
     padding: 8,
     width: 50,
     marginRight: 5,
@@ -79,8 +81,9 @@ const styles = StyleSheet.create({
   },
   dobSelect: {
     borderWidth: 1,
+    borderColor: "black",
     backgroundColor: "#F8F8F8",
-    paddingHorizontal: 0,
+    paddingHorizontal: 70,
     width: "100%",
     marginRight: 8,
     textAlign: "center",
@@ -213,7 +216,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   timePickerContainer: {
-    flex: 1, // Each picker takes equal width
+    flex: 1, 
     height: 36,
   },
   timePicker: {
@@ -234,10 +237,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     height: 36,
   },
-  frequencyPickerContainer: {
-    flex: 1, // Each picker takes equal width
-    height: 36, // Consistent height
-  },
+  PickerContainer: {
+    flex: 1,
+    height: 36,
+    marginRight: 10,
+    marginBottom: 10,
+   },
   frequencyPicker: {
     paddingVertical: 8,
     paddingHorizontal: 10,
@@ -247,20 +252,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     height: 36,
   },
-  frequencyPickerWeb: {
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: "black",
-    borderRadius: 1,
-    fontSize: 16,
-    height: 36,
-  },
+  
   autocompleteContainer: {
     flex: 1,
-    zIndex: 10, // Make sure suggestions appear above other elements
-    minHeight: 50,
+    zIndex: 10,
+    width: 415,
+    marginBottom: 10,
+    
   },
+  
+
 });
 
 export default styles;

@@ -24,47 +24,44 @@ export default function CalendarApp() {
 
   // Fetch medication data for all patients
   const fetchMedicationData = async () => {
-    try {
-      const response = await fetch(`${BASE_API}/api/medications`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch medication data");
-      }
-      const data = await response.json();
-      const today = new Date().toISOString().split("T")[0];
-      const formattedData = {};
-      const patientNames = {}; // To store Patients
-
-      // Fetch Patients
-      for (const med of data) {
-        if (!patientNames[med.patient_number]) {
-          const patientResponse = await fetch(
-            `${BASE_API}/api/patients/${med.patient_number}`
-          );
-          const patientData = await patientResponse.json();
-          patientNames[
-            med.patient_number
-          ] = `${patientData.first_name} ${patientData.last_name}`;
-        }
-
-        if (!formattedData[today]) {
-          formattedData[today] = [];
-        }
-
-        formattedData[today].push({
-          name: med.Medication_name,
-          time: med.Medication_Time,
-          patientId: med.patient_number,
-          patientName: patientNames[med.patient_number], // Add Patient
-          scheduleId: med.schedule_id,
-        });
-      }
-
-      console.log("Formatted Data:", formattedData);
-      setMedicationData(formattedData);
-    } catch (error) {
-      console.error("Error fetching medication data:", error);
+  try {
+    const response = await fetch(`${BASE_API}/api/medications`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch medication data");
     }
-  };
+
+    const data = await response.json();
+    const formattedData = {};
+    const patientNames = {};
+
+    for (const med of data) {
+      const medDate = med.Medication_start_date?.split("T")[0];
+      if (!medDate) continue;
+      if (!patientNames[med.patient_number]) {
+        const patientResponse = await fetch(`${BASE_API}/api/patients/${med.patient_number}`);
+        const patientData = await patientResponse.json();
+        patientNames[med.patient_number] = `${patientData.first_name} ${patientData.last_name}`;
+      }
+
+      if (!formattedData[medDate]) {
+        formattedData[medDate] = [];
+      }
+
+      formattedData[medDate].push({
+        name: med.Medication_name,
+        time: med.Medication_Time,
+        patientId: med.patient_number,
+        patientName: patientNames[med.patient_number],
+        scheduleId: med.schedule_id,
+      });
+    }
+
+    console.log("Formatted Data:", formattedData);
+    setMedicationData(formattedData);
+  } catch (error) {
+    console.error("Error fetching medication data:", error);
+  }
+};
   
 
   useEffect(() => {
@@ -105,7 +102,7 @@ export default function CalendarApp() {
       <Sidebar setSidebarWidth={setSidebarWidth} />
 
       {/* Main Calendar Content */}
-      <View style={{ flex: 1, padding: 40, marginLeft: sidebarWidth }}>
+      <ScrollView style={{ flex: 1, padding: 40, marginLeft: sidebarWidth }}>
         <Text style={{ fontSize: 30, fontWeight: "bold", margin: 8 }}>
           Calendar
         </Text>
@@ -120,6 +117,7 @@ export default function CalendarApp() {
             padding: 8,
             margin: 8,
             boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+            height: 630,
           }}
         >
           {/* Calendar Header */}
@@ -216,10 +214,10 @@ export default function CalendarApp() {
                           marginTop: 2,
                         }}
                       >
-                        {medications.slice(0, 4).map(
+                        {medications.slice(0, 3).map(
                           (
                             med,
-                            index // Limit to 3 previews to avoid overcrowding
+                            index 
                           ) => (
                             <View
                               key={index}
@@ -234,7 +232,7 @@ export default function CalendarApp() {
                             >
                               <Text
                                 style={{
-                                  fontSize: 16,
+                                  fontSize: 12,
                                   textAlign: "flex-start",
                                   color: "#000",
                                   fontWeight: "bold",
@@ -306,7 +304,7 @@ export default function CalendarApp() {
                     >
                       <Text
                         style={{
-                          fontSize: 10,
+                          fontSize: 13,
                           textAlign: "flex-start",
                           color: "#000",
                           fontWeight: "bold",
@@ -326,18 +324,18 @@ export default function CalendarApp() {
               <TouchableOpacity
                 onPress={() => setModalVisible(false)}
                 style={{
-                  backgroundColor: '#ccc',
+                  backgroundColor: '#ff0000',
                   paddingVertical: 10,
                   borderRadius: 5,
                   alignItems: 'center',
                 }}
               >
-                <Text style={{ color: '#000', fontSize: 16 }}>Close</Text>
+                <Text style={{ color: 'white', fontWeight:'bold', fontSize: 16 }}>Close</Text>
               </TouchableOpacity>
             </View>
           </View>
         </Modal>
-      </View>
+      </ScrollView>
     </View>
   );
 }

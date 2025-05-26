@@ -22,6 +22,11 @@ const styles = StyleSheet.create({
       padding: 10,
       minWidth: 350,
       maxWidth: width * 1.3,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.25,
+      shadowRadius: 8,
+      elevation: 8,
     },
     header: {
       paddingHorizontal: 40,

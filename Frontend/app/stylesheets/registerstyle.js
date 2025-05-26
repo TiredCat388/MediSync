@@ -23,11 +23,16 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     flexDirection: "row",
-    backgroundColor: "#CCCCCC",
+    backgroundColor: "#b8cbdb",
     padding: 40,
     borderRadius: 10,
     justifyContent: "space-between",
-    maxHeight: 580,
+    maxHeight: 520,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 8,
   },
   column: {
     flex: 1,
@@ -50,11 +55,11 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   input: {
-    borderWidth: 1,
     borderColor: "black",
     backgroundColor: "#F8F8F8",
     padding: 8,
     marginBottom: 10,
+    height: 38,
   },
   dobContainer: {
     flexDirection: "row",
@@ -62,8 +67,9 @@ const styles = StyleSheet.create({
   },
   dobInput: {
     borderWidth: 1,
+    borderRadius: 10,
     borderColor: "black",
-    backgroundColor: "#F8F8F8",
+    backgroundColor: "white",
     padding: 8,
     width: 50,
     marginRight: 5,
@@ -72,7 +78,7 @@ const styles = StyleSheet.create({
   dobSelect: {
     borderWidth: 1,
     borderColor: "black",
-    backgroundColor: "#F8F8F8",
+    backgroundColor: "white",
     paddingHorizontal: 70,
     width: 60,
     marginRight: 8,
@@ -132,7 +138,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     width: 300,
     padding: 20,
-    backgroundColor: "#F8F8F8",
+    backgroundColor: "white",
     borderRadius: 10,
   },
   modalTitle: {
@@ -164,7 +170,7 @@ const styles = StyleSheet.create({
   modalButtonText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#F8F8F8",
+    color: "white",
   },
   divider: {
     width: 2,
@@ -172,6 +178,94 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     marginHorizontal: 30,
     alignSelf: "stretch",
+  },
+  heightRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  heightInputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 0, 
+  },
+  heightInput: {
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: "black",
+    backgroundColor: "white",
+    padding: 8,
+    width: 100,
+    textAlign: "center",
+  },
+  unitLabel: {
+    marginLeft: 5,
+    fontSize: 16,
+    color: "black",
+  },
+  ageInput: {
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: "black",
+    backgroundColor: "white",
+    padding: 8,
+    marginBottom: 5,
+    width: 50, 
+    textAlign: "left", 
+  },
+  weightRow: {
+  flexDirection: "row",
+  alignItems: "center",
+  marginBottom: 10,
+  },
+  weightInputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  weightInput: {
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: "black",
+    backgroundColor: "white",
+    padding: 8,
+    width: 100, 
+    textAlign: "center",
+  },
+  unitLabel: {
+    marginLeft: 5,
+    fontSize: 16,
+    color: "black",
+  },
+  inlineContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: 10,
+  },
+  inlineItem: {
+    flex: 1,
+    marginHorizontal: 0, 
+  },
+  chiefComplaintInput: {
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: "black",
+    backgroundColor: "white",
+    padding: 10,
+    marginBottom: 10,
+    height: 100, 
+    textAlignVertical: "top", 
+  },
+
+  diagnosisInput: {
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: "black",
+    backgroundColor: "white",
+    padding: 10,
+    marginBottom: 10,
+    height: 100, 
+    textAlignVertical: "top", 
   },
 });
 
