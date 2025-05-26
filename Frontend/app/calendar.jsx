@@ -117,6 +117,7 @@ export default function CalendarApp() {
             padding: 8,
             margin: 8,
             boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+            height: 630,
           }}
         >
           {/* Calendar Header */}
@@ -213,10 +214,10 @@ export default function CalendarApp() {
                           marginTop: 2,
                         }}
                       >
-                        {medications.slice(0, 4).map(
+                        {medications.slice(0, 3).map(
                           (
                             med,
-                            index // Limit to 3 previews to avoid overcrowding
+                            index 
                           ) => (
                             <View
                               key={index}
@@ -231,7 +232,7 @@ export default function CalendarApp() {
                             >
                               <Text
                                 style={{
-                                  fontSize: 16,
+                                  fontSize: 12,
                                   textAlign: "flex-start",
                                   color: "#000",
                                   fontWeight: "bold",
@@ -303,7 +304,7 @@ export default function CalendarApp() {
                     >
                       <Text
                         style={{
-                          fontSize: 10,
+                          fontSize: 13,
                           textAlign: "flex-start",
                           color: "#000",
                           fontWeight: "bold",

@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 8,
     elevation: 8,
+    maxHeight: 600,
   },
   column: {
     flex: 1,

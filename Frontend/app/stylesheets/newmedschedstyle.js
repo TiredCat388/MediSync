@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     padding: 40,
     borderRadius: 10,
     justifyContent: "space-between",
-    maxHeight: 520,
+    maxHeight: 590,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,

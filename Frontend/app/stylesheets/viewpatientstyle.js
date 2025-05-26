@@ -107,7 +107,8 @@ export const styles = StyleSheet.create({
   },
   buttonWrapper: { 
     alignItems: "flex-end", 
-    marginTop: 10 
+    marginTop: 10, 
+    marginBottom: 30,
   },
   addMedicationButton: {
     backgroundColor: "#4E84D3",
