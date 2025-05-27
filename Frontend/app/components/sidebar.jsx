@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Animated, TouchableOpacity, Modal, Text, View, Image } from 'react-native';
-import { FontAwesome, Feather } from '@expo/vector-icons';
+import { FontAwesome, Feather, Ionicons } from '@expo/vector-icons';
 import { useRouter, usePathname } from 'expo-router';
 import styles from './sidebarstyle';
 import { useNotification } from '../../notifcontext';
@@ -145,7 +145,7 @@ const Sidebar = () => {
             onPress={() => handleSidebarPress('settings')}
             style={[styles.iconLabelContainer, pathname === '/settings' && isSidebarExpanded && styles.activeItem]}
           >
-            <FontAwesome name="cog" size={27} color={iconColor} />
+            <Ionicons name="settings-outline" size={25} color={iconColor} />
             {isSidebarExpanded && <AppText style={[styles.iconLabel, { color: textColor }]}>Settings</AppText>}
           </TouchableOpacity>
 
