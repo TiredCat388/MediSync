@@ -119,7 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Manila'
 
 USE_I18N = True
 
@@ -146,4 +146,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
-ALLOWED_HOSTS = ['192.168.1.136', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['192.168.1.136', 'localhost', '127.0.0.1', '172.16.4.232']

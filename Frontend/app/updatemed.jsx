@@ -72,11 +72,6 @@ export default function NewMedSched() {
       frequencyType: value,
     };
 
-    if (value !== "Other") {
-      updates.timeHour = "08";
-      updates.timeMinute = "00";
-      updates.timePeriod = "AM";
-    }
     if (value in frequencyIntervals) {
       const { days, hours, minutes } = frequencyIntervals[value];
       updates.frequencyDay = days.toString();
@@ -645,10 +640,6 @@ export default function NewMedSched() {
               <View style={styles.dobContainer}>
                 <View style={styles.PickerContainer}>
                   <RNPickerSelect
-                    disabled={
-                      formData.frequencyType != "Other" &&
-                      formData.frequencyType != ""
-                    }
                     Icon={() => (
                       <Icon name="arrow-drop-down" size={20} color="gray" />
                     )}
@@ -668,10 +659,6 @@ export default function NewMedSched() {
 
                 <View style={styles.PickerContainer}>
                   <RNPickerSelect
-                    disabled={
-                      formData.frequencyType != "Other" &&
-                      formData.frequencyType != ""
-                    }
                     Icon={() => (
                       <Icon name="arrow-drop-down" size={20} color="gray" />
                     )}
@@ -691,10 +678,6 @@ export default function NewMedSched() {
 
                 <View style={styles.PickerContainer}>
                   <RNPickerSelect
-                    disabled={
-                      formData.frequencyType != "Other" &&
-                      formData.frequencyType != ""
-                    }
                     Icon={() => (
                       <Icon name="arrow-drop-down" size={20} color="gray" />
                     )}
@@ -741,10 +724,6 @@ export default function NewMedSched() {
                   <View style={styles.dobContainer}>
                     <View style={styles.PickerContainer}>
                       <RNPickerSelect
-                        disabled={
-                          formData.frequencyType != "Other" &&
-                          formData.frequencyType != ""
-                        }
                         Icon={() => (
                           <Icon name="arrow-drop-down" size={20} color="gray" />
                         )}
@@ -766,10 +745,6 @@ export default function NewMedSched() {
 
                     <View style={styles.PickerContainer}>
                       <RNPickerSelect
-                        disabled={
-                          formData.frequencyType != "Other" &&
-                          formData.frequencyType != ""
-                        }
                         Icon={() => (
                           <Icon name="arrow-drop-down" size={20} color="gray" />
                         )}
@@ -791,10 +766,6 @@ export default function NewMedSched() {
 
                     <View style={styles.PickerContainer}>
                       <RNPickerSelect
-                        disabled={
-                          formData.frequencyType != "Other" &&
-                          formData.frequencyType != ""
-                        }
                         Icon={() => (
                           <Icon name="arrow-drop-down" size={20} color="gray" />
                         )}
