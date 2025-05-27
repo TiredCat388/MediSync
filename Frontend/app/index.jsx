@@ -13,11 +13,13 @@ import {
   ScrollView,
   Keyboard,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import styles from "./stylesheets/loginstyles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constants from "expo-constants";
+import AppText from './components/AppText';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
@@ -114,6 +116,7 @@ const LoginScreen = () => {
   };
 
   return(
+  <SafeAreaView style={{ flex: 1 }}>
   <KeyboardAvoidingView
   style={{ flex: 1 }}
   behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -140,7 +143,7 @@ const LoginScreen = () => {
         <View style={styles.lowerHalf}>
           {role === null ? (
   <>
-    <Text style={styles.title}>Medisync</Text>
+    <AppText style={styles.title}>Medisync</AppText>
     <View style={styles.roleContainer}>
       <TouchableOpacity
         style={styles.roleButton}
@@ -148,7 +151,7 @@ const LoginScreen = () => {
         activeOpacity={0.6}
       >
         <FontAwesome5 name="user-nurse" size={28} color="#F8F8F8" />
-        <Text style={styles.roleText}>Nurse Login</Text>
+        <AppText style={styles.roleText}>Nurse Login</AppText>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -157,13 +160,13 @@ const LoginScreen = () => {
         activeOpacity={0.6}
       >
         <FontAwesome5 name="user-md" size={28} color="#F8F8F8" />
-        <Text style={styles.roleText}>Physician Login</Text>
+        <AppText style={styles.roleText}>Physician Login</AppText>
       </TouchableOpacity>
     </View>
   </>
 ) : role === "physician" ? (
   <>
-    <Text style={styles.title}>Physician Login</Text>
+    <AppText style={styles.title}>Physician Login</AppText>
 
     <TextInput
       style={styles.input}
@@ -183,7 +186,7 @@ const LoginScreen = () => {
     />
 
     {errorMessage ? (
-      <Text style={styles.errorText}>{errorMessage}</Text>
+      <AppText style={styles.errorText}>{errorMessage}</AppText>
     ) : null}
 
     <View style={styles.buttonContainer}>
@@ -191,14 +194,14 @@ const LoginScreen = () => {
         style={styles.cancelButton}
         onPress={() => setRole(null)}
       >
-        <Text style={styles.cancelText}>Cancel</Text>
+        <AppText style={styles.cancelText}>Cancel</AppText>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.loginButton}
         onPress={handleLogin}
       >
-        <Text style={styles.loginText}>Login</Text>
+        <AppText style={styles.loginText}>Login</AppText>
       </TouchableOpacity>
     </View>
   </>
@@ -208,6 +211,7 @@ const LoginScreen = () => {
     </ScrollView>
   </TouchableWithoutFeedback>
 </KeyboardAvoidingView>
+  </SafeAreaView>
   )
 };
 

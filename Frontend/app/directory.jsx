@@ -4,7 +4,7 @@ import {
   TouchableOpacity,
   FlatList,
   TextInput,
-  ScrollView, // Import ScrollView
+  ScrollView,
 } from "react-native";
 import { useRouter } from "expo-router";
 import Sidebar from "./components/sidebar";
@@ -12,6 +12,8 @@ import { useState, useEffect } from "react";
 import { Menu, Divider, Provider } from "react-native-paper";
 import styles from "./stylesheets/directorystyles";
 import Constants from 'expo-constants';
+import { SafeAreaView } from "react-native-safe-area-context";
+import AppText from './components/AppText';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
@@ -79,17 +81,18 @@ export default function PatientsDirectory() {
   }
 
   return (
+    <SafeAreaView style={{ flex: 1 }}>
     <Provider>
       <View style={styles.container}>
         <Sidebar onNavigate={(destination) => router.push(destination)} />
         <View style={styles.content}>
           <View style={styles.header}>
-            <Text style={styles.headerText}>Patients Directory</Text>
+            <AppText style={styles.headerText}>Patients Directory</AppText>
             <TouchableOpacity
               onPress={() => router.push("/registernew")}
               style={styles.newPatientButton}
             >
-              <Text style={styles.newPatientButtonText}>+ New Patient</Text>
+              <AppText style={styles.newPatientButtonText}>+ New Patient</AppText>
             </TouchableOpacity>
           </View>
 
@@ -106,9 +109,9 @@ export default function PatientsDirectory() {
               onPress={() => setSortAscending(!sortAscending)}
               style={styles.sortButton}
             >
-              <Text style={styles.sortButtonText}>
+              <AppText style={styles.sortButtonText}>
                 Sort {sortAscending ? "↑" : "↓"}
-              </Text>
+              </AppText>
             </TouchableOpacity>
           </View>
 
@@ -116,10 +119,10 @@ export default function PatientsDirectory() {
           <View style={styles.table}>
             <View style={styles.tableHeader}>
               <View style={[styles.tableHeaderCellID]}>
-                <Text style={styles.tableHeaderText}>Patient ID</Text>
+                <AppText style={styles.tableHeaderText}>Patient ID</AppText>
               </View>
               <View style={[styles.tableHeaderCellName]}>
-                <Text style={styles.tableHeaderText}>Patient Name</Text>
+                <AppText style={styles.tableHeaderText}>Patient Name</AppText>
               </View>
             </View>
             <ScrollView style={{ maxHeight: 500 }}>
@@ -145,13 +148,13 @@ export default function PatientsDirectory() {
                     ]}
                   >
                     <View style={styles.rowCellID}>
-                      <Text style={styles.rowText}>
+                      <AppText style={styles.rowText}>
                         {item.patient_number || ""}
-                      </Text>
+                      </AppText>
                     </View>
                     <View style={styles.rowDivider} />
                     <View style={styles.rowCellName}>
-                      <Text style={styles.rowTextCentered}>
+                      <AppText style={styles.rowTextCentered}>
                         {item.first_name && item.last_name
                           ? formatName(
                               item.first_name,
@@ -159,7 +162,7 @@ export default function PatientsDirectory() {
                               item.last_name
                             )
                           : ""}
-                      </Text>
+                      </AppText>
                     </View>
                   </TouchableOpacity>
                 )}
@@ -169,5 +172,6 @@ export default function PatientsDirectory() {
         </View>
       </View>
     </Provider>
+    </SafeAreaView>
   );
 }

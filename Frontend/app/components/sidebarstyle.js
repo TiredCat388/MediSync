@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 30,
-    paddingLeft: 20,
+    paddingLeft: 25,
   },
   iconLabel: {
     fontSize: 18,
@@ -50,10 +50,10 @@ const styles = StyleSheet.create({
     paddingRight: 15,
   },
   activeItem: {
-  backgroundColor: '#ffffff33', // translucent white
-  width: '100%',
-  padding: 10,
-  alignSelf: 'center',
+    backgroundColor: '#ffffff33',
+    width: '100%',
+    padding: 10,
+    alignSelf: 'center',
   },
   logoContainer: {
     position: 'absolute',

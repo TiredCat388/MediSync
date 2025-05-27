@@ -42,10 +42,10 @@ export default function NotificationToast({ data, visible, onHide, isMultiple })
       <View style={cardStyle}>
         <TouchableWithoutFeedback onPress={() => setExpanded((prev) => !prev)}>
           <View style={bannerStyle}>
-            <Text style={styles.title}>
+            <AppText style={styles.title}>
               {isMultiple ? "MULTIPLE UPCOMING MEDICATIONS" : "UPCOMING MEDICATION ALERT"}
-            </Text>
-            {!isMultiple && <Text style={styles.subtitle}>Schedule ID: {data.scheduleId}</Text>}
+            </AppText>
+            {!isMultiple && <AppText style={styles.subtitle}>Schedule ID: {data.scheduleId}</AppText>}
           </View>
         </TouchableWithoutFeedback>
 
@@ -53,25 +53,25 @@ export default function NotificationToast({ data, visible, onHide, isMultiple })
           <View style={styles.detailsContainer}>
             <View style={styles.row}>
               <View style={styles.col}>
-                <Text style={styles.label}>Patient:</Text>
-                <Text style={styles.text}>{data.patient}</Text>
+                <AppText style={styles.label}>Patient:</AppText>
+                <AppText style={styles.text}>{data.patient}</AppText>
 
-                <Text style={styles.label}>Medication:</Text>
-                <Text style={styles.text}>{data.medication}</Text>
+                <AppText style={styles.label}>Medication:</AppText>
+                <AppText style={styles.text}>{data.medication}</AppText>
 
-                <Text style={styles.label}>Dosage:</Text>
-                <Text style={styles.text}>{data.dosage}</Text>
+                <AppText style={styles.label}>Dosage:</AppText>
+                <AppText style={styles.text}>{data.dosage}</AppText>
               </View>
 
               <View style={styles.col}>
-                <Text style={styles.label}>Room No:</Text>
-                <Text style={styles.text}>{data.room}</Text>
+                <AppText style={styles.label}>Room No:</AppText>
+                <AppText style={styles.text}>{data.room}</AppText>
 
-                <Text style={styles.label}>Quantity:</Text>
-                <Text style={styles.text}>{data.quantity}</Text>
+                <AppText style={styles.label}>Quantity:</AppText>
+                <AppText style={styles.text}>{data.quantity}</AppText>
 
-                <Text style={styles.label}>Notes:</Text>
-                <Text style={styles.text}>{data.notes}</Text>
+                <AppText style={styles.label}>Notes:</AppText>
+                <AppText style={styles.text}>{data.notes}</AppText>
               </View>
             </View>
 
@@ -83,7 +83,7 @@ export default function NotificationToast({ data, visible, onHide, isMultiple })
                   handleHide(); 
                 }}
               >
-                <Text style={styles.confirmText}>View Alerts</Text>
+                <AppText style={styles.confirmText}>View Alerts</AppText>
               </Pressable>
             </View>
           </View>
@@ -99,7 +99,7 @@ export default function NotificationToast({ data, visible, onHide, isMultiple })
                   handleHide();  // Hide and minimize after navigating
                 }}
               >
-                <Text style={styles.confirmText}>View Alerts</Text>
+                <AppText style={styles.confirmText}>View Alerts</AppText>
               </Pressable>
             </View>
           </View>

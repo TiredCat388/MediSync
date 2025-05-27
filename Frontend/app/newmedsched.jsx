@@ -16,7 +16,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import CustomAlert from "./components/alert";
 import Constants from "expo-constants";
 import { ScrollView } from "react-native";
-import Icon from "react-native-vector-icons/MaterialIcons"; // Or FontAwesome, Feather, etc.
+import Icon from "react-native-vector-icons/MaterialIcons";
+import { SafeAreaView } from "react-native-safe-area-context";
+import AppText from './components/AppText';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
@@ -293,6 +295,7 @@ export default function NewMedSched() {
   };
 
   return (
+    <SafeAreaView style={{ flex: 1 }}>
     <View style={styles.container}>
       <Sidebar onNavigate={(destination) => router.push(destination)} />
       <View
@@ -301,25 +304,25 @@ export default function NewMedSched() {
           { marginLeft: isSidebarExpanded ? 200 : 70 },
         ]}
       >
-        <Text style={styles.screenTitle}>New Medication Schedule</Text>
+        <AppText style={styles.screenTitle}>New Medication Schedule</AppText>
         <View style={styles.formContainer}>
           <ScrollView
             style={{ flex: 1 }}
             contentContainerStyle={{ flexGrow: 1 }}
           >
             <View style={styles.column}>
-              <Text style={styles.sectionTitle}>
+              <AppText style={styles.sectionTitle}>
                 {patient_number
                   ? patientName
                     ? `FOR: ${patientName} | Patient ID - ${patient_number}`
                     : `FOR: Patient ID - ${patient_number}`
                   : "FOR: Patient ID - Loading..."}
-              </Text>
+              </AppText>
 
               {/* Medication Name with Autocomplete */}
-              <Text style={styles.label}>
-                Medication Name <Text style={{ color: "#5879A5" }}>*</Text>{" "}
-              </Text>
+              <AppText style={styles.label}>
+                Medication Name <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
+              </AppText>
               <View style={styles.autocompleteContainer}>
                 <Autocomplete
                   data={filteredMedications}
@@ -332,7 +335,7 @@ export default function NewMedSched() {
                         style={styles.autocompleteItem}
                         onPress={() => handleSelectMedication(item)}
                       >
-                        <Text style={styles.autocompleteText}>{item}</Text>
+                        <AppText style={styles.autocompleteText}>{item}</AppText>
                       </TouchableOpacity>
                     ),
                   }}
@@ -341,9 +344,9 @@ export default function NewMedSched() {
                 />
               </View>
 
-              <Text style={[styles.label]}>
-                Medication form <Text style={{ color: "#5879A5" }}>*</Text>{" "}
-              </Text>
+              <AppText style={[styles.label]}>
+                Medication form <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
+              </AppText>
               <View style={styles.PickerContainer}>
                 <RNPickerSelect
                   Icon={() => (
@@ -373,9 +376,9 @@ export default function NewMedSched() {
                 />
               </View>
 
-              <Text style={[styles.label]}>
-                Medication Route <Text style={{ color: "#5879A5" }}>*</Text>{" "}
-              </Text>
+              <AppText style={[styles.label]}>
+                Medication Route <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
+              </AppText>
               <View>
                 <RNPickerSelect
                   Icon={() => (
@@ -409,9 +412,9 @@ export default function NewMedSched() {
                 />
               </View>
 
-              <Text style={styles.label}>
-                Medication Strength <Text style={{ color: "#5879A5" }}>*</Text>{" "}
-              </Text>
+              <AppText style={styles.label}>
+                Medication Strength <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
+              </AppText>
               <View
                 style={{
                   flexDirection: "row",
@@ -458,10 +461,10 @@ export default function NewMedSched() {
                 </View>
               </View>
 
-              <Text style={styles.label}>
+              <AppText style={styles.label}>
                 Medication Start Date{" "}
-                <Text style={{ color: "#5879A5" }}>*</Text>{" "}
-              </Text>
+                <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
+              </AppText>
               <View
                 style={{
                   flexDirection: "row",
@@ -518,7 +521,7 @@ export default function NewMedSched() {
                 </View>
               </View>
 
-              <Text style={styles.label}>Medication End Date</Text>
+              <AppText style={styles.label}>Medication End Date</AppText>
               <View
                 style={{
                   flexDirection: "row",
@@ -576,9 +579,9 @@ export default function NewMedSched() {
               </View>
 
                 
-              <Text style={styles.label}>
-                Time of Medication <Text style={{ color: "#5879A5" }}>*</Text>{" "}
-              </Text>
+              <AppText style={styles.label}>
+                Time of Medication <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
+              </AppText>
               <View style={styles.dobContainer}>
                 <View style={styles.PickerContainer}>
                   <RNPickerSelect
@@ -650,9 +653,9 @@ export default function NewMedSched() {
                 </View>
               </View>
 
-              <Text style={styles.label}>
-                Frequency <Text style={{ color: "#5879A5" }}>*</Text>{" "}
-              </Text>
+              <AppText style={styles.label}>
+                Frequency <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
+              </AppText>
               <RNPickerSelect
                 Icon={() => (
                   <Icon name="arrow-drop-down" size={20} color="gray" />
@@ -670,10 +673,10 @@ export default function NewMedSched() {
               />
               {formData.frequencyType === "Other" && (
               <View>
-              <Text style={styles.label}>
+              <AppText style={styles.label}>
                 Set Frequency Interval
-                <Text style={{ color: "#5879A5" }}>*</Text>{" "}
-              </Text>
+                <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
+              </AppText>
               <View style={styles.dobContainer}>
                 <View style={styles.PickerContainer}>
                   <RNPickerSelect
@@ -757,10 +760,10 @@ export default function NewMedSched() {
           <View style={styles.divider} />
 
           <View style={styles.column}>
-            <Text style={styles.sectionTitle}>Additional Information</Text>
-            <Text style={styles.label}>
-              Medication Notes <Text style={{ color: "#5879A5" }}>*</Text>{" "}
-            </Text>
+            <AppText style={styles.sectionTitle}>Additional Information</AppText>
+            <AppText style={styles.label}>
+              Medication Notes <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
+            </AppText>
             <TextInput
               style={styles.input}
               multiline
@@ -770,9 +773,9 @@ export default function NewMedSched() {
               }
               value={formData.medicationNotes}
             />
-            <Text style={styles.label}>
-              Physician ID <Text style={{ color: "#5879A5" }}>*</Text>{" "}
-            </Text>
+            <AppText style={styles.label}>
+              Physician ID <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
+            </AppText>
             <TextInput
               style={[styles.input]}
               value={formData.physicianID || "Loading..."}
@@ -786,13 +789,13 @@ export default function NewMedSched() {
             onPress={() => setModalVisible(true)}
             style={[styles.button, styles.leaveButton]}
           >
-            <Text style={styles.buttonText}>Cancel</Text>
+            <AppText style={styles.buttonText}>Cancel</AppText>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={handleRegister}
             style={[styles.button, styles.stayButton]}
           >
-            <Text style={styles.buttonText}>Add Medication</Text>
+            <AppText style={styles.buttonText}>Add Medication</AppText>
           </TouchableOpacity>
         </View>
       </View>
@@ -811,16 +814,16 @@ export default function NewMedSched() {
       <Modal visible={modalVisible} transparent animationType="fade">
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Cancel Medication Schedule</Text>
-            <Text style={styles.modalMessage}>
+            <AppText style={styles.modalTitle}>Cancel Medication Schedule</AppText>
+            <AppText style={styles.modalMessage}>
               Are you sure you want to cancel scheduling this medication?
-            </Text>
+            </AppText>
             <View style={styles.modalButtonContainer}>
               <TouchableOpacity
                 style={[styles.modalButton, styles.stayButton]}
                 onPress={() => setModalVisible(false)}
               >
-                <Text style={styles.modalButtonText}>Stay</Text>
+                <AppText style={styles.modalButtonText}>Stay</AppText>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.modalButton, styles.leaveButton]}
@@ -829,7 +832,7 @@ export default function NewMedSched() {
                   router.push(`/viewpatient?patient_number=${patient_number}`);
                 }}
               >
-                <Text style={styles.modalButtonText}>Leave</Text>
+                <AppText style={styles.modalButtonText}>Leave</AppText>
               </TouchableOpacity>
             </View>
           </View>
@@ -840,10 +843,10 @@ export default function NewMedSched() {
       <Modal visible={warningModalVisible} transparent animationType="fade">
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Incomplete Form</Text>
-            <Text style={styles.modalMessage}>
+            <AppText style={styles.modalTitle}>Incomplete Form</AppText>
+            <AppText style={styles.modalMessage}>
               Some details are missing. Are you sure you want to proceed?
-            </Text>
+            </AppText>
             <View style={styles.modalButtonContainer}>
               <TouchableOpacity
                 style={[styles.modalButton, styles.stayButton]}
@@ -852,13 +855,13 @@ export default function NewMedSched() {
                   handleRegister(); // Proceed with registration despite missing fields
                 }}
               >
-                <Text style={styles.modalButtonText}>Proceed</Text>
+                <AppText style={styles.modalButtonText}>Proceed</AppText>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.modalButton, styles.leaveButton]}
                 onPress={() => setWarningModalVisible(false)}
               >
-                <Text style={styles.modalButtonText}>Stay</Text>
+                <AppText style={styles.modalButtonText}>Stay</AppText>
               </TouchableOpacity>
             </View>
           </View>
@@ -875,5 +878,6 @@ export default function NewMedSched() {
         }}
       />
     </View>
+    </SafeAreaView>
   );
 }

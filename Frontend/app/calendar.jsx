@@ -4,6 +4,8 @@ import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import Sidebar from './components/sidebar';
 import Constants from 'expo-constants';
+import { SafeAreaView } from "react-native-safe-area-context";
+import AppText from './components/AppText';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
@@ -98,14 +100,15 @@ export default function CalendarApp() {
   });
 
   return (
+    <SafeAreaView style={{ flex: 1 }}>
     <View style={{ flex: 1, flexDirection: "row" }}>
       <Sidebar setSidebarWidth={setSidebarWidth} />
 
       {/* Main Calendar Content */}
       <ScrollView style={{ flex: 1, padding: 40, marginLeft: sidebarWidth }}>
-        <Text style={{ fontSize: 30, fontWeight: "bold", margin: 8 }}>
+        <AppText style={{ fontSize: 30, fontWeight: "bold", margin: 8 }}>
           Calendar
-        </Text>
+        </AppText>
 
         {/* Calendar Section */}
         <View
@@ -135,9 +138,9 @@ export default function CalendarApp() {
             <TouchableOpacity onPress={() => handleMonthChange(-1)}>
               <Feather name="arrow-left-circle" size={30} color="white" />
             </TouchableOpacity>
-            <Text style={{ color: "white", fontSize: 16, fontWeight: "600" }}>
+            <AppText style={{ color: "white", fontSize: 16, fontWeight: "600" }}>
               {months[currentMonth]} {currentYear}
-            </Text>
+            </AppText>
             <TouchableOpacity onPress={() => handleMonthChange(1)}>
               <Feather name="arrow-right-circle" size={30} color="white" />
             </TouchableOpacity>
@@ -155,7 +158,7 @@ export default function CalendarApp() {
             }}
           >
             {daysOfWeek.map((day) => (
-              <Text
+              <AppText
                 key={day}
                 style={{
                   flex: 1,
@@ -165,7 +168,7 @@ export default function CalendarApp() {
                 }}
               >
                 {day}
-              </Text>
+              </AppText>
             ))}
           </View>
 
@@ -204,9 +207,9 @@ export default function CalendarApp() {
                 >
                   {item && (
                     <>
-                      <Text style={{ fontSize: 16, marginBottom: 2 }}>
+                      <AppText style={{ fontSize: 16, marginBottom: 2 }}>
                         {item}
-                      </Text>
+                      </AppText>
                       <View
                         style={{
                           width: "100%",
@@ -230,7 +233,7 @@ export default function CalendarApp() {
                                 width: "100%",
                               }}
                             >
-                              <Text
+                              <AppText
                                 style={{
                                   fontSize: 12,
                                   textAlign: "flex-start",
@@ -242,14 +245,14 @@ export default function CalendarApp() {
                                 {med.name} at {med.time} (Patient:{" "}
                                 {med.patientName}, Schedule ID: {med.scheduleId}
                                 )
-                              </Text>
+                              </AppText>
                             </View>
                           )
                         )}
                         {medications.length > 3 && (
-                          <Text style={{ fontSize: 14, color: "#5879A5" }}>
+                          <AppText style={{ fontSize: 14, color: "#5879A5" }}>
                             +{medications.length - 3} more
-                          </Text>
+                          </AppText>
                         )}
                       </View>
                     </>
@@ -279,9 +282,9 @@ export default function CalendarApp() {
                 borderRadius: 10,
               }}
             >
-              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+              <AppText style={{ fontSize: 20, fontWeight: "bold" }}>
                 Details for {selectedDate}
-              </Text>
+              </AppText>
 
               <ScrollView style={{ marginVertical: 10 }}>
                 {medicationData[selectedDate] ? (
@@ -302,7 +305,7 @@ export default function CalendarApp() {
                         );
                       }}
                     >
-                      <Text
+                      <AppText
                         style={{
                           fontSize: 13,
                           textAlign: "flex-start",
@@ -313,11 +316,11 @@ export default function CalendarApp() {
                       >
                         {med.name} at {med.time} (Patient:{" "}
                         {med.patientName}, Schedule ID: {med.scheduleId})
-                      </Text>
+                      </AppText>
                     </TouchableOpacity>
                   ))
                 ) : (
-                  <Text>No medications for this day.</Text>
+                  <AppText>No medications for this day.</AppText>
                 )}
               </ScrollView>
 
@@ -330,12 +333,13 @@ export default function CalendarApp() {
                   alignItems: 'center',
                 }}
               >
-                <Text style={{ color: 'white', fontWeight:'bold', fontSize: 16 }}>Close</Text>
+                <AppText style={{ color: 'white', fontWeight:'bold', fontSize: 16 }}>Close</AppText>
               </TouchableOpacity>
             </View>
           </View>
         </Modal>
       </ScrollView>
     </View>
+    </SafeAreaView>
   );
 }

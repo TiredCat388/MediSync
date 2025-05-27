@@ -12,6 +12,8 @@ import RNPickerSelect from "react-native-picker-select";
 import styles from "./stylesheets/updatepatientstyle";
 import CustomAlert from "./components/alert";
 import Constants from 'expo-constants';
+import { SafeAreaView } from "react-native-safe-area-context";
+import AppText from './components/AppText';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
@@ -292,7 +294,7 @@ export default function UpdatePatientScreen() {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <Text style={styles.loadingText}>Loading patient details...</Text>
+        <AppText style={styles.loadingText}>Loading patient details...</AppText>
       </View>
     );
   }
@@ -300,12 +302,13 @@ export default function UpdatePatientScreen() {
   if (error) {
     return (
       <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>Error: {error}</Text>
+        <AppText style={styles.errorText}>Error: {error}</AppText>
       </View>
     );
   }
 
   return (
+    <SafeAreaView style={{ flex: 1 }}>
     <View style={styles.container}>
       <Sidebar onNavigate={() => {}} /> {/* Adjust navigation as needed */}
       <View
@@ -314,36 +317,36 @@ export default function UpdatePatientScreen() {
           { marginLeft: isSidebarExpanded ? 200 : 70 },
         ]}
       >
-        <Text style={styles.screenTitle}>Update Patient</Text>
+        <AppText style={styles.screenTitle}>Update Patient</AppText>
         <View style={styles.formContainer}>
           <ScrollView style={styles.column}>  
-            <Text style={styles.sectionTitle}>Patient Details <Text style={{ color: 'red', fontSize: 16 }}>* Required</Text>
-            </Text>
-            <Text style={styles.label}>
-              First Name <Text style={{ color: "red" }}>*</Text>
-            </Text>
+            <AppText style={styles.sectionTitle}>Patient Details <AppText style={{ color: 'red', fontSize: 16 }}>* Required</AppText>
+            </AppText>
+            <AppText style={styles.label}>
+              First Name <AppText style={{ color: "red" }}>*</AppText>
+            </AppText>
             <TextInput
               style={styles.input}
               value={formData.firstName}
               onChangeText={(text) => handleInputChange("firstName", text)}
             />
-            <Text style={styles.label}>Middle Name</Text>
+            <AppText style={styles.label}>Middle Name</AppText>
             <TextInput
               style={styles.input}
               value={formData.middleName}
               onChangeText={(text) => handleInputChange("middleName", text)}
             />
-            <Text style={styles.label}>
-              Surname <Text style={{ color: "red" }}>*</Text>
-            </Text>
+            <AppText style={styles.label}>
+              Surname <AppText style={{ color: "red" }}>*</AppText>
+            </AppText>
             <TextInput
               style={styles.input}
               value={formData.surname}
               onChangeText={(text) => handleInputChange("surname", text)}
             />
-            <Text style={styles.label}>
-              Sex <Text style={{ color: "red" }}>*</Text>
-            </Text>
+            <AppText style={styles.label}>
+              Sex <AppText style={{ color: "red" }}>*</AppText>
+            </AppText>
             <View>
               <RNPickerSelect
                 items={[
@@ -365,9 +368,9 @@ export default function UpdatePatientScreen() {
                 }}
               />
             </View>
-            <Text style={styles.label}>
-              Date of Birth <Text style={{ color: "red" }}>*</Text>
-            </Text>
+            <AppText style={styles.label}>
+              Date of Birth <AppText style={{ color: "red" }}>*</AppText>
+            </AppText>
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
@@ -432,15 +435,15 @@ export default function UpdatePatientScreen() {
                 />
               </View>
             </View>
-            <Text style={styles.label}>Age</Text>
+            <AppText style={styles.label}>Age</AppText>
             <TextInput
               style={styles.input}
               value={formData.age.toString()}
               editable={false}
             />
-            <Text style={styles.label}>
-              Blood Type <Text style={{ color: "red" }}>*</Text>
-            </Text>
+            <AppText style={styles.label}>
+              Blood Type <AppText style={{ color: "red" }}>*</AppText>
+            </AppText>
             <View>
               <RNPickerSelect
                 items={[
@@ -471,7 +474,7 @@ export default function UpdatePatientScreen() {
                 }}
               />
             </View>
-            <Text style={styles.label}>Religion</Text>
+            <AppText style={styles.label}>Religion</AppText>
             <View>
               <RNPickerSelect
                 items={[
@@ -503,9 +506,9 @@ export default function UpdatePatientScreen() {
             </View>
             {formData.religion === "Other" ? (
               <>
-                <Text style={styles.label}>
-                  Specify Other Religion <Text style={{ color: "red" }}>*</Text>
-                </Text>
+                <AppText style={styles.label}>
+                  Specify Other Religion <AppText style={{ color: "red" }}>*</AppText>
+                </AppText>
                 <TextInput
                   style={styles.input}
                   value={formData.otherReligionSpecify}
@@ -520,9 +523,9 @@ export default function UpdatePatientScreen() {
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
               <View style={{ flex: 1, marginRight: 10 }}>
-                <Text style={styles.label}>
-                  Height (meters) <Text style={{ color: "red" }}>*</Text>
-                </Text>
+                <AppText style={styles.label}>
+                  Height (meters) <AppText style={{ color: "red" }}>*</AppText>
+                </AppText>
                 <TextInput
                   style={styles.input}
                   keyboardType="numeric"
@@ -532,9 +535,9 @@ export default function UpdatePatientScreen() {
                 />
               </View>
               <View style={{ flex: 1 }}>
-                <Text style={styles.label}>
-                  Weight (kg) <Text style={{ color: "red" }}>*</Text>
-                </Text>
+                <AppText style={styles.label}>
+                  Weight (kg) <AppText style={{ color: "red" }}>*</AppText>
+                </AppText>
                 <TextInput
                   style={styles.input}
                   keyboardType="numeric"
@@ -544,9 +547,9 @@ export default function UpdatePatientScreen() {
                 />
               </View>
             </View>
-            <Text style={styles.label}>
-              Diet <Text style={{ color: "red" }}>*</Text>
-            </Text>
+            <AppText style={styles.label}>
+              Diet <AppText style={{ color: "red" }}>*</AppText>
+            </AppText>
             <View>
               <RNPickerSelect
                 items={dietOptions}
@@ -567,9 +570,9 @@ export default function UpdatePatientScreen() {
             </View>
             {formData.diet.startsWith("ngt:") ? (
               <>
-                <Text style={styles.label}>
-                  Specify NGT Details <Text style={{ color: "red" }}>*</Text>
-                </Text>
+                <AppText style={styles.label}>
+                  Specify NGT Details <AppText style={{ color: "red" }}>*</AppText>
+                </AppText>
                 <TextInput
                   style={styles.input}
                   value={formData.ngtSpecify}
@@ -580,9 +583,9 @@ export default function UpdatePatientScreen() {
             ) : null}
             {formData.diet.startsWith("other:") ? (
               <>
-                <Text style={styles.label}>
-                  Specify Other Diet <Text style={{ color: "red" }}>*</Text>
-                </Text>
+                <AppText style={styles.label}>
+                  Specify Other Diet <AppText style={{ color: "red" }}>*</AppText>
+                </AppText>
                 <TextInput
                   style={styles.input}
                   value={formData.otherDietSpecify}
@@ -593,36 +596,36 @@ export default function UpdatePatientScreen() {
                 />
               </>
             ) : null}
-            <Text style={styles.label}>
-            Contact Number <Text style={{ color: "red" }}>*</Text>
-            </Text>
+            <AppText style={styles.label}>
+            Contact Number <AppText style={{ color: "red" }}>*</AppText>
+            </AppText>
             <TextInput
               style={styles.input}
               value={formData.phoneNumber}
               onChangeText={(text) => handleInputChange("phoneNumber", text)}
               keyboardType="phone-pad"
             />
-            <Text style={styles.label}>
-              Bed Number <Text style={{ color: "red" }}>*</Text>
-            </Text>
+            <AppText style={styles.label}>
+              Bed Number <AppText style={{ color: "red" }}>*</AppText>
+            </AppText>
             <TextInput
               style={styles.input}
               value={formData.bedNumber}
               onChangeText={(text) => handleInputChange("bedNumber", text)}
               keyboardType="numeric"
             />
-            <Text style={styles.label}>
-              Room Number <Text style={{ color: "red" }}>*</Text>
-            </Text>
+            <AppText style={styles.label}>
+              Room Number <AppText style={{ color: "red" }}>*</AppText>
+            </AppText>
             <TextInput
               style={styles.input}
               value={formData.roomNumber}
               onChangeText={(text) => handleInputChange("roomNumber", text)}
               keyboardType="numeric"
             />
-            <Text style={styles.label}>
-              Chief Complaint/s <Text style={{ color: "red" }}>*</Text>
-            </Text>
+            <AppText style={styles.label}>
+              Chief Complaint/s <AppText style={{ color: "red" }}>*</AppText>
+            </AppText>
             <TextInput
               style={[styles.input, { height: 150, textAlignVertical: "top" }]}
               multiline
@@ -630,9 +633,9 @@ export default function UpdatePatientScreen() {
               value={formData.chiefComplaint}
               onChangeText={(text) => handleInputChange("chiefComplaint", text)}
             />
-            <Text style={styles.label}>
-              Admitting Diagnosis <Text style={{ color: "red" }}>*</Text>
-            </Text>
+            <AppText style={styles.label}>
+              Admitting Diagnosis <AppText style={{ color: "red" }}>*</AppText>
+            </AppText>
             <TextInput
               style={[styles.input, { height: 150, textAlignVertical: "top" }]}
               multiline
@@ -642,7 +645,7 @@ export default function UpdatePatientScreen() {
                 handleInputChange("admittingDiagnosis", text)
               }
             />
-            <Text style={styles.label}>Final Diagnosis</Text>
+            <AppText style={styles.label}>Final Diagnosis</AppText>
             <TextInput
               style={[styles.input, { height: 150, textAlignVertical: "top" }]}
               multiline
@@ -653,10 +656,10 @@ export default function UpdatePatientScreen() {
           </ScrollView>
           <View style={styles.divider} />
           <View style={styles.column}>
-            <Text style={styles.sectionTitle}>Emergency Contact Details</Text>
-            <Text style={styles.label}>
-              First Name <Text style={{ color: "red" }}>*</Text>
-            </Text>
+            <AppText style={styles.sectionTitle}>Emergency Contact Details</AppText>
+            <AppText style={styles.label}>
+              First Name <AppText style={{ color: "red" }}>*</AppText>
+            </AppText>
             <TextInput
               style={styles.input}
               value={formData.emergencyFirstName}
@@ -664,9 +667,9 @@ export default function UpdatePatientScreen() {
                 handleInputChange("emergencyFirstName", text)
               }
             />
-            <Text style={styles.label}>
-              Surname <Text style={{ color: "red" }}>*</Text>
-            </Text>
+            <AppText style={styles.label}>
+              Surname <AppText style={{ color: "red" }}>*</AppText>
+            </AppText>
             <TextInput
               style={styles.input}
               value={formData.emergencySurname}
@@ -674,17 +677,17 @@ export default function UpdatePatientScreen() {
                 handleInputChange("emergencySurname", text)
               }
             />
-            <Text style={styles.label}>
-              Relation to Patient <Text style={{ color: "red" }}>*</Text>
-            </Text>
+            <AppText style={styles.label}>
+              Relation to Patient <AppText style={{ color: "red" }}>*</AppText>
+            </AppText>
             <TextInput
               style={styles.input}
               value={formData.relation}
               onChangeText={(text) => handleInputChange("relation", text)}
             />
-            <Text style={styles.label}>
-              Contact Number <Text style={{ color: "red" }}>*</Text>
-            </Text>
+            <AppText style={styles.label}>
+              Contact Number <AppText style={{ color: "red" }}>*</AppText>
+            </AppText>
             <TextInput
               style={styles.input}
               value={formData.emergencyPhone}
@@ -700,13 +703,13 @@ export default function UpdatePatientScreen() {
             }
             style={[styles.button, styles.leaveButton]}
           >
-            <Text style={styles.buttonText}>Cancel</Text>
+            <AppText style={styles.buttonText}>Cancel</AppText>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={handleUpdate}
             style={[styles.button, styles.stayButton]}
           >
-            <Text style={styles.buttonText}>Update Patient</Text>
+            <AppText style={styles.buttonText}>Update Patient</AppText>
           </TouchableOpacity>
         </View>
       </View>
@@ -719,5 +722,6 @@ export default function UpdatePatientScreen() {
         }}
       />
     </View>
+    </SafeAreaView>
   );
 }

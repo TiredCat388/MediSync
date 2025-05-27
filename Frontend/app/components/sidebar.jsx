@@ -4,17 +4,17 @@ import { FontAwesome, Feather } from '@expo/vector-icons';
 import { useRouter, usePathname } from 'expo-router';
 import styles from './sidebarstyle';
 import { useNotification } from '../../notifcontext';
+import AppText from './AppText';
 
 const Sidebar = () => {
   const pathname = usePathname();
   const router = useRouter();
-
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const [sidebarWidth] = useState(new Animated.Value(70));
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
-  const [sidebarColor, setSidebarColor] = useState('#5879a5');
-  const [iconColor, setIconColor] = useState('white');
-  const [textColor, setTextColor] = useState('white');
+  const [sidebarColor, setSidebarColor] = useState('#e0e0e0');
+  const [iconColor, setIconColor] = useState('gray');
+  const [textColor, setTextColor] = useState('gray');
   const [showSubOptions, setShowSubOptions] = useState(false);
   const [isDirectoryExpanded, setIsDirectoryExpanded] = useState(false);
   const { showNotification } = useNotification();
@@ -41,8 +41,8 @@ const Sidebar = () => {
         useNativeDriver: false,
       }).start();
       setIsSidebarExpanded(!isSidebarExpanded);
-      setSidebarColor(isSidebarExpanded ? '#5879a5' : '#5879a5');
-      const newColor = isSidebarExpanded ? 'white' : 'white';
+      setSidebarColor(isSidebarExpanded ? '#e0e0e0' : '#5879a5');
+      const newColor = isSidebarExpanded ? 'gray' : 'white';
       setIconColor(newColor);
       setTextColor(newColor);
       if (isSidebarExpanded) {
@@ -77,7 +77,7 @@ const Sidebar = () => {
         <View style={styles.iconsContainer}>
           <TouchableOpacity onPress={() => handleSidebarPress('menu')} style={styles.iconLabelContainer}>
             <FontAwesome name="bars" size={24} color={iconColor} />
-            {isSidebarExpanded && <Text style={[styles.iconLabel, { color: textColor }]}>Menu</Text>}
+            {isSidebarExpanded && <AppText style={[styles.iconLabel, { color: textColor }]}>Menu</AppText>}
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -88,19 +88,17 @@ const Sidebar = () => {
           >
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <FontAwesome name="file-text-o" size={24} color={iconColor} />
-              {isSidebarExpanded && <Text style={[styles.iconLabel, { color: textColor }]}>Directory</Text>}
+              {isSidebarExpanded && <AppText style={[styles.iconLabel, { color: textColor }]}>Directory</AppText>}
             </View>
-
             {isSidebarExpanded && (
               <Feather
-                name={isDirectoryExpanded ? 'chevron-down' : 'chevron-right'}
+                name={isDirectoryExpanded ? 'chevron-down' : 'chevron-left'}
                 size={20}
                 color="white"
-                style={{ marginLeft: 35 }}
+                style={{ marginLeft: 20 }}
               />
             )}
           </TouchableOpacity>
-
           {isSidebarExpanded && showSubOptions && (
             <View style={{ marginLeft: 30 }}>
               <View style={styles.subOptionContainer}>
@@ -108,32 +106,31 @@ const Sidebar = () => {
                   onPress={() => router.push('/directory')}
                   style={[styles.subOption, pathname === '/directory' && styles.activesubItem]}
                 >
-                  <Text style={styles.subOptionText}>Patients</Text>
+                  <AppText style={styles.subOptionText}>Patients</AppText>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   onPress={() => router.push('/archive')}
                   style={[styles.subOption, pathname === '/archive' && styles.activesubItem]}
                 >
-                  <Text style={styles.subOptionText}>Archive</Text>
+                  <AppText style={styles.subOptionText}>Archive</AppText>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   onPress={() => router.push('/logs')}
                   style={[styles.subOption, pathname === '/logs' && styles.activesubItem]}
                 >
-                  <Text style={styles.subOptionText}>Logs</Text>
+                  <AppText style={styles.subOptionText}>Logs</AppText>
                 </TouchableOpacity>
               </View>
             </View>
           )}
-
           <TouchableOpacity
             onPress={() => handleSidebarPress('calendar')}
             style={[styles.iconLabelContainer, pathname === '/calendar' && isSidebarExpanded  && styles.activeItem]}
           >
             <FontAwesome name="calendar" size={24} color={iconColor} />
-            {isSidebarExpanded && <Text style={[styles.iconLabel, { color: textColor }]}>Calendar</Text>}
+            {isSidebarExpanded && <AppText style={[styles.iconLabel, { color: textColor }]}>Calendar</AppText>}
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -141,7 +138,7 @@ const Sidebar = () => {
             style={[styles.iconLabelContainer, pathname === '/clock' && isSidebarExpanded && styles.activeItem]}
           >
             <Feather name="clock" size={24} color={iconColor} />
-            {isSidebarExpanded && <Text style={[styles.iconLabel, { color: textColor }]}>Clock</Text>}
+            {isSidebarExpanded && <AppText style={[styles.iconLabel, { color: textColor }]}>Clock</AppText>}
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -149,12 +146,12 @@ const Sidebar = () => {
             style={[styles.iconLabelContainer, pathname === '/settings' && isSidebarExpanded && styles.activeItem]}
           >
             <FontAwesome name="cog" size={27} color={iconColor} />
-            {isSidebarExpanded && <Text style={[styles.iconLabel, { color: textColor }]}>Settings</Text>}
+            {isSidebarExpanded && <AppText style={[styles.iconLabel, { color: textColor }]}>Settings</AppText>}
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => handleSidebarPress('logout')} style={styles.iconLabelContainer}>
             <Feather name="log-out" size={24} color={iconColor} />
-            {isSidebarExpanded && <Text style={[styles.iconLabel, { color: textColor }]}>Logout</Text>}
+            {isSidebarExpanded && <AppText style={[styles.iconLabel, { color: textColor }]}>Logout</AppText>}
           </TouchableOpacity>
         </View>
 
@@ -164,11 +161,11 @@ const Sidebar = () => {
             source={
               isSidebarExpanded
                 ? require('../../assets/images/medisync-logo.png')
-                : require('../../assets/images/medisync-logo.png')
+                : require('../../assets/images/medisync-logo-bw.png')
             }
             style={styles.logo}
           />
-          {isSidebarExpanded && <Text style={[styles.logoText, { color: textColor }]}>Medisync</Text>}
+          {isSidebarExpanded && <AppText style={[styles.logoText, { color: textColor }]}>Medisync</AppText>}
         </View>
       </View>
 
@@ -176,14 +173,14 @@ const Sidebar = () => {
       <Modal visible={logoutModalVisible} transparent animationType="fade">
         <View style={styles.overlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Confirm Logout</Text>
-            <Text style={styles.modalText}>Are you sure you want to log out?</Text>
+            <AppText style={styles.modalTitle}>Confirm Logout</AppText>
+            <AppText style={styles.modalText}>Are you sure you want to log out?</AppText>
             <View style={styles.modalButtonContainer}>
               <TouchableOpacity
                 style={[styles.modalButton, styles.cancelButton]}
                 onPress={() => setLogoutModalVisible(false)}
               >
-                <Text style={styles.modalButtonText}>Cancel</Text>
+                <AppText style={styles.modalButtonText}>Cancel</AppText>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.modalButton, styles.logoutButton]}
@@ -192,7 +189,7 @@ const Sidebar = () => {
                   setLogoutModalVisible(false);
                 }}
               >
-                <Text style={styles.modalButtonText}>Log Out</Text>
+                <AppText style={styles.modalButtonText}>Log Out</AppText>
               </TouchableOpacity>
             </View>
           </View>

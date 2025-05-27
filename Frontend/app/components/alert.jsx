@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, Modal, TouchableOpacity, StyleSheet } from "react-native";
+import AppText from './AppText';
 
 const CustomAlert = ({
   visible,
@@ -17,20 +18,20 @@ const CustomAlert = ({
   >
     <View style={styles.centeredView}>
       <View style={styles.modalView}>
-        <Text style={styles.modalText}>{message}</Text>
+        <AppText style={styles.modalText}>{message}</AppText>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.button, styles.cancelButton]}
             onPress={onClose}
           >
-            <Text style={styles.extStyle}>{cancelText}</Text>
+            <AppText style={styles.extStyle}>{cancelText}</AppText>
           </TouchableOpacity>
           {onConfirm && (
             <TouchableOpacity
               style={[styles.button, styles.confirmButton]}
               onPress={onConfirm}
             >
-              <Text style={styles.textStyle}>{confirmText}</Text>
+              <AppText style={styles.textStyle}>{confirmText}</AppText>
             </TouchableOpacity>
           )}
         </View>

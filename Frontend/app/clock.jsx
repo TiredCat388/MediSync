@@ -13,6 +13,8 @@ import { Checkbox } from "react-native-paper";
 import styles from "./stylesheets/clockstyle";
 import Constants from "expo-constants";
 import Clock from "./components/analogclock";
+import { SafeAreaView } from "react-native-safe-area-context";
+import AppText from './components/AppText';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
@@ -292,16 +294,17 @@ const AnalogClock = () => {
   }, []);
 
   return (
+    <SafeAreaView style={{ flex: 1 }}>
     <View style={styles.container}>
       <Sidebar />
       <View style={[styles.header, { marginLeft: sidebarWidth }]}>
-        <Text style={styles.headerText}>Alerts List</Text>
+        <AppText style={styles.headerText}>Alerts List</AppText>
       </View>
       <View style={[styles.mainRow, { marginLeft: sidebarWidth }]}>
         <View style={styles.alertPanel}>
           <View style={styles.tabHeader}>
             {["upcoming", "pending", "history"].map((tab, index) => (
-              <Text
+              <AppText
                 key={tab}
                 style={[
                   styles.tabText,
@@ -312,13 +315,13 @@ const AnalogClock = () => {
                 onPress={() => setActiveTab(tab)}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
-              </Text>
+              </AppText>
             ))}
           </View>
           <View style={styles.tabContent}>
             <ScrollView style={styles.alertList}>
               {sortedAlerts.length === 0 ? (
-                <Text style={styles.noAlerts}>No alerts</Text>
+                <AppText style={styles.noAlerts}>No alerts</AppText>
               ) : (
                 sortedAlerts.map((alert) => {
                   const scheduleId = alert.schedule_id;
@@ -353,29 +356,29 @@ const AnalogClock = () => {
                           />
                         </View>
                         <View style={{ marginLeft: 10, flex: 1 }}>
-                          <Text style={[styles.alertText]}>
+                          <AppText style={[styles.alertText]}>
                             Schedule ID: {alert.patient_number} - {scheduleId}
-                          </Text>
+                          </AppText>
                           {isExpanded && (
                             <>
-                              <Text style={[styles.alertText]}>
+                              <AppText style={[styles.alertText]}>
                                 {alert.patient_first_name}{" "}
                                 {alert.patient_middle_name}{" "}
                                 {alert.patient_last_name} - Room{" "}
                                 {alert.room_number}
-                              </Text>
-                              <Text style={[styles.alertText]}>
+                              </AppText>
+                              <AppText style={[styles.alertText]}>
                                 Medication: {alert.Medication_name}
-                              </Text>
-                              <Text style={[styles.alertText]}>
+                              </AppText>
+                              <AppText style={[styles.alertText]}>
                                 Medication Form: {alert.Medication_form}
-                              </Text>
-                              <Text style={[styles.alertText]}>
+                              </AppText>
+                              <AppText style={[styles.alertText]}>
                                 Strength: {alert.Medication_strength} {alert.Medication_unit}
-                              </Text>
-                              <Text style={[styles.alertText]}>
+                              </AppText>
+                              <AppText style={[styles.alertText]}>
                                 Notes: {alert.Medication_notes}
-                              </Text>
+                              </AppText>
                               {(activeTab === "upcoming" ||
                                 activeTab === "pending") && (
                                 <View style={styles.tabButtonContainer}>
@@ -388,9 +391,9 @@ const AnalogClock = () => {
                                       handleAdministerPress(scheduleId)
                                     }
                                   >
-                                    <Text style={styles.buttonText}>
+                                    <AppText style={styles.buttonText}>
                                       Administer
-                                    </Text>
+                                    </AppText>
                                   </TouchableOpacity>
                                   <TouchableOpacity
                                     style={[
@@ -401,9 +404,9 @@ const AnalogClock = () => {
                                       handleCancelPress(scheduleId)
                                     }
                                   >
-                                    <Text style={styles.buttonText}>
+                                    <AppText style={styles.buttonText}>
                                       Cancel
-                                    </Text>
+                                    </AppText>
                                   </TouchableOpacity>
                                 </View>
                               )}
@@ -432,8 +435,8 @@ const AnalogClock = () => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Cancel Medication</Text>
-            <Text>Please provide a reason for cancellation:</Text>
+            <AppText style={styles.modalTitle}>Cancel Medication</AppText>
+            <AppText>Please provide a reason for cancellation:</AppText>
             <TextInput
               style={styles.modalInput}
               multiline
@@ -446,7 +449,7 @@ const AnalogClock = () => {
                 style={[styles.modalButtons]}
                 onPress={() => setIsCancelModalVisible(false)}
               >
-                <Text style={styles.modalButton}>Back</Text>
+                <AppText style={styles.modalButton}>Back</AppText>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -461,13 +464,14 @@ const AnalogClock = () => {
                 onPress={confirmCancellation}
                 disabled={!cancelReason.trim()}
               >
-                <Text style={styles.modalButton}>Confirm</Text>
+                <AppText style={styles.modalButton}>Confirm</AppText>
               </TouchableOpacity>
             </View>
           </View>
         </View>
       </Modal>
     </View>
+    </SafeAreaView>
   );
 };
 

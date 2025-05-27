@@ -15,6 +15,8 @@ import { Feather } from "@expo/vector-icons";
 import { Alert } from "react-native";
 import { styles } from "./stylesheets/viewpatientstyle";
 import Constants from "expo-constants";
+import { SafeAreaView } from "react-native-safe-area-context";
+import AppText from './components/AppText';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
@@ -146,10 +148,23 @@ export default function PatientDetails() {
     }
   };
   if (loading) {
-    return <Text>Loading patient details...</Text>;
+    return <AppText>Loading patient details...</AppText>;
   }
 
+  const displayValue = (value) => {
+  if (
+    value === null ||
+    value === undefined ||
+    value === "" ||
+    (typeof value === "string" && value.trim() === "")
+  ) {
+    return <AppText>N/A</AppText>;
+  }
+  return value;
+};
+
   return (
+    <SafeAreaView style={{ flex: 1 }}>
     <View style={styles.container}>
       <Sidebar />
       <ScrollView style={[styles.mainContent, { marginLeft: sidebarWidth }]}>
@@ -158,7 +173,7 @@ export default function PatientDetails() {
             style={styles.backButton}
             onPress={() => router.push("/directory")}
           >
-            <Text style={styles.buttonText}>Back</Text>
+            <AppText style={styles.buttonText}>Back</AppText>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -167,7 +182,7 @@ export default function PatientDetails() {
               router.push(`/updatepatient?patient_number=${patient_number}`)
             }
           >
-            <Text style={styles.buttonText}>Update Patient</Text>
+            <AppText style={styles.buttonText}>Update Patient</AppText>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -182,70 +197,70 @@ export default function PatientDetails() {
               }
             }}
           >
-            <Text style={styles.deactbuttonText}>Archive Patient</Text>
+            <AppText style={styles.deactbuttonText}>Archive Patient</AppText>
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.patientId}>
-          PATIENT ID: {patient?.patient_number} |{" "}
-          {patient?.last_name?.toUpperCase()}, {patient?.first_name}
-        </Text>
+        <AppText style={styles.patientId}>
+          PATIENT ID: {displayValue(patient?.patient_number)} |{" "}
+          {displayValue(patient?.last_name?.toUpperCase())}, {displayValue(patient?.first_name)}
+        </AppText>
 
         <View style={styles.infoContainer}>
           <View style={styles.detailsSection}>
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Patient Details</Text>
-              <Text style={styles.boldLabel}>Name</Text>
-              <Text>
-                {patient?.last_name?.toUpperCase()}, {patient?.first_name}{" "}
-                {patient?.middle_name
+              <AppText style={styles.sectionTitle}>Patient Details</AppText>
+              <AppText style={styles.boldLabel}>Name</AppText>
+              <AppText>
+                {displayValue(patient?.last_name?.toUpperCase())}, {displayValue(patient?.first_name)}{" "}
+                {displayValue(patient?.middle_name)
                   ? `${patient.middle_name.charAt(0)}.`
                   : ""}
-              </Text>
-              <Text style={styles.boldLabel}>Sex</Text>
-              <Text>{patient?.sex}</Text>
-              <Text style={styles.boldLabel}>Birth Date</Text>
-              <Text>{patient?.date_of_birth}</Text>
-              <Text style={styles.boldLabel}>Age</Text>
-              <Text>{patient?.age}</Text>
-              <Text style={styles.boldLabel}>Blood Type</Text>
-              <Text>{patient?.blood_group}</Text>
+              </AppText>
+              <AppText style={styles.boldLabel}>Sex</AppText>
+              <AppText>{displayValue(patient?.sex)}</AppText>
+              <AppText style={styles.boldLabel}>Birth Date</AppText>
+              <AppText>{displayValue(patient?.date_of_birth)}</AppText>
+              <AppText style={styles.boldLabel}>Age</AppText>
+              <AppText>{displayValue(patient?.age)}</AppText>
+              <AppText style={styles.boldLabel}>Blood Type</AppText>
+              <AppText>{displayValue(patient?.blood_group)}</AppText>
             </View>
           </View>
 
           <View style={styles.dividers} />
 
           <View style={styles.detailsSection}>
-            <Text style={styles.sectionTitle}> </Text>
+            <AppText style={styles.sectionTitle}> </AppText>
             <View style={styles.section}>
-              <Text style={styles.boldLabel}>Religion</Text>
-              <Text>{patient?.religion}</Text>
-              <Text style={styles.boldLabel}>Height (meters)</Text>
-              <Text>{patient?.height}</Text>
-              <Text style={styles.boldLabel}>Weight (kilograms)</Text>
-              <Text>{patient?.weight}</Text>
-              <Text style={styles.boldLabel}>BMI (kg/m²)</Text>
-              <Text>{patient?.BMI}</Text>
-              <Text style={styles.boldLabel}>Diet</Text>
-              <Text>{patient?.diet}</Text>
+              <AppText style={styles.boldLabel}>Religion</AppText>
+              <AppText>{displayValue(patient?.religion)}</AppText>
+              <AppText style={styles.boldLabel}>Height (meters)</AppText>
+              <AppText>{displayValue(patient?.height)}</AppText>
+              <AppText style={styles.boldLabel}>Weight (kilograms)</AppText>
+              <AppText>{displayValue(patient?.weight)}</AppText>
+              <AppText style={styles.boldLabel}>BMI (kg/m²)</AppText>
+              <AppText>{displayValue(patient?.BMI)}</AppText>
+              <AppText style={styles.boldLabel}>Diet</AppText>
+              <AppText>{displayValue(patient?.diet)}</AppText>
             </View>
           </View>
 
           <View style={styles.dividers} />
 
           <View style={styles.subsdetailsSection}>
-            <Text style={styles.sectionTitle}> </Text>
+            <AppText style={styles.sectionTitle}> </AppText>
             <View style={styles.section}>
-              <Text style={styles.boldLabel}>Contact Details</Text>
-              <Text>{patient?.contact_number}</Text>
-              <Text style={styles.boldLabel}>Room No</Text>
-              <Text>{patient?.room_number}</Text>
-              <Text style={styles.boldLabel}>Chief Complaint/s</Text>
-              <Text>{patient?.chief_complaint}</Text>
-              <Text style={styles.boldLabel}>Admitting Diagnosis</Text>
-              <Text>{patient?.admitting_diagnosis}</Text>
-              <Text style={styles.boldLabel}>Final Diagnosis</Text>
-              <Text>{patient?.Final_diagnosis}</Text>
+              <AppText style={styles.boldLabel}>Contact Details</AppText>
+              <AppText>{displayValue(patient?.contact_number)}</AppText>
+              <AppText style={styles.boldLabel}>Room No</AppText>
+              <AppText>{displayValue(patient?.room_number)}</AppText>
+              <AppText style={styles.boldLabel}>Chief Complaint/s</AppText>
+              <AppText>{displayValue(patient?.chief_complaint)}</AppText>
+              <AppText style={styles.boldLabel}>Admitting Diagnosis</AppText>
+              <AppText>{displayValue(patient?.admitting_diagnosis)}</AppText>
+              <AppText style={styles.boldLabel}>Final Diagnosis</AppText>
+              <AppText>{displayValue(patient?.Final_diagnosis)}</AppText>
             </View>
           </View>
 
@@ -253,16 +268,16 @@ export default function PatientDetails() {
 
           <View style={styles.subdetailsSection}>
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Emergency Contact Details</Text>
-              <Text style={styles.boldLabel}>Name</Text>
-              <Text>
-                {patient?.emergency_contact?.first_name}{" "}
-                {patient?.emergency_contact?.last_name}
-              </Text>
-              <Text style={styles.boldLabel}>Relation to Patient</Text>
-              <Text>{patient?.emergency_contact?.relation_to_patient}</Text>
-              <Text style={styles.boldLabel}>Contact Details</Text>
-              <Text>{patient?.emergency_contact?.contact_number}</Text>
+              <AppText style={styles.sectionTitle}>Emergency Contact Details</AppText>
+              <AppText style={styles.boldLabel}>Name</AppText>
+              <AppText>
+                {displayValue(patient?.emergency_contact?.first_name)}{" "}
+                {displayValue(patient?.emergency_contact?.last_name)}
+              </AppText>
+              <AppText style={styles.boldLabel}>Relation to Patient</AppText>
+              <AppText>{displayValue(patient?.emergency_contact?.relation_to_patient)}</AppText>
+              <AppText style={styles.boldLabel}>Contact Details</AppText>
+              <AppText>{displayValue(patient?.emergency_contact?.contact_number)}</AppText>
             </View>
           </View>
         </View>
@@ -283,9 +298,9 @@ export default function PatientDetails() {
               setShowMedications(!showMedications);
             }}
           >
-            <Text style={styles.buttonText}>
+            <AppText style={styles.buttonText}>
               {showMedications ? "Hide" : "View"} Medication List
-            </Text>
+            </AppText>
           </TouchableOpacity>
         </View>
 
@@ -370,14 +385,14 @@ export default function PatientDetails() {
                                     );
                                   }}
                                 >
-                                  <Text
+                                  <AppText
                                     style={[
                                       styles.menuItemText,
                                       styles.updateText,
                                     ]}
                                   >
                                     Update
-                                  </Text>
+                                  </AppText>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity
@@ -390,14 +405,14 @@ export default function PatientDetails() {
                                     );
                                   }}
                                 >
-                                  <Text
+                                  <AppText
                                     style={[
                                       styles.menuItemText,
                                       styles.deleteText,
                                     ]}
                                   >
                                     Archive
-                                  </Text>
+                                  </AppText>
                                 </TouchableOpacity>
                               </View>
                             )}
@@ -425,5 +440,6 @@ export default function PatientDetails() {
         )}
       </ScrollView>
     </View>
+    </SafeAreaView>
   );
 }

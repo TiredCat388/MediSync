@@ -4,11 +4,13 @@ import { useRouter } from "expo-router";
 import Sidebar from "./components/sidebar";
 import RNPickerSelect from "react-native-picker-select";
 import styles from "./stylesheets/registerstyle";
-import CustomAlert from "./components/alert"; // Import CustomAlert
+import CustomAlert from "./components/alert"; 
 import { ScrollView } from "react-native-gesture-handler";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Constants from 'expo-constants';
-import Icon from 'react-native-vector-icons/MaterialIcons'; // Or FontAwesome, Feather, etc.
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { SafeAreaView } from "react-native-safe-area-context";
+import AppText from './components/AppText';
 
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
@@ -34,15 +36,15 @@ export default function RegisterNewPatient() {
     height: "",
     weight: "",
     diet: "",
-    ngtSpecify: "", // For specifying NGT details
-    otherDietSpecify: "", // For specifying other diet details
+    ngtSpecify: "",
+    otherDietSpecify: "", 
     emergencyFirstName: "",
     emergencySurname: "",
     relation: "",
     emergencyPhone: "",
     chiefComplaint: "",
-    admittingDiagnosis: "", // Add new field for admitting diagnosis
-    finalDiagnosis: "", // Add new field for final diagnosis
+    admittingDiagnosis: "",
+    finalDiagnosis: "",
   });
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -323,6 +325,7 @@ export default function RegisterNewPatient() {
   };
 
   return (
+    <SafeAreaView style={{ flex: 1 }}>
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={styles.container}>
         <Sidebar onNavigate={handleNavigate} />
@@ -332,34 +335,34 @@ export default function RegisterNewPatient() {
             { marginLeft: isSidebarExpanded ? 200 : 70 },
           ]}
         >
-          <Text style={styles.screenTitle}>Register New Patient</Text>
+          <AppText style={styles.screenTitle}>Register New Patient</AppText>
           <View style={styles.formContainer}>
             <ScrollView style={styles.column}>
-              <Text style={styles.sectionTitle}>
+              <AppText style={styles.sectionTitle}>
                 Patient Details{" "}
-                <Text style={{ color: "#5879A5", fontSize: 16 }}>
+                <AppText style={{ color: "#5879A5", fontSize: 16 }}>
                   * Required
-                </Text>
-              </Text>
-              <Text style={styles.label}>
-                First Name <Text style={{ color: "#5879A5" }}>*</Text>
-              </Text>
+                </AppText>
+              </AppText>
+              <AppText style={styles.label}>
+                First Name <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
               <TextInput
                 style={styles.input}
                 onChangeText={(text) =>
                   setFormData({ ...formData, firstName: text })
                 }
               />
-              <Text style={styles.label}>Middle Name</Text>
+              <AppText style={styles.label}>Middle Name</AppText>
               <TextInput
                 style={styles.input}
                 onChangeText={(text) =>
                   setFormData({ ...formData, middleName: text })
                 }
               />
-              <Text style={styles.label}>
-                Surname <Text style={{ color: "#5879A5" }}>*</Text>
-              </Text>
+              <AppText style={styles.label}>
+                Surname <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
               <TextInput
                 style={styles.input}
                 onChangeText={(text) =>
@@ -367,9 +370,9 @@ export default function RegisterNewPatient() {
                 }
               />
 
-              <Text style={styles.label}>
-                Sex <Text style={{ color: "#5879A5" }}>*</Text>
-              </Text>
+              <AppText style={styles.label}>
+                Sex <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
               <View>
                 <RNPickerSelect
                   Icon={() => (
@@ -391,9 +394,9 @@ export default function RegisterNewPatient() {
                 />
               </View>
 
-              <Text style={styles.label}>
-                Date of Birth <Text style={{ color: "#5879A5" }}>*</Text>
-              </Text>
+              <AppText style={styles.label}>
+                Date of Birth <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
               <View
                 style={{
                   flexDirection: "row",
@@ -453,16 +456,16 @@ export default function RegisterNewPatient() {
                 </View>
               </View>
 
-              <Text style={styles.label}>Age</Text>
+              <AppText style={styles.label}>Age</AppText>
               <TextInput
                 style={styles.input}
                 value={formData.age.toString()}
                 editable={false}
               />
 
-              <Text style={styles.label}>
-                Blood Type <Text style={{ color: "#5879A5" }}>*</Text>
-              </Text>
+              <AppText style={styles.label}>
+                Blood Type <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
               <View>
                 <RNPickerSelect
                   Icon={() => (
@@ -493,7 +496,7 @@ export default function RegisterNewPatient() {
                 />
               </View>
 
-              <Text style={styles.label}>Religion</Text>
+              <AppText style={styles.label}>Religion</AppText>
               <View>
                 <RNPickerSelect
                   Icon={() => (
@@ -521,10 +524,10 @@ export default function RegisterNewPatient() {
 
               {formData.religion === "Other" ? (
                 <>
-                  <Text style={styles.label}>
+                  <AppText style={styles.label}>
                     Specify Other Religion{" "}
-                    <Text style={{ color: "#5879A5" }}>*</Text>
-                  </Text>
+                    <AppText style={{ color: "#5879A5" }}>*</AppText>
+                  </AppText>
                   <TextInput
                     style={styles.input}
                     onChangeText={(text) =>
@@ -543,9 +546,9 @@ export default function RegisterNewPatient() {
                 }}
               >
                 <View style={{ flex: 1, marginRight: 10 }}>
-                  <Text style={styles.label}>
-                    Height (meters) <Text style={{ color: "#5879A5" }}>*</Text>
-                  </Text>
+                  <AppText style={styles.label}>
+                    Height (meters) <AppText style={{ color: "#5879A5" }}>*</AppText>
+                  </AppText>
                   <TextInput
                     style={styles.input}
                     keyboardType="numeric"
@@ -557,9 +560,9 @@ export default function RegisterNewPatient() {
                   />
                 </View>
                 <View style={{ flex: 1 }}>
-                  <Text style={styles.label}>
-                    Weight (kg) <Text style={{ color: "#5879A5" }}>*</Text>
-                  </Text>
+                  <AppText style={styles.label}>
+                    Weight (kg) <AppText style={{ color: "#5879A5" }}>*</AppText>
+                  </AppText>
                   <TextInput
                     style={styles.input}
                     keyboardType="numeric"
@@ -572,9 +575,9 @@ export default function RegisterNewPatient() {
                 </View>
               </View>
 
-              <Text style={styles.label}>
-                Diet <Text style={{ color: "#5879A5" }}>*</Text>
-              </Text>
+              <AppText style={styles.label}>
+                Diet <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
               <View>
                 <RNPickerSelect
                   Icon={() => (
@@ -593,9 +596,9 @@ export default function RegisterNewPatient() {
 
               {formData.diet.startsWith("ngt:") ? (
                 <>
-                  <Text style={styles.label}>
-                    Specify NGT Details <Text style={{ color: "#5879A5" }}>*</Text>
-                  </Text>
+                  <AppText style={styles.label}>
+                    Specify NGT Details <AppText style={{ color: "#5879A5" }}>*</AppText>
+                  </AppText>
                   <TextInput
                     style={styles.input}
                     onChangeText={(text) =>
@@ -609,9 +612,9 @@ export default function RegisterNewPatient() {
 
               {formData.diet.startsWith("other:") ? (
                 <>
-                  <Text style={styles.label}>
-                    Specify Other Diet <Text style={{ color: "#5879A5" }}>*</Text>
-                  </Text>
+                  <AppText style={styles.label}>
+                    Specify Other Diet <AppText style={{ color: "#5879A5" }}>*</AppText>
+                  </AppText>
                   <TextInput
                     style={styles.input}
                     onChangeText={(text) =>
@@ -623,9 +626,9 @@ export default function RegisterNewPatient() {
                 </>
               ) : null}
 
-              <Text style={styles.label}>
-                Contact Number <Text style={{ color: "#5879A5" }}>*</Text>
-              </Text>
+              <AppText style={styles.label}>
+                Contact Number <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
               <TextInput
                 style={styles.input}
                 onChangeText={(text) =>
@@ -633,9 +636,9 @@ export default function RegisterNewPatient() {
                 }
               />
 
-              <Text style={styles.label}>
-                Bed Number <Text style={{ color: "#5879A5" }}>*</Text>
-              </Text>
+              <AppText style={styles.label}>
+                Bed Number <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
               <TextInput
                 style={styles.input}
                 onChangeText={(text) =>
@@ -643,9 +646,9 @@ export default function RegisterNewPatient() {
                 }
               />
 
-              <Text style={styles.label}>
-                Room Number <Text style={{ color: "#5879A5" }}>*</Text>
-              </Text>
+              <AppText style={styles.label}>
+                Room Number <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
               <TextInput
                 style={styles.input}
                 onChangeText={(text) =>
@@ -653,9 +656,9 @@ export default function RegisterNewPatient() {
                 }
               />
 
-              <Text style={styles.label}>
-                Chief Complaint/s <Text style={{ color: "#5879A5" }}>*</Text>
-              </Text>
+              <AppText style={styles.label}>
+                Chief Complaint/s <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
               <TextInput
                 style={[
                   styles.input,
@@ -668,9 +671,9 @@ export default function RegisterNewPatient() {
                 }
               />
 
-              <Text style={styles.label}>
-                Admitting Diagnosis <Text style={{ color: "#5879A5" }}>*</Text>
-              </Text>
+              <AppText style={styles.label}>
+                Admitting Diagnosis <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
               <TextInput
                 style={[
                   styles.input,
@@ -683,7 +686,7 @@ export default function RegisterNewPatient() {
                 }
               />
 
-              <Text style={styles.label}>Final Diagnosis</Text>
+              <AppText style={styles.label}>Final Diagnosis</AppText>
               <TextInput
                 style={[
                   styles.input,
@@ -700,37 +703,37 @@ export default function RegisterNewPatient() {
             <View style={styles.divider} />
 
             <View style={styles.column}>
-              <Text style={styles.sectionTitle}>Emergency Contact Details</Text>
-              <Text style={styles.label}>
-                First Name <Text style={{ color: "#5879A5" }}>*</Text>
-              </Text>
+              <AppText style={styles.sectionTitle}>Emergency Contact Details</AppText>
+              <AppText style={styles.label}>
+                First Name <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
               <TextInput
                 style={styles.input}
                 onChangeText={(text) =>
                   setFormData({ ...formData, emergencyFirstName: text })
                 }
               />
-              <Text style={styles.label}>
-                Surname <Text style={{ color: "#5879A5" }}>*</Text>
-              </Text>
+              <AppText style={styles.label}>
+                Surname <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
               <TextInput
                 style={styles.input}
                 onChangeText={(text) =>
                   setFormData({ ...formData, emergencySurname: text })
                 }
               />
-              <Text style={styles.label}>
-                Relation to Patient <Text style={{ color: "#5879A5" }}>*</Text>
-              </Text>
+              <AppText style={styles.label}>
+                Relation to Patient <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
               <TextInput
                 style={styles.input}
                 onChangeText={(text) =>
                   setFormData({ ...formData, relation: text })
                 }
               />
-              <Text style={styles.label}>
-                Contact Number <Text style={{ color: "#5879A5" }}>*</Text>
-              </Text>
+              <AppText style={styles.label}>
+                Contact Number <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
               <TextInput
                 style={styles.input}
                 onChangeText={(text) =>
@@ -744,13 +747,13 @@ export default function RegisterNewPatient() {
               onPress={() => handleNavigate("/directory")}
               style={[styles.button, styles.leaveButton]}
             >
-              <Text style={styles.buttonText}>Cancel</Text>
+              <AppText style={styles.buttonText}>Cancel</AppText>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={handleRegister}
               style={[styles.button, styles.stayButton]}
             >
-              <Text style={styles.buttonText}>Register Patient</Text>
+              <AppText style={styles.buttonText}>Register Patient</AppText>
             </TouchableOpacity>
           </View>
         </View>
@@ -759,16 +762,16 @@ export default function RegisterNewPatient() {
         <Modal visible={modalVisible} transparent animationType="fade">
           <View style={styles.modalOverlay}>
             <View style={styles.modalContainer}>
-              <Text style={styles.modalTitle}>Cancel Patient Registration</Text>
-              <Text style={styles.modalMessage}>
+              <AppText style={styles.modalTitle}>Cancel Patient Registration</AppText>
+              <AppText style={styles.modalMessage}>
                 Are you sure you want to cancel patient registration?
-              </Text>
+              </AppText>
               <View style={styles.modalButtonContainer}>
                 <TouchableOpacity
                   style={[styles.modalButton, styles.stayButton]}
                   onPress={() => setModalVisible(false)}
                 >
-                  <Text style={styles.modalButtonText}>Stay</Text>
+                  <AppText style={styles.modalButtonText}>Stay</AppText>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={[styles.modalButton, styles.leaveButton]}
@@ -777,7 +780,7 @@ export default function RegisterNewPatient() {
                     router.push("/directory");
                   }}
                 >
-                  <Text style={styles.modalButtonText}>Leave</Text>
+                  <AppText style={styles.modalButtonText}>Leave</AppText>
                 </TouchableOpacity>
               </View>
             </View>
@@ -787,10 +790,10 @@ export default function RegisterNewPatient() {
         <Modal visible={warningModalVisible} transparent animationType="fade">
           <View style={styles.modalOverlay}>
             <View style={styles.modalContainer}>
-              <Text style={styles.modalTitle}>Incomplete Form</Text>
-              <Text style={styles.modalMessage}>
+              <AppText style={styles.modalTitle}>Incomplete Form</AppText>
+              <AppText style={styles.modalMessage}>
                 {registrationSuccessMessage}
-              </Text>
+              </AppText>
               <View style={styles.modalButtonContainer}>
                 <TouchableOpacity
                   style={[styles.modalButton, styles.stayButton]}
@@ -799,13 +802,13 @@ export default function RegisterNewPatient() {
                     handleRegister(); // Consider if you want to attempt registration with missing fields
                   }}
                 >
-                  <Text style={styles.modalButtonText}>Proceed</Text>
+                  <AppText style={styles.modalButtonText}>Proceed</AppText>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={[styles.modalButton, styles.leaveButton]}
                   onPress={() => setWarningModalVisible(false)}
                 >
-                  <Text style={styles.modalButtonText}>Go Back</Text>
+                  <AppText style={styles.modalButtonText}>Go Back</AppText>
                 </TouchableOpacity>
               </View>
             </View>
@@ -823,5 +826,6 @@ export default function RegisterNewPatient() {
         />
       </View>
     </GestureHandlerRootView>
+    </SafeAreaView>
   );
 }
