@@ -12,12 +12,17 @@ const months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", 
 
 const getDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
 const getFirstDayOfMonth = (year, month) => new Date(year, month, 1).getDay();
+const datenow = new Date();
+
 
 export default function CalendarApp() {
+  const currenMonth = datenow.getMonth();
+  const currenYear = datenow.getFullYear();
+
   const [selectedDate, setSelectedDate] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [currentMonth, setCurrentMonth] = useState(3); // April (0-indexed)
-  const [currentYear, setCurrentYear] = useState(2025);
+  const [currentMonth, setCurrentMonth] = useState(currenMonth); // April (0-indexed)
+  const [currentYear, setCurrentYear] = useState(currenYear);
   const [sidebarWidth, setSidebarWidth] = useState(70); // Default sidebar width when collapsed
   const [medicationData, setMedicationData] = useState({});
   const router = useRouter();

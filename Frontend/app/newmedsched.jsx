@@ -20,8 +20,6 @@ import Icon from "react-native-vector-icons/MaterialIcons"; // Or FontAwesome, F
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
-const today = new Date();
-
 const frequencyOptions = [
   { label: "OD (Once Daily)", value: "OD" },
   { label: "BID (Twice Daily)", value: "BID" },
@@ -48,7 +46,7 @@ const months = [
 export default function NewMedSched() {
   const router = useRouter();
   const { patient_number } = useLocalSearchParams();
-
+  const [today, setToday] = useState(new Date());
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [warningModalVisible, setWarningModalVisible] = useState(false);
@@ -93,6 +91,7 @@ export default function NewMedSched() {
 
   // Update your checkAccess useEffect
   useEffect(() => {
+    setToday(new Date());
     const checkAccess = async () => {
       try {
         const [role, userId] = await Promise.all([
@@ -264,6 +263,12 @@ export default function NewMedSched() {
         Medication_notes: formData.medicationNotes,
         patient_number: parseInt(patient_number),
         physicianID: formData.physicianID || "default_physician",
+        // Add these fields for "Other" frequency
+        ...(formData.frequencyType === "Other" && {
+          day: parseInt(formData.frequencyDay || "0", 10),
+          hour: parseInt(formData.frequencyHour || "0", 10),
+          minutes: parseInt(formData.frequencyMinute || "0", 10),
+        }),
       };
 
       console.log(
