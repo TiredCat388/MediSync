@@ -53,6 +53,7 @@ export default function CalendarApp() {
         patientId: med.patient_number,
         patientName: patientNames[med.patient_number],
         scheduleId: med.schedule_id,
+        frequencyType: med.Frequency_type, 
       });
     }
 
@@ -96,6 +97,21 @@ export default function CalendarApp() {
     const day = i - firstDay + 1;
     return day > 0 && day <= daysInMonth ? day : null;
   });
+
+  function getFrequencyColor(frequencyType) {
+    switch (frequencyType) {
+      case "OD":
+        return "white";
+      case "BID":
+        return "yellow";
+      case "TID":
+        return "pink";
+      case "QID":
+        return "lightgreen";
+      default:
+        return "#e0e0e0";
+    }
+  }
 
   return (
     <View style={{ flex: 1, flexDirection: "row" }}>
@@ -214,38 +230,34 @@ export default function CalendarApp() {
                           marginTop: 2,
                         }}
                       >
-                        {medications.slice(0, 3).map(
-                          (
-                            med,
-                            index 
-                          ) => (
-                            <View
-                              key={index}
+                        {medications.slice(0, 3).map((med, index) => (
+                          <View
+                            key={index}
+                            style={{
+                              backgroundColor: getFrequencyColor(
+                                med.frequencyType
+                              ), // <-- Use the color
+                              paddingHorizontal: 7,
+                              paddingVertical: 7,
+                              borderRadius: 3,
+                              marginVertical: 1,
+                              width: "100%",
+                            }}
+                          >
+                            <Text
                               style={{
-                                backgroundColor: "rgba(103, 154, 236, 0.2)",
-                                paddingHorizontal: 7,
-                                paddingVertical: 7,
-                                borderRadius: 3,
-                                marginVertical: 1,
-                                width: "100%",
+                                fontSize: 12,
+                                textAlign: "flex-start",
+                                color: "#000",
+                                fontWeight: "bold",
                               }}
+                              numberOfLines={1}
                             >
-                              <Text
-                                style={{
-                                  fontSize: 12,
-                                  textAlign: "flex-start",
-                                  color: "#000",
-                                  fontWeight: "bold",
-                                }}
-                                numberOfLines={1}
-                              >
-                                {med.name} at {med.time} (Patient:{" "}
-                                {med.patientName}, Schedule ID: {med.scheduleId}
-                                )
-                              </Text>
-                            </View>
-                          )
-                        )}
+                              {med.name} at {med.time} (Patient:{" "}
+                              {med.patientName}, Schedule ID: {med.scheduleId})
+                            </Text>
+                          </View>
+                        ))}
                         {medications.length > 3 && (
                           <Text style={{ fontSize: 14, color: "#5879A5" }}>
                             +{medications.length - 3} more
@@ -289,7 +301,9 @@ export default function CalendarApp() {
                     <TouchableOpacity
                       key={index}
                       style={{
-                        backgroundColor: "rgba(103, 154, 236, 0.2)",
+                        backgroundColor: getFrequencyColor(
+                                med.frequencyType
+                              ), 
                         padding: 10,
                         borderRadius: 5,
                         marginVertical: 5,
