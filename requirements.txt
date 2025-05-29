@@ -1,0 +1,14 @@
+# Core
+Django
+djangorestframework
+
+# PostgreSQL DB connector
+psycopg2-binary
+
+# Environment variable handling
+python-decouple
+# OR use this alternative:
+# django-environ>=0.11,<0.12
+
+# CORS (if you need to allow cross-origin requests, e.g. from a React frontend)
+django-cors-headers

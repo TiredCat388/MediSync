@@ -5,6 +5,7 @@ import {
   FlatList,
   TextInput,
   ScrollView,
+  Dimensions,
 } from "react-native";
 import { useRouter } from "expo-router";
 import Sidebar from "./components/sidebar";
@@ -23,6 +24,9 @@ const TESTING_PATIENT = {
   middle_name: "ABC",
   last_name: "PURPOSES ONLY",
 };
+
+const { height } = Dimensions.get('window');
+const TABLE_HEIGHT = height-200;
 
 export default function PatientsDirectory() {
   const router = useRouter();
@@ -87,7 +91,7 @@ export default function PatientsDirectory() {
         <Sidebar onNavigate={(destination) => router.push(destination)} />
         <View style={styles.content}>
           <View style={styles.header}>
-            <AppText style={styles.headerText}>Patients Directory</AppText>
+            <AppText style={[ styles.headerText ]}>Patients Directory</AppText>
             <TouchableOpacity
               onPress={() => router.push("/registernew")}
               style={styles.newPatientButton}
@@ -96,7 +100,6 @@ export default function PatientsDirectory() {
             </TouchableOpacity>
           </View>
 
-          {/* Search + Sort */}
           <View style={styles.searchSortContainer}>
             <TextInput
               style={styles.searchInput}
@@ -116,7 +119,7 @@ export default function PatientsDirectory() {
           </View>
 
           {/* Table with ScrollView */}
-          <View style={styles.table}>
+          <View style={[styles.table, { height: TABLE_HEIGHT }]}>
             <View style={styles.tableHeader}>
               <View style={[styles.tableHeaderCellID]}>
                 <AppText style={styles.tableHeaderText}>Patient ID</AppText>
@@ -125,7 +128,6 @@ export default function PatientsDirectory() {
                 <AppText style={styles.tableHeaderText}>Patient Name</AppText>
               </View>
             </View>
-            <ScrollView style={{ maxHeight: 500 }}>
               {/* Added maxHeight for visual scroll */}
               <FlatList
                 data={displayedPatients}
@@ -167,7 +169,6 @@ export default function PatientsDirectory() {
                   </TouchableOpacity>
                 )}
               />
-            </ScrollView>
           </View>
         </View>
       </View>

@@ -12,12 +12,11 @@ const Sidebar = () => {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const [sidebarWidth] = useState(new Animated.Value(70));
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
-  const [sidebarColor, setSidebarColor] = useState('#e0e0e0');
-  const [iconColor, setIconColor] = useState('gray');
-  const [textColor, setTextColor] = useState('gray');
+  const [sidebarColor, setSidebarColor] = useState('#5879A5');
   const [showSubOptions, setShowSubOptions] = useState(false);
   const [isDirectoryExpanded, setIsDirectoryExpanded] = useState(false);
   const { showNotification } = useNotification();
+  const [overlayOpacity] = useState(new Animated.Value(0));
 
   const directoryPaths = ['/directory', '/archive', '/logs'];
 
@@ -41,10 +40,6 @@ const Sidebar = () => {
         useNativeDriver: false,
       }).start();
       setIsSidebarExpanded(!isSidebarExpanded);
-      setSidebarColor(isSidebarExpanded ? '#e0e0e0' : '#5879a5');
-      const newColor = isSidebarExpanded ? 'gray' : 'white';
-      setIconColor(newColor);
-      setTextColor(newColor);
       if (isSidebarExpanded) {
         setShowSubOptions(false);
         setIsDirectoryExpanded(false);
@@ -76,8 +71,8 @@ const Sidebar = () => {
       <View style={styles.sidebarContent}>
         <View style={styles.iconsContainer}>
           <TouchableOpacity onPress={() => handleSidebarPress('menu')} style={styles.iconLabelContainer}>
-            <FontAwesome name="bars" size={24} color={iconColor} />
-            {isSidebarExpanded && <AppText style={[styles.iconLabel, { color: textColor }]}>Menu</AppText>}
+            <FontAwesome name="bars" size={24} color={"white"} />
+            {isSidebarExpanded && <AppText style={[styles.iconLabel]}>Menu</AppText>}
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -87,8 +82,8 @@ const Sidebar = () => {
             style={[styles.iconLabelContainer, { width: '100%' }]}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <FontAwesome name="file-text-o" size={24} color={iconColor} />
-              {isSidebarExpanded && <AppText style={[styles.iconLabel, { color: textColor }]}>Directory</AppText>}
+              <FontAwesome name="file-text-o" size={24} color={"white"} />
+              {isSidebarExpanded && <AppText style={[styles.iconLabel, {fontWeight: 'bold'} ]}>Directory</AppText>}
             </View>
             {isSidebarExpanded && (
               <Feather
@@ -129,43 +124,39 @@ const Sidebar = () => {
             onPress={() => handleSidebarPress('calendar')}
             style={[styles.iconLabelContainer, pathname === '/calendar' && isSidebarExpanded  && styles.activeItem]}
           >
-            <FontAwesome name="calendar" size={24} color={iconColor} />
-            {isSidebarExpanded && <AppText style={[styles.iconLabel, { color: textColor }]}>Calendar</AppText>}
+            <FontAwesome name="calendar" size={24} color={"white"} />
+            {isSidebarExpanded && <AppText style={[styles.iconLabel, { color: "white" }]}>Calendar</AppText>}
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => handleSidebarPress('clock')}
             style={[styles.iconLabelContainer, pathname === '/clock' && isSidebarExpanded && styles.activeItem]}
           >
-            <Feather name="clock" size={24} color={iconColor} />
-            {isSidebarExpanded && <AppText style={[styles.iconLabel, { color: textColor }]}>Clock</AppText>}
+            <Feather name="clock" size={24} color={"white"} />
+            {isSidebarExpanded && <AppText style={[styles.iconLabel, { color: "white" }]}>Clock</AppText>}
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => handleSidebarPress('settings')}
             style={[styles.iconLabelContainer, pathname === '/settings' && isSidebarExpanded && styles.activeItem]}
           >
-            <Ionicons name="settings-outline" size={25} color={iconColor} />
-            {isSidebarExpanded && <AppText style={[styles.iconLabel, { color: textColor }]}>Settings</AppText>}
+            <Ionicons name="settings-outline" size={25} color={"white"} />
+            {isSidebarExpanded && <AppText style={[styles.iconLabel, { color: "white" }]}>Settings</AppText>}
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => handleSidebarPress('logout')} style={styles.iconLabelContainer}>
-            <Feather name="log-out" size={24} color={iconColor} />
-            {isSidebarExpanded && <AppText style={[styles.iconLabel, { color: textColor }]}>Logout</AppText>}
+            <Feather name="log-out" size={24} color={"white"} />
+            {isSidebarExpanded && <AppText style={[styles.iconLabel, { color: "white" }]}>Logout</AppText>}
           </TouchableOpacity>
         </View>
 
         <View style={styles.logoContainer}>
           <Image
-            resizeMode="contain"
-            source={
-              isSidebarExpanded
-                ? require('../../assets/images/medisync-logo.png')
-                : require('../../assets/images/medisync-logo-bw.png')
-            }
+            rresizeMode="contain"
+            source={require('../../assets/images/medisync.png')}
             style={styles.logo}
           />
-          {isSidebarExpanded && <AppText style={[styles.logoText, { color: textColor }]}>Medisync</AppText>}
+          {isSidebarExpanded && <AppText style={[styles.logoText, { color: "white" }]}>Medisync</AppText>}
         </View>
       </View>
 

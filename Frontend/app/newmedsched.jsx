@@ -379,7 +379,7 @@ export default function NewMedSched() {
               <AppText style={[styles.label]}>
                 Medication Route <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
               </AppText>
-              <View>
+              <View style={styles.PickerContainer}>
                 <RNPickerSelect
                   Icon={() => (
                     <Icon name="arrow-drop-down" size={20} color="gray" />
@@ -426,8 +426,11 @@ export default function NewMedSched() {
                     marginRight: 10,
                     backgroundColor: "#F8F8F8",
                     marginBottom: 10,
+                    borderRadius: 8,
+                    borderWidth: 1,
                     flex: 1,
                     height: 36,
+                    padding: 8,
                   }}
                   value={formData.medicationStrength}
                   onChangeText={(text) =>

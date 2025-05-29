@@ -1,5 +1,20 @@
-import { Text, TextProps } from 'react-native';
+import React from 'react';
+import { Text, TextProps, StyleSheet } from 'react-native';
 
 export default function AppText(props: TextProps) {
-  return <Text {...props} style={[{ fontFamily: 'AnekGujarati' }, props.style]} />;
+  const { style, ...rest } = props;
+  const flatStyle = StyleSheet.flatten(style) || {};
+  const isBold = flatStyle.fontWeight === 'bold' || flatStyle.fontWeight === '700';
+
+  const { fontWeight, ...styleWithoutFontWeight } = flatStyle;
+
+  return (
+    <Text
+      {...rest}
+      style={[
+        { fontFamily: isBold ? 'AGBold' : 'AnekGujarati' },
+        styleWithoutFontWeight,
+      ]}
+    />
+  );
 }

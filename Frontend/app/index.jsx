@@ -133,7 +133,7 @@ const LoginScreen = () => {
             <View style={styles.circleBackground}>
               <Image
                 resizeMode="contain"
-                source={require("../assets/images/medisync-logo.png")}
+                source={require("../assets/images/medisync.png")}
                 style={styles.logo}
               />
             </View>

@@ -105,10 +105,37 @@ export default function CalendarApp() {
       <Sidebar setSidebarWidth={setSidebarWidth} />
 
       {/* Main Calendar Content */}
-      <ScrollView style={{ flex: 1, padding: 40, marginLeft: sidebarWidth }}>
-        <AppText style={{ fontSize: 30, fontWeight: "bold", margin: 8 }}>
+      <ScrollView style={{ flex: 1, paddingHorizontal: 40, marginLeft: sidebarWidth }}>
+        <AppText style={{ fontSize: 30 }}>
           Calendar
         </AppText>
+
+        <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginBottom: 1 }}>
+          {[
+            { label: "OID", color: "#F8F8F8" , borderWidth: 1, borderColor: "#333333"},
+            { label: "BID", color: "#FFDA07" },
+            { label: "TID", color: "#EFA2CB" },
+            { label: "QID", color: "#85D684" }, 
+          ].map((item, index) => (
+            <View key={index} style={{ flexDirection: "row", alignItems: "center", marginHorizontal: 6 }}>
+              <View
+                style={{
+                  width: 16,
+                  height: 16,
+                  borderRadius: 8,
+                  borderWidth: 1,
+                  backgroundColor: item.color,
+                  borderColor: "#808080",
+                  marginRight: 4,
+                  zIndex: 999,
+                }}
+              />
+              <AppText style={{ fontSize: 18, fontWeight: "600", color: "#333" }}>
+                {item.label}
+              </AppText>
+            </View>
+          ))}
+        </View>
 
         {/* Calendar Section */}
         <View
@@ -118,7 +145,6 @@ export default function CalendarApp() {
             borderWidth: 1,
             borderColor: "#ccc",
             padding: 8,
-            margin: 8,
             boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
             height: 630,
           }}

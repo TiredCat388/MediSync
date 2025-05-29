@@ -6,7 +6,8 @@ import GlobalNotification from '../app/notification/globalnotif';
 
 export default function Layout() {
   const [fontsLoaded] = useFonts({
-    AnekGujarati: require('../app/fonts/AnekGujarati.ttf')
+    AnekGujarati: require('../app/fonts/AnekGujarati.ttf'),
+    AGBold: require('../app/fonts/AnekGujarati-Bold.ttf'),
   });
 
   if (!fontsLoaded) return null;

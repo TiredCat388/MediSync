@@ -16,7 +16,7 @@ export default StyleSheet.create({
   },
   headerText: {
     fontSize: 30,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   searchSortContainer: {
     flexDirection: "row",
@@ -56,7 +56,6 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderColor: "#000000",
     overflow: "hidden",
-    height: 500,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,

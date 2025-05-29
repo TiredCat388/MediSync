@@ -78,7 +78,6 @@ const styles = StyleSheet.create({
       width: '100%',
     },
     noAlerts: {
-      fontStyle: 'italic',
       textAlign: 'center',
       marginTop: 20,
       color: '#FAFAFA',
