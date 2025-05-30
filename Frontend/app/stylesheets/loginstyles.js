@@ -2,8 +2,8 @@ import { StyleSheet, Dimensions } from "react-native";
 
 const { width } = Dimensions.get("window");
 const isTablet = width > 900;
-const logoSize = isTablet ? 450 : 350;
-const circleSize = logoSize * 0.7
+const circleSize = isTablet ? 350 : 250;
+const logoSize = circleSize * 0.8; 
 
 const styles = StyleSheet.create({
   container: {
