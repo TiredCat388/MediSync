@@ -106,7 +106,7 @@ export default function CalendarApp() {
 
       {/* Main Calendar Content */}
       <ScrollView style={{ flex: 1, paddingHorizontal: 40, marginLeft: sidebarWidth }}>
-        <AppText style={{ fontSize: 30 }}>
+        <AppText style={{ fontSize: 30, fontWeight: 'bold' }}>
           Calendar
         </AppText>
 
