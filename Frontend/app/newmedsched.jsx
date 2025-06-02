@@ -316,9 +316,7 @@ export default function NewMedSched() {
         <AppText style={styles.screenTitle}>New Medication Schedule</AppText>
         <View style={styles.formContainer}>
           <ScrollView
-            style={{ flex: 1 }}
-            contentContainerStyle={{ flexGrow: 1 }}
-          >
+            style={{ flex: 1 }}>
             <View style={styles.column}>
               <AppText style={styles.sectionTitle}>
                 {patient_number
@@ -356,34 +354,34 @@ export default function NewMedSched() {
               <AppText style={[styles.label]}>
                 Medication form <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
               </AppText>
-              <View style={styles.PickerContainer}>
-                <RNPickerSelect
-                  Icon={() => (
-                    <Icon name="arrow-drop-down" size={20} color="gray" />
-                  )}
-                  items={[
-                    { label: "Tablet", value: "Tablet" },
-                    { label: "Syrup", value: "Syrup" },
-                    { label: "Injection", value: "Injection" },
-                    { label: "Cream", value: "Cream" },
-                    { label: "Ointment", value: "Ointment" },
-                    { label: "Drops", value: "Drops" },
-                    { label: "Inhaler", value: "Inhaler" },
-                    { label: "Patch", value: "Patch" },
-                    { label: "Other", value: "Other" },
-                  ]}
-                  value={formData.medicationForm}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, medicationForm: value })
-                  }
-                  placeholder={{
-                    label: "Select Medication form...",
-                    value: "",
-                  }}
-                  style={pickerSelectStyles}
-                  useNativeAndroidPickerStyle={false}
-                />
-              </View>
+                <View style={styles.PickerContainer}>
+                  <RNPickerSelect
+                    Icon={() => (
+                      <Icon name="arrow-drop-down" size={20} color="gray" />
+                    )}
+                    items={[
+                      { label: "Tablet", value: "Tablet" },
+                      { label: "Syrup", value: "Syrup" },
+                      { label: "Injection", value: "Injection" },
+                      { label: "Cream", value: "Cream" },
+                      { label: "Ointment", value: "Ointment" },
+                      { label: "Drops", value: "Drops" },
+                      { label: "Inhaler", value: "Inhaler" },
+                      { label: "Patch", value: "Patch" },
+                      { label: "Other", value: "Other" },
+                    ]}
+                    value={formData.medicationForm}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, medicationForm: value })
+                    }
+                    placeholder={{
+                      label: "Select Medication form...",
+                      value: "",
+                    }}
+                    style={pickerSelectStyles}
+                    useNativeAndroidPickerStyle={false}
+                  />
+                </View>
 
               <AppText style={[styles.label]}>
                 Medication Route <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
@@ -670,38 +668,42 @@ export default function NewMedSched() {
                 style={pickerSelectStyles}
                 useNativeAndroidPickerStyle={false}
               />
-              {formData.frequencyType === "Other" && (
-              <View>
-              <AppText style={styles.label}>
-                Set Frequency Interval
-                <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
-              </AppText>
-              <View style={styles.dobContainer}>
-                <View style={styles.PickerContainer}>
-                  <RNPickerSelect
-                    disabled={
-                      formData.frequencyType != "Other" &&
-                      formData.frequencyType != ""
-                    }
-                    Icon={() => (
-                      <Icon name="arrow-drop-down" size={20} color="gray" />
-                    )}
-                    items={[
-                      ...Array.from({ length: 31 }, (_, i) => ({
-                        label: i.toString().padStart(2, "0"),
-                        value: i.toString(),
-                      })),
-                    ]}
-                    value={formData.frequencyDay}
-                    onValueChange={(value) =>
-                      setFormData({ ...formData, frequencyDay: value })
-                    }
-                    placeholder={{ label: "Days", value: "" }}
-                    style={pickerSelectStyles}
-                    useNativeAndroidPickerStyle={false}
-                  />
-                </View>
-              )}
+
+             {formData.frequencyType === "Other" && (
+  <View>
+    <AppText style={styles.label}>
+      Set Frequency Interval
+      <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
+    </AppText>
+    <View style={styles.dobContainer}>
+      <View style={styles.PickerContainer}>
+        <RNPickerSelect
+          disabled={
+            formData.frequencyType !== "Other" &&
+            formData.frequencyType !== ""
+          }
+          Icon={() => (
+            <Icon name="arrow-drop-down" size={20} color="gray" />
+          )}
+          items={[
+            ...Array.from({ length: 31 }, (_, i) => ({
+              label: i.toString().padStart(2, "0"),
+              value: i.toString(),
+            })),
+          ]}
+          value={formData.frequencyDay}
+          onValueChange={(value) =>
+            setFormData({ ...formData, frequencyDay: value })
+          }
+          placeholder={{ label: "Days", value: "" }}
+          style={pickerSelectStyles}
+          useNativeAndroidPickerStyle={false}
+        />
+      </View>
+    </View>
+  </View>
+)}
+            
             </View>
           </ScrollView>
           <View style={styles.divider} />

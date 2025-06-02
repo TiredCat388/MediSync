@@ -364,7 +364,7 @@ export default function UpdatePatientScreen() {
                   inputIOS: styles.input,
                   inputWeb: styles.input,
                   placeholder: {
-                    color: "#999",
+                  color: "#999",
                   },
                 }}
               />

@@ -170,7 +170,7 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 10,
-    padding: 40,
+    paddingHorizontal: 40,
     backgroundColor: "#fff",
   },
   heading: {
