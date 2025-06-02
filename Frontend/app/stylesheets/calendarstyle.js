@@ -111,6 +111,8 @@ export default StyleSheet.create({
     backgroundColor: "rgba(103, 154, 236, 0.2)",
     paddingHorizontal: 7,
     paddingVertical: 7,
+    borderColor: "rgb(193, 193, 193)",
+    borderWidth: 1,
     borderRadius: 3,
     marginVertical: 1,
     width: "100%",

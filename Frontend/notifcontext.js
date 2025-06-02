@@ -19,7 +19,9 @@ export const NotificationProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const interval = setInterval(async () => {
+    let interval;
+
+    const fetchData = async () => {
       try {
         const response = await fetch(`${BASE_API}/api/medications/`);
         const schedules = await response.json();
@@ -27,16 +29,16 @@ export const NotificationProvider = ({ children }) => {
         const now = new Date();
 
         const upcoming = schedules.filter((sched) => {
-          const schedTime = new Date(sched.time); 
+          const schedTime = new Date(sched.time);
           const diff = schedTime - now;
-          return diff > 0 && diff < 5 * 60 * 1000;  
+          return diff > 0 && diff < 5 * 60 * 1000;
         });
 
         if (upcoming.length > 1) {
           showNotification({
             multiple: true,
             message: 'Multiple upcoming medications scheduled.',
-            scheduleIds: upcoming.map((sched) => sched.id), 
+            scheduleIds: upcoming.map((sched) => sched.id),
           });
         }
 
@@ -55,9 +57,21 @@ export const NotificationProvider = ({ children }) => {
       } catch (error) {
         console.error('Error fetching medication schedules:', error);
       }
-    }, 30000);
+    };
 
-    return () => clearInterval(interval);
+    const now = new Date();
+    const msUntilNextMinute = 60000 - (now.getTime() % 60000);
+
+    const timeout = setTimeout(() => {
+      fetchData();
+
+      interval = setInterval(fetchData, 60000);
+    }, msUntilNextMinute);
+
+    return () => {
+      clearTimeout(timeout);
+      if (interval) clearInterval(interval);
+    };
   }, []);
 
   return (

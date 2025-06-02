@@ -25,8 +25,8 @@ export default function CalendarApp() {
 
   const [selectedDate, setSelectedDate] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [currentMonth, setCurrentMonth] = useState(3); 
-  const [currentYear, setCurrentYear] = useState(2025);
+  const [currentMonth, setCurrentMonth] = useState(currenMonth); 
+  const [currentYear, setCurrentYear] = useState(currenYear);
   const [sidebarWidth, setSidebarWidth] = useState(70);
   const [medicationData, setMedicationData] = useState({});
   const router = useRouter();
@@ -44,7 +44,7 @@ export default function CalendarApp() {
     const patientNames = {};
 
     for (const med of data) {
-      const medDate = med.Medication_start_date?.split("T")[0];
+      const medDate = med.next_dose_time?.split("T")[0];
       if (!medDate) continue;
       if (!patientNames[med.patient_number]) {
         const patientResponse = await fetch(`${BASE_API}/api/patients/${med.patient_number}`);
@@ -58,7 +58,7 @@ export default function CalendarApp() {
 
       formattedData[medDate].push({
         name: med.Medication_name,
-        time: med.Medication_Time,
+        time: med.next_dose_time?.split("T")[1]?.split("+")[0],
         patientId: med.patient_number,
         patientName: patientNames[med.patient_number],
         scheduleId: med.schedule_id,
@@ -195,7 +195,7 @@ export default function CalendarApp() {
                         <AppText style={styles.calendarCellDate}>{item}</AppText>
                         <View style={styles.calendarCellMedList}>
                           {medications.slice(0, 3).map((med, index) => (
-                            <View key={index} style={styles.calendarCellMed}>
+                            <View key={index} style={[styles.calendarCellMed, {backgroundColor: getFrequencyColor(med.frequencyType)}]}>
                               <AppText style={styles.calendarCellMedText} numberOfLines={1}>
                                 {med.name} at {med.time} (Patient: {med.patientName}, Schedule ID: {med.scheduleId})
                               </AppText>
