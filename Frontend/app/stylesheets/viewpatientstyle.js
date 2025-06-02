@@ -42,7 +42,11 @@ export const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
   },
-  patientId: { fontSize: 18, fontWeight: "bold", marginBottom: 10 },
+  patientId: { 
+    fontSize: 20, 
+    fontWeight: "bold", 
+    marginBottom: 10 
+  },
   infoContainer: {
     flexDirection: "row",
     backgroundColor: "#b8cbdb",
@@ -74,10 +78,20 @@ export const styles = StyleSheet.create({
     maxHeight: 300,
     overflow: "hidden",
   },
-  divider: { width: 1, backgroundColor: "gray", marginHorizontal: 10 },
-  dividers: { width: 1, marginHorizontal: 10 },
-
-  sectionTitle: { fontWeight: "bold", fontSize: 20, marginBottom: 5 },
+  divider: { 
+    width: 1, 
+    backgroundColor: "#333333", 
+    marginHorizontal: 10 
+  },
+  dividers: { 
+    width: 1, 
+    marginHorizontal: 10 
+  },
+  sectionTitle: { 
+    fontWeight: "bold", 
+    fontSize: 20, 
+    marginBottom: 5 
+  },
   medicationToggleButton: {
     backgroundColor: "#5879A5",
     padding: 10,
@@ -88,14 +102,10 @@ export const styles = StyleSheet.create({
     marginLeft: 0,
   },
   buttonText: {
+    fontSize: 16,
     fontWeight: "bold",
     paddingHorizontal: 10, 
     color: "#F8F8F8",
-  },
-  deactbuttonText: { 
-    fontWeight: "bold",
-    paddingHorizontal: 10, 
-    color: "#F8F8F8" 
   },
   tableContainer: {
     marginTop: 10,

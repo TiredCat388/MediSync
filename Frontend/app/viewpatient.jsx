@@ -198,7 +198,7 @@ export default function PatientDetails() {
               }
             }}
           >
-            <AppText style={styles.deactbuttonText}>Archive Patient</AppText>
+            <AppText style={styles.buttonText}>Archive Patient</AppText>
           </TouchableOpacity>
         </View>
 
