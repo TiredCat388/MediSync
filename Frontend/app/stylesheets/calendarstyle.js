@@ -4,14 +4,18 @@ const { width, height } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
+    fontSize: 16,
+    backgroundColor: "#F8F8F8",
     flex: 1,
     flexDirection: "row",
   },
   content: {
     flex: 1,
-    padding: 40,
+    paddingHorizontal: 40,
+    paddingBottom: 40,
   },
   headerText: {
+    paddingTop: 20,
     fontSize: 30,
     fontWeight: "bold",
   },
@@ -31,7 +35,7 @@ export default StyleSheet.create({
     height: 16,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#808080",
+    borderColor: "#F8F8F8",
     marginRight: 4,
     zIndex: 999,
   },
@@ -155,7 +159,7 @@ export default StyleSheet.create({
     fontWeight: "bold",
   },
   modalCloseButton: {
-    backgroundColor: "#ff0000",
+    backgroundColor: "#D9534F",
     paddingVertical: 10,
     borderRadius: 5,
     alignItems: "center",

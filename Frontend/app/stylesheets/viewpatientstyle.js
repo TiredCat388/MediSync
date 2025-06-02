@@ -7,9 +7,19 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1, 
     flexDirection: "row", 
-    backgroundColor: "#f0f0f0" },
-  mainContent: { flex: 1, padding: 20 },
-  boldLabel: { fontWeight: "bold", fontSize: 16, marginTop: 10 },
+    backgroundColor: "#f0f0f0",
+    color: "#000000", 
+  },
+  mainContent: { 
+    flex: 1, 
+    padding: 20 
+  },
+  boldLabel: { 
+    fontWeight: "bold", 
+    fontSize: 14, 
+    marginTop: 10,
+    color: "#000000", 
+  },
   headerButtons: {
     flexDirection: "row",
     justifyContent: "flex-end",
@@ -90,20 +100,24 @@ export const styles = StyleSheet.create({
   tableContainer: {
     marginTop: 10,
     borderWidth: 1,
-    borderColor: "#CCCCCC",
+    borderColor: "#808080",
     borderRadius: 8,
     maxHeight: 600,
     overflow: "hidden",
   },
   tableHeader: {
-    fontSize: 16,
+    fontSize: 1,
     backgroundColor: "#F8F8F8",
     flexDirection: "row",
     alignItems: "center",
   },
+  tableHeaderText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#000000",
+  },
   row: { 
-    borderBottomWidth: 2, 
-    borderColor: "#CCCCCC" 
+    borderColor: "#808080",
   },
   buttonWrapper: { 
     alignItems: "flex-end", 
@@ -114,6 +128,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "#4E84D3",
     paddingHorizontal: 10,
     borderRadius: 7,
+    color: "#FFFFFF",
   },
   searchBarColumn:{
     paddingVertical: 21,
@@ -123,8 +138,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#999999",
     borderRadius: 5,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    padding: 10,
     fontSize: 16,
     width: 140,
     height: 25,
@@ -154,9 +168,9 @@ export const styles = StyleSheet.create({
 
   popupMenu: {
     position: "absolute",
-    top: 30,
-    right: 0,
-    backgroundColor: "#fff",
+    top: 0,
+    right: 40,
+    backgroundColor: "#FFFFFF",
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 8,
@@ -185,6 +199,10 @@ export const styles = StyleSheet.create({
   deleteText: {
     color: "#",
     fontWeight: "500",
+  },
+  rowText: {
+    fontSize: 14,
+    color: "#000000",
   },
 });
   

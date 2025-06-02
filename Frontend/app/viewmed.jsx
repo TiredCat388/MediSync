@@ -542,6 +542,7 @@ export default function ViewMedSched() {
                               </View>
                             )}
                           </View>
+                          </View>
                         </ScrollView>
           <View style={styles.divider} />
 

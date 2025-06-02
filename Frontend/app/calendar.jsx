@@ -140,7 +140,7 @@ export default function CalendarApp() {
                 <View
                   style={[
                     styles.legendCircle,
-                    { backgroundColor: item.color, borderWidth: item.borderWidth || 1, borderColor: item.borderColor || "#808080" }
+                    { backgroundColor: item.color, borderWidth: item.borderWidth || 1, borderColor: item.borderColor || "#303030" }
                   ]}
                 />
                 <AppText style={styles.legendLabel}>{item.label}</AppText>

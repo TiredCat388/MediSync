@@ -13,6 +13,7 @@ import styles from "./stylesheets/directorystyles";
 import Constants from 'expo-constants';
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppText from './components/AppText';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
@@ -87,14 +88,12 @@ export default function PatientsDirectory() {
         <View style={styles.content}>
           <View style={styles.header}>
             <AppText style={[ styles.headerText ]}>Patients Directory</AppText>
-          </View>
-
-            <TouchableOpacity
+              <TouchableOpacity
               onPress={() => router.push("/registernew")}
-              style={styles.newPatientButton}
-            >
+              style={styles.newPatientButton}>
               <AppText style={styles.newPatientButtonText}>+ New Patient</AppText>
             </TouchableOpacity>
+          </View>
 
           <View style={styles.searchSortContainer}>
             <TextInput
@@ -109,7 +108,8 @@ export default function PatientsDirectory() {
               style={styles.sortButton}
             >
               <AppText style={styles.sortButtonText}>
-                Sort {sortAscending ? "↑" : "↓"}
+                Sort{"  "}
+                <FontAwesome5 name={sortAscending ? "arrow-up" : "arrow-down"} size={14} color="#fff" />
               </AppText>
             </TouchableOpacity>
           </View>

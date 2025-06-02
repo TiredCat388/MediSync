@@ -8,7 +8,7 @@ import {
   Dimensions,
   TextInput,
 } from "react-native";
-import { DataTable, Button } from "react-native-paper";
+import { DataTable, Button, Portal } from "react-native-paper";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import Sidebar from "./components/sidebar";
 import { Feather } from "@expo/vector-icons";
@@ -29,11 +29,12 @@ export default function PatientDetails() {
   const { patient_number, schedule_id } = useLocalSearchParams();
   const [patient, setPatient] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  
   const [medicationData, setMedicationData] = useState([]);
   const [showMedications, setShowMedications] = useState(true);
-  const [searchQuery, setSearchQuery] = useState(""); // Search bar state
+  const [searchQuery, setSearchQuery] = useState("");
   const [openMenuId, setOpenMenuId] = useState(null);
+  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     fetchPatientDetails();
@@ -312,16 +313,16 @@ export default function PatientDetails() {
                   <View style={styles.headerRowContainer}>
                     <DataTable.Header style={styles.tableHeader}>
                       <DataTable.Title style={styles.columnId}>
-                        Schedule ID
+                        <AppText style={styles.tableHeaderText}>Schedule ID</AppText>
                       </DataTable.Title>
                       <DataTable.Title style={styles.columnName}>
-                        Medication Name
+                        <AppText style={styles.tableHeaderText}>Medication Name</AppText>
                       </DataTable.Title>
                       <DataTable.Title style={styles.columnTime}>
-                        Time
+                        <AppText style={styles.tableHeaderText}>Time</AppText>
                       </DataTable.Title>
                       <DataTable.Title style={styles.columnNotes}>
-                        Notes
+                        <AppText style={styles.tableHeaderText}>Notes</AppText>
                       </DataTable.Title>
                       <DataTable.Title style={styles.searchBarColumn}>
                         <TextInput
@@ -344,78 +345,36 @@ export default function PatientDetails() {
                     >
                       <DataTable.Row style={styles.row}>
                         <DataTable.Cell style={styles.columnId}>
-                          {item.schedule_id}
+                          <AppText style={styles.rowText}>{item.schedule_id}</AppText>
                         </DataTable.Cell>
                         <DataTable.Cell style={styles.columnName}>
-                          {item.Medication_name}
+                          <AppText style={styles.rowText}>{item.Medication_name}</AppText>
                         </DataTable.Cell>
                         <DataTable.Cell style={styles.columnTime}>
-                          {item.Medication_Time}
+                          <AppText style={styles.rowText}>{item.Medication_Time}</AppText>
                         </DataTable.Cell>
                         <DataTable.Cell style={styles.columnNotes}>
-                          {item.Medication_notes}
+                          <AppText style={styles.rowText}>{item.Medication_notes}</AppText>
                         </DataTable.Cell>
 
                         <DataTable.Cell style={styles.columnActions}>
                           <View style={{ position: "relative" }}>
                             <TouchableOpacity
+                              ref={ref => { if (ref) item.buttonRef = ref; }}
                               style={styles.customizeButton}
-                              onPress={() =>
-                                setOpenMenuId(
-                                  openMenuId === item.schedule_id
-                                    ? null
-                                    : item.schedule_id
-                                )
-                              }
+                              onPress={() => {
+                                if (item.buttonRef) {
+                                  item.buttonRef.measureInWindow((x, y, width, height) => {
+                                    setMenuPosition({ x: x - 140, y });
+                                    setOpenMenuId(openMenuId === item.schedule_id ? null : item.schedule_id);
+                                  });
+                                } else {
+                                  setOpenMenuId(openMenuId === item.schedule_id ? null : item.schedule_id);
+                                }
+                              }}
                             >
-                              <Feather
-                                name="more-horizontal"
-                                size={20}
-                                color="black"
-                              />
+                              <Feather name="more-horizontal" size={20} color="black" />
                             </TouchableOpacity>
-
-                            {openMenuId === item.schedule_id && (
-                              <View style={styles.popupMenu}>
-                                <TouchableOpacity
-                                  style={styles.menuItem}
-                                  onPress={() => {
-                                    router.push(
-                                      `/updatemed?schedule_id=${item.schedule_id}&patient_number=${patient_number}`
-                                    );
-                                  }}
-                                >
-                                  <AppText
-                                    style={[
-                                      styles.menuItemText,
-                                      styles.updateText,
-                                    ]}
-                                  >
-                                    Update
-                                  </AppText>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity
-                                  style={styles.menuItem}
-                                  onPress={() => {
-                                    setOpenMenuId(null);
-                                    deleteSchedule(
-                                      item.schedule_id,
-                                      patient_number
-                                    );
-                                  }}
-                                >
-                                  <AppText
-                                    style={[
-                                      styles.menuItemText,
-                                      styles.deleteText,
-                                    ]}
-                                  >
-                                    Archive
-                                  </AppText>
-                                </TouchableOpacity>
-                              </View>
-                            )}
                           </View>
                         </DataTable.Cell>
                       </DataTable.Row>
@@ -430,8 +389,7 @@ export default function PatientDetails() {
                 mode="contained"
                 style={styles.addMedicationButton}
                 onPress={() =>
-                  router.push(`/newmedsched?patient_number=${patient_number}`)
-                }
+                  router.push(`/newmedsched?patient_number=${patient_number}`)}
               >
                 Add Medication
               </Button>
@@ -440,6 +398,45 @@ export default function PatientDetails() {
         )}
       </ScrollView>
     </View>
+    <Portal>
+      {openMenuId && (
+        <View
+          style={[
+            styles.popupMenu,
+            {
+              position: 'absolute',
+              left: menuPosition.x,
+              top: menuPosition.y,
+            },
+          ]}
+        >
+          <TouchableOpacity
+            style={styles.menuItem}
+            onPress={() => {
+              router.push(
+                `/updatemed?schedule_id=${openMenuId}&patient_number=${patient_number}`
+              );
+              setOpenMenuId(null);
+            }}
+          >
+            <AppText style={[styles.menuItemText, styles.updateText]}>
+              Update
+            </AppText>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.menuItem}
+            onPress={() => {
+              setOpenMenuId(null);
+              deleteSchedule(openMenuId, patient_number);
+            }}
+          >
+            <AppText style={[styles.menuItemText, styles.deleteText]}>
+              Archive
+            </AppText>
+          </TouchableOpacity>
+        </View>
+      )}
+    </Portal>
     </SafeAreaView>
   );
 }

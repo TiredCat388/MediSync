@@ -9,16 +9,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#F8F8F8",
   },
-  sidebar: {
-    width: isTablet ? 100 : 75,
-    backgroundColor: "#CCCCCC",
-    alignItems: "center",
-    paddingVertical: 20,
-  },
   mainContent: {
     flex: 4,
-    paddingHorizontal: isTablet ? 80 : 20,
-    paddingTop: isTablet ? 60 : 30,
+    paddingHorizontal: 40,
+    paddingBottom: 40,
   },
   header: {
   flexDirection: "row",
@@ -26,8 +20,10 @@ const styles = StyleSheet.create({
   alignItems: "center",
   },
   headerText: {
+    paddingTop: 20,
     fontSize: 30,
     fontWeight: "bold",
+    marginBottom: 20,
   },
   listContainer: {
     flexGrow: 1,

@@ -114,6 +114,7 @@ export default function RegisterNewPatient() {
 
   const pickerSelectStyles = {
       inputAndroid: styles.input,
+      inputIOS: styles.input,
       placeholder: {
         color: "#999", 
       },

@@ -1,20 +1,25 @@
 import { StyleSheet, Dimensions } from "react-native";
 
 const { height } = Dimensions.get('window');
-const TABLE_HEIGHT = height-200;
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "row",
+    backgroundColor: "#F8F8F8",
+    height: "100%"
   },
   content: {
     flex: 1,
     marginLeft: 70,
     paddingHorizontal: 40,
+    paddingBottom: 40,
   },
   header: {
-    paddingBottom: 20,
+    paddingTop: 20,
+    paddingVertical: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   headerText: {
     fontSize: 30,
@@ -23,17 +28,16 @@ export default StyleSheet.create({
   searchSortContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 20,
   },
   searchInput: {
     flex: 1,
     height: 45,
-    borderColor: "#000",
+    borderColor: "#000000",
     borderWidth: 1,
     borderRadius: 10,
     paddingHorizontal: 14,
     marginRight: 12,
-    backgroundColor: "#fff",
+    backgroundColor: "#FFFFFF",
     fontSize: 16,
     boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.1)",
     elevation: 2,
@@ -41,7 +45,7 @@ export default StyleSheet.create({
   sortButton: {
     backgroundColor: "#4E84D3",
     paddingVertical: 10,
-    paddingHorizontal: 16,
+    paddingHorizontal: 20,
     borderRadius: 10,
     boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.1)",
     elevation: 2,
@@ -89,10 +93,12 @@ export default StyleSheet.create({
   newPatientButton: {
     backgroundColor: "#4E84D3",
     paddingHorizontal: 20,
+    paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",
     minWidth: 180,
+    marginTop: 40,
   },
   newPatientButtonText: {
     color: "#F8F8F8",

@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       flexDirection: 'column',
+      backgroundColor: "#F8F8F8",
     },
     mainRow: {
       flexDirection: 'row',
@@ -35,6 +36,7 @@ const styles = StyleSheet.create({
       paddingBottom: 20,
     },
     headerText: {
+      paddingTop: 20,
       fontSize: 30,
       fontWeight: "bold",
     },
