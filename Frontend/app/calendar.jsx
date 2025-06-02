@@ -15,8 +15,13 @@ const months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", 
 
 const getDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
 const getFirstDayOfMonth = (year, month) => new Date(year, month, 1).getDay();
+const datenow = new Date();
+
 
 export default function CalendarApp() {
+  const currenMonth = datenow.getMonth();
+  const currenYear = datenow.getFullYear();
+
   const [selectedDate, setSelectedDate] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(3); 
@@ -56,6 +61,7 @@ export default function CalendarApp() {
         patientId: med.patient_number,
         patientName: patientNames[med.patient_number],
         scheduleId: med.schedule_id,
+        frequencyType: med.Frequency_type, 
       });
     }
 
@@ -99,6 +105,21 @@ export default function CalendarApp() {
     const day = i - firstDay + 1;
     return day > 0 && day <= daysInMonth ? day : null;
   });
+
+  function getFrequencyColor(frequencyType) {
+    switch (frequencyType) {
+      case "OD":
+        return "white";
+      case "BID":
+        return "yellow";
+      case "TID":
+        return "pink";
+      case "QID":
+        return "lightgreen";
+      default:
+        return "#e0e0e0";
+    }
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

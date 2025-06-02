@@ -22,22 +22,48 @@ class MedicationsViewSet(viewsets.ModelViewSet):
         if response.status_code == 201:  # HTTP 201 Created
             medication_name = request.data.get("Medication_name", "Unknown")
             patient_number = request.data.get("patient_number", "Unknown")
+            first_name = request.data.get("first_name", "Unknown")
+            last_name = request.data.get("last_name", "Unknown")
+            physicianID = request.data.get("physicianID", "Unknown")
+            Medication_start_date = request.data.get("Medication_start_date", "Unknown")
+            Medication_end_date = request.data.get("Medication_end_date", "No End Date")
+            Medication_strength = request.data.get("Medication_strength", "Unknown")
+            Medication_form = request.data.get("Medication_form", "Unknown")
+            Medication_unit = request.data.get("Medication_unit", "Unknown")
+            Medication_route = request.data.get("Medication_route", "Unknown")
+            Frequency_type = request.data.get("Frequency_type", "Unknown")
+
+            # Log the creation of the medication
             log_action(
-                f"Added medication '{medication_name}' for patient {patient_number}.",
-                log_type="CREATION"
+                message=f"{physicianID} Added medication '{medication_name}' for patient {patient_number}|{last_name}, {first_name}.",
+                log_type="CREATION",
+                message_extended=f"{physicianID} Added medication '{medication_name}' {Medication_unit}{Medication_strength}{Medication_form} for patient {patient_number} via {Medication_route} starting {Medication_start_date} and ends {Medication_end_date}."
             )
 
         return response
 
     def retrieve(self, request, *args, **kwargs):
         try:
-            patient_number = self.kwargs.get("patient_number")
-            schedule_id = self.kwargs.get("schedule_id")
-            medication = Medications.objects.get(
-                patient_number=patient_number, schedule_id=schedule_id
+            medication_name = request.data.get("Medication_name", "Unknown")
+            patient_number = request.data.get("patient_number", "Unknown")
+            first_name = request.data.get("first_name", "Unknown")
+            last_name = request.data.get("last_name", "Unknown")
+            physicianID = request.data.get("physicianID", "Unknown")
+            Medication_start_date = request.data.get("Medication_start_date", "Unknown")
+            Medication_end_date = request.data.get("Medication_end_date", "No End Date")
+            Medication_strength = request.data.get("Medication_strength", "Unknown")
+            Medication_form = request.data.get("Medication_form", "Unknown")
+            Medication_unit = request.data.get("Medication_unit", "Unknown")
+            Medication_route = request.data.get("Medication_route", "Unknown")
+            Frequency_type = request.data.get("Frequency_type", "Unknown")
+
+            # Log the creation of the medication
+            log_action(
+                message=f"{physicianID} Added medication '{medication_name}' for patient {patient_number}|{last_name}, {first_name}.",
+                log_type="CREATION",
+                message_extended=f"{physicianID} Added medication '{medication_name}' {Medication_unit}{Medication_strength}{Medication_form} for patient {patient_number} via {Medication_route} starting {Medication_start_date} and ends {Medication_end_date}."
             )
-            serializer = self.get_serializer(medication)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response()
         except Medications.DoesNotExist:
             return Response(
                 {"error": "Medication not found"},

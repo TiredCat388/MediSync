@@ -73,28 +73,26 @@ class MedicationsModelSerializer(serializers.ModelSerializer):
 
         freq_type = obj.Frequency_type
 
-        # Handle fixed frequency types with predefined dosing times
+        # Handle fixed frequency types like OD, BID, TID, QID
         if freq_type in FREQUENCY_TYPE_TIMES:
             dose_times = FREQUENCY_TYPE_TIMES[freq_type]
 
-            # Start from medication start date or today, whichever is later
-            start_date = max(obj.Medication_start_date, now.date())
+            for day_offset in range(0, 30):  # Look ahead up to 30 days
+                current_date = obj.Medication_start_date + timedelta(days=day_offset)
 
-            for day_offset in range(0, 30):  # Look ahead max 30 days
-                current_date = start_date + timedelta(days=day_offset)
-
-                # Check end date if set
+                # Check if current_date is past the end date
                 if obj.Medication_end_date and current_date > obj.Medication_end_date:
                     return None
 
                 for dose_time in dose_times:
                     dose_datetime = timezone.make_aware(datetime.combine(current_date, dose_time))
+
                     if dose_datetime > now:
                         return dose_datetime
 
-            return None  # No next dose in the next 30 days
+            return None  # No dose found in next 30 days
 
-        # For 'Other' frequency, use interval logic based on Frequency timedelta and Medication_Time
+        # Custom 'Other' frequency using timedelta
         if not obj.Frequency or obj.Frequency.total_seconds() == 0:
             return None
 
@@ -114,3 +112,4 @@ class MedicationsModelSerializer(serializers.ModelSerializer):
                 return None
 
         return next_dose
+

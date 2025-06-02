@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Dimensions, ScrollView, Modal } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+  ScrollView,
+  Modal
+} from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import styles from "./stylesheets/logstyles";
@@ -44,6 +51,7 @@ const mockLogs = [
 export default function LogsScreen() {
   const router = useRouter();
   const [logs, setLogs] = useState([]);
+  const [patients, setPatients] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
   const [selectedLog, setSelectedLog] = useState(null);
@@ -57,8 +65,13 @@ export default function LogsScreen() {
     try {
       const response = await fetch(`${BASE_API}/api/logs/`);
       let logs = await response.json();
+
+      const patientResponse = await fetch(`${BASE_API}/api/patients/`);
+      let patients = await patientResponse.json();
+
       logs = logs.sort((a, b) => a.log_id - b.log_id);
       setLogs(logs);
+      setPatients(patients);
     } catch (error) {
       console.error("Error fetching logs:", error);
       setLogs(mockLogs);
@@ -73,6 +86,11 @@ export default function LogsScreen() {
   const handleLogout = () => {
     setLogoutModalVisible(false);
     router.replace("/");
+  };
+
+  const getPatientLastName = (patientId) => {
+    const patient = patients.find((p) => p.id === patientId);
+    return patient?.last_name || "Unknown";
   };
 
   return (
