@@ -118,7 +118,7 @@ export default function CalendarApp() {
             padding: 8,
             margin: 8,
             boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-            height: 350,
+            height: 580,
           }}
         >
           {/* Calendar Header */}
