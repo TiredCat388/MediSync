@@ -288,7 +288,7 @@ const AnalogClock = () => {
         setUpcomingAlerts(updatedUpcoming);
         setPendingAlerts((prev) => [...prev, ...newlyPending]);
       }
-    }, 60 * 1000); // run every minute
+    }, 60 * 1000);
 
     return () => clearInterval(interval);
   }, []);
