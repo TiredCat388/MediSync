@@ -34,7 +34,7 @@ class Emergencycontactdetails(models.Model):
     first_name = models.CharField(max_length=100, blank=False)
     last_name = models.CharField(max_length=100, blank=True)
     relation_to_patient = models.CharField(max_length=100, blank=False)
-    contact_number = models.BigIntegerField(blank=False)
+    contact_number = models.CharField(max_length=20, blank=False)
     patient_number = models.OneToOneField('Patients', on_delete=models.CASCADE, db_column='patient_number', primary_key=True)
 
     class Meta:
@@ -70,10 +70,8 @@ class Patients(models.Model):
         blank=True,
         help_text='Patient\'s final diagnosis'
     )
-    contact_number = models.BigIntegerField(
-        blank=False,
-        help_text='Patient\'s contact number'
-    )
+    contact_number = models.CharField(max_length=20, blank=False)
+    
     date_of_birth = models.DateField(
         blank=False,
         help_text='Patient\'s date of birth'
