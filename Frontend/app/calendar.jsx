@@ -110,6 +110,7 @@ export default function CalendarApp() {
         {/* Calendar Section */}
         <View
           style={{
+            flex: 1,
             backgroundColor:"#5879A5",
             borderRadius: 8,
             borderWidth: 1,
@@ -117,6 +118,7 @@ export default function CalendarApp() {
             padding: 8,
             margin: 8,
             boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+            height: 350,
           }}
         >
           {/* Calendar Header */}
