@@ -139,7 +139,6 @@ export default function SettingsScreen() {
             style={styles.picker}
             dropdownIconColor="#3b5f8a"
           >
-            <Picker.Item label="Default" value="default" />
             <Picker.Item label="Alarm 1" value="alarm 1" />
             <Picker.Item label="Alarm 2" value="alarm 2" />
             <Picker.Item label="Alarm 3" value="alarm 3" />
