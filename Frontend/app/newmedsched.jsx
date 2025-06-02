@@ -202,6 +202,7 @@ export default function NewMedSched() {
 
   const pickerSelectStyles = {
     inputAndroid: styles.input,
+    inputIOS: styles.input,
     placeholder: {
       color: "#999",
     },
@@ -433,11 +434,10 @@ export default function NewMedSched() {
                     marginRight: 10,
                     backgroundColor: "#F8F8F8",
                     marginBottom: 10,
-                    borderRadius: 8,
-                    borderWidth: 1,
                     flex: 1,
                     height: 36,
                     padding: 8,
+                    keyboardType: "numeric",
                   }}
                   value={formData.medicationStrength}
                   onChangeText={(text) =>
@@ -653,6 +653,7 @@ export default function NewMedSched() {
               <AppText style={styles.label}>
                 Frequency <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
               </AppText>
+              <View style={styles.PickerContainer}>
               <RNPickerSelect
                 Icon={() => (
                   <Icon name="arrow-drop-down" size={20} color="gray" />
@@ -668,6 +669,7 @@ export default function NewMedSched() {
                 style={pickerSelectStyles}
                 useNativeAndroidPickerStyle={false}
               />
+              </View>
 
              {formData.frequencyType === "Other" && (
   <View>
