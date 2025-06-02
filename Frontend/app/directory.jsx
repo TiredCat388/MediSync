@@ -96,7 +96,6 @@ export default function PatientsDirectory() {
               style={styles.newPatientButton}>
               <AppText style={styles.newPatientButtonText}>+ New Patient</AppText>
             </TouchableOpacity>
-          </View>
 
           <View style={styles.searchSortContainer}>
             <TextInput

@@ -98,7 +98,6 @@ export default StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     minWidth: 180,
-    marginTop: 40,
   },
   newPatientButtonText: {
     color: "#F8F8F8",
