@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: "space-between",
     maxHeight: 590,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 8,
@@ -50,20 +50,15 @@ const styles = StyleSheet.create({
   },
   input: {
     borderColor: "black",
-    borderWidth: 1,
-    borderRadius: 10,
-    backgroundColor: "white",
+    backgroundColor: "#F8F8F8",
     padding: 8,
-    fontSize: 16,
     marginBottom: 10,
-    height: 36,
-    borderColor: "black",
-    paddingRight: 30,
+    height: 38,
   },
 
   dobContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    marginBottom: 10,
   },
   dobInput: {
     borderWidth: 1,
@@ -216,7 +211,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   timePickerContainer: {
-    flex: 1, 
+    flex: 1,
     height: 36,
   },
   timePicker: {
@@ -242,7 +237,7 @@ const styles = StyleSheet.create({
     height: 36,
     marginRight: 10,
     marginBottom: 10,
-   },
+  },
   frequencyPicker: {
     paddingVertical: 8,
     paddingHorizontal: 10,
@@ -252,20 +247,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     height: 36,
   },
-  
+
   autocompleteContainer: {
     flex: 1,
     zIndex: 10,
-    width: 505,
+    width: 405,
     marginBottom: 10,
   },
 
   autocompleteItem: {
     borderRadius: 8,
     borderWidth: 1,
-  }
-  
-
+  },
 });
 
 export default styles;
