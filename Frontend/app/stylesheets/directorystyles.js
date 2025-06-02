@@ -23,7 +23,7 @@ export default StyleSheet.create({
   },
   headerText: {
     fontSize: 30,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   searchSortContainer: {
     flexDirection: "row",

@@ -125,7 +125,6 @@ export default function PatientsDirectory() {
                 </View>
                 <View style={styles.tableHeaderCellEmpty} />
               </View>
-
               {/* ScrollView for Table Rows */}
               <ScrollView>
                 <FlatList

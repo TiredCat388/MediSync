@@ -24,6 +24,9 @@ const TESTING_PATIENT = {
   last_name: "PURPOSES ONLY",
 };
 
+const { height } = Dimensions.get('window');
+const TABLE_HEIGHT = height-200;
+
 export default function PatientsDirectory() {
   const router = useRouter();
   const [patients, setPatients] = useState([]);
