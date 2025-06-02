@@ -8,6 +8,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import AppText from './components/AppText';
 import styles from './stylesheets/calendarstyle';
 
+
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
 const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
@@ -162,7 +163,6 @@ export default function CalendarApp() {
                 <Feather name="arrow-right-circle" size={30} color="white" />
               </TouchableOpacity>
             </View>
-
             {/* Days of the Week */}
             <View style={styles.daysOfWeekRow}>
               {daysOfWeek.map((day) => (
@@ -171,7 +171,6 @@ export default function CalendarApp() {
                 </AppText>
               ))}
             </View>
-
             {/* Calendar Grid */}
             <FlatList
               data={dates}
