@@ -306,56 +306,55 @@ export default function NewMedSched() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <Sidebar onNavigate={(destination) => router.push(destination)} />
-        <View
-          style={[
-            styles.contentContainer,
-            { marginLeft: isSidebarExpanded ? 200 : 70 },
-          ]}
-        >
-          <AppText style={styles.screenTitle}>New Medication Schedule</AppText>
-          <View style={styles.formContainer}>
-            <ScrollView style={{ flex: 1 }}>
-              <View style={styles.column}>
-                <AppText style={styles.sectionTitle}>
-                  {patient_number
-                    ? patientName
-                      ? `FOR: ${patientName} | Patient ID - ${patient_number}`
-                      : `FOR: Patient ID - ${patient_number}`
-                    : "FOR: Patient ID - Loading..."}
-                </AppText>
+    <View style={styles.container}>
+      <Sidebar onNavigate={(destination) => router.push(destination)} />
+      <View
+        style={[
+          styles.contentContainer,
+          { marginLeft: isSidebarExpanded ? 200 : 70 },
+        ]}
+      >
+        <AppText style={styles.screenTitle}>New Medication Schedule</AppText>
+        <View style={styles.formContainer}>
+          <ScrollView
+            style={{ flex: 1 }}>
+            <View style={styles.column}>
+              <AppText style={styles.sectionTitle}>
+                {patient_number
+                  ? patientName
+                    ? `FOR: ${patientName} | Patient ID - ${patient_number}`
+                    : `FOR: Patient ID - ${patient_number}`
+                  : "FOR: Patient ID - Loading..."}
+              </AppText>
 
-                {/* Medication Name with Autocomplete */}
-                <AppText style={styles.label}>
-                  Medication Name{" "}
-                  <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
-                </AppText>
-                <View style={styles.autocompleteContainer}>
-                  <Autocomplete
-                    data={filteredMedications}
-                    value={query}
-                    onChangeText={handleInputChange}
-                    flatListProps={{
-                      keyExtractor: (_, idx) => idx.toString(),
-                      renderItem: ({ item }) => (
-                        <TouchableOpacity
-                          style={styles.autocompleteItem}
-                          onPress={() => handleSelectMedication(item)}
-                        >
-                          <AppText style={styles.autocompleteText}>
-                            {item}
-                          </AppText>
-                        </TouchableOpacity>
-                      ),
-                    }}
-                  />
-                </View>
+              {/* Medication Name with Autocomplete */}
+              <AppText style={styles.label}>
+                Medication Name <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
+              </AppText>
+              <View style={styles.autocompleteContainer}>
+                <Autocomplete
+                  data={filteredMedications}
+                  value={query}
+                  onChangeText={handleInputChange}
+                  flatListProps={{
+                    keyExtractor: (_, idx) => idx.toString(),
+                    renderItem: ({ item }) => (
+                      <TouchableOpacity
+                        style={styles.autocompleteItem}
+                        onPress={() => handleSelectMedication(item)}
+                      >
+                        <AppText style={styles.autocompleteText}>{item}</AppText>
+                      </TouchableOpacity>
+                    ),
+                  }}
+                  containerStyle={styles.autocompleteWrapper}
+                  inputContainerStyle={styles.autocompleteInput}
+                />
+              </View>
 
-                <AppText style={[styles.label]}>
-                  Medication form{" "}
-                  <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
-                </AppText>
+              <AppText style={[styles.label]}>
+                Medication form <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
+              </AppText>
                 <View style={styles.PickerContainer}>
                   <RNPickerSelect
                     Icon={() => (
@@ -385,464 +384,451 @@ export default function NewMedSched() {
                   />
                 </View>
 
-                <AppText style={[styles.label]}>
-                  Medication Route{" "}
-                  <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
-                </AppText>
+              <AppText style={[styles.label]}>
+                Medication Route <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
+              </AppText>
+              <View style={styles.PickerContainer}>
+                <RNPickerSelect
+                  Icon={() => (
+                    <Icon name="arrow-drop-down" size={20} color="gray" />
+                  )}
+                  items={[
+                    { label: "Oral", value: "Oral" },
+                    { label: "Intramuscular", value: "Intramuscular" },
+                    { label: "Intravenous", value: "Intravenous" },
+                    { label: "Subcutaneous", value: "Subcutaneous" },
+                    { label: "Topical", value: "Topical" },
+                    { label: "Inhalation", value: "Inhalation" },
+                    { label: "Sublingual", value: "Sublingual" },
+                    { label: "Transdermal", value: "Transdermal" },
+                    { label: "Rectal", value: "Rectal" },
+                    { label: "Intranasal", value: "Intranasal" },
+                    { label: "Ocular", value: "Ocular" },
+                    { label: "Vaginal", value: "Vaginal" },
+                    { label: "Other", value: "Other" },
+                  ]}
+                  value={formData.medicationRoute}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, medicationRoute: value })
+                  }
+                  placeholder={{
+                    label: "Select Medication route...",
+                    value: "",
+                  }}
+                  style={pickerSelectStyles}
+                  useNativeAndroidPickerStyle={false}
+                />
+              </View>
+
+              <AppText style={styles.label}>
+                Medication Strength <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
+              </AppText>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <TextInput
+                  style={{
+                    marginRight: 10,
+                    backgroundColor: "#F8F8F8",
+                    marginBottom: 10,
+                    flex: 1,
+                    height: 36,
+                    padding: 8,
+                    keyboardType: "numeric",
+                  }}
+                  value={formData.medicationStrength}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, medicationStrength: text })
+                  }
+                />
                 <View style={styles.PickerContainer}>
                   <RNPickerSelect
                     Icon={() => (
                       <Icon name="arrow-drop-down" size={20} color="gray" />
                     )}
                     items={[
-                      { label: "Oral", value: "Oral" },
-                      { label: "Intramuscular", value: "Intramuscular" },
-                      { label: "Intravenous", value: "Intravenous" },
-                      { label: "Subcutaneous", value: "Subcutaneous" },
-                      { label: "Topical", value: "Topical" },
-                      { label: "Inhalation", value: "Inhalation" },
-                      { label: "Sublingual", value: "Sublingual" },
-                      { label: "Transdermal", value: "Transdermal" },
-                      { label: "Rectal", value: "Rectal" },
-                      { label: "Intranasal", value: "Intranasal" },
-                      { label: "Ocular", value: "Ocular" },
-                      { label: "Vaginal", value: "Vaginal" },
-                      { label: "Other", value: "Other" },
+                      { label: "mL", value: "ml" },
+                      { label: "mcg", value: "mcg" },
+                      { label: "mg", value: "mg" },
+                      { label: "%", value: "%" },
+                      { label: "g", value: "g" },
                     ]}
-                    value={formData.medicationRoute}
+                    value={formData.dosageUnit}
                     onValueChange={(value) =>
-                      setFormData({ ...formData, medicationRoute: value })
+                      setFormData({ ...formData, medicationUnit: value })
                     }
-                    placeholder={{
-                      label: "Select Medication route...",
-                      value: "",
-                    }}
+                    placeholder={
+                      formData.medicationUnit
+                        ? {}
+                        : { label: "Unit", value: "" }
+                    }
                     style={pickerSelectStyles}
                     useNativeAndroidPickerStyle={false}
                   />
                 </View>
+              </View>
 
-                <AppText style={styles.label}>
-                  Medication Strength{" "}
-                  <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
-                </AppText>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <TextInput
-                    style={{
-                      marginRight: 10,
-                      backgroundColor: "#F8F8F8",
-                      marginBottom: 10,
-                      flex: 1,
-                      height: 36,
-                      padding: 8,
-                      keyboardType: "numeric",
-                    }}
-                    value={formData.medicationStrength}
-                    onChangeText={(text) =>
-                      setFormData({ ...formData, medicationStrength: text })
-                    }
-                  />
-                  <View style={styles.PickerContainer}>
-                    <RNPickerSelect
-                      Icon={() => (
-                        <Icon name="arrow-drop-down" size={20} color="gray" />
-                      )}
-                      items={[
-                        { label: "mL", value: "ml" },
-                        { label: "mcg", value: "mcg" },
-                        { label: "mg", value: "mg" },
-                        { label: "%", value: "%" },
-                        { label: "g", value: "g" },
-                      ]}
-                      value={formData.dosageUnit}
-                      onValueChange={(value) =>
-                        setFormData({ ...formData, medicationUnit: value })
-                      }
-                      placeholder={
-                        formData.medicationUnit
-                          ? {}
-                          : { label: "Unit", value: "" }
-                      }
-                      style={pickerSelectStyles}
-                      useNativeAndroidPickerStyle={false}
-                    />
-                  </View>
-                </View>
-
-                <AppText style={styles.label}>
-                  Medication Start Date{" "}
-                  <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
-                </AppText>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  {/* Month */}
-                  <View style={styles.PickerContainer}>
-                    <RNPickerSelect
-                      Icon={() => (
-                        <Icon name="arrow-drop-down" size={20} color="gray" />
-                      )}
-                      items={months}
-                      value={formData.medicationMonth}
-                      onValueChange={(value) =>
-                        setFormData({ ...formData, medicationMonth: value })
-                      }
-                      placeholder={{ label: "MM", value: "" }}
-                      style={pickerSelectStyles}
-                      useNativeAndroidPickerStyle={false}
-                    />
-                  </View>
-                  {/* Day */}
-                  <View style={styles.PickerContainer}>
-                    <RNPickerSelect
-                      Icon={() => (
-                        <Icon name="arrow-drop-down" size={20} color="gray" />
-                      )}
-                      items={days}
-                      value={formData.medicationDay}
-                      onValueChange={(value) =>
-                        setFormData({ ...formData, medicationDay: value })
-                      }
-                      placeholder={{ label: "DD", value: "" }}
-                      style={pickerSelectStyles}
-                      useNativeAndroidPickerStyle={false}
-                    />
-                  </View>
-                  {/* Year */}
-                  <View style={styles.PickerContainer}>
-                    <RNPickerSelect
-                      Icon={() => (
-                        <Icon name="arrow-drop-down" size={20} color="gray" />
-                      )}
-                      items={years}
-                      value={formData.medicationYear}
-                      onValueChange={(value) =>
-                        setFormData({ ...formData, medicationYear: value })
-                      }
-                      placeholder={{ label: "YYYY", value: "" }}
-                      style={pickerSelectStyles}
-                      useNativeAndroidPickerStyle={false}
-                    />
-                  </View>
-                </View>
-
-                <AppText style={styles.label}>Medication End Date</AppText>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  {/* Month */}
-                  <View style={styles.PickerContainer}>
-                    <RNPickerSelect
-                      Icon={() => (
-                        <Icon name="arrow-drop-down" size={20} color="gray" />
-                      )}
-                      items={months}
-                      value={formData.medicationEndMonth}
-                      onValueChange={(value) =>
-                        setFormData({ ...formData, medicationEndMonth: value })
-                      }
-                      placeholder={{ label: "MM", value: "" }}
-                      style={pickerSelectStyles}
-                      useNativeAndroidPickerStyle={false}
-                    />
-                  </View>
-                  {/* Day */}
-                  <View style={styles.PickerContainer}>
-                    <RNPickerSelect
-                      Icon={() => (
-                        <Icon name="arrow-drop-down" size={20} color="gray" />
-                      )}
-                      items={days}
-                      value={formData.medicationEndDay}
-                      onValueChange={(value) =>
-                        setFormData({ ...formData, medicationEndDay: value })
-                      }
-                      placeholder={{ label: "DD", value: "" }}
-                      style={pickerSelectStyles}
-                      useNativeAndroidPickerStyle={false}
-                    />
-                  </View>
-                  {/* Year */}
-                  <View style={styles.PickerContainer}>
-                    <RNPickerSelect
-                      Icon={() => (
-                        <Icon name="arrow-drop-down" size={20} color="gray" />
-                      )}
-                      items={years}
-                      value={formData.medicationEndYear}
-                      onValueChange={(value) =>
-                        setFormData({ ...formData, medicationEndYear: value })
-                      }
-                      placeholder={{ label: "YYYY", value: "" }}
-                      style={pickerSelectStyles}
-                      useNativeAndroidPickerStyle={false}
-                    />
-                  </View>
-                </View>
-
-                <AppText style={styles.label}>
-                  Time of Medication{" "}
-                  <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
-                </AppText>
-                <View style={styles.dobContainer}>
-                  <View style={styles.PickerContainer}>
-                    <RNPickerSelect
-                      Icon={() => (
-                        <Icon name="arrow-drop-down" size={20} color="gray" />
-                      )}
-                      items={Array.from({ length: 13 }, (_, index) => ({
-                        label: index.toString().padStart(2, "0"),
-                        value: index.toString().padStart(2, "0"),
-                      }))}
-                      value={formData.timeHour}
-                      onValueChange={(value) =>
-                        setFormData({ ...formData, timeHour: value })
-                      }
-                      placeholder={{ label: "HH", value: "" }}
-                      style={pickerSelectStyles}
-                      useNativeAndroidPickerStyle={false}
-                    />
-                  </View>
-
-                  <View style={styles.PickerContainer}>
-                    <RNPickerSelect
-                      Icon={() => (
-                        <Icon name="arrow-drop-down" size={20} color="gray" />
-                      )}
-                      items={Array.from({ length: 60 }, (_, index) => ({
-                        label: index.toString().padStart(2, "0"),
-                        value: index.toString().padStart(2, "0"),
-                      }))}
-                      value={formData.timeMinute}
-                      onValueChange={(value) =>
-                        setFormData({ ...formData, timeMinute: value })
-                      }
-                      placeholder={{ label: "MM", value: "" }}
-                      style={pickerSelectStyles}
-                      useNativeAndroidPickerStyle={false}
-                    />
-                  </View>
-
-                  <View style={styles.PickerContainer}>
-                    <RNPickerSelect
-                      Icon={() => (
-                        <Icon name="arrow-drop-down" size={20} color="gray" />
-                      )}
-                      items={[
-                        { label: "AM", value: "AM" },
-                        { label: "PM", value: "PM" },
-                      ]}
-                      value={formData.timePeriod}
-                      onValueChange={(value) =>
-                        setFormData({ ...formData, timePeriod: value })
-                      }
-                      placeholder={{ label: "AM/PM", value: "" }}
-                      style={pickerSelectStyles}
-                      useNativeAndroidPickerStyle={false}
-                    />
-                  </View>
-                </View>
-
-                <AppText style={styles.label}>
-                  Frequency <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
-                </AppText>
+              <AppText style={styles.label}>
+                Medication Start Date{" "}
+                <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
+              </AppText>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                {/* Month */}
                 <View style={styles.PickerContainer}>
                   <RNPickerSelect
                     Icon={() => (
                       <Icon name="arrow-drop-down" size={20} color="gray" />
                     )}
-                    items={frequencyOptions}
-                    value={formData.frequencyType}
-                    onValueChange={handleFrequencyChange}
-                    placeholder={
-                      formData.frequencyType
-                        ? {}
-                        : { label: "Select frequency", value: "" }
+                    items={months}
+                    value={formData.medicationMonth}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, medicationMonth: value })
                     }
+                    placeholder={{ label: "MM", value: "" }}
+                    style={pickerSelectStyles}
+                    useNativeAndroidPickerStyle={false}
+                  />
+                </View>
+                {/* Day */}
+                <View style={styles.PickerContainer}>
+                  <RNPickerSelect
+                    Icon={() => (
+                      <Icon name="arrow-drop-down" size={20} color="gray" />
+                    )}
+                    items={days}
+                    value={formData.medicationDay}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, medicationDay: value })
+                    }
+                    placeholder={{ label: "DD", value: "" }}
+                    style={pickerSelectStyles}
+                    useNativeAndroidPickerStyle={false}
+                  />
+                </View>
+                {/* Year */}
+                <View style={styles.PickerContainer}>
+                  <RNPickerSelect
+                    Icon={() => (
+                      <Icon name="arrow-drop-down" size={20} color="gray" />
+                    )}
+                    items={years}
+                    value={formData.medicationYear}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, medicationYear: value })
+                    }
+                    placeholder={{ label: "YYYY", value: "" }}
+                    style={pickerSelectStyles}
+                    useNativeAndroidPickerStyle={false}
+                  />
+                </View>
+              </View>
+
+              <AppText style={styles.label}>Medication End Date</AppText>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                {/* Month */}
+                <View style={styles.PickerContainer}>
+                  <RNPickerSelect
+                    Icon={() => (
+                      <Icon name="arrow-drop-down" size={20} color="gray" />
+                    )}
+                    items={months}
+                    value={formData.medicationEndMonth}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, medicationEndMonth: value })
+                    }
+                    placeholder={{ label: "MM", value: "" }}
+                    style={pickerSelectStyles}
+                    useNativeAndroidPickerStyle={false}
+                  />
+                </View>
+                {/* Day */}
+                <View style={styles.PickerContainer}>
+                  <RNPickerSelect
+                    Icon={() => (
+                      <Icon name="arrow-drop-down" size={20} color="gray" />
+                    )}
+                    items={days}
+                    value={formData.medicationEndDay}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, medicationEndDay: value })
+                    }
+                    placeholder={{ label: "DD", value: "" }}
+                    style={pickerSelectStyles}
+                    useNativeAndroidPickerStyle={false}
+                  />
+                </View>
+                {/* Year */}
+                <View style={styles.PickerContainer}>
+                  <RNPickerSelect
+                    Icon={() => (
+                      <Icon name="arrow-drop-down" size={20} color="gray" />
+                    )}
+                    items={years}
+                    value={formData.medicationEndYear}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, medicationEndYear: value })
+                    }
+                    placeholder={{ label: "YYYY", value: "" }}
+                    style={pickerSelectStyles}
+                    useNativeAndroidPickerStyle={false}
+                  />
+                </View>
+              </View>
+ 
+              <AppText style={styles.label}>
+                Time of Medication <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
+              </AppText>
+              <View style={styles.dobContainer}>
+                <View style={styles.PickerContainer}>
+                  <RNPickerSelect
+                    Icon={() => (
+                      <Icon name="arrow-drop-down" size={20} color="gray" />
+                    )}
+                    items={Array.from({ length: 13 }, (_, index) => ({
+                      label: index.toString().padStart(2, "0"),
+                      value: index.toString().padStart(2, "0"),
+                    }))}
+                    value={formData.timeHour}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, timeHour: value })
+                    }
+                    placeholder={{ label: "HH", value: "" }}
                     style={pickerSelectStyles}
                     useNativeAndroidPickerStyle={false}
                   />
                 </View>
 
-                {formData.frequencyType === "Other" && (
-                  <View>
-                    <AppText style={styles.label}>
-                      Set Frequency Interval
-                      <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
-                    </AppText>
-                    <View style={styles.dobContainer}>
-                      <View style={styles.PickerContainer}>
-                        <RNPickerSelect
-                          disabled={
-                            formData.frequencyType !== "Other" &&
-                            formData.frequencyType !== ""
-                          }
-                          Icon={() => (
-                            <Icon
-                              name="arrow-drop-down"
-                              size={20}
-                              color="gray"
-                            />
-                          )}
-                          items={[
-                            ...Array.from({ length: 31 }, (_, i) => ({
-                              label: i.toString().padStart(2, "0"),
-                              value: i.toString(),
-                            })),
-                          ]}
-                          value={formData.frequencyDay}
-                          onValueChange={(value) =>
-                            setFormData({ ...formData, frequencyDay: value })
-                          }
-                          placeholder={{ label: "Days", value: "" }}
-                          style={pickerSelectStyles}
-                          useNativeAndroidPickerStyle={false}
-                        />
-                      </View>
-                    </View>
-                  </View>
-                )}
+                <View style={styles.PickerContainer}>
+                  <RNPickerSelect
+                    Icon={() => (
+                      <Icon name="arrow-drop-down" size={20} color="gray" />
+                    )}
+                    items={Array.from({ length: 60 }, (_, index) => ({
+                      label: index.toString().padStart(2, "0"),
+                      value: index.toString().padStart(2, "0"),
+                    }))}
+                    value={formData.timeMinute}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, timeMinute: value })
+                    }
+                    placeholder={{ label: "MM", value: "" }}
+                    style={pickerSelectStyles}
+                    useNativeAndroidPickerStyle={false}
+                  />
+                </View>
+
+                <View style={styles.PickerContainer}>
+                  <RNPickerSelect
+                    Icon={() => (
+                      <Icon name="arrow-drop-down" size={20} color="gray" />
+                    )}
+                    items={[
+                      { label: "AM", value: "AM" },
+                      { label: "PM", value: "PM" },
+                    ]}
+                    value={formData.timePeriod}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, timePeriod: value })
+                    }
+                    placeholder={{ label: "AM/PM", value: "" }}
+                    style={pickerSelectStyles}
+                    useNativeAndroidPickerStyle={false}
+                  />
+                </View>
               </View>
-            </ScrollView>
-            <View style={styles.divider} />
 
-            <View style={styles.column}>
-              <AppText style={styles.sectionTitle}>
-                Additional Information
-              </AppText>
               <AppText style={styles.label}>
-                Medication Notes{" "}
-                <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
+                Frequency <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
               </AppText>
-              <TextInput
-                style={styles.input}
-                multiline
-                numberOfLines={4}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, medicationNotes: text })
+              <View style={styles.PickerContainer}>
+              <RNPickerSelect
+                Icon={() => (
+                  <Icon name="arrow-drop-down" size={20} color="gray" />
+                )}
+                items={frequencyOptions}
+                value={formData.frequencyType}
+                onValueChange={handleFrequencyChange}
+                placeholder={
+                  formData.frequencyType
+                    ? {}
+                    : { label: "Select frequency", value: "" }
                 }
-                value={formData.medicationNotes}
+                style={pickerSelectStyles}
+                useNativeAndroidPickerStyle={false}
               />
-              <AppText style={styles.label}>
-                Physician ID <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
-              </AppText>
-              <TextInput
-                style={[styles.input]}
-                value={formData.physicianID || "Loading..."}
-                editable={false}
-              />
-            </View>
-          </View>
+              </View>
 
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              onPress={() => setModalVisible(true)}
-              style={[styles.button, styles.leaveButton]}
-            >
-              <AppText style={styles.buttonText}>Cancel</AppText>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={handleRegister}
-              style={[styles.button, styles.stayButton]}
-            >
-              <AppText style={styles.buttonText}>Add Medication</AppText>
-            </TouchableOpacity>
+             {formData.frequencyType === "Other" && (
+  <View>
+    <AppText style={styles.label}>
+      Set Frequency Interval
+      <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
+    </AppText>
+    <View style={styles.dobContainer}>
+      <View style={styles.PickerContainer}>
+        <RNPickerSelect
+          disabled={
+            formData.frequencyType !== "Other" &&
+            formData.frequencyType !== ""
+          }
+          Icon={() => (
+            <Icon name="arrow-drop-down" size={20} color="gray" />
+          )}
+          items={[
+            ...Array.from({ length: 31 }, (_, i) => ({
+              label: i.toString().padStart(2, "0"),
+              value: i.toString(),
+            })),
+          ]}
+          value={formData.frequencyDay}
+          onValueChange={(value) =>
+            setFormData({ ...formData, frequencyDay: value })
+          }
+          placeholder={{ label: "Days", value: "" }}
+          style={pickerSelectStyles}
+          useNativeAndroidPickerStyle={false}
+        />
+      </View>
+    </View>
+  </View>
+)}
+            
+            </View>
+          </ScrollView>
+          <View style={styles.divider} />
+
+          <View style={styles.column}>
+            <AppText style={styles.sectionTitle}>Additional Information</AppText>
+            <AppText style={styles.label}>
+              Medication Notes <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
+            </AppText>
+            <TextInput
+              style={styles.input}
+              multiline
+              numberOfLines={4}
+              onChangeText={(text) =>
+                setFormData({ ...formData, medicationNotes: text })
+              }
+              value={formData.medicationNotes}
+            />
+            <AppText style={styles.label}>
+              Physician ID <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
+            </AppText>
+            <TextInput
+              style={[styles.input]}
+              value={formData.physicianID || "Loading..."}
+              editable={false}
+            />
           </View>
         </View>
 
-        {/* Custom Access Denied Alert */}
-        <CustomAlert
-          visible={accessDeniedVisible}
-          message={accessDeniedMessage}
-          onClose={() => {
-            setAccessDeniedVisible(false);
-            router.replace("/viewpatient?patient_number=" + patient_number);
-          }}
-        />
-
-        {/* Cancel Confirmation Modal */}
-        <Modal visible={modalVisible} transparent animationType="fade">
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalContainer}>
-              <AppText style={styles.modalTitle}>
-                Cancel Medication Schedule
-              </AppText>
-              <AppText style={styles.modalMessage}>
-                Are you sure you want to cancel scheduling this medication?
-              </AppText>
-              <View style={styles.modalButtonContainer}>
-                <TouchableOpacity
-                  style={[styles.modalButton, styles.stayButton]}
-                  onPress={() => setModalVisible(false)}
-                >
-                  <AppText style={styles.modalButtonText}>Stay</AppText>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.modalButton, styles.leaveButton]}
-                  onPress={() => {
-                    setModalVisible(false);
-                    router.push(
-                      `/viewpatient?patient_number=${patient_number}`
-                    );
-                  }}
-                >
-                  <AppText style={styles.modalButtonText}>Leave</AppText>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
-
-        {/* Warning Modal for Incomplete Form */}
-        <Modal visible={warningModalVisible} transparent animationType="fade">
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalContainer}>
-              <AppText style={styles.modalTitle}>Incomplete Form</AppText>
-              <AppText style={styles.modalMessage}>
-                Some details are missing. Are you sure you want to proceed?
-              </AppText>
-              <View style={styles.modalButtonContainer}>
-                <TouchableOpacity
-                  style={[styles.modalButton, styles.stayButton]}
-                  onPress={() => {
-                    setWarningModalVisible(false);
-                    handleRegister(); // Proceed with registration despite missing fields
-                  }}
-                >
-                  <AppText style={styles.modalButtonText}>Proceed</AppText>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.modalButton, styles.leaveButton]}
-                  onPress={() => setWarningModalVisible(false)}
-                >
-                  <AppText style={styles.modalButtonText}>Stay</AppText>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
-
-        {/* Medication Added Successfully Alert */}
-        <CustomAlert
-          visible={addSuccessVisible}
-          message={addSuccessMessage}
-          onClose={() => {
-            setAddSuccessVisible(false);
-            router.push(`/viewpatient?patient_number=${patient_number}`);
-          }}
-        />
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            onPress={() => setModalVisible(true)}
+            style={[styles.button, styles.leaveButton]}
+          >
+            <AppText style={styles.buttonText}>Cancel</AppText>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleRegister}
+            style={[styles.button, styles.stayButton]}
+          >
+            <AppText style={styles.buttonText}>Add Medication</AppText>
+          </TouchableOpacity>
+        </View>
       </View>
+
+      {/* Custom Access Denied Alert */}
+      <CustomAlert
+        visible={accessDeniedVisible}
+        message={accessDeniedMessage}
+        onClose={() => {
+          setAccessDeniedVisible(false);
+          router.replace("/viewpatient?patient_number=" + patient_number);
+        }}
+      />
+
+      {/* Cancel Confirmation Modal */}
+      <Modal visible={modalVisible} transparent animationType="fade">
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <AppText style={styles.modalTitle}>Cancel Medication Schedule</AppText>
+            <AppText style={styles.modalMessage}>
+              Are you sure you want to cancel scheduling this medication?
+            </AppText>
+            <View style={styles.modalButtonContainer}>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.stayButton]}
+                onPress={() => setModalVisible(false)}
+              >
+                <AppText style={styles.modalButtonText}>Stay</AppText>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.leaveButton]}
+                onPress={() => {
+                  setModalVisible(false);
+                  router.push(`/viewpatient?patient_number=${patient_number}`);
+                }}
+              >
+                <AppText style={styles.modalButtonText}>Leave</AppText>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Warning Modal for Incomplete Form */}
+      <Modal visible={warningModalVisible} transparent animationType="fade">
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <AppText style={styles.modalTitle}>Incomplete Form</AppText>
+            <AppText style={styles.modalMessage}>
+              Some details are missing. Are you sure you want to proceed?
+            </AppText>
+            <View style={styles.modalButtonContainer}>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.stayButton]}
+                onPress={() => {
+                  setWarningModalVisible(false);
+                  handleRegister(); // Proceed with registration despite missing fields
+                }}
+              >
+                <AppText style={styles.modalButtonText}>Proceed</AppText>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.leaveButton]}
+                onPress={() => setWarningModalVisible(false)}
+              >
+                <AppText style={styles.modalButtonText}>Stay</AppText>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Medication Added Successfully Alert */}
+      <CustomAlert
+        visible={addSuccessVisible}
+        message={addSuccessMessage}
+        onClose={() => {
+          setAddSuccessVisible(false);
+          router.push(`/viewpatient?patient_number=${patient_number}`);
+        }}
+      />
+    </View>
     </SafeAreaView>
   );
 }
