@@ -256,10 +256,14 @@ const styles = StyleSheet.create({
   autocompleteContainer: {
     flex: 1,
     zIndex: 10,
-    width: 415,
+    width: 505,
     marginBottom: 10,
-    
   },
+
+  autocompleteItem: {
+    borderRadius: 8,
+    borderWidth: 1,
+  }
   
 
 });

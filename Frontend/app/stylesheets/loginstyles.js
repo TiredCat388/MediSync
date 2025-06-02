@@ -2,60 +2,62 @@ import { StyleSheet, Dimensions } from "react-native";
 
 const { width } = Dimensions.get("window");
 const isTablet = width > 900;
-const logoSize = isTablet ? 450 : 350;
-const circleSize = logoSize * 0.7
+const circleSize = isTablet ? 350 : 250;
+const logoSize = circleSize * 0.8; 
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F8F8F8",
+    position: "relative",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
   },
   upperHalf: {
-    flex: 1.5,
+    flex: 1,
     backgroundColor: "#5879A5",
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    paddingTop: 20,
+    zIndex: 1,
   },
   lowerHalf: {
     flex: 2,
     backgroundColor: "#F8F8F8",
     width: "100%",
     alignItems: "center",
-    justifyContent: "center",
-    marginTop: -20,
+    justifyContent: "flex-start",
+    marginTop: 60,
+    zIndex: 2,
   },
   circleBackground: {
+    position: "relative",
+    top: "30%",
+    bottom: 30,
     width: circleSize,
     height: circleSize,
-    borderRadius: circleSize / 2, // Always keeps it a perfect circle
     backgroundColor: "#F8F8F8",
+    borderRadius: circleSize / 2,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 70,
-    zIndex: 1,
+    margintTop: 20,
   },
   logo: {
     width: logoSize,
     height: logoSize,
-    zIndex: 3,
   },
   title: {
-    zIndex: 1,
+    zIndex: 4,
     fontSize: isTablet ? 40 : 24,
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 10,
-    marginTop: -70,
   },
   roleContainer: {
     flexDirection: "column",
-    justifyContent: "center", // Center buttons vertically in lower half
-    alignItems: "center", // Center buttons horizontally
+    justifyContent: "center",
+    alignItems: "center",
     marginVertical: 10,
     width: "100%",
   },
@@ -68,7 +70,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 15,
     marginBottom: 10,
-    width: width * 0.45,
+    width: "40%",
   },
   roleText: {
     color: "#F8F8F8",
@@ -91,11 +93,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "80%",
-    maxWidth: 400,
+    maxWidth: 300,
     marginTop: 20,
+    zIndex: 2,
   },
   cancelButton: {
-    backgroundColor: "#CCCCCC",
+    backgroundColor: "#808080",
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 8,

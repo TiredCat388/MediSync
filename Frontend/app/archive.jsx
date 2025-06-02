@@ -11,6 +11,8 @@ import Sidebar from "./components/sidebar";
 import { useState, useEffect } from "react";
 import { Menu, Divider, Provider } from "react-native-paper";
 import Constants from 'expo-constants';
+import { SafeAreaView } from "react-native-safe-area-context";
+import AppText from './components/AppText';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
@@ -71,6 +73,7 @@ export default function PatientsDirectory() {
   }
 
   return (
+  <SafeAreaView style={{ flex: 1 }}>
     <Provider>
       <View
         style={{ flex: 1, flexDirection: "row", backgroundColor: "#f8f8f8" }}
@@ -85,9 +88,9 @@ export default function PatientsDirectory() {
               alignItems: "center",
             }}
           >
-            <Text style={{ fontSize: 30, fontWeight: "bold"}}>
+            <AppText style={{ fontSize: 30, fontWeight: "bold"}}>
               Archive History
-            </Text>
+            </AppText>
           </View>
 
           {/* Search + Sort */}
@@ -128,9 +131,9 @@ export default function PatientsDirectory() {
                 elevation: 2,
               }}
             >
-              <Text style={{ fontSize: 16, color: "#fff", fontWeight: "600" }}>
+              <AppText style={{ fontSize: 16, color: "#fff", fontWeight: "600" }}>
                 Sort {sortAscending ? "↑" : "↓"}
-              </Text>
+              </AppText>
             </TouchableOpacity>
           </View>
 
@@ -168,9 +171,9 @@ export default function PatientsDirectory() {
                   justifyContent: "center",
                 }}
               >
-                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                <AppText style={{ fontSize: 20, fontWeight: "bold" }}>
                   Patient ID
-                </Text>
+                </AppText>
               </View>
               <View
                 style={{
@@ -179,9 +182,9 @@ export default function PatientsDirectory() {
                   justifyContent: "center",
                 }}
               >
-                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                <AppText style={{ fontSize: 20, fontWeight: "bold" }}>
                   Patient Name
-                </Text>
+                </AppText>
               </View>
               <View
                 style={{
@@ -190,9 +193,9 @@ export default function PatientsDirectory() {
                   justifyContent: "center",
                 }}
               >
-                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                <AppText style={{ fontSize: 20, fontWeight: "bold" }}>
                   Archived Date
-                </Text>
+                </AppText>
               </View>
               <View style={{ width: 50 }} />{" "}
               {/* Empty view for the removed button space */}
@@ -234,9 +237,9 @@ export default function PatientsDirectory() {
                         paddingHorizontal: 5,
                       }}
                     >
-                      <Text style={{ fontSize: 15 }}>
+                      <AppText style={{ fontSize: 15 }}>
                         {item.patient_number || ""}
-                      </Text>
+                      </AppText>
                     </View>
 
                     {/* Patient Name */}
@@ -250,7 +253,7 @@ export default function PatientsDirectory() {
                         paddingHorizontal: 5,
                       }}
                     >
-                      <Text style={{ fontSize: 15, textAlign: "center" }}>
+                      <AppText style={{ fontSize: 15, textAlign: "center" }}>
                         {item.first_name && item.last_name
                           ? formatName(
                               item.first_name,
@@ -258,7 +261,7 @@ export default function PatientsDirectory() {
                               item.last_name
                             )
                           : ""}
-                      </Text>
+                      </AppText>
                     </View>
 
                     {/* Archived Date */}
@@ -271,7 +274,7 @@ export default function PatientsDirectory() {
                         paddingHorizontal: 5,
                       }}
                     >
-                      <Text style={{ fontSize: 15 }}>
+                      <AppText style={{ fontSize: 15 }}>
                         {item.date_archived
                           ? new Date(item.date_archived).toLocaleString(
                               "en-PH",
@@ -280,7 +283,7 @@ export default function PatientsDirectory() {
                               }
                             )
                           : ""}
-                      </Text>
+                      </AppText>
                     </View>
 
                     <View
@@ -298,5 +301,6 @@ export default function PatientsDirectory() {
         </View>
       </View>
     </Provider>
+    </SafeAreaView>
   );
 }

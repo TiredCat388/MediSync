@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
       flex: 1,
       marginLeft: 70,
       paddingTop: 0,
-      padding: 40,
+      paddingHorizontal: 40,
     },
     alertPanel: {
       flex: 1,
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
       elevation: 8,
     },
     header: {
-      padding: 40,
+      paddingHorizontal: 40,
       paddingBottom: 20,
     },
     headerText: {
@@ -78,7 +78,6 @@ const styles = StyleSheet.create({
       width: '100%',
     },
     noAlerts: {
-      fontStyle: 'italic',
       textAlign: 'center',
       marginTop: 20,
       color: '#FAFAFA',
