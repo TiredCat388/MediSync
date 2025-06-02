@@ -1,53 +1,62 @@
 import { StyleSheet, Dimensions } from "react-native";
 
-const { height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "row",
     backgroundColor: "#F8F8F8",
-    height: "100%"
   },
   content: {
     flex: 1,
     marginLeft: 70,
     paddingHorizontal: 40,
-    paddingBottom: 40,
   },
-  header: {
-    paddingTop: 20,
-    paddingVertical: 20,
+  headerRow: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
   },
   headerText: {
+    paddingTop: 20,
     fontSize: 30,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   searchSortContainer: {
     flexDirection: "row",
     alignItems: "center",
+    marginTop: 20,
   },
   searchInput: {
     flex: 1,
     height: 45,
-    borderColor: "#000000",
+    borderColor: "#000",
     borderWidth: 1,
     borderRadius: 10,
     paddingHorizontal: 14,
     marginRight: 12,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#fff",
     fontSize: 16,
-    boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.1)",
+    // Shadow for iOS
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    // Elevation for Android
     elevation: 2,
   },
   sortButton: {
-    backgroundColor: "#4E84D3",
+    backgroundColor: "#5c87b2",
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     borderRadius: 10,
-    boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.1)",
+    // Shadow for iOS
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    // Elevation for Android
     elevation: 2,
   },
   sortButtonText: {
@@ -63,10 +72,12 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderColor: "#000000",
     overflow: "hidden",
-    shadowColor: '#000',
+    // Shadow for iOS
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 8,
+    // Elevation for Android
     elevation: 8,
   },
   tableHeader: {
@@ -77,64 +88,63 @@ export default StyleSheet.create({
     borderColor: "#000000",
   },
   tableHeaderCellID: {
-    flex: 0.34,
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },
   tableHeaderCellName: {
-    flex: 0.66,
+    flex: 2,
     alignItems: "center",
     justifyContent: "center",
   },
-  tableHeaderText: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  newPatientButton: {
-    backgroundColor: "#4E84D3",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 8,
+  tableHeaderCellDate: {
+    flex: 2,
     alignItems: "center",
     justifyContent: "center",
-    minWidth: 180,
   },
-  newPatientButtonText: {
-    color: "#F8F8F8",
-    fontSize: 18,
-    fontWeight: "bold",
+  tableHeaderCellEmpty: {
+    width: 50,
   },
-
   row: {
     flexDirection: "row",
+    backgroundColor: "white",
     borderBottomWidth: 1,
-    borderColor: "#000000",
+    borderColor: "black",
     minHeight: 35,
   },
   rowCellID: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    padding: 10,
+    borderRightWidth: 1,
+    borderColor: "black",
+    paddingHorizontal: 5,
   },
   rowCellName: {
     flex: 2,
-    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    padding: 10,
+    borderRightWidth: 1,
+    borderColor: "black",
+    paddingHorizontal: 5,
   },
-  rowDivider: {
-    width: 2,
-    backgroundColor: "#000000",
-    alignSelf: "stretch",
+  rowCellDate: {
+    flex: 2,
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: "black",
+    paddingHorizontal: 5,
+  },
+  rowCellEmpty: {
+    width: 50,
+    alignItems: "center",
+    justifyContent: "center",
   },
   rowText: {
-    fontSize: 16,
+    fontSize: 15,
   },
   rowTextCentered: {
-    fontSize: 16,
-    flex: 1,
+    fontSize: 15,
     textAlign: "center",
   },
 });

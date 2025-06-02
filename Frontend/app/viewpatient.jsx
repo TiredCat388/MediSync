@@ -8,13 +8,15 @@ import {
   Dimensions,
   TextInput,
 } from "react-native";
-import { DataTable, Button } from "react-native-paper";
+import { DataTable, Button, Portal } from "react-native-paper";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import Sidebar from "./components/sidebar";
 import { Feather } from "@expo/vector-icons";
 import { Alert } from "react-native";
 import { styles } from "./stylesheets/viewpatientstyle";
 import Constants from "expo-constants";
+import { SafeAreaView } from "react-native-safe-area-context";
+import AppText from './components/AppText';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
@@ -27,11 +29,12 @@ export default function PatientDetails() {
   const { patient_number, schedule_id } = useLocalSearchParams();
   const [patient, setPatient] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  
   const [medicationData, setMedicationData] = useState([]);
   const [showMedications, setShowMedications] = useState(true);
-  const [searchQuery, setSearchQuery] = useState(""); // Search bar state
+  const [searchQuery, setSearchQuery] = useState("");
   const [openMenuId, setOpenMenuId] = useState(null);
+  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     fetchPatientDetails();
@@ -146,10 +149,23 @@ export default function PatientDetails() {
     }
   };
   if (loading) {
-    return <Text>Loading patient details...</Text>;
+    return <AppText>Loading patient details...</AppText>;
   }
 
+  const displayValue = (value) => {
+  if (
+    value === null ||
+    value === undefined ||
+    value === "" ||
+    (typeof value === "string" && value.trim() === "")
+  ) {
+    return <AppText>N/A</AppText>;
+  }
+  return value;
+};
+
   return (
+    <SafeAreaView style={{ flex: 1 }}>
     <View style={styles.container}>
       <Sidebar />
       <ScrollView style={[styles.mainContent, { marginLeft: sidebarWidth }]}>
@@ -158,7 +174,7 @@ export default function PatientDetails() {
             style={styles.backButton}
             onPress={() => router.push("/directory")}
           >
-            <Text style={styles.buttonText}>Back</Text>
+            <AppText style={styles.buttonText}>Back</AppText>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -167,7 +183,7 @@ export default function PatientDetails() {
               router.push(`/updatepatient?patient_number=${patient_number}`)
             }
           >
-            <Text style={styles.buttonText}>Update Patient</Text>
+            <AppText style={styles.buttonText}>Update Patient</AppText>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -182,70 +198,70 @@ export default function PatientDetails() {
               }
             }}
           >
-            <Text style={styles.deactbuttonText}>Archive Patient</Text>
+            <AppText style={styles.deactbuttonText}>Archive Patient</AppText>
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.patientId}>
-          PATIENT ID: {patient?.patient_number} |{" "}
-          {patient?.last_name?.toUpperCase()}, {patient?.first_name}
-        </Text>
+        <AppText style={styles.patientId}>
+          PATIENT ID: {displayValue(patient?.patient_number)} |{" "}
+          {displayValue(patient?.last_name?.toUpperCase())}, {displayValue(patient?.first_name)}
+        </AppText>
 
         <View style={styles.infoContainer}>
           <View style={styles.detailsSection}>
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Patient Details</Text>
-              <Text style={styles.boldLabel}>Name</Text>
-              <Text>
-                {patient?.last_name?.toUpperCase()}, {patient?.first_name}{" "}
-                {patient?.middle_name
+              <AppText style={styles.sectionTitle}>Patient Details</AppText>
+              <AppText style={styles.boldLabel}>Name</AppText>
+              <AppText>
+                {displayValue(patient?.last_name?.toUpperCase())}, {displayValue(patient?.first_name)}{" "}
+                {displayValue(patient?.middle_name)
                   ? `${patient.middle_name.charAt(0)}.`
                   : ""}
-              </Text>
-              <Text style={styles.boldLabel}>Sex</Text>
-              <Text>{patient?.sex}</Text>
-              <Text style={styles.boldLabel}>Birth Date</Text>
-              <Text>{patient?.date_of_birth}</Text>
-              <Text style={styles.boldLabel}>Age</Text>
-              <Text>{patient?.age}</Text>
-              <Text style={styles.boldLabel}>Blood Type</Text>
-              <Text>{patient?.blood_group}</Text>
+              </AppText>
+              <AppText style={styles.boldLabel}>Sex</AppText>
+              <AppText>{displayValue(patient?.sex)}</AppText>
+              <AppText style={styles.boldLabel}>Birth Date</AppText>
+              <AppText>{displayValue(patient?.date_of_birth)}</AppText>
+              <AppText style={styles.boldLabel}>Age</AppText>
+              <AppText>{displayValue(patient?.age)}</AppText>
+              <AppText style={styles.boldLabel}>Blood Type</AppText>
+              <AppText>{displayValue(patient?.blood_group)}</AppText>
             </View>
           </View>
 
           <View style={styles.dividers} />
 
           <View style={styles.detailsSection}>
-            <Text style={styles.sectionTitle}> </Text>
+            <AppText style={styles.sectionTitle}> </AppText>
             <View style={styles.section}>
-              <Text style={styles.boldLabel}>Religion</Text>
-              <Text>{patient?.religion}</Text>
-              <Text style={styles.boldLabel}>Height (meters)</Text>
-              <Text>{patient?.height}</Text>
-              <Text style={styles.boldLabel}>Weight (kilograms)</Text>
-              <Text>{patient?.weight}</Text>
-              <Text style={styles.boldLabel}>BMI (kg/m²)</Text>
-              <Text>{patient?.BMI}</Text>
-              <Text style={styles.boldLabel}>Diet</Text>
-              <Text>{patient?.diet}</Text>
+              <AppText style={styles.boldLabel}>Religion</AppText>
+              <AppText>{displayValue(patient?.religion)}</AppText>
+              <AppText style={styles.boldLabel}>Height (meters)</AppText>
+              <AppText>{displayValue(patient?.height)}</AppText>
+              <AppText style={styles.boldLabel}>Weight (kilograms)</AppText>
+              <AppText>{displayValue(patient?.weight)}</AppText>
+              <AppText style={styles.boldLabel}>BMI (kg/m²)</AppText>
+              <AppText>{displayValue(patient?.BMI)}</AppText>
+              <AppText style={styles.boldLabel}>Diet</AppText>
+              <AppText>{displayValue(patient?.diet)}</AppText>
             </View>
           </View>
 
           <View style={styles.dividers} />
 
           <View style={styles.subsdetailsSection}>
-            <Text style={styles.sectionTitle}> </Text>
+            <AppText style={styles.sectionTitle}> </AppText>
             <View style={styles.section}>
-              <Text style={styles.boldLabel}>Contact Details</Text>
-              <Text>{patient?.contact_number}</Text>
-              <Text style={styles.boldLabel}>Room No</Text>
-              <Text>{patient?.room_number}</Text>
-              <Text style={styles.boldLabel}>Chief Complaint/s</Text>
-              <Text>{patient?.chief_complaint}</Text>
-              <Text style={styles.boldLabel}>Admitting Diagnosis</Text>
-              <Text>{patient?.admitting_diagnosis}</Text>
-              <Text style={styles.boldLabel}>Final Diagnosis</Text>
-              <Text>{patient?.Final_diagnosis}</Text>
+              <AppText style={styles.boldLabel}>Contact Details</AppText>
+              <AppText>{displayValue(patient?.contact_number)}</AppText>
+              <AppText style={styles.boldLabel}>Room No</AppText>
+              <AppText>{displayValue(patient?.room_number)}</AppText>
+              <AppText style={styles.boldLabel}>Chief Complaint/s</AppText>
+              <AppText>{displayValue(patient?.chief_complaint)}</AppText>
+              <AppText style={styles.boldLabel}>Admitting Diagnosis</AppText>
+              <AppText>{displayValue(patient?.admitting_diagnosis)}</AppText>
+              <AppText style={styles.boldLabel}>Final Diagnosis</AppText>
+              <AppText>{displayValue(patient?.Final_diagnosis)}</AppText>
             </View>
           </View>
 
@@ -253,16 +269,16 @@ export default function PatientDetails() {
 
           <View style={styles.subdetailsSection}>
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Emergency Contact Details</Text>
-              <Text style={styles.boldLabel}>Name</Text>
-              <Text>
-                {patient?.emergency_contact?.first_name}{" "}
-                {patient?.emergency_contact?.last_name}
-              </Text>
-              <Text style={styles.boldLabel}>Relation to Patient</Text>
-              <Text>{patient?.emergency_contact?.relation_to_patient}</Text>
-              <Text style={styles.boldLabel}>Contact Details</Text>
-              <Text>{patient?.emergency_contact?.contact_number}</Text>
+              <AppText style={styles.sectionTitle}>Emergency Contact Details</AppText>
+              <AppText style={styles.boldLabel}>Name</AppText>
+              <AppText>
+                {displayValue(patient?.emergency_contact?.first_name)}{" "}
+                {displayValue(patient?.emergency_contact?.last_name)}
+              </AppText>
+              <AppText style={styles.boldLabel}>Relation to Patient</AppText>
+              <AppText>{displayValue(patient?.emergency_contact?.relation_to_patient)}</AppText>
+              <AppText style={styles.boldLabel}>Contact Details</AppText>
+              <AppText>{displayValue(patient?.emergency_contact?.contact_number)}</AppText>
             </View>
           </View>
         </View>
@@ -283,9 +299,9 @@ export default function PatientDetails() {
               setShowMedications(!showMedications);
             }}
           >
-            <Text style={styles.buttonText}>
+            <AppText style={styles.buttonText}>
               {showMedications ? "Hide" : "View"} Medication List
-            </Text>
+            </AppText>
           </TouchableOpacity>
         </View>
 
@@ -297,16 +313,16 @@ export default function PatientDetails() {
                   <View style={styles.headerRowContainer}>
                     <DataTable.Header style={styles.tableHeader}>
                       <DataTable.Title style={styles.columnId}>
-                        Schedule ID
+                        <AppText style={styles.tableHeaderText}>Schedule ID</AppText>
                       </DataTable.Title>
                       <DataTable.Title style={styles.columnName}>
-                        Medication Name
+                        <AppText style={styles.tableHeaderText}>Medication Name</AppText>
                       </DataTable.Title>
                       <DataTable.Title style={styles.columnTime}>
-                        Time
+                        <AppText style={styles.tableHeaderText}>Time</AppText>
                       </DataTable.Title>
                       <DataTable.Title style={styles.columnNotes}>
-                        Notes
+                        <AppText style={styles.tableHeaderText}>Notes</AppText>
                       </DataTable.Title>
                       <DataTable.Title style={styles.searchBarColumn}>
                         <TextInput
@@ -329,78 +345,36 @@ export default function PatientDetails() {
                     >
                       <DataTable.Row style={styles.row}>
                         <DataTable.Cell style={styles.columnId}>
-                          {item.schedule_id}
+                          <AppText style={styles.rowText}>{item.schedule_id}</AppText>
                         </DataTable.Cell>
                         <DataTable.Cell style={styles.columnName}>
-                          {item.Medication_name}
+                          <AppText style={styles.rowText}>{item.Medication_name}</AppText>
                         </DataTable.Cell>
                         <DataTable.Cell style={styles.columnTime}>
-                          {item.Medication_Time}
+                          <AppText style={styles.rowText}>{item.Medication_Time}</AppText>
                         </DataTable.Cell>
                         <DataTable.Cell style={styles.columnNotes}>
-                          {item.Medication_notes}
+                          <AppText style={styles.rowText}>{item.Medication_notes}</AppText>
                         </DataTable.Cell>
 
                         <DataTable.Cell style={styles.columnActions}>
                           <View style={{ position: "relative" }}>
                             <TouchableOpacity
+                              ref={ref => { if (ref) item.buttonRef = ref; }}
                               style={styles.customizeButton}
-                              onPress={() =>
-                                setOpenMenuId(
-                                  openMenuId === item.schedule_id
-                                    ? null
-                                    : item.schedule_id
-                                )
-                              }
+                              onPress={() => {
+                                if (item.buttonRef) {
+                                  item.buttonRef.measureInWindow((x, y, width, height) => {
+                                    setMenuPosition({ x: x - 140, y });
+                                    setOpenMenuId(openMenuId === item.schedule_id ? null : item.schedule_id);
+                                  });
+                                } else {
+                                  setOpenMenuId(openMenuId === item.schedule_id ? null : item.schedule_id);
+                                }
+                              }}
                             >
-                              <Feather
-                                name="more-horizontal"
-                                size={20}
-                                color="black"
-                              />
+                              <Feather name="more-horizontal" size={20} color="black" />
                             </TouchableOpacity>
-
-                            {openMenuId === item.schedule_id && (
-                              <View style={styles.popupMenu}>
-                                <TouchableOpacity
-                                  style={styles.menuItem}
-                                  onPress={() => {
-                                    router.push(
-                                      `/updatemed?schedule_id=${item.schedule_id}&patient_number=${patient_number}`
-                                    );
-                                  }}
-                                >
-                                  <Text
-                                    style={[
-                                      styles.menuItemText,
-                                      styles.updateText,
-                                    ]}
-                                  >
-                                    Update
-                                  </Text>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity
-                                  style={styles.menuItem}
-                                  onPress={() => {
-                                    setOpenMenuId(null);
-                                    deleteSchedule(
-                                      item.schedule_id,
-                                      patient_number
-                                    );
-                                  }}
-                                >
-                                  <Text
-                                    style={[
-                                      styles.menuItemText,
-                                      styles.deleteText,
-                                    ]}
-                                  >
-                                    Archive
-                                  </Text>
-                                </TouchableOpacity>
-                              </View>
-                            )}
                           </View>
                         </DataTable.Cell>
                       </DataTable.Row>
@@ -415,8 +389,7 @@ export default function PatientDetails() {
                 mode="contained"
                 style={styles.addMedicationButton}
                 onPress={() =>
-                  router.push(`/newmedsched?patient_number=${patient_number}`)
-                }
+                  router.push(`/newmedsched?patient_number=${patient_number}`)}
               >
                 Add Medication
               </Button>
@@ -425,5 +398,45 @@ export default function PatientDetails() {
         )}
       </ScrollView>
     </View>
+    <Portal>
+      {openMenuId && (
+        <View
+          style={[
+            styles.popupMenu,
+            {
+              position: 'absolute',
+              left: menuPosition.x,
+              top: menuPosition.y,
+            },
+          ]}
+        >
+          <TouchableOpacity
+            style={styles.menuItem}
+            onPress={() => {
+              router.push(
+                `/updatemed?schedule_id=${openMenuId}&patient_number=${patient_number}`
+              );
+              setOpenMenuId(null);
+            }}
+          >
+            <AppText style={[styles.menuItemText, styles.updateText]}>
+              Update
+            </AppText>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.menuItem}
+            onPress={() => {
+              setOpenMenuId(null);
+              deleteSchedule(openMenuId, patient_number);
+            }}
+          >
+            <AppText style={[styles.menuItemText, styles.deleteText]}>
+              Archive
+            </AppText>
+          </TouchableOpacity>
+        </View>
+      )}
+    </Portal>
+    </SafeAreaView>
   );
 }

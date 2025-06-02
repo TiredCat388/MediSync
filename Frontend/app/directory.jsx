@@ -1,17 +1,19 @@
 import {
   View,
-  Text,
   TouchableOpacity,
   FlatList,
   TextInput,
-  ScrollView, // Import ScrollView
+  Dimensions,
 } from "react-native";
 import { useRouter } from "expo-router";
 import Sidebar from "./components/sidebar";
 import { useState, useEffect } from "react";
-import { Menu, Divider, Provider } from "react-native-paper";
+import { Provider } from "react-native-paper";
 import styles from "./stylesheets/directorystyles";
 import Constants from 'expo-constants';
+import { SafeAreaView } from "react-native-safe-area-context";
+import AppText from './components/AppText';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
@@ -21,6 +23,9 @@ const TESTING_PATIENT = {
   middle_name: "ABC",
   last_name: "PURPOSES ONLY",
 };
+
+const { height } = Dimensions.get('window');
+const TABLE_HEIGHT = height-200;
 
 export default function PatientsDirectory() {
   const router = useRouter();
@@ -79,21 +84,19 @@ export default function PatientsDirectory() {
   }
 
   return (
+    <SafeAreaView style={{ flex: 1 }}>
     <Provider>
       <View style={styles.container}>
         <Sidebar onNavigate={(destination) => router.push(destination)} />
         <View style={styles.content}>
           <View style={styles.header}>
-            <Text style={styles.headerText}>Patients Directory</Text>
-            <TouchableOpacity
+            <AppText style={[ styles.headerText ]}>Patients Directory</AppText>
+              <TouchableOpacity
               onPress={() => router.push("/registernew")}
-              style={styles.newPatientButton}
-            >
-              <Text style={styles.newPatientButtonText}>+ New Patient</Text>
+              style={styles.newPatientButton}>
+              <AppText style={styles.newPatientButtonText}>+ New Patient</AppText>
             </TouchableOpacity>
-          </View>
 
-          {/* Search + Sort */}
           <View style={styles.searchSortContainer}>
             <TextInput
               style={styles.searchInput}
@@ -106,23 +109,23 @@ export default function PatientsDirectory() {
               onPress={() => setSortAscending(!sortAscending)}
               style={styles.sortButton}
             >
-              <Text style={styles.sortButtonText}>
-                Sort {sortAscending ? "↑" : "↓"}
-              </Text>
+              <AppText style={styles.sortButtonText}>
+                Sort{"  "}
+                <FontAwesome5 name={sortAscending ? "arrow-up" : "arrow-down"} size={14} color="#fff" />
+              </AppText>
             </TouchableOpacity>
           </View>
 
           {/* Table with ScrollView */}
-          <View style={styles.table}>
+          <View style={[styles.table]}>
             <View style={styles.tableHeader}>
               <View style={[styles.tableHeaderCellID]}>
-                <Text style={styles.tableHeaderText}>Patient ID</Text>
+                <AppText style={styles.tableHeaderText}>Patient ID</AppText>
               </View>
               <View style={[styles.tableHeaderCellName]}>
-                <Text style={styles.tableHeaderText}>Patient Name</Text>
+                <AppText style={styles.tableHeaderText}>Patient Name</AppText>
               </View>
             </View>
-            <ScrollView style={{ maxHeight: 500 }}>
               {/* Added maxHeight for visual scroll */}
               <FlatList
                 data={displayedPatients}
@@ -145,13 +148,13 @@ export default function PatientsDirectory() {
                     ]}
                   >
                     <View style={styles.rowCellID}>
-                      <Text style={styles.rowText}>
+                      <AppText style={styles.rowText}>
                         {item.patient_number || ""}
-                      </Text>
+                      </AppText>
                     </View>
                     <View style={styles.rowDivider} />
                     <View style={styles.rowCellName}>
-                      <Text style={styles.rowTextCentered}>
+                      <AppText style={styles.rowTextCentered}>
                         {item.first_name && item.last_name
                           ? formatName(
                               item.first_name,
@@ -159,15 +162,15 @@ export default function PatientsDirectory() {
                               item.last_name
                             )
                           : ""}
-                      </Text>
+                      </AppText>
                     </View>
                   </TouchableOpacity>
                 )}
               />
-            </ScrollView>
           </View>
         </View>
       </View>
     </Provider>
+    </SafeAreaView>
   );
 }

@@ -4,9 +4,15 @@ const { width } = Dimensions.get("window");
 const isTablet = width > 900;
 
 export const styles = StyleSheet.create({
-  container: { flex: 1, flexDirection: "row", backgroundColor: "#f0f0f0" },
-  mainContent: { flex: 1, padding: 20 },
-  boldLabel: { fontWeight: "bold", fontSize: 16, marginTop: 10 },
+  container: { 
+    flex: 1, flexDirection: "row", backgroundColor: "#f0f0f0" },
+  mainContent: { 
+    flex: 1, 
+    padding: 20 },
+  boldLabel: { 
+    fontWeight: "bold", 
+    fontSize: 16, 
+    marginTop: 10 },
   headerButtons: {
     flexDirection: "row",
     justifyContent: "flex-end",

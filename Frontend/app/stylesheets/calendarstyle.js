@@ -1,0 +1,172 @@
+import { StyleSheet, Dimensions } from "react-native";
+
+const { width, height } = Dimensions.get("window");
+
+export default StyleSheet.create({
+  container: {
+    fontSize: 16,
+    backgroundColor: "#F8F8F8",
+    flex: 1,
+    flexDirection: "row",
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 40,
+    paddingBottom: 40,
+  },
+  headerText: {
+    paddingTop: 20,
+    fontSize: 30,
+    fontWeight: "bold",
+  },
+  legendRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 1,
+  },
+  legendItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginHorizontal: 6,
+  },
+  legendCircle: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#F8F8F8",
+    marginRight: 4,
+    zIndex: 999,
+  },
+  legendLabel: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#333",
+  },
+  calendarSection: {
+    flex: 1,
+    backgroundColor: "#5879A5",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  calendarHeader: {
+    backgroundColor: "#5879A5",
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+    padding: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  calendarHeaderText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  daysOfWeekRow: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    backgroundColor: "white",
+    padding: 4,
+    borderBottomWidth: 1,
+    borderColor: "#ccc",
+  },
+  dayOfWeek: {
+    flex: 1,
+    textAlign: "center",
+    fontWeight: "600",
+    padding: 4,
+  },
+  calendarCell: {
+    flex: 1,
+    aspectRatio: 1,
+    borderWidth: 0.5,
+    borderColor: "#ccc",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    backgroundColor: "white",
+    padding: 4,
+  },
+  calendarCellDisabled: {
+    backgroundColor: "#e0e0e0",
+  },
+  calendarCellDate: {
+    fontSize: 16,
+    marginBottom: 2,
+  },
+  calendarCellMedList: {
+    width: "100%",
+    alignItems: "center",
+    marginTop: 2,
+  },
+  calendarCellMed: {
+    backgroundColor: "rgba(103, 154, 236, 0.2)",
+    paddingHorizontal: 7,
+    paddingVertical: 7,
+    borderRadius: 3,
+    marginVertical: 1,
+    width: "100%",
+  },
+  calendarCellMedText: {
+    fontSize: 12,
+    textAlign: "flex-start",
+    color: "#000",
+    fontWeight: "bold",
+  },
+  calendarCellMore: {
+    fontSize: 14,
+    color: "#5879A5",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContainer: {
+    width: 500,
+    height: 500,
+    padding: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  modalScroll: {
+    marginVertical: 10,
+  },
+  modalMed: {
+    backgroundColor: "rgba(103, 154, 236, 0.2)",
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 5,
+    paddingHorizontal: 10,
+  },
+  modalMedText: {
+    fontSize: 13,
+    textAlign: "flex-start",
+    color: "#000",
+    fontWeight: "bold",
+  },
+  modalCloseButton: {
+    backgroundColor: "#D9534F",
+    paddingVertical: 10,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  modalCloseButtonText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+});

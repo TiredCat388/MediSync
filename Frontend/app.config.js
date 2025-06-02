@@ -10,7 +10,7 @@ module.exports = {
     slug: "Frontend",
     version: "1.0.0",
     orientation: "landscape",
-    icon: "./assets/images/icon.png",
+    icon: "./assets/images/medisync.png",
     scheme: "myapp",
     userInterfaceStyle: "automatic",
     newArchEnabled: true,
@@ -19,21 +19,22 @@ module.exports = {
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: "./assets/images/adaptive-icon.png",
+        foregroundImage: "./assets/images/medisync.png",
         backgroundColor: "#ffffff",
       },
     },
     web: {
       bundler: "metro",
       output: "static",
-      favicon: "./assets/images/medisync-logo.png",
+      favicon: "./assets/images/medisync.png",
     },
     plugins: [
       "expo-router",
+      "expo-font",
       [
         "expo-splash-screen",
         {
-          image: "./assets/images/medisync-logo-bw.png",
+          image: "./assets/images/medisync.png",
           imageWidth: 200,
           resizeMode: "contain",
           backgroundColor: "#ffffff",

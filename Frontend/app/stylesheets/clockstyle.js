@@ -6,21 +6,24 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       flexDirection: 'column',
+      backgroundColor: "#F8F8F8",
     },
     mainRow: {
       flexDirection: 'row',
       flex: 1,
       marginLeft: 70,
       paddingTop: 0,
-      padding: 40,
+      paddingHorizontal: 40,
     },
     alertPanel: {
+      alignItems: 'center',
       flex: 1,
       marginRight: 20,
       backgroundColor: '#CCCCCC',
       borderRadius: 10,
       padding: 10,
-      minWidth: 350,
+      minWidth: 400,
+      height: '95%',
       maxWidth: width * 1.3,
       shadowColor: '#000',
       shadowOffset: { width: 0, height: 4 },
@@ -29,10 +32,11 @@ const styles = StyleSheet.create({
       elevation: 8,
     },
     header: {
-      padding: 40,
+      paddingHorizontal: 40,
       paddingBottom: 20,
     },
     headerText: {
+      paddingTop: 20,
       fontSize: 30,
       fontWeight: "bold",
     },
@@ -78,7 +82,6 @@ const styles = StyleSheet.create({
       width: '100%',
     },
     noAlerts: {
-      fontStyle: 'italic',
       textAlign: 'center',
       marginTop: 20,
       color: '#FAFAFA',

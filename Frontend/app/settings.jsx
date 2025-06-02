@@ -6,6 +6,8 @@ import { Picker } from "@react-native-picker/picker";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Audio } from "expo-av";
+import { SafeAreaView } from "react-native-safe-area-context";
+import AppText from './components/AppText';
 
 export default function SettingsScreen() {
   const [volume, setVolume] = useState(50);
@@ -155,15 +157,16 @@ export default function SettingsScreen() {
   };
 
   return (
+    <SafeAreaView style={{ flex: 1 }}>
     <View style={{ flex: 1, flexDirection: "row" }}>
       {/* Sidebar Component */}
       <Sidebar setSidebarWidth={setSidebarWidth} />
 
       {/* Main Settings Content */}
       <View style={[styles.container, { marginLeft: sidebarWidth }]}>
-        <Text style={styles.heading}>Settings</Text>
+        <AppText style={styles.heading}>Settings</AppText>
 
-        <Text style={styles.label}>Volume</Text>
+        <AppText style={styles.label}>Volume</AppText>
         <View style={styles.volumeContainer}>
           {volume === 0 ? (
             <Ionicons
@@ -202,7 +205,7 @@ export default function SettingsScreen() {
           />
         </View>
 
-        <Text style={styles.label}>Alert Sound</Text>
+        <AppText style={styles.label}>Alert Sound</AppText>
         <View style={styles.pickerWrapper}>
           <Picker
             selectedValue={alertSound}
@@ -227,20 +230,21 @@ export default function SettingsScreen() {
             onPress={saveSettings}
             disabled={isSaving}
           >
-            <Text style={styles.saveButtonText}>
+            <AppText style={styles.saveButtonText}>
               {isSaving ? "Saving..." : isSaved ? "Saved" : "Save Settings"}
-            </Text>
+            </AppText>
           </TouchableOpacity>
         </View>
       </View>
     </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 10,
-    padding: 40,
+    paddingHorizontal: 40,
     backgroundColor: "#fff",
   },
   heading: {

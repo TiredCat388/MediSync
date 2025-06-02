@@ -1,12 +1,26 @@
 import { Slot } from 'expo-router';
-import { NotificationProvider, useNotification } from '../notifcontext';
-import GlobalNotification from './notification/globalnotif';  // Import GlobalNotification component
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useFonts } from 'expo-font';
+import { NotificationProvider } from '../notifcontext';
+import GlobalNotification from '../app/notification/globalnotif';
+import { Provider as PaperProvider } from 'react-native-paper'; // <-- Add this import
 
 export default function Layout() {
+  const [fontsLoaded] = useFonts({
+    AnekGujarati: require('../app/fonts/AnekGujarati.ttf'),
+    AGBold: require('../app/fonts/AnekGujarati-Bold.ttf'),
+  });
+
+  if (!fontsLoaded) return null;
+
   return (
-    <NotificationProvider>
-      <Slot />  
-      <GlobalNotification /> 
-    </NotificationProvider>
+    <PaperProvider>
+      <SafeAreaProvider>
+        <NotificationProvider>
+          <Slot />
+          <GlobalNotification />
+        </NotificationProvider>
+      </SafeAreaProvider>
+    </PaperProvider>
   );
 }

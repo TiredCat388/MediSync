@@ -6,7 +6,7 @@ const isTablet = width > 900;
 const styles = StyleSheet.create({
   sidebar: {
     height: '100%',
-    backgroundColor: "#e0e0e0",
+    backgroundColor: "#5879A5",
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     position: 'absolute',
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     paddingTop: 40, 
   },
   iconsContainer: {
-    width: 'auto',  
+    width: '100%',  
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     paddingTop: 30,
@@ -37,40 +37,37 @@ const styles = StyleSheet.create({
   },
   iconLabelContainer: {
     flexDirection: 'row',
+    color: '#f8f8f8',
     alignItems: 'center',
     marginBottom: 30,
-    paddingLeft: 20,
+    paddingLeft: 25,
   },
   iconLabel: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: 'white',
     opacity: 1,
+    fontWeight: 'bold',
+    color: "white",
     paddingLeft: 15,
     paddingRight: 15,
-  },
-  activeItem: {
-  backgroundColor: '#ffffff33', // translucent white
-  width: '100%',
-  padding: 10,
-  alignSelf: 'center',
   },
   logoContainer: {
     position: 'absolute',
     bottom: 10,
-    width: 'auto',
     alignItems: 'center', 
     flexDirection: 'row',
+    marginLeft: 15,
+    marginBottom: 15,
   },
   logo: {
-    width: 70,
-    height: 70,
+    width: 40,
+    height: 40,
   },
   logoText: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: 'white',
+    color: '#F8F8F8F',
     alignSelf: 'center', 
+    paddingLeft: 10,
   },
   overlay: {
     flex: 1,
@@ -78,10 +75,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "rgba(0,0,0,0.5)",
   },
+  overlayBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    zIndex: 998,
+  },
   modalContainer: {
     width: 300,
     padding: 20,
-    backgroundColor: "white",
+    backgroundColor: "#F8F8F8",
     borderRadius: 10,
   },
   modalTitle: {
@@ -113,7 +119,7 @@ const styles = StyleSheet.create({
   modalButtonText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "white",
+    color: "#F8F8F8",
   },
   subOptionContainer: {
     marginTop: -20,
@@ -129,13 +135,19 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   subOptionText: {
-    color: 'white',
+    color: "#F8F8F8",
     fontSize: 18,
     fontWeight: '600',
   },
+    activeItem: {
+    backgroundColor: "#00000033",
+    width: '100%',
+    padding: 10,
+    alignSelf: 'center',
+  },
   activesubItem: {
-  backgroundColor: '#FFFFFF33',
-  width: "100%",
+    backgroundColor: '#00000033',
+    width: "100%",
   },
 });
 
