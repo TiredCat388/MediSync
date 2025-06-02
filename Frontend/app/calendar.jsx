@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, FlatList, Modal, Button,ScrollView } from 'react-native';
+import { View, TouchableOpacity, FlatList, Modal, ScrollView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import Sidebar from './components/sidebar';
 import Constants from 'expo-constants';
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppText from './components/AppText';
+import styles from './stylesheets/calendarstyle';
+
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
@@ -23,9 +25,9 @@ export default function CalendarApp() {
 
   const [selectedDate, setSelectedDate] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [currentMonth, setCurrentMonth] = useState(currenMonth); // April (0-indexed)
-  const [currentYear, setCurrentYear] = useState(currenYear);
-  const [sidebarWidth, setSidebarWidth] = useState(70); // Default sidebar width when collapsed
+  const [currentMonth, setCurrentMonth] = useState(3); 
+  const [currentYear, setCurrentYear] = useState(2025);
+  const [sidebarWidth, setSidebarWidth] = useState(70);
   const [medicationData, setMedicationData] = useState({});
   const router = useRouter();
 
@@ -122,280 +124,136 @@ export default function CalendarApp() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-    <View style={{ flex: 1, flexDirection: "row" }}>
-      <Sidebar setSidebarWidth={setSidebarWidth} />
+      <View style={styles.container}>
+        <Sidebar setSidebarWidth={setSidebarWidth} />
+        <View style={[styles.content, { marginLeft: sidebarWidth }]}>
+          <AppText style={styles.headerText}>Calendar</AppText>
 
-      {/* Main Calendar Content */}
-      <ScrollView style={{ flex: 1, paddingHorizontal: 40, marginLeft: sidebarWidth }}>
-        <AppText style={{ fontSize: 30, fontWeight: 'bold' }}>
-          Calendar
-        </AppText>
-
-        <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginBottom: 1 }}>
-          {[
-            { label: "OID", color: "#F8F8F8" , borderWidth: 1, borderColor: "#333333"},
-            { label: "BID", color: "#FFDA07" },
-            { label: "TID", color: "#EFA2CB" },
-            { label: "QID", color: "#85D684" }, 
-          ].map((item, index) => (
-            <View key={index} style={{ flexDirection: "row", alignItems: "center", marginHorizontal: 6 }}>
-              <View
-                style={{
-                  width: 16,
-                  height: 16,
-                  borderRadius: 8,
-                  borderWidth: 1,
-                  backgroundColor: item.color,
-                  borderColor: "#808080",
-                  marginRight: 4,
-                  zIndex: 999,
-                }}
-              />
-              <AppText style={{ fontSize: 18, fontWeight: "600", color: "#333" }}>
-                {item.label}
-              </AppText>
-            </View>
-          ))}
-        </View>
-
-        {/* Calendar Section */}
-        <View
-          style={{
-            backgroundColor:"#5879A5",
-            borderRadius: 8,
-            borderWidth: 1,
-            borderColor: "#ccc",
-            padding: 8,
-            boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-            height: 630,
-          }}
-        >
-          {/* Calendar Header */}
-          <View
-            style={{
-              backgroundColor: "#5879A5",
-              borderTopLeftRadius: 8,
-              borderTopRightRadius: 8,
-              padding: 8,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <TouchableOpacity onPress={() => handleMonthChange(-1)}>
-              <Feather name="arrow-left-circle" size={30} color="white" />
-            </TouchableOpacity>
-            <AppText style={{ color: "white", fontSize: 16, fontWeight: "600" }}>
-              {months[currentMonth]} {currentYear}
-            </AppText>
-            <TouchableOpacity onPress={() => handleMonthChange(1)}>
-              <Feather name="arrow-right-circle" size={30} color="white" />
-            </TouchableOpacity>
-          </View>
-
-          {/* Days of the Week */}
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-around",
-              backgroundColor: "white",
-              padding: 4,
-              borderBottomWidth: 1,
-              borderColor: "#ccc",
-            }}
-          >
-            {daysOfWeek.map((day) => (
-              <AppText
-                key={day}
-                style={{
-                  flex: 1,
-                  textAlign: "center",
-                  fontWeight: "600",
-                  padding: 4,
-                }}
-              >
-                {day}
-              </AppText>
+          {/* Legend */}
+          <View style={styles.legendRow}>
+            {[
+              { label: "OID", color: "#F8F8F8", borderWidth: 1, borderColor: "#333333" },
+              { label: "BID", color: "#FFDA07" },
+              { label: "TID", color: "#EFA2CB" },
+              { label: "QID", color: "#85D684" },
+            ].map((item, index) => (
+              <View key={index} style={styles.legendItem}>
+                <View
+                  style={[
+                    styles.legendCircle,
+                    { backgroundColor: item.color, borderWidth: item.borderWidth || 1, borderColor: item.borderColor || "#808080" }
+                  ]}
+                />
+                <AppText style={styles.legendLabel}>{item.label}</AppText>
+              </View>
             ))}
           </View>
 
-          {/* Calendar Grid */}
-          <FlatList
-            data={dates}
-            numColumns={7}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => {
-              const dateKey = item
-                ? `${currentYear}-${String(currentMonth + 1).padStart(
-                    2,
-                    "0"
-                  )}-${String(item).padStart(2, "0")}`
-                : null;
-
-              const medications =
-                dateKey && medicationData[dateKey]
-                  ? medicationData[dateKey]
-                  : [];
-
-              return (
-                <TouchableOpacity
-                  style={{
-                    flex: 1,
-                    aspectRatio: 1,
-                    borderWidth: 0.5,
-                    borderColor: "#ccc",
-                    alignItems: "center",
-                    justifyContent: "flex-start",
-                    backgroundColor: item ? "white" : "#e0e0e0",
-                    padding: 4,
-                  }}
-                  onPress={() => item && handleDatePress(dateKey)}
-                  disabled={!item}
-                >
-                  {item && (
-                    <>
-                      <AppText style={{ fontSize: 16, marginBottom: 2 }}>
-                        {item}
-                      </AppText>
-                      <View
-                        style={{
-                          width: "100%",
-                          alignItems: "center",
-                          marginTop: 2,
-                        }}
-                      >
-                        {medications.slice(0, 3).map((med, index) => (
-                          <View
-                            key={index}
-                            style={{
-                              backgroundColor: getFrequencyColor(
-                                med.frequencyType
-                              ), // <-- Use the color
-                              paddingHorizontal: 7,
-                              paddingVertical: 7,
-                              borderRadius: 3,
-                              marginVertical: 1,
-                              width: "100%",
-                            }}
-                          >
-                            <Text
-                              style={{
-                                fontSize: 12,
-                                textAlign: "flex-start",
-                                color: "#000",
-                                fontWeight: "bold",
-                              }}
-                              numberOfLines={1}
-                            >
-                              <AppText
-                                style={{
-                                  fontSize: 12,
-                                  textAlign: "flex-start",
-                                  color: "#000",
-                                  fontWeight: "bold",
-                                }}
-                                numberOfLines={1}
-                              >
-                                {med.name} at {med.time} (Patient:{" "}
-                                {med.patientName}, Schedule ID: {med.scheduleId}
-                                )
-                              </AppText>
-                            </View>
-                          )
-                        )}
-                        {medications.length > 3 && (
-                          <AppText style={{ fontSize: 14, color: "#5879A5" }}>
-                            +{medications.length - 3} more
-                          </AppText>
-                        )}
-                      </View>
-                    </>
-                  )}
-                </TouchableOpacity>
-              );
-            }}
-          />
-        </View>
-
-        {/* Date Details Modal */}
-        <Modal visible={modalVisible} transparent={true} animationType="fade">
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: "rgba(0,0,0,0.5)",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <View
-              style={{
-                width: 500,
-                height: 500,
-                padding: 20,
-                backgroundColor: "white",
-                borderRadius: 10,
-              }}
-            >
-              <AppText style={{ fontSize: 20, fontWeight: "bold" }}>
-                Details for {selectedDate}
+          {/* Calendar Section */}
+          <View style={styles.calendarSection}>
+            {/* Calendar Header */}
+            <View style={styles.calendarHeader}>
+              <TouchableOpacity onPress={() => handleMonthChange(-1)}>
+                <Feather name="arrow-left-circle" size={30} color="white" />
+              </TouchableOpacity>
+              <AppText style={styles.calendarHeaderText}>
+                {months[currentMonth]} {currentYear}
               </AppText>
-
-              <ScrollView style={{ marginVertical: 10 }}>
-                {medicationData[selectedDate] ? (
-                  medicationData[selectedDate].map((med, index) => (
-                    <TouchableOpacity
-                      key={index}
-                      style={{
-                        backgroundColor: getFrequencyColor(
-                                med.frequencyType
-                              ), 
-                        padding: 10,
-                        borderRadius: 5,
-                        marginVertical: 5,
-                        paddingHorizontal: 10,
-                        paddingVertical: 10,
-                      }}
-                      onPress={() => {
-                        router.push(
-                          `/viewmed?schedule_id=${med.scheduleId}&patient_number=${med.patientId}`
-                        );
-                      }}
-                    >
-                      <AppText
-                        style={{
-                          fontSize: 13,
-                          textAlign: "flex-start",
-                          color: "#000",
-                          fontWeight: "bold",
-                        }}
-                        numberOfLines={1}
-                      >
-                        {med.name} at {med.time} (Patient:{" "}
-                        {med.patientName}, Schedule ID: {med.scheduleId})
-                      </AppText>
-                    </TouchableOpacity>
-                  ))
-                ) : (
-                  <AppText>No medications for this day.</AppText>
-                )}
-              </ScrollView>
-
-              <TouchableOpacity
-                onPress={() => setModalVisible(false)}
-                style={{
-                  backgroundColor: '#ff0000',
-                  paddingVertical: 10,
-                  borderRadius: 5,
-                  alignItems: 'center',
-                }}
-              >
-                <AppText style={{ color: 'white', fontWeight:'bold', fontSize: 16 }}>Close</AppText>
+              <TouchableOpacity onPress={() => handleMonthChange(1)}>
+                <Feather name="arrow-right-circle" size={30} color="white" />
               </TouchableOpacity>
             </View>
+            {/* Days of the Week */}
+            <View style={styles.daysOfWeekRow}>
+              {daysOfWeek.map((day) => (
+                <AppText key={day} style={styles.dayOfWeek}>
+                  {day}
+                </AppText>
+              ))}
+            </View>
+            {/* Calendar Grid */}
+            <FlatList
+              data={dates}
+              numColumns={7}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) => {
+                const dateKey = item
+                  ? `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(item).padStart(2, "0")}`
+                  : null;
+                const medications = dateKey && medicationData[dateKey] ? medicationData[dateKey] : [];
+                return (
+                  <TouchableOpacity
+                    style={[
+                      styles.calendarCell,
+                      !item && styles.calendarCellDisabled,
+                    ]}
+                    onPress={() => item && handleDatePress(dateKey)}
+                    disabled={!item}
+                  >
+                    {item && (
+                      <>
+                        <AppText style={styles.calendarCellDate}>{item}</AppText>
+                        <View style={styles.calendarCellMedList}>
+                          {medications.slice(0, 3).map((med, index) => (
+                            <View key={index} style={styles.calendarCellMed}>
+                              <AppText style={styles.calendarCellMedText} numberOfLines={1}>
+                                {med.name} at {med.time} (Patient: {med.patientName}, Schedule ID: {med.scheduleId})
+                              </AppText>
+                            </View>
+                          ))}
+                          {medications.length > 3 && (
+                            <AppText style={styles.calendarCellMore}>
+                              +{medications.length - 3} more
+                            </AppText>
+                          )}
+                        </View>
+                      </>
+                    )}
+                  </TouchableOpacity>
+                );
+              }}
+            />
           </View>
-        </Modal>
-      </ScrollView>
-    </View>
+
+          {/* Date Details Modal */}
+          <Modal visible={modalVisible} transparent={true} animationType="fade">
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContainer}>
+                <AppText style={styles.modalTitle}>
+                  Details for {selectedDate}
+                </AppText>
+                <ScrollView style={styles.modalScroll}>
+                  {medicationData[selectedDate] ? (
+                    medicationData[selectedDate].map((med, index) => (
+                      <TouchableOpacity
+                        key={index}
+                        style={styles.modalMed}
+                        onPress={() => {
+                          router.push(
+                            `/viewmed?schedule_id=${med.scheduleId}&patient_number=${med.patientId}`
+                          );
+                        }}
+                      >
+                        <AppText style={styles.modalMedText} numberOfLines={1}>
+                          {med.name} at {med.time} (Patient: {med.patientName}, Schedule ID: {med.scheduleId})
+                        </AppText>
+                      </TouchableOpacity>
+                    ))
+                  ) : (
+                    <AppText>No medications for this day.</AppText>
+                  )}
+                </ScrollView>
+                <TouchableOpacity
+                  onPress={() => setModalVisible(false)}
+                  style={styles.modalCloseButton}
+                >
+                  <AppText style={styles.modalCloseButtonText}>Close</AppText>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+        </View>
+      </View>
     </SafeAreaView>
   );
 }

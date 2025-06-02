@@ -7,6 +7,7 @@ const logoSize = circleSize * 0.8;
 
 const styles = StyleSheet.create({
   container: {
+    height: '100%',
     flex: 1,
     backgroundColor: "#F8F8F8",
     position: "relative",

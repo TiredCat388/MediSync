@@ -1,10 +1,9 @@
 import {
   View,
-  Text,
   TouchableOpacity,
   FlatList,
   TextInput,
-  ScrollView, // Import ScrollView
+  ScrollView,
 } from "react-native";
 import { useRouter } from "expo-router";
 import Sidebar from "./components/sidebar";
@@ -13,6 +12,7 @@ import { Menu, Divider, Provider } from "react-native-paper";
 import Constants from 'expo-constants';
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppText from './components/AppText';
+import styles from './stylesheets/archivestyle';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
@@ -73,234 +73,125 @@ export default function PatientsDirectory() {
   }
 
   return (
-  <SafeAreaView style={{ flex: 1 }}>
-    <Provider>
-      <View
-        style={{ flex: 1, flexDirection: "row", backgroundColor: "#f8f8f8" }}
-      >
-        <Sidebar onNavigate={(destination) => router.push(destination)} />
-        <View style={{ flex: 1, marginLeft: 70, padding: 40 }}>
-          {/* Header and Button Row */}
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <AppText style={{ fontSize: 30, fontWeight: "bold"}}>
-              Archive History
-            </AppText>
-          </View>
-
-          {/* Search + Sort */}
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              marginTop: 20,
-            }}
-          >
-            <TextInput
-              style={{
-                flex: 1,
-                height: 45,
-                borderColor: "#000",
-                borderWidth: 1,
-                borderRadius: 10,
-                paddingHorizontal: 14,
-                marginRight: 12,
-                backgroundColor: "#fff",
-                fontSize: 16,
-                boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.1)",
-                elevation: 2,
-              }}
-              placeholder="Search by name or patient number or date"
-              placeholderTextColor="#666"
-              value={searchText}
-              onChangeText={setSearchText}
-            />
-            <TouchableOpacity
-              onPress={() => setSortAscending(!sortAscending)}
-              style={{
-                backgroundColor: "#5c87b2",
-                paddingVertical: 10,
-                paddingHorizontal: 16,
-                borderRadius: 10,
-                boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.1)",
-                elevation: 2,
-              }}
-            >
-              <AppText style={{ fontSize: 16, color: "#fff", fontWeight: "600" }}>
-                Sort {sortAscending ? "↑" : "↓"}
+    <SafeAreaView style={{ flex: 1 }}>
+      <Provider>
+        <View style={styles.container}>
+          <Sidebar onNavigate={(destination) => router.push(destination)} />
+          <View style={styles.content}>
+            {/* Header and Button Row */}
+            <View style={styles.headerRow}>
+              <AppText style={styles.headerText}>
+                Archive History
               </AppText>
-            </TouchableOpacity>
-          </View>
-
-          {/* Table with ScrollView */}
-          <View
-            style={{
-              marginTop: 20,
-              backgroundColor: "white",
-              borderRadius: 15,
-              borderWidth: 1,
-              borderColor: "black",
-              overflow: "hidden",
-              maxHeight: 560, // Added maxHeight for table scroll
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.25,
-              shadowRadius: 8,
-              elevation: 8,
-            }}
-          >
-            {/* Table Header */}
-            <View
-              style={{
-                flexDirection: "row",
-                backgroundColor: "white",
-                paddingVertical: 10,
-                borderBottomWidth: 1,
-                borderColor: "black",
-              }}
-            >
-              <View
-                style={{
-                  flex: 1,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <AppText style={{ fontSize: 20, fontWeight: "bold" }}>
-                  Patient ID
-                </AppText>
-              </View>
-              <View
-                style={{
-                  flex: 2,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <AppText style={{ fontSize: 20, fontWeight: "bold" }}>
-                  Patient Name
-                </AppText>
-              </View>
-              <View
-                style={{
-                  flex: 2,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <AppText style={{ fontSize: 20, fontWeight: "bold" }}>
-                  Archived Date
-                </AppText>
-              </View>
-              <View style={{ width: 50 }} />{" "}
-              {/* Empty view for the removed button space */}
             </View>
 
-            {/* ScrollView for Table Rows */}
-            <ScrollView>
-              <FlatList
-                data={displayedPatients}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item, index }) => (
-                  <TouchableOpacity
-                    disabled={!item.patient_number}
-                    onPress={() => {
-                      if (item.patient_number) {
-                        router.push(
-                          `/history?patient_number=${item.patient_number}`
-                        );
-                      }
-                    }}
-                    style={{
-                      flexDirection: "row",
-                      backgroundColor: item.patient_number
-                        ? "white"
-                        : "lightgrey",
-                      borderBottomWidth: 1,
-                      borderColor: "black",
-                      minHeight: 35,
-                    }}
-                  >
-                    {/* Patient ID */}
-                    <View
-                      style={{
-                        flex: 1,
-                        alignItems: "center",
-                        justifyContent: "center",
-                        borderRightWidth: 1,
-                        borderColor: "black",
-                        paddingHorizontal: 5,
-                      }}
-                    >
-                      <AppText style={{ fontSize: 15 }}>
-                        {item.patient_number || ""}
-                      </AppText>
-                    </View>
-
-                    {/* Patient Name */}
-                    <View
-                      style={{
-                        flex: 2,
-                        alignItems: "center",
-                        justifyContent: "center",
-                        borderRightWidth: 1,
-                        borderColor: "black",
-                        paddingHorizontal: 5,
-                      }}
-                    >
-                      <AppText style={{ fontSize: 15, textAlign: "center" }}>
-                        {item.first_name && item.last_name
-                          ? formatName(
-                              item.first_name,
-                              item.middle_name,
-                              item.last_name
-                            )
-                          : ""}
-                      </AppText>
-                    </View>
-
-                    {/* Archived Date */}
-                    <View
-                      style={{
-                        flex: 2,
-                        alignItems: "center",
-                        justifyContent: "center",
-                        borderColor: "black",
-                        paddingHorizontal: 5,
-                      }}
-                    >
-                      <AppText style={{ fontSize: 15 }}>
-                        {item.date_archived
-                          ? new Date(item.date_archived).toLocaleString(
-                              "en-PH",
-                              {
-                                timeZone: "Asia/Manila",
-                              }
-                            )
-                          : ""}
-                      </AppText>
-                    </View>
-
-                    <View
-                      style={{
-                        width: 50,
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    />
-                  </TouchableOpacity>
-                )}
+            {/* Search + Sort */}
+            <View style={styles.searchSortContainer}>
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Search by name or patient number or date"
+                placeholderTextColor="#666"
+                value={searchText}
+                onChangeText={setSearchText}
               />
-            </ScrollView>
+              <TouchableOpacity
+                onPress={() => setSortAscending(!sortAscending)}
+                style={styles.sortButton}
+              >
+                <AppText style={styles.sortButtonText}>
+                  Sort {sortAscending ? "↑" : "↓"}
+                </AppText>
+              </TouchableOpacity>
+            </View>
+
+            {/* Table with ScrollView */}
+            <View style={styles.table}>
+              {/* Table Header */}
+              <View style={styles.tableHeader}>
+                <View style={styles.tableHeaderCellID}>
+                  <AppText style={{ fontSize: 20, fontWeight: "bold" }}>
+                    Patient ID
+                  </AppText>
+                </View>
+                <View style={styles.tableHeaderCellName}>
+                  <AppText style={{ fontSize: 20, fontWeight: "bold" }}>
+                    Patient Name
+                  </AppText>
+                </View>
+                <View style={styles.tableHeaderCellDate}>
+                  <AppText style={{ fontSize: 20, fontWeight: "bold" }}>
+                    Archived Date
+                  </AppText>
+                </View>
+                <View style={styles.tableHeaderCellEmpty} />
+              </View>
+              {/* ScrollView for Table Rows */}
+              <ScrollView>
+                <FlatList
+                  data={displayedPatients}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item, index }) => (
+                    <TouchableOpacity
+                      disabled={!item.patient_number}
+                      onPress={() => {
+                        if (item.patient_number) {
+                          router.push(
+                            `/history?patient_number=${item.patient_number}`
+                          );
+                        }
+                      }}
+                      style={[
+                        styles.row,
+                        {
+                          backgroundColor: item.patient_number
+                            ? "white"
+                            : "lightgrey",
+                        },
+                      ]}
+                    >
+                      {/* Patient ID */}
+                      <View style={styles.rowCellID}>
+                        <AppText style={styles.rowText}>
+                          {item.patient_number || ""}
+                        </AppText>
+                      </View>
+
+                      {/* Patient Name */}
+                      <View style={styles.rowCellName}>
+                        <AppText style={styles.rowTextCentered}>
+                          {item.first_name && item.last_name
+                            ? formatName(
+                                item.first_name,
+                                item.middle_name,
+                                item.last_name
+                              )
+                            : ""}
+                        </AppText>
+                      </View>
+
+                      {/* Archived Date */}
+                      <View style={styles.rowCellDate}>
+                        <AppText style={styles.rowText}>
+                          {item.date_archived
+                            ? new Date(item.date_archived).toLocaleString(
+                                "en-PH",
+                                {
+                                  timeZone: "Asia/Manila",
+                                }
+                              )
+                            : ""}
+                        </AppText>
+                      </View>
+
+                      <View style={styles.rowCellEmpty} />
+                    </TouchableOpacity>
+                  )}
+                />
+              </ScrollView>
+            </View>
           </View>
         </View>
-      </View>
-    </Provider>
+      </Provider>
     </SafeAreaView>
   );
 }

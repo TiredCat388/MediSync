@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     paddingTop: 40, 
   },
   iconsContainer: {
-    width: 'auto',  
+    width: '100%',  
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     paddingTop: 30,
@@ -49,12 +49,6 @@ const styles = StyleSheet.create({
     color: "white",
     paddingLeft: 15,
     paddingRight: 15,
-  },
-  activeItem: {
-    backgroundColor: "#00000033",
-    width: '100%',
-    padding: 10,
-    alignSelf: 'center',
   },
   logoContainer: {
     position: 'absolute',
@@ -144,9 +138,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
   },
+    activeItem: {
+    backgroundColor: "#00000033",
+    width: '100%',
+    padding: 10,
+    alignSelf: 'center',
+  },
   activesubItem: {
-  backgroundColor: '#00000033',
-  width: "100%",
+    backgroundColor: '#00000033',
+    width: "100%",
   },
 });
 

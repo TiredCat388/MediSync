@@ -1,16 +1,14 @@
 import {
   View,
-  Text,
   TouchableOpacity,
   FlatList,
   TextInput,
-  ScrollView,
   Dimensions,
 } from "react-native";
 import { useRouter } from "expo-router";
 import Sidebar from "./components/sidebar";
 import { useState, useEffect } from "react";
-import { Menu, Divider, Provider } from "react-native-paper";
+import { Provider } from "react-native-paper";
 import styles from "./stylesheets/directorystyles";
 import Constants from 'expo-constants';
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -92,13 +90,14 @@ export default function PatientsDirectory() {
         <View style={styles.content}>
           <View style={styles.header}>
             <AppText style={[ styles.headerText ]}>Patients Directory</AppText>
+          </View>
+
             <TouchableOpacity
               onPress={() => router.push("/registernew")}
               style={styles.newPatientButton}
             >
               <AppText style={styles.newPatientButtonText}>+ New Patient</AppText>
             </TouchableOpacity>
-          </View>
 
           <View style={styles.searchSortContainer}>
             <TextInput
@@ -119,7 +118,7 @@ export default function PatientsDirectory() {
           </View>
 
           {/* Table with ScrollView */}
-          <View style={[styles.table, { height: TABLE_HEIGHT }]}>
+          <View style={[styles.table]}>
             <View style={styles.tableHeader}>
               <View style={[styles.tableHeaderCellID]}>
                 <AppText style={styles.tableHeaderText}>Patient ID</AppText>
