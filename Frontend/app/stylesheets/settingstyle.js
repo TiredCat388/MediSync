@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 
 const styles = StyleSheet.create({
 container: {
@@ -44,19 +44,22 @@ slider: {
     backgroundColor: "e0e0e0",
 },
 pickerWrapper: {
-    width: "100%",
+    width: Platform.OS === "ios" ? "100%" : 220,
     borderWidth: 2,
-    borderColor: "#5879A5",
+    borderColor: "#808080",
     borderRadius: 12,
-    overflow: "hidden",
+    ...Platform.select({
+      ios: { overflow: "hidden" },
+      android: {},
+    }),
 },
-    picker: {
+picker: {
     height: 50,
     fontSize: 16,
     paddingLeft: 15,
     borderWidth: 0,
     width: "100%",
-    color: "#000",
+    color: "#808080",
 },
 trackBackground: {
     height: 25,

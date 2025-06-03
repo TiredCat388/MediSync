@@ -37,7 +37,6 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderColor: "#F8F8F8",
     marginRight: 4,
-    zIndex: 999,
   },
   legendLabel: {
     fontSize: 18,

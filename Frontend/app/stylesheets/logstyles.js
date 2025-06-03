@@ -114,7 +114,7 @@ closeButton: {
   paddingHorizontal: 20,
   borderRadius: 5,
   alignSelf: "flex-end",
-  width: "30%",
+  width: "20%",
   alignItems: "center",
 },
 closeButtonText: {

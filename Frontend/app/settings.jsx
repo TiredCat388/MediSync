@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Modal } from "react-native";
 import Slider from "@react-native-community/slider";
 import Sidebar from "./components/sidebar";
-import { Picker } from "@react-native-picker/picker";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Audio } from "expo-av";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppText from './components/AppText';
 import styles from "./stylesheets/settingstyle";
+import RNPickerSelect from "react-native-picker-select";
 
 export default function SettingsScreen() {
   const [volume, setVolume] = useState(50);
-  const [alertSound, setAlertSound] = useState("default");
+  const [alertSound, setAlertSound] = useState("alarm 1");
   const [sidebarWidth, setSidebarWidth] = useState(70);
   const [isSaving, setIsSaving] = useState(false); // For showing loading state
   const [isSaved, setIsSaved] = useState(false); // To track if settings are saved
@@ -211,8 +211,8 @@ export default function SettingsScreen() {
                   minimumValue={0}
                   maximumValue={100}
                   value={volume}
-                  onValueChange={(value) => setVolume(value)} // update UI only
-                  onSlidingComplete={handleVolumeRelease}     // play sound here
+                  onValueChange={(value) => setVolume(value)} 
+                  onSlidingComplete={handleVolumeRelease}   
                   minimumTrackTintColor="#5879A5"
                   maximumTrackTintColor="#e0e0e0"
                   thumbTintColor="#5879A5"
@@ -227,20 +227,29 @@ export default function SettingsScreen() {
             />
           </View>
 
-          <AppText style={styles.label}>Alert Sound</AppText>
-          <View style={styles.pickerWrapper}>
-            <Picker
-              selectedValue={alertSound}
-              onValueChange={handleAlertSoundChange}
-              style={styles.picker}
-              dropdownIconColor="#5879A5"
-            >
-              <Picker.Item label="Alarm 1" value="alarm 1" />
-              <Picker.Item label="Alarm 2" value="alarm 2" />
-              <Picker.Item label="Alarm 3" value="alarm 3" />
-              <Picker.Item label="Alarm 4" value="alarm 4" />
-            </Picker>
-          </View>
+        <AppText style={styles.label}>Alert Sound</AppText>
+        <View style={styles.pickerWrapper}>
+          <RNPickerSelect
+            onValueChange={handleAlertSoundChange}
+            value={alertSound}
+            items={[
+              { label: "Alarm 1", value: "alarm 1" },
+              { label: "Alarm 2", value: "alarm 2" },
+              { label: "Alarm 3", value: "alarm 3" },
+              { label: "Alarm 4", value: "alarm 4" },
+            ]}
+            placeholder={{ label: "Default", value: "" }}
+            style={{
+              inputIOS: styles.picker,
+              inputAndroid: styles.picker,
+              placeholder: { color: "#808080" },
+            }}
+            Icon={() => (
+              <Ionicons name="chevron-down" size={24} color="#808080" style={{ top: 12, right: 10 }} />
+            )}
+            useNativeAndroidPickerStyle={false}
+          />
+        </View>
 
           {/* Save Button */}
           <View style={styles.saveButtonWrapper}>

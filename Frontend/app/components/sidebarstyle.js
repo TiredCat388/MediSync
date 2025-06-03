@@ -6,6 +6,7 @@ const isTablet = width > 900;
 const styles = StyleSheet.create({
   sidebar: {
     height: '100%',
+    paddingVertical: 10,
     backgroundColor: "#5879A5",
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
@@ -32,15 +33,14 @@ const styles = StyleSheet.create({
     width: '100%',  
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    paddingTop: 30,
     flexDirection: 'column',
   },
   iconLabelContainer: {
+    paddingVertical: 15,
+    paddingLeft: 25,
     flexDirection: 'row',
     color: '#f8f8f8',
     alignItems: 'center',
-    marginBottom: 30,
-    paddingLeft: 25,
   },
   iconLabel: {
     fontSize: 18,
@@ -48,15 +48,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: "white",
     paddingLeft: 15,
-    paddingRight: 15,
   },
   logoContainer: {
     position: 'absolute',
-    bottom: 10,
+    bottom: 5,
     alignItems: 'center', 
     flexDirection: 'row',
     marginLeft: 15,
-    marginBottom: 15,
   },
   logo: {
     width: 40,
@@ -67,7 +65,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#F8F8F8F',
     alignSelf: 'center', 
-    paddingLeft: 10,
+    paddingLeft: 15,
   },
   overlay: {
     flex: 1,
@@ -122,29 +120,21 @@ const styles = StyleSheet.create({
     color: "#F8F8F8",
   },
   subOptionContainer: {
-    marginTop: -20,
-    marginLeft: 20,
     marginBottom: 10,
-    width: "100%",
   },
   subOption: {
-    paddingVertical: 8,
+    paddingVertical: 10,
     marginBottom: 5,
-    paddingLeft: 15,
-    paddingRight: 70,
-    width: '100%',
+    paddingHorizontal: 45,
   },
   subOptionText: {
     color: "#F8F8F8",
     fontSize: 18,
     fontWeight: '600',
   },
-    activeItem: {
+  activeItem: {
     backgroundColor: "#00000033",
-    width: '100%',
-    padding: 10,
-    alignSelf: 'center',
-  },
+    },
   activesubItem: {
     backgroundColor: '#00000033',
     width: "100%",
