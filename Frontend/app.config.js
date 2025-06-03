@@ -29,6 +29,7 @@ module.exports = {
       favicon: "./assets/images/medisync.png",
     },
     plugins: [
+      "expo-audio",
       "expo-router",
       "expo-font",
       [
