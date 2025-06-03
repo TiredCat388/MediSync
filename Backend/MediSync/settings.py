@@ -1,8 +1,12 @@
 from pathlib import Path
 from decouple import config, Csv
 import dj_database_url
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
@@ -118,3 +122,9 @@ CORS_ALLOW_CREDENTIALS = True
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+if os.getenv('RAILWAY_ENVIRONMENT'):
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get("DATABASE_URL"), conn_max_age=600)
+    }
