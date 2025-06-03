@@ -741,24 +741,24 @@ export default function RegisterNewPatient() {
                   setFormData({ ...formData, emergencyPhone: text })
                 }
               />
-
-              <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              onPress={() => handleNavigate("/directory")}
-              style={[styles.button, styles.leaveButton]}
-            >
-              <AppText style={styles.buttonText}>Cancel</AppText>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={handleRegister}
-              style={[styles.button, styles.stayButton]}
-            >
-              <AppText style={styles.buttonText}>Register Patient</AppText>
-            </TouchableOpacity>
-          </View>
-        </View>
-        
             </View>
+            </View>
+
+                <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                onPress={() => handleNavigate("/directory")}
+                style={[styles.button, styles.leaveButton]}
+              >
+              <AppText style={styles.buttonText}>Cancel</AppText>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleRegister}
+                style={[styles.button, styles.stayButton]}
+              >
+                <AppText style={styles.buttonText}>Register Patient</AppText>
+              </TouchableOpacity>
+            </View>
+
           </View>
 
         {/* Cancel Confirmation Modal */}
