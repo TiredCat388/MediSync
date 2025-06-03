@@ -101,8 +101,6 @@ export default function NewMedSched() {
           AsyncStorage.getItem("userId"),
         ]);
 
-        console.log("Retrieved from storage - Role:", role, "User ID:", userId);
-
         if (role !== "physician") {
           setAccessDeniedMessage(
             "Access denied: Only physicians can add medication."
@@ -273,11 +271,6 @@ export default function NewMedSched() {
           minutes: parseInt(formData.frequencyMinute || "0", 10),
         }),
       };
-
-      console.log(
-        "🧾 Request data being sent to backend:",
-        JSON.stringify(requestData, null, 2)
-      );
 
       const response = await fetch(`${BASE_API}/api/medications/`, {
         method: "POST",

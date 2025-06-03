@@ -48,7 +48,6 @@ export default function SettingsScreen() {
       await AsyncStorage.setItem("volume", JSON.stringify(volume));
       await AsyncStorage.setItem("alertSound", alertSound);
       setIsSaved(true);
-      console.log("Settings saved!");
     } catch (error) {
       console.error("Error saving settings:", error);
     } finally {

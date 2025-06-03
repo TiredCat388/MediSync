@@ -139,7 +139,6 @@ export default function PatientDetails() {
       );
 
       if (response.ok) {
-        console.log("Deleted successfully");
         fetchMedications();
       } else {
         console.error("Failed to delete medication");

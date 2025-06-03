@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
   autocompleteContainer: {
     flex: 1,
     zIndex: 10,
-    width: 415,
+    width: 420,
     marginBottom: 10,
   },
 });

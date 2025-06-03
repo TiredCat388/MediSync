@@ -113,9 +113,7 @@ const AnalogClock = () => {
 
 
         const medsData = await medsResponse.json();
-        // console.log("Fetched medications:", medsData);
         const patientsData = await patientsResponse.json();
-        // console.log("Fetched patients:", patientsData);
 
         // Index patients by patientID for fast lookup
         const patientMap = {};
@@ -134,7 +132,6 @@ const AnalogClock = () => {
             room_number: patient.room_number || "N/A",
           };
         });
-        // console.log("Enriched alerts:", enrichedAlerts);
 
         setUpcomingAlerts(enrichedAlerts);
       } catch (error) {
@@ -234,7 +231,6 @@ const AnalogClock = () => {
       upcomingRef.current.forEach((alert) => {
         const alertDate = new Date(alert.next_dose_time);
         const diffMs = alertDate - now;
-        console.log(diffMs);
 
         if (diffMs < 0) {
           // Already due → Pending
