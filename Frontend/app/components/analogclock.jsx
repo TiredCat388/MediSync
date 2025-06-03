@@ -82,6 +82,10 @@ export default function AnalogClock({ size = 350, style }) {
       <Text style={{ textAlign: "center", marginTop: 10, fontSize: 30, fontWeight: "bold" }}>
         {time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false })}
       </Text>
+      <Text style={{ textAlign: "center", fontSize: 18, color: "#333" }}>
+        {time.getFullYear()}-{String(time.getMonth() + 1).padStart(2, '0')}-{String(time.getDate()).padStart(2, '0')}
+      </Text>
+
     </View>
   );
 }

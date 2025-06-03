@@ -215,7 +215,7 @@ export default function UpdatePatientScreen() {
             emergencyPhone: data.emergency_contact?.contact_number || "",
             chiefComplaint: data.chief_complaint || "",
             admittingDiagnosis: data.admitting_diagnosis || "",
-            finalDiagnosis: data.final_diagnosis || "",
+            finalDiagnosis: data.Final_diagnosis || "",
           });
         } else {
           const errorData = await response.json();
@@ -287,7 +287,7 @@ export default function UpdatePatientScreen() {
             },
             chief_complaint: formData.chiefComplaint,
             admitting_diagnosis: formData.admittingDiagnosis,
-            final_diagnosis: formData.finalDiagnosis,
+            Final_diagnosis: formData.finalDiagnosis,
           }),
         }
       );

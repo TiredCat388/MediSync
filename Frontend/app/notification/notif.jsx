@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { TouchableWithoutFeedback, View, Text, StyleSheet, Dimensions, Pressable } from "react-native";
+import AppText from '../components/AppText';
+import { router } from 'expo-router';
 import { useNavigation } from "@react-navigation/native";
 import Animated, { 
   useAnimatedStyle, 
@@ -54,21 +56,24 @@ export default function NotificationToast({ data, visible, onHide, isMultiple })
             <View style={styles.row}>
               <View style={styles.col}>
                 <AppText style={styles.label}>Patient:</AppText>
-                <AppText style={styles.text}>{data.patient}</AppText>
+                <AppText style={styles.text}>{data.patient_name}</AppText>
 
                 <AppText style={styles.label}>Medication:</AppText>
-                <AppText style={styles.text}>{data.medication}</AppText>
+                <AppText style={styles.text}>{data.medication} - {data.dosage} {data.dosage_unit} - {data.form}</AppText>
 
-                <AppText style={styles.label}>Dosage:</AppText>
-                <AppText style={styles.text}>{data.dosage}</AppText>
+                <AppText style={styles.label}>Route:</AppText>
+                <AppText style={styles.text}>{data.route}</AppText>
+
+                <AppText style={styles.label}>Physician ID:</AppText>
+                <AppText style={styles.text}>{data.physician}</AppText>
               </View>
 
               <View style={styles.col}>
                 <AppText style={styles.label}>Room No:</AppText>
                 <AppText style={styles.text}>{data.room}</AppText>
 
-                <AppText style={styles.label}>Quantity:</AppText>
-                <AppText style={styles.text}>{data.quantity}</AppText>
+                <AppText style={styles.label}>Adminster on:</AppText>
+                <AppText style={styles.text}>{data.dosage_time}</AppText>
 
                 <AppText style={styles.label}>Notes:</AppText>
                 <AppText style={styles.text}>{data.notes}</AppText>
@@ -79,7 +84,7 @@ export default function NotificationToast({ data, visible, onHide, isMultiple })
               <Pressable
                 style={styles.confirmButton}
                 onPress={() => {
-                  navigation.navigate("clock");
+                  router.push('/clock');
                   handleHide(); 
                 }}
               >
@@ -95,7 +100,7 @@ export default function NotificationToast({ data, visible, onHide, isMultiple })
               <Pressable
                 style={styles.confirmButton}
                 onPress={() => {
-                  navigation.navigate("clock");
+                  router.push('/clock');
                   handleHide();  // Hide and minimize after navigating
                 }}
               >

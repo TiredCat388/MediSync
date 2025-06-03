@@ -68,6 +68,7 @@ class Patients(models.Model):
     )
     Final_diagnosis = models.TextField(
         blank=True,
+        default='',
         help_text='Patient\'s final diagnosis'
     )
     contact_number = models.CharField(max_length=20, blank=False)

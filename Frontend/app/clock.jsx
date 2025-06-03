@@ -113,28 +113,28 @@ const AnalogClock = () => {
 
 
         const medsData = await medsResponse.json();
-        console.log("Fetched medications:", medsData);
+        // console.log("Fetched medications:", medsData);
         const patientsData = await patientsResponse.json();
-        console.log("Fetched patients:", patientsData);
+        // console.log("Fetched patients:", patientsData);
 
         // Index patients by patientID for fast lookup
         const patientMap = {};
         patientsData.forEach((p) => {
-          patientMap[p.patientID] = p;
+          patientMap[p.patient_number] = p;
         });
 
         // Combine the medication and patient data
         const enrichedAlerts = medsData.map((med) => {
-          const patient = patientMap[med.patientID] || {};
+          const patient = patientMap[med.patient_number] || {};
           return {
             ...med,
             patient_first_name: patient.first_name || "",
             patient_middle_name: patient.middle_name || "",
             patient_last_name: patient.last_name || "",
-            room_number: patient.room_number || "",
+            room_number: patient.room_number || "N/A",
           };
         });
-        console.log("Enriched alerts:", enrichedAlerts);
+        // console.log("Enriched alerts:", enrichedAlerts);
 
         setUpcomingAlerts(enrichedAlerts);
       } catch (error) {
@@ -232,25 +232,25 @@ const AnalogClock = () => {
       const newlyPending = [];
 
       upcomingRef.current.forEach((alert) => {
-        const [alertHour, alertMinute] =
-          alert.Medication_Time.split(":").map(Number);
-        const alertDate = new Date();
-        alertDate.setHours(alertHour, alertMinute, 0, 0);
+        const alertDate = new Date(alert.next_dose_time);
+        const diffMs = alertDate - now;
+        console.log(diffMs);
 
-        const diffInMinutes = (now - alertDate) / (1000 * 60);
-
-        if (diffInMinutes > 1) {
+        if (diffMs < 0) {
+          // Already due → Pending
           newlyPending.push({ ...alert, status: "pending" });
-        } else {
+        } else if (diffMs > 0 && diffMs <= 3600000) {
+          // Due within the next hour → Upcoming
           updatedUpcoming.push(alert);
         }
+
       });
 
       if (newlyPending.length > 0) {
         setUpcomingAlerts(updatedUpcoming);
         setPendingAlerts((prev) => [...prev, ...newlyPending]);
       }
-    }, 60 * 1000);
+    }, 60 * 100);
 
     return () => clearInterval(interval);
   }, []);
@@ -318,32 +318,42 @@ const AnalogClock = () => {
                             />
                           </View>
                           <View style={{ flex: 1 }}>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
-                              <AppText style={styles.scheduleText}>
-                                Schedule ID: {alert.patient_number} - {scheduleId}
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                              <AppText style={styles.alertText}>
+                                Patient: {alert.patient_last_name.toUpperCase()}, {alert.patient_first_name} - {alert.Medication_name}
                               </AppText>
-                              <AppText style={[styles.alertText, {paddingRight: 10}]}>
-                                {alert.next_dose_time
-                                  ? alert.next_dose_time.split("T")[1]?.split("+")[0]
-                                  : ""}
+                              <AppText style={[styles.alertText, { paddingRight: 10 }]}>
+                                {(() => {
+                                  const [date, timeWithZone] = alert.next_dose_time.split("T");
+                                  const time = timeWithZone?.split("+")[0];
+                                  return `${date} | ${time}`;
+                                })()}
                               </AppText>
                             </View>
+
                             {isExpanded && (
                               <>
                                 <AppText style={[styles.alertText]}>
-                                  {alert.patient_first_name}{" "}
-                                  {alert.patient_middle_name}{" "}
-                                  {alert.patient_last_name} - Room{" "}
-                                  {alert.room_number}
-                                </AppText>
-                                <AppText style={[styles.alertText]}>
-                                  Medication: {alert.Medication_name}
+                                  Room{" "}{alert.room_number}
                                 </AppText>
                                 <AppText style={[styles.alertText]}>
                                   Medication Form: {alert.Medication_form}
                                 </AppText>
                                 <AppText style={[styles.alertText]}>
                                   Strength: {alert.Medication_strength} {alert.Medication_unit}
+                                </AppText>
+                                <AppText style={[styles.alertText]}>
+                                  Medication Route: {alert.Medication_route}
+                                </AppText>
+                                <AppText style={[styles.alertText]}>
+                                  Frequency: {alert.Frequency_type === 'Other'
+                                    ? `${alert.frequency_days ? `${alert.frequency_days} Day${alert.frequency_days > 1 ? 's' : ''} ` : ''}` +
+                                    `${alert.frequency_hours ? `${alert.frequency_hours} Hour${alert.frequency_hours > 1 ? 's' : ''} ` : ''}` +
+                                    `${alert.frequency_minutes ? `${alert.frequency_minutes} Minute${alert.frequency_minutes > 1 ? 's' : ''}` : ''}`
+                                    : alert.Frequency_type}
+                                </AppText>
+                                <AppText style={[styles.alertText]}>
+                                  Physician: {alert.physicianID}
                                 </AppText>
                                 <AppText style={[styles.alertText]}>
                                   Notes: {alert.Medication_notes}
