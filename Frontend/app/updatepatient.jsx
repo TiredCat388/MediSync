@@ -14,6 +14,8 @@ import CustomAlert from "./components/alert";
 import Constants from 'expo-constants';
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppText from './components/AppText';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
@@ -231,6 +233,18 @@ export default function UpdatePatientScreen() {
     }
   }, [patient_number]);
 
+  const pickerSelectStyles = {
+    inputAndroid: styles.input,
+    inputIOS: styles.input,
+    placeholder: {
+      color: "#999",
+    },
+    iconContainer: {
+      top: 10,
+      right: 12,
+    },
+  }; 
+
   const handleInputChange = (name, value) => {
     setFormData({ ...formData, [name]: value });
   };
@@ -310,419 +324,442 @@ export default function UpdatePatientScreen() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-    <View style={styles.container}>
-      <Sidebar onNavigate={() => {}} /> {/* Adjust navigation as needed */}
-      <View
-        style={[
-          styles.contentContainer,
-          { marginLeft: isSidebarExpanded ? 200 : 70 },
-        ]}
-      >
-        <AppText style={styles.screenTitle}>Update Patient</AppText>
-        <View style={styles.formContainer}>
-          <ScrollView style={styles.column}>  
-            <AppText style={styles.sectionTitle}>Patient Details <AppText style={{ color: 'red', fontSize: 16 }}>* Required</AppText>
-            </AppText>
-            <AppText style={styles.label}>
-              First Name <AppText style={{ color: "red" }}>*</AppText>
-            </AppText>
-            <TextInput
-              style={styles.input}
-              value={formData.firstName}
-              onChangeText={(text) => handleInputChange("firstName", text)}
-            />
-            <AppText style={styles.label}>Middle Name</AppText>
-            <TextInput
-              style={styles.input}
-              value={formData.middleName}
-              onChangeText={(text) => handleInputChange("middleName", text)}
-            />
-            <AppText style={styles.label}>
-              Surname <AppText style={{ color: "red" }}>*</AppText>
-            </AppText>
-            <TextInput
-              style={styles.input}
-              value={formData.surname}
-              onChangeText={(text) => handleInputChange("surname", text)}
-            />
-            <AppText style={styles.label}>
-              Sex <AppText style={{ color: "red" }}>*</AppText>
-            </AppText>
-            <View>
-              <RNPickerSelect
-                items={[
-                  { label: "Male", value: "M" },
-                  { label: "Female", value: "F" },
-                ]}
-                value={formData.sex}
-                onValueChange={(value) => handleInputChange("sex", value)}
-                placeholder={
-                  formData.sex ? {} : { label: "Select Sex", value: "" }
-                }
+      <View style={styles.container}>
+        <Sidebar onNavigate={() => {}} /> {/* Adjust navigation as needed */}
+        <View
+          style={[
+            styles.contentContainer,
+            { marginLeft: isSidebarExpanded ? 200 : 70 },
+          ]}
+        >
+          <AppText style={styles.screenTitle}>Update Patient</AppText>
+          <View style={styles.formContainer}>
+            <ScrollView style={styles.column}>
+              <AppText style={styles.sectionTitle}>
+                Patient Details{" "}
+                <AppText style={{ color: "#5879A5", fontSize: 16 }}>
+                  * Required
+                </AppText>
+              </AppText>
+              <AppText style={styles.label}>
+                First Name <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
+              <TextInput
+                style={styles.input}
+                value={formData.firstName}
+                onChangeText={(text) => handleInputChange("firstName", text)}
+              />
+              <AppText style={styles.label}>Middle Name</AppText>
+              <TextInput
+                style={styles.input}
+                value={formData.middleName}
+                onChangeText={(text) => handleInputChange("middleName", text)}
+              />
+              <AppText style={styles.label}>
+                Surname <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
+              <TextInput
+                style={styles.input}
+                value={formData.surname}
+                onChangeText={(text) => handleInputChange("surname", text)}
+              />
+              <AppText style={styles.label}>
+                Sex <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
+              <View>
+                <RNPickerSelect
+                  items={[
+                    { label: "Male", value: "M" },
+                    { label: "Female", value: "F" },
+                  ]}
+                  value={formData.sex}
+                  onValueChange={(value) => handleInputChange("sex", value)}
+                  placeholder={
+                    formData.sex ? {} : { label: "Select Sex", value: "" }
+                  }
+                  style={{
+                    inputAndroid: styles.input,
+                    inputIOS: styles.input,
+                    inputWeb: styles.input,
+                    placeholder: {
+                      color: "#999",
+                    },
+                  }}
+                />
+              </View>
+              <AppText style={styles.label}>
+                Date of Birth <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
+              <View
                 style={{
-                  inputAndroid: styles.input,
-                  inputIOS: styles.input,
-                  inputWeb: styles.input,
-                  placeholder: {
-                  color: "#999",
-                  },
+                  flexDirection: "row",
+                  justifyContent: "space-between",
                 }}
+              >
+                <View style={{ flex: 1, marginRight: 10 }}>
+                  <RNPickerSelect
+                    Icon={() => (
+                      <Icon name="arrow-drop-down" size={20} color="gray" />
+                    )}
+                    items={months}
+                    value={formData.birthMonth}
+                    onValueChange={(value) =>
+                      handleInputChange("birthMonth", value)
+                    }
+                    placeholder={
+                      formData.birthMonth ? {} : { label: "MM", value: "" }
+                    }
+                    style={pickerSelectStyles}
+                    useNativeAndroidPickerStyle={false}
+                  />
+                </View>
+                <View style={{ flex: 1, marginRight: 10 }}>
+                  <RNPickerSelect
+                    Icon={() => (
+                      <Icon name="arrow-drop-down" size={20} color="gray" />
+                    )}
+                    items={days}
+                    value={formData.birthDay}
+                    onValueChange={(value) =>
+                      handleInputChange("birthDay", value)
+                    }
+                    placeholder={
+                      formData.birthDay ? {} : { label: "DD", value: "" }
+                    }
+                    style={pickerSelectStyles}
+                    useNativeAndroidPickerStyle={false}
+                  />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <RNPickerSelect
+                    Icon={() => (
+                      <Icon name="arrow-drop-down" size={20} color="gray" />
+                    )}
+                    items={years}
+                    value={formData.birthYear}
+                    onValueChange={(value) =>
+                      handleInputChange("birthYear", value)
+                    }
+                    placeholder={
+                      formData.birthYear ? {} : { label: "YYYY", value: "" }
+                    }
+                    style={pickerSelectStyles}
+                    useNativeAndroidPickerStyle={false}
+                  />
+                </View>
+              </View>
+              <AppText style={styles.label}>Age</AppText>
+              <TextInput
+                style={styles.input}
+                value={formData.age.toString()}
+                editable={false}
+              />
+              <AppText style={styles.label}>
+                Blood Type <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
+              <View>
+                <RNPickerSelect
+                  Icon={() => (
+                    <Icon name="arrow-drop-down" size={20} color="gray" />
+                  )}
+                  items={[
+                    { label: "A+", value: "A+" },
+                    { label: "A-", value: "A-" },
+                    { label: "B+", value: "B+" },
+                    { label: "B-", value: "B-" },
+                    { label: "AB+", value: "AB+" },
+                    { label: "AB-", value: "AB-" },
+                    { label: "O+", value: "O+" },
+                    { label: "O-", value: "O-" },
+                    { label: "Rhnull", value: "Rhnull" },
+                  ]}
+                  value={formData.bloodType}
+                  onValueChange={(value) =>
+                    handleInputChange("bloodType", value)
+                  }
+                  placeholder={
+                    formData.bloodType
+                      ? {}
+                      : { label: "Select Blood Type", value: "" }
+                  }
+                  style={pickerSelectStyles}
+                  useNativeAndroidPickerStyle={false}
+                />
+              </View>
+              <AppText style={styles.label}>Religion</AppText>
+              <View>
+                <RNPickerSelect
+                  Icon={() => (
+                    <Icon name="arrow-drop-down" size={20} color="gray" />
+                  )}
+                  items={[
+                    { label: "Catholic", value: "Catholic" },
+                    { label: "Protestant", value: "Protestant" },
+                    { label: "Muslim", value: "Muslim" },
+                    { label: "Buddhist", value: "Buddhist" },
+                    { label: "Hindu", value: "Hindu" },
+                    { label: "Atheist", value: "Atheist" },
+                    { label: "Agnostic", value: "Agnostic" },
+                    { label: "Other", value: "Other" },
+                  ]}
+                  value={formData.religion}
+                  onValueChange={(value) =>
+                    handleInputChange("religion", value)
+                  }
+                  placeholder={
+                    formData.religion
+                      ? {}
+                      : { label: "Select Religion", value: "" }
+                  }
+                  style={pickerSelectStyles}
+                  useNativeAndroidPickerStyle={false}
+                />
+              </View>
+              {formData.religion === "Other" ? (
+                <>
+                  <AppText style={styles.label}>
+                    Specify Other Religion{" "}
+                    <AppText style={{ color: "red" }}>*</AppText>
+                  </AppText>
+                  <TextInput
+                    style={styles.input}
+                    value={formData.otherReligionSpecify}
+                    onChangeText={(text) =>
+                      handleInputChange("otherReligionSpecify", text)
+                    }
+                    placeholder="Please specify your religion"
+                  />
+                </>
+              ) : null}
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <View style={{ flex: 1, marginRight: 10 }}>
+                  <AppText style={styles.label}>
+                    Height (meters){" "}
+                    <AppText style={{ color: "#5879A5" }}>*</AppText>
+                  </AppText>
+                  <TextInput
+                    style={styles.input}
+                    keyboardType="numeric"
+                    placeholder="e.g., 1.70"
+                    value={formData.height}
+                    onChangeText={(text) => handleInputChange("height", text)}
+                  />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <AppText style={styles.label}>
+                    Weight (kg){" "}
+                    <AppText style={{ color: "#5879A5" }}>*</AppText>
+                  </AppText>
+                  <TextInput
+                    style={styles.input}
+                    keyboardType="numeric"
+                    placeholder="e.g., 65"
+                    value={formData.weight}
+                    onChangeText={(text) => handleInputChange("weight", text)}
+                  />
+                </View>
+              </View>
+              <AppText style={styles.label}>
+                Diet <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
+              <View>
+                <RNPickerSelect
+                  Icon={() => (
+                    <Icon name="arrow-drop-down" size={20} color="gray" />
+                  )}
+                  items={dietOptions}
+                  value={formData.diet.split(":")[0]}
+                  onValueChange={handleDietChange}
+                  placeholder={
+                    formData.diet ? {} : { label: "Select Diet", value: "" }
+                  }
+                  style={pickerSelectStyles}
+                  useNativeAndroidPickerStyle={false}
+                />
+              </View>
+              {formData.diet.startsWith("ngt:") ? (
+                <>
+                  <AppText style={styles.label}>
+                    Specify NGT Details{" "}
+                    <AppText style={{ color: "red" }}>*</AppText>
+                  </AppText>
+                  <TextInput
+                    style={styles.input}
+                    value={formData.ngtSpecify}
+                    onChangeText={(text) =>
+                      handleDietSpecifyChange(text, "ngt")
+                    }
+                    placeholder="e.g., Formula"
+                  />
+                </>
+              ) : null}
+              {formData.diet.startsWith("other:") ? (
+                <>
+                  <AppText style={styles.label}>
+                    Specify Other Diet{" "}
+                    <AppText style={{ color: "red" }}>*</AppText>
+                  </AppText>
+                  <TextInput
+                    style={styles.input}
+                    value={formData.otherDietSpecify}
+                    onChangeText={(text) =>
+                      handleDietSpecifyChange(text, "other")
+                    }
+                    placeholder="Please specify the diet"
+                  />
+                </>
+              ) : null}
+              <AppText style={styles.label}>
+                Contact Number <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
+              <TextInput
+                style={styles.input}
+                value={formData.phoneNumber}
+                onChangeText={(text) => handleInputChange("phoneNumber", text)}
+                keyboardType="phone-pad"
+              />
+              <AppText style={styles.label}>
+                Bed Number <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
+              <TextInput
+                style={styles.input}
+                value={formData.bedNumber}
+                onChangeText={(text) => handleInputChange("bedNumber", text)}
+                keyboardType="numeric"
+              />
+              <AppText style={styles.label}>
+                Room Number <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
+              <TextInput
+                style={styles.input}
+                value={formData.roomNumber}
+                onChangeText={(text) => handleInputChange("roomNumber", text)}
+                keyboardType="numeric"
+              />
+              <AppText style={styles.label}>
+                Chief Complaint/s{" "}
+                <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
+              <TextInput
+                style={[
+                  styles.input,
+                  { height: 150, textAlignVertical: "top" },
+                ]}
+                multiline
+                numberOfLines={4}
+                value={formData.chiefComplaint}
+                onChangeText={(text) =>
+                  handleInputChange("chiefComplaint", text)
+                }
+              />
+              <AppText style={styles.label}>
+                Admitting Diagnosis{" "}
+                <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
+              <TextInput
+                style={[
+                  styles.input,
+                  { height: 150, textAlignVertical: "top" },
+                ]}
+                multiline
+                numberOfLines={4}
+                value={formData.admittingDiagnosis}
+                onChangeText={(text) =>
+                  handleInputChange("admittingDiagnosis", text)
+                }
+              />
+              <AppText style={styles.label}>Final Diagnosis</AppText>
+              <TextInput
+                style={[
+                  styles.input,
+                  { height: 150, textAlignVertical: "top" },
+                ]}
+                multiline
+                numberOfLines={4}
+                value={formData.finalDiagnosis}
+                onChangeText={(text) =>
+                  handleInputChange("finalDiagnosis", text)
+                }
+              />
+            </ScrollView>
+            <View style={styles.divider} />
+            <View style={styles.column}>
+              <AppText style={styles.sectionTitle}>
+                Emergency Contact Details
+              </AppText>
+              <AppText style={styles.label}>
+                First Name <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
+              <TextInput
+                style={styles.input}
+                value={formData.emergencyFirstName}
+                onChangeText={(text) =>
+                  handleInputChange("emergencyFirstName", text)
+                }
+              />
+              <AppText style={styles.label}>
+                Surname <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
+              <TextInput
+                style={styles.input}
+                value={formData.emergencySurname}
+                onChangeText={(text) =>
+                  handleInputChange("emergencySurname", text)
+                }
+              />
+              <AppText style={styles.label}>
+                Relation to Patient{" "}
+                <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
+              <TextInput
+                style={styles.input}
+                value={formData.relation}
+                onChangeText={(text) => handleInputChange("relation", text)}
+              />
+              <AppText style={styles.label}>
+                Contact Number <AppText style={{ color: "#5879A5" }}>*</AppText>
+              </AppText>
+              <TextInput
+                style={styles.input}
+                value={formData.emergencyPhone}
+                onChangeText={(text) =>
+                  handleInputChange("emergencyPhone", text)
+                }
+                keyboardType="phone-pad"
               />
             </View>
-            <AppText style={styles.label}>
-              Date of Birth <AppText style={{ color: "red" }}>*</AppText>
-            </AppText>
-            <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              onPress={() =>
+                router.push("/viewpatient?patient_number=" + patient_number)
+              }
+              style={[styles.button, styles.leaveButton]}
             >
-              <View style={{ flex: 1, marginRight: 10 }}>
-                <RNPickerSelect
-                  items={months}
-                  value={formData.birthMonth}
-                  onValueChange={(value) =>
-                    handleInputChange("birthMonth", value)
-                  }
-                  placeholder={
-                    formData.birthMonth ? {} : { label: "MM", value: "" }
-                  }
-                  style={{
-                    inputAndroid: styles.input,
-                    inputIOS: styles.input,
-                    inputWeb: styles.input,
-                    placeholder: {
-                      color: "#999",
-                    },
-                  }}
-                />
-              </View>
-              <View style={{ flex: 1, marginRight: 10 }}>
-                <RNPickerSelect
-                  items={days}
-                  value={formData.birthDay}
-                  onValueChange={(value) =>
-                    handleInputChange("birthDay", value)
-                  }
-                  placeholder={
-                    formData.birthDay ? {} : { label: "DD", value: "" }
-                  }
-                  style={{
-                    inputAndroid: styles.input,
-                    inputIOS: styles.input,
-                    inputWeb: styles.input,
-                    placeholder: {
-                      color: "#999",
-                    },
-                  }}
-                />
-              </View>
-              <View style={{ flex: 1 }}>
-                <RNPickerSelect
-                  items={years}
-                  value={formData.birthYear}
-                  onValueChange={(value) =>
-                    handleInputChange("birthYear", value)
-                  }
-                  placeholder={
-                    formData.birthYear ? {} : { label: "YYYY", value: "" }
-                  }
-                  style={{
-                    inputAndroid: styles.input,
-                    inputIOS: styles.input,
-                    inputWeb: styles.input,
-                    placeholder: {
-                      color: "#999",
-                    },
-                  }}
-                />
-              </View>
-            </View>
-            <AppText style={styles.label}>Age</AppText>
-            <TextInput
-              style={styles.input}
-              value={formData.age.toString()}
-              editable={false}
-            />
-            <AppText style={styles.label}>
-              Blood Type <AppText style={{ color: "red" }}>*</AppText>
-            </AppText>
-            <View>
-              <RNPickerSelect
-                items={[
-                  { label: "A+", value: "A+" },
-                  { label: "A-", value: "A-" },
-                  { label: "B+", value: "B+" },
-                  { label: "B-", value: "B-" },
-                  { label: "AB+", value: "AB+" },
-                  { label: "AB-", value: "AB-" },
-                  { label: "O+", value: "O+" },
-                  { label: "O-", value: "O-" },
-                  { label: "Rhnull", value: "Rhnull" },
-                ]}
-                value={formData.bloodType}
-                onValueChange={(value) => handleInputChange("bloodType", value)}
-                placeholder={
-                  formData.bloodType
-                    ? {}
-                    : { label: "Select Blood Type", value: "" }
-                }
-                style={{
-                  inputAndroid: styles.input,
-                  inputIOS: styles.input,
-                  inputWeb: styles.input,
-                  placeholder: {
-                    color: "#999",
-                  },
-                }}
-              />
-            </View>
-            <AppText style={styles.label}>Religion</AppText>
-            <View>
-              <RNPickerSelect
-                items={[
-                  { label: "Catholic", value: "Catholic" },
-                  { label: "Protestant", value: "Protestant" },
-                  { label: "Muslim", value: "Muslim" },
-                  { label: "Buddhist", value: "Buddhist" },
-                  { label: "Hindu", value: "Hindu" },
-                  { label: "Atheist", value: "Atheist" },
-                  { label: "Agnostic", value: "Agnostic" },
-                  { label: "Other", value: "Other" },
-                ]}
-                value={formData.religion}
-                onValueChange={(value) => handleInputChange("religion", value)}
-                placeholder={
-                  formData.religion
-                    ? {}
-                    : { label: "Select Religion", value: "" }
-                }
-                style={{
-                  inputAndroid: styles.input,
-                  inputIOS: styles.input,
-                  inputWeb: styles.input,
-                  placeholder: {
-                    color: "#999",
-                  },
-                }}
-              />
-            </View>
-            {formData.religion === "Other" ? (
-              <>
-                <AppText style={styles.label}>
-                  Specify Other Religion <AppText style={{ color: "red" }}>*</AppText>
-                </AppText>
-                <TextInput
-                  style={styles.input}
-                  value={formData.otherReligionSpecify}
-                  onChangeText={(text) =>
-                    handleInputChange("otherReligionSpecify", text)
-                  }
-                  placeholder="Please specify your religion"
-                />
-              </>
-            ) : null}
-            <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
+              <AppText style={styles.buttonText}>Cancel</AppText>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={handleUpdate}
+              style={[styles.button, styles.stayButton]}
             >
-              <View style={{ flex: 1, marginRight: 10 }}>
-                <AppText style={styles.label}>
-                  Height (meters) <AppText style={{ color: "red" }}>*</AppText>
-                </AppText>
-                <TextInput
-                  style={styles.input}
-                  keyboardType="numeric"
-                  placeholder="e.g., 1.70"
-                  value={formData.height}
-                  onChangeText={(text) => handleInputChange("height", text)}
-                />
-              </View>
-              <View style={{ flex: 1 }}>
-                <AppText style={styles.label}>
-                  Weight (kg) <AppText style={{ color: "red" }}>*</AppText>
-                </AppText>
-                <TextInput
-                  style={styles.input}
-                  keyboardType="numeric"
-                  placeholder="e.g., 65"
-                  value={formData.weight}
-                  onChangeText={(text) => handleInputChange("weight", text)}
-                />
-              </View>
-            </View>
-            <AppText style={styles.label}>
-              Diet <AppText style={{ color: "red" }}>*</AppText>
-            </AppText>
-            <View>
-              <RNPickerSelect
-                items={dietOptions}
-                value={formData.diet.split(":")[0]}
-                onValueChange={handleDietChange}
-                placeholder={
-                  formData.diet ? {} : { label: "Select Diet", value: "" }
-                }
-                style={{
-                  inputAndroid: styles.input,
-                  inputIOS: styles.input,
-                  inputWeb: styles.input,
-                  placeholder: {
-                    color: "#999",
-                  },
-                }}
-              />
-            </View>
-            {formData.diet.startsWith("ngt:") ? (
-              <>
-                <AppText style={styles.label}>
-                  Specify NGT Details <AppText style={{ color: "red" }}>*</AppText>
-                </AppText>
-                <TextInput
-                  style={styles.input}
-                  value={formData.ngtSpecify}
-                  onChangeText={(text) => handleDietSpecifyChange(text, "ngt")}
-                  placeholder="e.g., Formula"
-                />
-              </>
-            ) : null}
-            {formData.diet.startsWith("other:") ? (
-              <>
-                <AppText style={styles.label}>
-                  Specify Other Diet <AppText style={{ color: "red" }}>*</AppText>
-                </AppText>
-                <TextInput
-                  style={styles.input}
-                  value={formData.otherDietSpecify}
-                  onChangeText={(text) =>
-                    handleDietSpecifyChange(text, "other")
-                  }
-                  placeholder="Please specify the diet"
-                />
-              </>
-            ) : null}
-            <AppText style={styles.label}>
-            Contact Number <AppText style={{ color: "red" }}>*</AppText>
-            </AppText>
-            <TextInput
-              style={styles.input}
-              value={formData.phoneNumber}
-              onChangeText={(text) => handleInputChange("phoneNumber", text)}
-              keyboardType="phone-pad"
-            />
-            <AppText style={styles.label}>
-              Bed Number <AppText style={{ color: "red" }}>*</AppText>
-            </AppText>
-            <TextInput
-              style={styles.input}
-              value={formData.bedNumber}
-              onChangeText={(text) => handleInputChange("bedNumber", text)}
-              keyboardType="numeric"
-            />
-            <AppText style={styles.label}>
-              Room Number <AppText style={{ color: "red" }}>*</AppText>
-            </AppText>
-            <TextInput
-              style={styles.input}
-              value={formData.roomNumber}
-              onChangeText={(text) => handleInputChange("roomNumber", text)}
-              keyboardType="numeric"
-            />
-            <AppText style={styles.label}>
-              Chief Complaint/s <AppText style={{ color: "red" }}>*</AppText>
-            </AppText>
-            <TextInput
-              style={[styles.input, { height: 150, textAlignVertical: "top" }]}
-              multiline
-              numberOfLines={4}
-              value={formData.chiefComplaint}
-              onChangeText={(text) => handleInputChange("chiefComplaint", text)}
-            />
-            <AppText style={styles.label}>
-              Admitting Diagnosis <AppText style={{ color: "red" }}>*</AppText>
-            </AppText>
-            <TextInput
-              style={[styles.input, { height: 150, textAlignVertical: "top" }]}
-              multiline
-              numberOfLines={4}
-              value={formData.admittingDiagnosis}
-              onChangeText={(text) =>
-                handleInputChange("admittingDiagnosis", text)
-              }
-            />
-            <AppText style={styles.label}>Final Diagnosis</AppText>
-            <TextInput
-              style={[styles.input, { height: 150, textAlignVertical: "top" }]}
-              multiline
-              numberOfLines={4}
-              value={formData.finalDiagnosis}
-              onChangeText={(text) => handleInputChange("finalDiagnosis", text)}
-            />
-          </ScrollView>
-          <View style={styles.divider} />
-          <View style={styles.column}>
-            <AppText style={styles.sectionTitle}>Emergency Contact Details</AppText>
-            <AppText style={styles.label}>
-              First Name <AppText style={{ color: "red" }}>*</AppText>
-            </AppText>
-            <TextInput
-              style={styles.input}
-              value={formData.emergencyFirstName}
-              onChangeText={(text) =>
-                handleInputChange("emergencyFirstName", text)
-              }
-            />
-            <AppText style={styles.label}>
-              Surname <AppText style={{ color: "red" }}>*</AppText>
-            </AppText>
-            <TextInput
-              style={styles.input}
-              value={formData.emergencySurname}
-              onChangeText={(text) =>
-                handleInputChange("emergencySurname", text)
-              }
-            />
-            <AppText style={styles.label}>
-              Relation to Patient <AppText style={{ color: "red" }}>*</AppText>
-            </AppText>
-            <TextInput
-              style={styles.input}
-              value={formData.relation}
-              onChangeText={(text) => handleInputChange("relation", text)}
-            />
-            <AppText style={styles.label}>
-              Contact Number <AppText style={{ color: "red" }}>*</AppText>
-            </AppText>
-            <TextInput
-              style={styles.input}
-              value={formData.emergencyPhone}
-              onChangeText={(text) => handleInputChange("emergencyPhone", text)}
-              keyboardType="phone-pad"
-            />
+              <AppText style={styles.buttonText}>Update Patient</AppText>
+            </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            onPress={() =>
-              router.push("/viewpatient?patient_number=" + patient_number)
-            }
-            style={[styles.button, styles.leaveButton]}
-          >
-            <AppText style={styles.buttonText}>Cancel</AppText>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={handleUpdate}
-            style={[styles.button, styles.stayButton]}
-          >
-            <AppText style={styles.buttonText}>Update Patient</AppText>
-          </TouchableOpacity>
-        </View>
+        <CustomAlert
+          visible={updateSuccessVisible}
+          message={updateSuccessMessage}
+          onClose={() => {
+            setUpdateSuccessVisible(false);
+            router.push("/viewpatient?patient_number=" + patient_number);
+          }}
+        />
       </View>
-      <CustomAlert
-        visible={updateSuccessVisible}
-        message={updateSuccessMessage}
-        onClose={() => {
-          setUpdateSuccessVisible(false);
-          router.push("/viewpatient?patient_number=" + patient_number);
-        }}
-      />
-    </View>
     </SafeAreaView>
   );
 }
