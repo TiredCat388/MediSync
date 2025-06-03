@@ -14,7 +14,7 @@ export default function AnalogClock({ size = 350, style }) {
     return () => clearInterval(interval);
   }, []);
 
-  const hours = time.getHours() % 12;
+  const hours = time.getHours();
   const minutes = time.getMinutes();
   const seconds = time.getSeconds();
 
@@ -80,7 +80,7 @@ export default function AnalogClock({ size = 350, style }) {
         />
       </Svg>
       <Text style={{ textAlign: "center", marginTop: 10, fontSize: 24, fontWeight: "bold" }}>
-        {time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+        {time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false })}
       </Text>
     </View>
   );
