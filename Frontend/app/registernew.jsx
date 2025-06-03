@@ -741,9 +741,8 @@ export default function RegisterNewPatient() {
                   setFormData({ ...formData, emergencyPhone: text })
                 }
               />
-            </View>
-          </View>
-          <View style={styles.buttonContainer}>
+
+              <View style={styles.buttonContainer}>
             <TouchableOpacity
               onPress={() => handleNavigate("/directory")}
               style={[styles.button, styles.leaveButton]}
@@ -758,6 +757,9 @@ export default function RegisterNewPatient() {
             </TouchableOpacity>
           </View>
         </View>
+        
+            </View>
+          </View>
 
         {/* Cancel Confirmation Modal */}
         <Modal visible={modalVisible} transparent animationType="fade">
