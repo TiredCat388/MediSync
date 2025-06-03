@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#5879A5",
   },
   leaveButton: {
-    backgroundColor: "#999999",
+    backgroundColor: "#D9534F",
   },
   modalButtonText: {
     fontSize: 16,
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
   inlineContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-start",
+    alignItems: "flex-end",
     marginBottom: 10,
   },
   inlineItem: {
