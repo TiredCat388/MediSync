@@ -8,16 +8,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Audio } from "expo-av";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppText from './components/AppText';
+import styles from "./stylesheets/settingstyle";
 
 export default function SettingsScreen() {
   const [volume, setVolume] = useState(50);
-  const [alertSound, setAlertSound] = useState("alarm 1");
-  const [sidebarWidth, setSidebarWidth] = useState(70);
-  const [isSaving, setIsSaving] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
-  const [soundObject, setSoundObject] = useState(null);
+  const [alertSound, setAlertSound] = useState("default"); 
+  const [sidebarWidth, setSidebarWidth] = useState(70); 
+  const [isSaving, setIsSaving] = useState(false); // For showing loading state
+  const [isSaved, setIsSaved] = useState(false); // To track if settings are saved
 
-  // Load settings from AsyncStorage
   useEffect(() => {
     const loadSettings = async () => {
       try {
@@ -211,7 +210,7 @@ export default function SettingsScreen() {
             selectedValue={alertSound}
             onValueChange={handleAlertSoundChange}
             style={styles.picker}
-            dropdownIconColor="#3b5f8a"
+            dropdownIconColor="#5879A5"
           >
             <Picker.Item label="Alarm 1" value="alarm 1" />
             <Picker.Item label="Alarm 2" value="alarm 2" />
@@ -225,7 +224,7 @@ export default function SettingsScreen() {
           <TouchableOpacity
             style={[
               styles.saveButton,
-              { backgroundColor: isSaving ? "#A0C4FF" : "#4E84D3" },
+              { backgroundColor: isSaving ? "#333333" : "#4E84D3" },
             ]}
             onPress={saveSettings}
             disabled={isSaving}
@@ -240,90 +239,3 @@ export default function SettingsScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 10,
-    paddingHorizontal: 40,
-    backgroundColor: "#fff",
-  },
-  heading: {
-    fontSize: 30,
-    fontWeight: "bold",
-    marginBottom: 50,
-    color: "#000",
-  },
-  sliderWrapper: {
-    borderWidth: 2,
-    borderColor: "#808080",
-    borderRadius: 15,
-  },
-  thumbStyle: {
-    width: 20,
-    height: 20,
-    borderRadius: 15,
-    backgroundColor: "#5879A5",
-  },
-  label: {
-    fontSize: 25,
-    fontWeight: "600",
-    marginTop: 16,
-    marginBottom: 20,
-    color: "#000",
-  },
-  volumeContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    marginBottom: 16,
-    alignSelf: "flex-start",
-    paddingHorizontal: 12,
-  },
-  slider: {
-    flex: 1,
-    width: 880,
-    height: 50,
-    marginHorizontal: 10,
-    borderRadius: 15,
-    backgroundColor: "e0e0e0",
-  },
-  pickerWrapper: {
-    alignSelf: "left",
-    width: 1000,
-    borderWidth: 2,
-    borderColor: "#5879A5",
-    borderRadius: 12,
-    overflow: "hidden",
-  },
-  picker: {
-    height: 50,
-    fontSize: 16,
-    paddingLeft: 15,
-    borderWidth: 0,
-    width: "100%",
-    color: "#000",
-  },
-  trackBackground: {
-    width: 900,
-    height: 25,
-    borderRadius: 12,
-    justifyContent: "center",
-  },
-  saveButtonWrapper: {
-    marginTop: 30,
-    width: "100%",
-    alignItems: "flex-end",
-  },
-  saveButton: {
-    paddingVertical: 12,
-    paddingHorizontal: 40,
-    borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  saveButtonText: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#fff",
-  },
-});

@@ -91,12 +91,12 @@ export default function PatientsDirectory() {
         <View style={styles.content}>
           <View style={styles.header}>
             <AppText style={[ styles.headerText ]}>Patients Directory</AppText>
-              <TouchableOpacity
+            <TouchableOpacity
               onPress={() => router.push("/registernew")}
               style={styles.newPatientButton}>
               <AppText style={styles.newPatientButtonText}>+ New Patient</AppText>
             </TouchableOpacity>
-            </View>
+          </View>
 
           <View style={styles.searchSortContainer}>
             <TextInput

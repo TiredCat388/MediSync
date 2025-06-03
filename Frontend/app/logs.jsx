@@ -7,7 +7,7 @@ import {
   ScrollView,
   Modal
 } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import styles from "./stylesheets/logstyles";
 import Sidebar from './components/sidebar';
@@ -53,7 +53,6 @@ export default function LogsScreen() {
   const [logs, setLogs] = useState([]);
   const [patients, setPatients] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [logoutModalVisible, setLogoutModalVisible] = useState(false);
   const [selectedLog, setSelectedLog] = useState(null);
   const [sidebarWidth, setSidebarWidth] = useState(70);
 
@@ -83,11 +82,6 @@ export default function LogsScreen() {
     setModalVisible(true);
   };
 
-  const handleLogout = () => {
-    setLogoutModalVisible(false);
-    router.replace("/");
-  };
-
   const getPatientLastName = (patientId) => {
     const patient = patients.find((p) => p.id === patientId);
     return patient?.last_name || "Unknown";
@@ -113,7 +107,7 @@ export default function LogsScreen() {
               <View key={item.id || index} style={styles.card}>
                 <View style={styles.cardContent}>
                   <View style={styles.dateTimeContainer}>
-                    <FontAwesome name="clock-o" size={24} color="#666" style={styles.iconClock} />
+                    <Feather name="clock" size={22} color="#666" style={styles.iconClock} />
                     <AppText style={styles.date}>{item.log_date}</AppText>
                     <AppText style={styles.time}> - {formatTime(item.log_time)}</AppText>
                   </View>
@@ -141,13 +135,21 @@ export default function LogsScreen() {
             <AppText style={styles.modalTitle}>View</AppText>
             {selectedLog && (
               <>
-                <AppText style={styles.modalDate}>{selectedLog.date}</AppText>
-                <AppText style={styles.modalText}>Patient ID - 0012345AB</AppText>
-                <AppText style={styles.modalDescription}>Add Description of Changes Here</AppText>
+                <AppText style={styles.modalDate}>
+                  {selectedLog.log_date} {formatTime(selectedLog.log_time)}
+                </AppText>
+                <AppText style={styles.modalID}>
+                  {selectedLog.patient_id
+                    ? `Patient ID - ${selectedLog.patient_id}`
+                    : ""}
+                </AppText>
+                <AppText style={styles.modalText}>
+                  {selectedLog.log_message}
+                </AppText>
               </>
             )}
             <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
-              <AppText style={styles.closeButtonText}>Cancel</AppText>
+              <AppText style={styles.closeButtonText}>Close</AppText>
             </TouchableOpacity>
           </View>
         </View>
