@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
       marginLeft: 70,
       paddingTop: 0,
       paddingHorizontal: 40,
+      paddingBottom: 40,
     },
     alertPanel: {
       alignItems: 'center',
