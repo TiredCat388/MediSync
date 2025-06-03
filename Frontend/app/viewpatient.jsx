@@ -235,15 +235,15 @@ export default function PatientDetails() {
             <AppText style={styles.sectionTitle}> </AppText>
             <View style={styles.section}>
               <AppText style={styles.boldLabel}>Religion</AppText>
-              <AppText>{displayValue(patient?.religion)}</AppText>
+              <AppText style={styles.rowText}>{displayValue(patient?.religion)}</AppText>
               <AppText style={styles.boldLabel}>Height (meters)</AppText>
-              <AppText>{displayValue(patient?.height)}</AppText>
+              <AppText style={styles.rowText}>{displayValue(patient?.height)}</AppText>
               <AppText style={styles.boldLabel}>Weight (kilograms)</AppText>
-              <AppText>{displayValue(patient?.weight)}</AppText>
+              <AppText style={styles.rowText}>{displayValue(patient?.weight)}</AppText>
               <AppText style={styles.boldLabel}>BMI (kg/m²)</AppText>
-              <AppText>{displayValue(patient?.BMI)}</AppText>
+              <AppText style={styles.rowText}>{displayValue(patient?.BMI)}</AppText>
               <AppText style={styles.boldLabel}>Diet</AppText>
-              <AppText>{displayValue(patient?.diet)}</AppText>
+              <AppText style={styles.rowText}>{displayValue(patient?.diet)}</AppText>
             </View>
           </View>
 
@@ -391,7 +391,7 @@ export default function PatientDetails() {
                 onPress={() =>
                   router.push(`/newmedsched?patient_number=${patient_number}`)}
               >
-                Add Medication
+                <AppText style={styles.buttonText}> Add Medication </AppText>
               </Button>
             </View>
           </View>

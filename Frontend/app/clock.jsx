@@ -15,6 +15,7 @@ import Constants from "expo-constants";
 import Clock from "./components/analogclock";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppText from './components/AppText';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
@@ -357,11 +358,13 @@ const AnalogClock = () => {
                           </View>
                           <View style={{ flex: 1 }}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
-                              <AppText style={styles.alertText}>
+                              <AppText style={styles.scheduleText}>
                                 Schedule ID: {alert.patient_number} - {scheduleId}
                               </AppText>
                               <AppText style={[styles.alertText, {paddingRight: 10}]}>
-                                {(alert.next_dose_time).split("T")[1]?.split("+")[0]}
+                                {alert.next_dose_time
+                                  ? alert.next_dose_time.split("T")[1]?.split("+")[0]
+                                  : ""}
                               </AppText>
                             </View>
                             {isExpanded && (

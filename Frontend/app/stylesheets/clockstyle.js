@@ -96,6 +96,11 @@ const styles = StyleSheet.create({
       justifyContent: 'space-between',
       position: 'relative', 
     },
+    scheduleText: {
+      fontSize: 18,
+      color: '#333333',
+      fontWeight: "bold",
+    },
     alertText: {
       fontSize: 16,
       color: '#333333',

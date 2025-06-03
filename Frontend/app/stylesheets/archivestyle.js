@@ -119,7 +119,7 @@ export default StyleSheet.create({
     justifyContent: "center",
     borderRightWidth: 1,
     borderColor: "black",
-    paddingHorizontal: 5,
+    padding: 10,
   },
   rowCellName: {
     flex: 2,
@@ -127,14 +127,14 @@ export default StyleSheet.create({
     justifyContent: "center",
     borderRightWidth: 1,
     borderColor: "black",
-    paddingHorizontal: 5,
+    padding:10 ,
   },
   rowCellDate: {
     flex: 2,
     alignItems: "center",
     justifyContent: "center",
     borderColor: "black",
-    paddingHorizontal: 5,
+    padding: 10,
   },
   rowCellEmpty: {
     width: 50,
