@@ -11,6 +11,7 @@ export default StyleSheet.create({
   },
   content: {
     flex: 1,
+    flexDirection: "column",
     marginLeft: 70,
     paddingHorizontal: 40,
     paddingBottom: 40,
@@ -56,7 +57,7 @@ export default StyleSheet.create({
     fontWeight: "600",
   },
   table: {
-    flex: 1,
+    flex: 1.2,
     marginTop: 20,
     backgroundColor: "#F8F8F8",
     borderRadius: 15,

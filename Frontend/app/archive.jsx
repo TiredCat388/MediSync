@@ -8,11 +8,12 @@ import {
 import { useRouter } from "expo-router";
 import Sidebar from "./components/sidebar";
 import { useState, useEffect } from "react";
-import { Menu, Divider, Provider } from "react-native-paper";
+import { Provider } from "react-native-paper";
 import Constants from 'expo-constants';
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppText from './components/AppText';
 import styles from './stylesheets/archivestyle';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
@@ -99,7 +100,8 @@ export default function PatientsDirectory() {
                 style={styles.sortButton}
               >
                 <AppText style={styles.sortButtonText}>
-                  Sort {sortAscending ? "↑" : "↓"}
+                  Sort{"  "}
+                  <FontAwesome5 name={sortAscending ? "arrow-up" : "arrow-down"} size={14} color="#fff" />
                 </AppText>
               </TouchableOpacity>
             </View>

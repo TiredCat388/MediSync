@@ -104,7 +104,7 @@ const Sidebar = () => {
               </View>
               {isSidebarExpanded && (
                 <Feather
-                  name={isDirectoryExpanded ? 'chevron-down' : 'chevron-left'}
+                  name={isDirectoryExpanded ? 'chevron-down' : 'chevron-right'}
                   size={20}
                   color="white"
                   style={{ marginLeft: 20 }}

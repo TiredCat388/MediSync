@@ -109,7 +109,7 @@ const AnalogClock = () => {
         if (!medsResponse.ok || !patientsResponse.ok) {
           throw new Error("Failed to fetch meds or patients");
         }
-        
+
 
         const medsData = await medsResponse.json();
         console.log("Fetched medications:", medsData);
@@ -187,10 +187,10 @@ const AnalogClock = () => {
     activeTab === "upcoming"
       ? upcomingAlerts
       : activeTab === "pending"
-      ? pendingAlerts
-      : activeTab === "history"
-      ? historyAlerts
-      : [];
+        ? pendingAlerts
+        : activeTab === "history"
+          ? historyAlerts
+          : [];
 
   const filteredAlerts = activeAlerts.filter((alert) => {
     if (activeTab === "upcoming") return true;
@@ -295,182 +295,187 @@ const AnalogClock = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-    <View style={styles.container}>
-      <Sidebar />
-      <View style={[styles.header, { marginLeft: sidebarWidth }]}>
-        <AppText style={styles.headerText}>Alerts List</AppText>
-      </View>
-      <View style={[styles.mainRow, { marginLeft: sidebarWidth }]}>
-        <View style={styles.alertPanel}>
-          <View style={styles.tabHeader}>
-            {["upcoming", "pending", "history"].map((tab, index) => (
-              <AppText
-                key={tab}
-                style={[
-                  styles.tabText,
-                  activeTab === tab ? styles.activeTab : styles.inactiveTab,
-                  index === 0 && { marginRight: 8 },
-                  index === 2 && { marginLeft: 8 },
-                ]}
-                onPress={() => setActiveTab(tab)}
-              >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
-              </AppText>
-            ))}
-          </View>
-          <View style={styles.tabContent}>
-            <ScrollView style={styles.alertList}>
-              {sortedAlerts.length === 0 ? (
-                <AppText style={styles.noAlerts}>No alerts</AppText>
-              ) : (
-                sortedAlerts.map((alert) => {
-                  const scheduleId = alert.schedule_id;
-                  const isExpanded = expandedAlerts[scheduleId];
-                  return (
-                    <TouchableOpacity
-                      key={scheduleId}
-                      style={[
-                        styles.alertItem,
-                        getCardStyle(alert.Medication_Time),
-                      ]}
-                      onPress={() => toggleExpand(scheduleId)}
-                      activeOpacity={0.9}
-                    >
-                      <View style={{ flexDirection: "row", flex: 1 }}>
-                        <View style={{ alignSelf: "flex-start" }}>
-                          <Checkbox
-                            status={
-                              activeTab === "history"
-                                ? alert.status === "administered"
-                                  ? "checked"
-                                  : "unchecked"
-                                : checkedAlerts[scheduleId]
-                                ? "checked"
-                                : "unchecked"
-                            }
-                            onPress={null}
-                            color={
-                              checkedAlerts[scheduleId] ? "#333" : "#CCCCCC"
-                            }
-                            style={styles.checkboxPosition}
-                          />
-                        </View>
-                        <View style={{ marginLeft: 10, flex: 1 }}>
-                          <AppText style={[styles.alertText]}>
-                            Schedule ID: {alert.patient_number} - {scheduleId}
-                          </AppText>
-                          {isExpanded && (
-                            <>
-                              <AppText style={[styles.alertText]}>
-                                {alert.patient_first_name}{" "}
-                                {alert.patient_middle_name}{" "}
-                                {alert.patient_last_name} - Room{" "}
-                                {alert.room_number}
-                              </AppText>
-                              <AppText style={[styles.alertText]}>
-                                Medication: {alert.Medication_name}
-                              </AppText>
-                              <AppText style={[styles.alertText]}>
-                                Medication Form: {alert.Medication_form}
-                              </AppText>
-                              <AppText style={[styles.alertText]}>
-                                Strength: {alert.Medication_strength} {alert.Medication_unit}
-                              </AppText>
-                              <AppText style={[styles.alertText]}>
-                                Notes: {alert.Medication_notes}
-                              </AppText>
-                              {(activeTab === "upcoming" ||
-                                activeTab === "pending") && (
-                                <View style={styles.tabButtonContainer}>
-                                  <TouchableOpacity
-                                    style={[
-                                      styles.tabButton,
-                                      styles.confirmButton,
-                                    ]}
-                                    onPress={() =>
-                                      handleAdministerPress(scheduleId)
-                                    }
-                                  >
-                                    <AppText style={styles.buttonText}>
-                                      Administer
-                                    </AppText>
-                                  </TouchableOpacity>
-                                  <TouchableOpacity
-                                    style={[
-                                      styles.tabButton,
-                                      styles.cancelButton,
-                                    ]}
-                                    onPress={() =>
-                                      handleCancelPress(scheduleId)
-                                    }
-                                  >
-                                    <AppText style={styles.buttonText}>
-                                      Cancel
-                                    </AppText>
-                                  </TouchableOpacity>
-                                </View>
-                              )}
-                            </>
-                          )}
-                        </View>
-                      </View>
-                    </TouchableOpacity>
-                  );
-                })
-              )}
-            </ScrollView>
-          </View>
+      <View style={styles.container}>
+        <Sidebar />
+        <View style={[styles.header, { marginLeft: sidebarWidth }]}>
+          <AppText style={styles.headerText}>Alerts List</AppText>
         </View>
-        <View style={styles.clockPanel}>
-          <Clock style={{ alignSelf: "center", marginVertical: 20 }} />
-          <View style={styles.clock}></View>
-        </View>
-      </View>
-
-      <Modal
-        visible={isCancelModalVisible}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setIsCancelModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <AppText style={styles.modalTitle}>Cancel Medication</AppText>
-            <AppText>Please provide a reason for cancellation:</AppText>
-            <TextInput
-              style={styles.modalInput}
-              multiline
-              placeholder="Enter reason"
-              value={cancelReason}
-              onChangeText={setCancelReason}
-            />
-            <View style={styles.modalButtonContainer}>
-              <TouchableOpacity
-                style={[styles.modalButtons]}
-                onPress={() => setIsCancelModalVisible(false)}
-              >
-                <AppText style={styles.modalButton}>Back</AppText>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[
-                  styles.modalButtons,
-                  styles.confirmButton,
-                  !cancelReason.trim() && {
-                    backgroundColor: "#808080",
-                    opacity: 0.5,
-                  },
-                ]}
-                onPress={confirmCancellation}
-                disabled={!cancelReason.trim()}
-              >
-                <AppText style={styles.modalButton}>Confirm</AppText>
-              </TouchableOpacity>
+        <View style={[styles.mainRow, { marginLeft: sidebarWidth }]}>
+          <View style={styles.alertPanel}>
+            <View style={styles.tabHeader}>
+              {["upcoming", "pending", "history"].map((tab, index) => (
+                <AppText
+                  key={tab}
+                  style={[
+                    styles.tabText,
+                    activeTab === tab ? styles.activeTab : styles.inactiveTab,
+                    index === 0 && { marginRight: 8 },
+                    index === 2 && { marginLeft: 8 },
+                  ]}
+                  onPress={() => setActiveTab(tab)}
+                >
+                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                </AppText>
+              ))}
+            </View>
+            <View style={styles.tabContent}>
+              <ScrollView style={styles.alertList}>
+                {sortedAlerts.length === 0 ? (
+                  <AppText style={styles.noAlerts}>No alerts</AppText>
+                ) : (
+                  sortedAlerts.map((alert) => {
+                    const scheduleId = alert.schedule_id;
+                    const isExpanded = expandedAlerts[scheduleId];
+                    return (
+                      <TouchableOpacity
+                        key={scheduleId}
+                        style={[
+                          styles.alertItem,
+                          getCardStyle(alert.Medication_Time),
+                        ]}
+                        onPress={() => toggleExpand(scheduleId)}
+                        activeOpacity={0.9}
+                      >
+                        <View style={{ flexDirection: "row", flex: 1 }}>
+                          <View style={{ alignSelf: "flex-start" }}>
+                            <Checkbox
+                              status={
+                                activeTab === "history"
+                                  ? alert.status === "administered"
+                                    ? "checked"
+                                    : "unchecked"
+                                  : checkedAlerts[scheduleId]
+                                    ? "checked"
+                                    : "unchecked"
+                              }
+                              onPress={null}
+                              color={
+                                checkedAlerts[scheduleId] ? "#333" : "#CCCCCC"
+                              }
+                              style={styles.checkboxPosition}
+                            />
+                          </View>
+                          <View style={{ flex: 1 }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+                              <AppText style={styles.alertText}>
+                                Schedule ID: {alert.patient_number} - {scheduleId}
+                              </AppText>
+                              <AppText style={[styles.alertText, {paddingRight: 10}]}>
+                                {(alert.next_dose_time).split("T")[1]?.split("+")[0]}
+                              </AppText>
+                            </View>
+                            {isExpanded && (
+                              <>
+                                <AppText style={[styles.alertText]}>
+                                  {alert.patient_first_name}{" "}
+                                  {alert.patient_middle_name}{" "}
+                                  {alert.patient_last_name} - Room{" "}
+                                  {alert.room_number}
+                                </AppText>
+                                <AppText style={[styles.alertText]}>
+                                  Medication: {alert.Medication_name}
+                                </AppText>
+                                <AppText style={[styles.alertText]}>
+                                  Medication Form: {alert.Medication_form}
+                                </AppText>
+                                <AppText style={[styles.alertText]}>
+                                  Strength: {alert.Medication_strength} {alert.Medication_unit}
+                                </AppText>
+                                <AppText style={[styles.alertText]}>
+                                  Notes: {alert.Medication_notes}
+                                </AppText>
+                                {(activeTab === "upcoming" ||
+                                  activeTab === "pending") && (
+                                    <View style={styles.tabButtonContainer}>
+                                      <TouchableOpacity
+                                        style={[
+                                          styles.tabButton,
+                                          styles.confirmButton,
+                                        ]}
+                                        onPress={() =>
+                                          handleAdministerPress(scheduleId)
+                                        }
+                                      >
+                                        <AppText style={styles.buttonText}>
+                                          Administer
+                                        </AppText>
+                                      </TouchableOpacity>
+                                      <TouchableOpacity
+                                        style={[
+                                          styles.tabButton,
+                                          styles.cancelButton,
+                                        ]}
+                                        onPress={() =>
+                                          handleCancelPress(scheduleId)
+                                        }
+                                      >
+                                        <AppText style={styles.buttonText}>
+                                          Cancel
+                                        </AppText>
+                                      </TouchableOpacity>
+                                    </View>
+                                  )}
+                              </>
+                            )}
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  })
+                )}
+              </ScrollView>
             </View>
           </View>
+          <View style={styles.clockPanel}>
+            <Clock style={{ alignSelf: "center", marginVertical: 20 }} />
+            <View style={styles.clock}></View>
+          </View>
         </View>
-      </Modal>
-    </View>
+
+        <Modal
+          visible={isCancelModalVisible}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setIsCancelModalVisible(false)}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContainer}>
+              <AppText style={styles.modalTitle}>Cancel Medication</AppText>
+              <AppText>Please provide a reason for cancellation:</AppText>
+              <TextInput
+                style={styles.modalInput}
+                multiline
+                placeholder="Enter reason"
+                value={cancelReason}
+                onChangeText={setCancelReason}
+              />
+              <View style={styles.modalButtonContainer}>
+                <TouchableOpacity
+                  style={[styles.modalButtons]}
+                  onPress={() => setIsCancelModalVisible(false)}
+                >
+                  <AppText style={styles.modalButton}>Back</AppText>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[
+                    styles.modalButtons,
+                    styles.confirmButton,
+                    !cancelReason.trim() && {
+                      backgroundColor: "#808080",
+                      opacity: 0.5,
+                    },
+                  ]}
+                  onPress={confirmCancellation}
+                  disabled={!cancelReason.trim()}
+                >
+                  <AppText style={styles.modalButton}>Confirm</AppText>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      </View>
     </SafeAreaView>
   );
 };

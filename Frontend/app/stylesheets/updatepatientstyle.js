@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f8f8f8",
   },
   contentContainer: {
-    flex: 1,
+    flex: 0.95,
     marginLeft: sidebarWidth,
     padding: 40,
   },
