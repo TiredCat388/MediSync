@@ -75,9 +75,9 @@ export default function NewMedSched() {
     frequencyType: "",
     frequencyHour: "",
     frequencyMinute: "",
-    medicationDay: String(today.getDate()).padStart(2, "0"), // "25"
-    medicationMonth: String(today.getMonth() + 1).padStart(2, "0"), // "05"
-    medicationYear: String(today.getFullYear()), // "2025"
+    medicationDay: String(today.getDate()).padStart(2, "0"), 
+    medicationMonth: String(today.getMonth() + 1).padStart(2, "0"), 
+    medicationYear: String(today.getFullYear()), 
     medicationEndMonth: "",
     medicationEndDay: "",
     medicationEndYear: "",

@@ -131,8 +131,7 @@ const AnalogClock = () => {
             patient_first_name: patient.first_name || "",
             patient_middle_name: patient.middle_name || "",
             patient_last_name: patient.last_name || "",
-            room_number: patient.room_number || "N/A",
-            // medicationName may already be in med, if not add fallback here
+            room_number: patient.room_number || "",
           };
         });
         console.log("Enriched alerts:", enrichedAlerts);
@@ -140,46 +139,8 @@ const AnalogClock = () => {
         setUpcomingAlerts(enrichedAlerts);
       } catch (error) {
         console.error("Fetch failed:", error);
-        // You may want to use mock data here as fallback
-        setUpcomingAlerts([...mockData1, ...mockData2]);
       }
     };
-
-    const mockData1 = [
-      {
-        patientID: "AB256",
-        schedule_id: "SCH123",
-        patient_first_name: "Jane",
-        patient_middle_name: "Bee",
-        patient_last_name: "Smith",
-        medicationName: "Ibuprofen",
-        dosage: "2",
-        dosageUnit: "tablets",
-        medicationNotes:
-          "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ",
-        room_number: "102",
-        quantity: "5",
-        Medication_Time: "13:12",
-      },
-    ];
-
-    const mockData2 = [
-      {
-        patientID: "AB123",
-        schedule_id: "SCH122",
-        patient_first_name: "John",
-        patient_middle_name: "Adam",
-        patient_last_name: "Doe",
-        medicationName: "Paracetamol",
-        dosage: "500",
-        dosageUnit: "mg",
-        medicationNotes:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        room_number: "103",
-        quantity: "7",
-        Medication_Time: "13:12",
-      },
-    ];
 
     fetchAlerts();
   }, []);

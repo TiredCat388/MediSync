@@ -211,8 +211,8 @@ export default function SettingsScreen() {
                   minimumValue={0}
                   maximumValue={100}
                   value={volume}
-                  onValueChange={(value) => setVolume(value)} // update UI only
-                  onSlidingComplete={handleVolumeRelease}     // play sound here
+                  onValueChange={(value) => setVolume(value)} 
+                  onSlidingComplete={handleVolumeRelease}   
                   minimumTrackTintColor="#5879A5"
                   maximumTrackTintColor="#e0e0e0"
                   thumbTintColor="#5879A5"

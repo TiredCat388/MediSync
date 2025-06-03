@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     },
     alertItem: {
       backgroundColor: '#eee',
-      padding: 10,
+      padding: 15,
       borderRadius: 5,
       marginBottom: 8,
       flexDirection: 'row',
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
       fontSize: 16,
     },
     clockPanel: { 
-      padding: 30,
+      padding: 15,
       justifyContent: 'center',
       alignItems: 'center',
     },
