@@ -742,22 +742,24 @@ export default function RegisterNewPatient() {
                 }
               />
             </View>
-          </View>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              onPress={() => handleNavigate("/directory")}
-              style={[styles.button, styles.leaveButton]}
-            >
+            </View>
+
+                <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                onPress={() => handleNavigate("/directory")}
+                style={[styles.button, styles.leaveButton]}
+              >
               <AppText style={styles.buttonText}>Cancel</AppText>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={handleRegister}
-              style={[styles.button, styles.stayButton]}
-            >
-              <AppText style={styles.buttonText}>Register Patient</AppText>
-            </TouchableOpacity>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleRegister}
+                style={[styles.button, styles.stayButton]}
+              >
+                <AppText style={styles.buttonText}>Register Patient</AppText>
+              </TouchableOpacity>
+            </View>
+
           </View>
-        </View>
 
         {/* Cancel Confirmation Modal */}
         <Modal visible={modalVisible} transparent animationType="fade">

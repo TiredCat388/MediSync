@@ -66,7 +66,7 @@ export default StyleSheet.create({
     fontWeight: "600",
   },
   table: {
-    flex: 1,
+    flex: 0.95,
     marginTop: 20,
     backgroundColor: "#F8F8F8",
     borderRadius: 15,

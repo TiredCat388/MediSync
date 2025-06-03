@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     marginLeft: sidebarWidth,
-    padding: 40,
+    padding: 30,
   },
   screenTitle: {
     fontSize: 25,
@@ -22,9 +22,10 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   formContainer: {
+    flex: 1,
     flexDirection: "row",
     backgroundColor: "#b8cbdb",
-    padding: 40,
+    padding: 20,
     borderRadius: 10,
     justifyContent: "space-between",
     maxHeight: 520,
@@ -114,11 +115,12 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
-    marginTop: 20,
+    marginTop: 15,
+    marginRight: -5,
     justifyContent: "flex-end",
   },
   button: {
-    width: 200,
+    width: 211,
     paddingVertical: 12,
     alignItems: "center",
     borderRadius: 8,
@@ -136,7 +138,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.5)",
   },
   modalContainer: {
-    width: 300,
+    width: 150,
     padding: 20,
     backgroundColor: "white",
     borderRadius: 10,
@@ -165,7 +167,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#5879A5",
   },
   leaveButton: {
-    backgroundColor: "#999999",
+    backgroundColor: "#D9534F",
   },
   modalButtonText: {
     fontSize: 16,
@@ -239,7 +241,7 @@ const styles = StyleSheet.create({
   inlineContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-start",
+    alignItems: "flex-end",
     marginBottom: 10,
   },
   inlineItem: {

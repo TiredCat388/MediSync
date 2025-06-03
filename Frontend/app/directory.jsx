@@ -171,7 +171,6 @@ export default function PatientsDirectory() {
           </View>
         </View>
       </View>
-      </View>
     </Provider>
     </SafeAreaView>
   );
