@@ -1,7 +1,7 @@
 const dotenv = require('dotenv');
 const path = require('path');
 
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
+dotenv.config({ path: path.resolve(__dirname, '/.env') });
 
 
 module.exports = {
@@ -18,6 +18,7 @@ module.exports = {
       supportsTablet: true,
     },
     android: {
+      package: "com.medisync.app",
       adaptiveIcon: {
         foregroundImage: "./assets/images/medisync.png",
         backgroundColor: "#ffffff",
@@ -47,6 +48,9 @@ module.exports = {
     },
     extra: {
       BASE_API: process.env.BASE_API,
+      eas:{
+        projectId: "67b41ee3-b77c-4758-8eee-29aa095dc8b7"
+      }
     },
   },
 };
