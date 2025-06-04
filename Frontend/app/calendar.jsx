@@ -1,23 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import { View, TouchableOpacity, FlatList, Modal, ScrollView } from 'react-native';
-import { Feather } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import Sidebar from './components/sidebar';
-import Constants from 'expo-constants';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  TouchableOpacity,
+  FlatList,
+  Modal,
+  ScrollView,
+} from "react-native";
+import { Feather } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import Sidebar from "./components/sidebar";
+import Constants from "expo-constants";
 import { SafeAreaView } from "react-native-safe-area-context";
-import AppText from './components/AppText';
-import styles from './stylesheets/calendarstyle';
-
+import AppText from "./components/AppText";
+import styles from "./stylesheets/calendarstyle";
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
-const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-const months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+const months = [
+  "JANUARY",
+  "FEBRUARY",
+  "MARCH",
+  "APRIL",
+  "MAY",
+  "JUNE",
+  "JULY",
+  "AUGUST",
+  "SEPTEMBER",
+  "OCTOBER",
+  "NOVEMBER",
+  "DECEMBER",
+];
 
 const getDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
 const getFirstDayOfMonth = (year, month) => new Date(year, month, 1).getDay();
 const datenow = new Date();
-
 
 export default function CalendarApp() {
   const currenMonth = datenow.getMonth();
@@ -25,52 +42,71 @@ export default function CalendarApp() {
 
   const [selectedDate, setSelectedDate] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [currentMonth, setCurrentMonth] = useState(currenMonth); 
+  const [currentMonth, setCurrentMonth] = useState(currenMonth);
   const [currentYear, setCurrentYear] = useState(currenYear);
   const [sidebarWidth, setSidebarWidth] = useState(70);
   const [medicationData, setMedicationData] = useState({});
   const router = useRouter();
 
-  // Fetch medication data for all patients
+  // Fetch medication data for all non-archived patients
   const fetchMedicationData = async () => {
-  try {
-    const response = await fetch(`${BASE_API}/api/medications`);
-    if (!response.ok) {
-      throw new Error("Failed to fetch medication data");
-    }
-
-    const data = await response.json();
-    const formattedData = {};
-    const patientNames = {};
-
-    for (const med of data) {
-      const medDate = med.next_dose_time?.split("T")[0];
-      if (!medDate) continue;
-      if (!patientNames[med.patient_number]) {
-        const patientResponse = await fetch(`${BASE_API}/api/patients/${med.patient_number}`);
-        const patientData = await patientResponse.json();
-        patientNames[med.patient_number] = `${patientData.first_name} ${patientData.last_name}`;
+    try {
+      // First fetch all patients to get archived status
+      const patientsResponse = await fetch(`${BASE_API}/api/patients/`);
+      if (!patientsResponse.ok) {
+        throw new Error("Failed to fetch patient data");
       }
+      const patientsData = await patientsResponse.json();
 
-      if (!formattedData[medDate]) {
-        formattedData[medDate] = [];
-      }
-
-      formattedData[medDate].push({
-        name: med.Medication_name,
-        time: med.next_dose_time?.split("T")[1]?.split("+")[0],
-        patientId: med.patient_number,
-        patientName: patientNames[med.patient_number],
-        scheduleId: med.schedule_id,
-        frequencyType: med.Frequency_type, 
+      // Create a map of patient data for quick lookup
+      const patientMap = {};
+      patientsData.forEach((patient) => {
+        patientMap[patient.patient_number] = {
+          name: `${patient.first_name} ${patient.last_name}`,
+          isArchived: patient.is_archived,
+        };
       });
+
+      // Then fetch all medications
+      const medsResponse = await fetch(`${BASE_API}/api/medications`);
+      if (!medsResponse.ok) {
+        throw new Error("Failed to fetch medication data");
+      }
+      const medsData = await medsResponse.json();
+
+      const formattedData = {};
+
+      for (const med of medsData) {
+        // Skip if patient is archived or not found
+        if (
+          !patientMap[med.patient_number] ||
+          patientMap[med.patient_number].isArchived
+        ) {
+          continue;
+        }
+
+        const medDate = med.next_dose_time?.split("T")[0];
+        if (!medDate) continue;
+
+        if (!formattedData[medDate]) {
+          formattedData[medDate] = [];
+        }
+
+        formattedData[medDate].push({
+          name: med.Medication_name,
+          time: med.next_dose_time?.split("T")[1]?.split("+")[0],
+          patientId: med.patient_number,
+          patientName: patientMap[med.patient_number].name,
+          scheduleId: med.schedule_id,
+          frequencyType: med.Frequency_type,
+        });
+      }
+
+      setMedicationData(formattedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
-    setMedicationData(formattedData);
-  } catch (error) {
-    console.error("Error fetching medication data:", error);
-  }
-};
-  
+  };
 
   useEffect(() => {
     fetchMedicationData();
@@ -130,7 +166,12 @@ export default function CalendarApp() {
           {/* Legend */}
           <View style={styles.legendRow}>
             {[
-              { label: "OID", color: "#F8F8F8", borderWidth: 1, borderColor: "#333333" },
+              {
+                label: "OID",
+                color: "#F8F8F8",
+                borderWidth: 1,
+                borderColor: "#333333",
+              },
               { label: "BID", color: "#FFDA07" },
               { label: "TID", color: "#EFA2CB" },
               { label: "QID", color: "#85D684" },
@@ -139,7 +180,11 @@ export default function CalendarApp() {
                 <View
                   style={[
                     styles.legendCircle,
-                    { backgroundColor: item.color, borderWidth: item.borderWidth || 1, borderColor: item.borderColor || "#303030" }
+                    {
+                      backgroundColor: item.color,
+                      borderWidth: item.borderWidth || 1,
+                      borderColor: item.borderColor || "#303030",
+                    },
                   ]}
                 />
                 <AppText style={styles.legendLabel}>{item.label}</AppText>
@@ -176,9 +221,15 @@ export default function CalendarApp() {
               keyExtractor={(item, index) => index.toString()}
               renderItem={({ item }) => {
                 const dateKey = item
-                  ? `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(item).padStart(2, "0")}`
+                  ? `${currentYear}-${String(currentMonth + 1).padStart(
+                      2,
+                      "0"
+                    )}-${String(item).padStart(2, "0")}`
                   : null;
-                const medications = dateKey && medicationData[dateKey] ? medicationData[dateKey] : [];
+                const medications =
+                  dateKey && medicationData[dateKey]
+                    ? medicationData[dateKey]
+                    : [];
                 return (
                   <TouchableOpacity
                     style={[
@@ -190,12 +241,29 @@ export default function CalendarApp() {
                   >
                     {item && (
                       <>
-                        <AppText style={styles.calendarCellDate}>{item}</AppText>
+                        <AppText style={styles.calendarCellDate}>
+                          {item}
+                        </AppText>
                         <View style={styles.calendarCellMedList}>
                           {medications.slice(0, 3).map((med, index) => (
-                            <View key={index} style={[styles.calendarCellMed, {backgroundColor: getFrequencyColor(med.frequencyType)}]}>
-                              <AppText style={styles.calendarCellMedText} numberOfLines={1}>
-                                {med.name} at {med.time} (Patient: {med.patientName}, Schedule ID: {med.scheduleId})
+                            <View
+                              key={index}
+                              style={[
+                                styles.calendarCellMed,
+                                {
+                                  backgroundColor: getFrequencyColor(
+                                    med.frequencyType
+                                  ),
+                                },
+                              ]}
+                            >
+                              <AppText
+                                style={styles.calendarCellMedText}
+                                numberOfLines={1}
+                              >
+                                {med.name} at {med.time} (Patient:{" "}
+                                {med.patientName}, Schedule ID: {med.scheduleId}
+                                )
                               </AppText>
                             </View>
                           ))}
@@ -233,7 +301,8 @@ export default function CalendarApp() {
                         }}
                       >
                         <AppText style={styles.modalMedText} numberOfLines={1}>
-                          {med.name} at {med.time} (Patient: {med.patientName}, Schedule ID: {med.scheduleId})
+                          {med.name} at {med.time} (Patient: {med.patientName},
+                          Schedule ID: {med.scheduleId})
                         </AppText>
                       </TouchableOpacity>
                     ))

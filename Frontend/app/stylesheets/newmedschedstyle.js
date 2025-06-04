@@ -22,12 +22,13 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   formContainer: {
+    flex: 1,
     flexDirection: "row",
     backgroundColor: "#b8cbdb",
     padding: 20,
     borderRadius: 10,
     justifyContent: "space-between",
-    maxHeight: 550,
+    maxHeight: 520,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
@@ -251,7 +252,7 @@ const styles = StyleSheet.create({
   autocompleteContainer: {
     flex: 1,
     zIndex: 10,
-    width: 425,
+    width: 416,
     marginBottom: 10,
   },
 

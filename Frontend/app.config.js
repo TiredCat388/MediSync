@@ -3,7 +3,6 @@ const path = require('path');
 
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
-
 module.exports = {
   expo: {
     name: "Frontend",
