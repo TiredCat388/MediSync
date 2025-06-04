@@ -401,7 +401,7 @@ export default function NewMedSched() {
 
                 {/* Medication Name with Autocomplete */}
                 <AppText style={styles.label}>Medication Name</AppText>
-                <View style={styles.autocompleteContainer}>
+                <View style={styles.PickerContainer}>
                   <Autocomplete
                     data={filteredMedications}
                     value={formData.medicineName}
@@ -422,6 +422,7 @@ export default function NewMedSched() {
                     containerStyle={styles.autocompleteWrapper}
                     inputContainerStyle={styles.autocompleteInput}
                   />
+                  </View>
 
                   <AppText style={[styles.label]}>
                     Medication form{" "}
@@ -510,6 +511,7 @@ export default function NewMedSched() {
                         marginBottom: 10,
                         flex: 1,
                         height: 36,
+                        keyboardType: "numeric",
                       }}
                       value={formData.medicationStrength?.toString() || ""}
                       onChangeText={(text) =>
@@ -542,7 +544,6 @@ export default function NewMedSched() {
                       />
                     </View>
                   </View>
-                </View>
 
                 <AppText style={styles.label}>
                   Medication Start Date{" "}
@@ -728,22 +729,21 @@ export default function NewMedSched() {
                   Frequency <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
                 </AppText>
                 <View style={styles.PickerContainer}>
-
-                <RNPickerSelect
-                  Icon={() => (
-                    <Icon name="arrow-drop-down" size={20} color="gray" />
-                  )}
-                  items={frequencyOptions}
-                  value={formData.frequencyType}
-                  onValueChange={handleFrequencyChange}
-                  placeholder={
-                    formData.frequencyType
-                      ? {}
-                      : { label: "Select frequency", value: "" }
-                  }
-                  style={pickerSelectStyles}
-                  useNativeAndroidPickerStyle={false}
-                />
+                  <RNPickerSelect
+                    Icon={() => (
+                      <Icon name="arrow-drop-down" size={20} color="gray" />
+                    )}
+                    items={frequencyOptions}
+                    value={formData.frequencyType}
+                    onValueChange={handleFrequencyChange}
+                    placeholder={
+                      formData.frequencyType
+                        ? {}
+                        : { label: "Select frequency", value: "" }
+                    }
+                    style={pickerSelectStyles}
+                    useNativeAndroidPickerStyle={false}
+                  />
                 </View>
 
                 {formData.frequencyType === "Other" && (

@@ -327,429 +327,450 @@ export default function RegisterNewPatient() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <Sidebar onNavigate={handleNavigate} />
-        <View
-          style={[
-            styles.contentContainer,
-            { marginLeft: isSidebarExpanded ? 200 : 70 },
-          ]}
-        >
-          <AppText style={styles.screenTitle}>Register New Patient</AppText>
-          <View style={styles.formContainer}>
-            <ScrollView style={styles.column}>
-              <AppText style={styles.sectionTitle}>
-                Patient Details{" "}
-                <AppText style={{ color: "#5879A5", fontSize: 16 }}>
-                  * Required
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <View style={styles.container}>
+          <Sidebar onNavigate={handleNavigate} />
+          <View
+            style={[
+              styles.contentContainer,
+              { marginLeft: isSidebarExpanded ? 200 : 70 },
+            ]}
+          >
+            <AppText style={styles.screenTitle}>Register New Patient</AppText>
+            <View style={styles.formContainer}>
+              <ScrollView style={styles.column}>
+                <AppText style={styles.sectionTitle}>
+                  Patient Details{" "}
+                  <AppText style={{ color: "#5879A5", fontSize: 16 }}>
+                    * Required
+                  </AppText>
                 </AppText>
-              </AppText>
-              <AppText style={styles.label}>
-                First Name <AppText style={{ color: "#5879A5" }}>*</AppText>
-              </AppText>
-              <TextInput
-                style={styles.input}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, firstName: text })
-                }
-              />
-              <AppText style={styles.label}>Middle Name</AppText>
-              <TextInput
-                style={styles.input}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, middleName: text })
-                }
-              />
-              <AppText style={styles.label}>
-                Surname <AppText style={{ color: "#5879A5" }}>*</AppText>
-              </AppText>
-              <TextInput
-                style={styles.input}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, surname: text })
-                }
-              />
-
-              <AppText style={styles.label}>
-                Sex <AppText style={{ color: "#5879A5" }}>*</AppText>
-              </AppText>
-              <View>
-                <RNPickerSelect
-                  Icon={() => (
-                    <Icon name="arrow-drop-down" size={20} color="gray" />
-                  )}
-                  items={[
-                    { label: "Male", value: "M" },
-                    { label: "Female", value: "F" },
-                  ]}
-                  value={formData.sex}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, sex: value })
+                <AppText style={styles.label}>
+                  First Name <AppText style={{ color: "#5879A5" }}>*</AppText>
+                </AppText>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, firstName: text })
                   }
-                  placeholder={
-                    formData.sex ? {} : { label: "Select Sex", value: "" }
-                  }
-                  style={pickerSelectStyles}
-                  useNativeAndroidPickerStyle={false}
                 />
-              </View>
+                <AppText style={styles.label}>Middle Name</AppText>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, middleName: text })
+                  }
+                />
+                <AppText style={styles.label}>
+                  Surname <AppText style={{ color: "#5879A5" }}>*</AppText>
+                </AppText>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, surname: text })
+                  }
+                />
 
-              <AppText style={styles.label}>
-                Date of Birth <AppText style={{ color: "#5879A5" }}>*</AppText>
-              </AppText>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <View style={{ flex: 1, marginRight: 10 }}>
+                <AppText style={styles.label}>
+                  Sex <AppText style={{ color: "#5879A5" }}>*</AppText>
+                </AppText>
+                <View>
                   <RNPickerSelect
                     Icon={() => (
                       <Icon name="arrow-drop-down" size={20} color="gray" />
                     )}
-                    items={months}
-                    value={formData.birthMonth}
+                    items={[
+                      { label: "Male", value: "M" },
+                      { label: "Female", value: "F" },
+                    ]}
+                    value={formData.sex}
                     onValueChange={(value) =>
-                      setFormData({ ...formData, birthMonth: value })
+                      setFormData({ ...formData, sex: value })
                     }
                     placeholder={
-                      formData.birthMonth ? {} : { label: "MM", value: "" }
+                      formData.sex ? {} : { label: "Select Sex", value: "" }
                     }
                     style={pickerSelectStyles}
                     useNativeAndroidPickerStyle={false}
                   />
                 </View>
-                <View style={{ flex: 1, marginRight: 10 }}>
+
+                <AppText style={styles.label}>
+                  Date of Birth{" "}
+                  <AppText style={{ color: "#5879A5" }}>*</AppText>
+                </AppText>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <View style={{ flex: 1, marginRight: 10 }}>
+                    <RNPickerSelect
+                      Icon={() => (
+                        <Icon name="arrow-drop-down" size={20} color="gray" />
+                      )}
+                      items={months}
+                      value={formData.birthMonth}
+                      onValueChange={(value) =>
+                        setFormData({ ...formData, birthMonth: value })
+                      }
+                      placeholder={
+                        formData.birthMonth ? {} : { label: "MM", value: "" }
+                      }
+                      style={pickerSelectStyles}
+                      useNativeAndroidPickerStyle={false}
+                    />
+                  </View>
+                  <View style={{ flex: 1, marginRight: 10 }}>
+                    <RNPickerSelect
+                      Icon={() => (
+                        <Icon name="arrow-drop-down" size={20} color="gray" />
+                      )}
+                      items={days}
+                      value={formData.birthDay}
+                      onValueChange={(value) =>
+                        setFormData({ ...formData, birthDay: value })
+                      }
+                      placeholder={
+                        formData.birthDay ? {} : { label: "DD", value: "" }
+                      }
+                      style={pickerSelectStyles}
+                      useNativeAndroidPickerStyle={false}
+                    />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <RNPickerSelect
+                      Icon={() => (
+                        <Icon name="arrow-drop-down" size={20} color="gray" />
+                      )}
+                      items={years}
+                      value={formData.birthYear}
+                      onValueChange={(value) =>
+                        setFormData({ ...formData, birthYear: value })
+                      }
+                      placeholder={
+                        formData.birthYear ? {} : { label: "YYYY", value: "" }
+                      }
+                      style={pickerSelectStyles}
+                      useNativeAndroidPickerStyle={false}
+                    />
+                  </View>
+                </View>
+
+                <AppText style={styles.label}>Age</AppText>
+                <TextInput
+                  style={styles.input}
+                  value={formData.age.toString()}
+                  editable={false}
+                />
+
+                <AppText style={styles.label}>
+                  Blood Type <AppText style={{ color: "#5879A5" }}>*</AppText>
+                </AppText>
+                <View>
                   <RNPickerSelect
                     Icon={() => (
                       <Icon name="arrow-drop-down" size={20} color="gray" />
                     )}
-                    items={days}
-                    value={formData.birthDay}
+                    items={[
+                      { label: "A+", value: "A+" },
+                      { label: "A-", value: "A-" },
+                      { label: "B+", value: "B+" },
+                      { label: "B-", value: "B-" },
+                      { label: "AB+", value: "AB+" },
+                      { label: "AB-", value: "AB-" },
+                      { label: "O+", value: "O+" },
+                      { label: "O-", value: "O-" },
+                      { label: "Rhnull", value: "Rhnull" },
+                    ]}
+                    value={formData.bloodType}
                     onValueChange={(value) =>
-                      setFormData({ ...formData, birthDay: value })
+                      setFormData({ ...formData, bloodType: value })
                     }
                     placeholder={
-                      formData.birthDay ? {} : { label: "DD", value: "" }
+                      formData.bloodType
+                        ? {}
+                        : { label: "Select Blood Type", value: "" }
                     }
                     style={pickerSelectStyles}
                     useNativeAndroidPickerStyle={false}
                   />
                 </View>
-                <View style={{ flex: 1 }}>
+
+                <AppText style={styles.label}>Religion</AppText>
+                <View>
                   <RNPickerSelect
                     Icon={() => (
                       <Icon name="arrow-drop-down" size={20} color="gray" />
                     )}
-                    items={years}
-                    value={formData.birthYear}
-                    onValueChange={(value) =>
-                      setFormData({ ...formData, birthYear: value })
-                    }
+                    items={[
+                      { label: "Catholic", value: "Catholic" },
+                      { label: "Protestant", value: "Protestant" },
+                      { label: "Muslim", value: "Muslim" },
+                      { label: "Buddhist", value: "Buddhist" },
+                      { label: "Hindu", value: "Hindu" },
+                      { label: "Atheist", value: "Atheist" },
+                      { label: "Agnostic", value: "Agnostic" },
+                      { label: "Other", value: "Other" },
+                    ]}
+                    value={formData.religion}
+                    onValueChange={(value) => {
+                      // Reset otherReligionSpecify if not "Other"
+                      if (value !== "Other") {
+                        setFormData({
+                          ...formData,
+                          religion: value,
+                          otherReligionSpecify: "",
+                        });
+                      } else {
+                        setFormData({ ...formData, religion: value });
+                      }
+                    }}
+                    placeholder={{ label: "Select Religion", value: "" }}
+                    style={pickerSelectStyles}
+                    useNativeAndroidPickerStyle={false}
+                  />
+                </View>
+
+                {formData.religion === "Other" ? (
+                  <>
+                    <AppText style={styles.label}>
+                      Specify Other Religion{" "}
+                      <AppText style={{ color: "#5879A5" }}>*</AppText>
+                    </AppText>
+                    <TextInput
+                      style={styles.input}
+                      onChangeText={(text) =>
+                        setFormData({ ...formData, otherReligionSpecify: text })
+                      }
+                      value={formData.otherReligionSpecify}
+                      placeholder="Please specify your religion"
+                    />
+                  </>
+                ) : null}
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <View style={{ flex: 1, marginRight: 10 }}>
+                    <AppText style={styles.label}>
+                      Height (meters){" "}
+                      <AppText style={{ color: "#5879A5" }}>*</AppText>
+                    </AppText>
+                    <TextInput
+                      style={styles.input}
+                      keyboardType="numeric"
+                      placeholder="e.g., 1.70"
+                      value={formData.height}
+                      onChangeText={(text) =>
+                        setFormData({ ...formData, height: text })
+                      }
+                    />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <AppText style={styles.label}>
+                      Weight (kg){" "}
+                      <AppText style={{ color: "#5879A5" }}>*</AppText>
+                    </AppText>
+                    <TextInput
+                      style={styles.input}
+                      keyboardType="numeric"
+                      placeholder="e.g., 65"
+                      value={formData.weight}
+                      onChangeText={(text) =>
+                        setFormData({ ...formData, weight: text })
+                      }
+                    />
+                  </View>
+                </View>
+
+                <AppText style={styles.label}>
+                  Diet <AppText style={{ color: "#5879A5" }}>*</AppText>
+                </AppText>
+                <View>
+                  <RNPickerSelect
+                    Icon={() => (
+                      <Icon name="arrow-drop-down" size={20} color="gray" />
+                    )}
+                    items={dietOptions}
+                    value={formData.diet.split(":")[0]}
+                    onValueChange={handleDietChange}
                     placeholder={
-                      formData.birthYear ? {} : { label: "YYYY", value: "" }
+                      formData.diet ? {} : { label: "Select Diet", value: "" }
                     }
                     style={pickerSelectStyles}
                     useNativeAndroidPickerStyle={false}
                   />
                 </View>
-              </View>
 
-              <AppText style={styles.label}>Age</AppText>
-              <TextInput
-                style={styles.input}
-                value={formData.age.toString()}
-                editable={false}
-              />
+                {formData.diet.startsWith("ngt:") ? (
+                  <>
+                    <AppText style={styles.label}>
+                      Specify NGT Details{" "}
+                      <AppText style={{ color: "#5879A5" }}>*</AppText>
+                    </AppText>
+                    <TextInput
+                      style={styles.input}
+                      onChangeText={(text) =>
+                        handleDietSpecifyChange(text, "ngt")
+                      }
+                      value={formData.ngtSpecify}
+                      placeholder="e.g., Formula"
+                    />
+                  </>
+                ) : null}
 
-              <AppText style={styles.label}>
-                Blood Type <AppText style={{ color: "#5879A5" }}>*</AppText>
-              </AppText>
-              <View>
-                <RNPickerSelect
-                  Icon={() => (
-                    <Icon name="arrow-drop-down" size={20} color="gray" />
-                  )}
-                  items={[
-                    { label: "A+", value: "A+" },
-                    { label: "A-", value: "A-" },
-                    { label: "B+", value: "B+" },
-                    { label: "B-", value: "B-" },
-                    { label: "AB+", value: "AB+" },
-                    { label: "AB-", value: "AB-" },
-                    { label: "O+", value: "O+" },
-                    { label: "O-", value: "O-" },
-                    { label: "Rhnull", value: "Rhnull" },
+                {formData.diet.startsWith("other:") ? (
+                  <>
+                    <AppText style={styles.label}>
+                      Specify Other Diet{" "}
+                      <AppText style={{ color: "#5879A5" }}>*</AppText>
+                    </AppText>
+                    <TextInput
+                      style={styles.input}
+                      onChangeText={(text) =>
+                        handleDietSpecifyChange(text, "other")
+                      }
+                      value={formData.otherDietSpecify}
+                      placeholder="Please specify the diet"
+                    />
+                  </>
+                ) : null}
+
+                <AppText style={styles.label}>
+                  Contact Number{" "}
+                  <AppText style={{ color: "#5879A5" }}>*</AppText>
+                </AppText>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, phoneNumber: text })
+                  }
+                />
+
+                <AppText style={styles.label}>
+                  Bed Number <AppText style={{ color: "#5879A5" }}>*</AppText>
+                </AppText>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, bedNumber: text })
+                  }
+                />
+
+                <AppText style={styles.label}>
+                  Room Number <AppText style={{ color: "#5879A5" }}>*</AppText>
+                </AppText>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, roomNumber: text })
+                  }
+                />
+
+                <AppText style={styles.label}>
+                  Chief Complaint/s{" "}
+                  <AppText style={{ color: "#5879A5" }}>*</AppText>
+                </AppText>
+                <TextInput
+                  style={[
+                    styles.input,
+                    { height: 150, textAlignVertical: "top" },
                   ]}
-                  value={formData.bloodType}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, bloodType: value })
+                  multiline
+                  numberOfLines={4}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, chiefComplaint: text })
                   }
-                  placeholder={
-                    formData.bloodType
-                      ? {}
-                      : { label: "Select Blood Type", value: "" }
-                  }
-                  style={pickerSelectStyles}
-                  useNativeAndroidPickerStyle={false}
                 />
-              </View>
 
-              <AppText style={styles.label}>Religion</AppText>
-              <View>
-                <RNPickerSelect
-                  Icon={() => (
-                    <Icon name="arrow-drop-down" size={20} color="gray" />
-                  )}
-                  items={[
-                    { label: "Catholic", value: "Catholic" },
-                    { label: "Protestant", value: "Protestant" },
-                    { label: "Muslim", value: "Muslim" },
-                    { label: "Buddhist", value: "Buddhist" },
-                    { label: "Hindu", value: "Hindu" },
-                    { label: "Atheist", value: "Atheist" },
-                    { label: "Agnostic", value: "Agnostic" },
-                    { label: "Other", value: "Other" },
+                <AppText style={styles.label}>
+                  Admitting Diagnosis{" "}
+                  <AppText style={{ color: "#5879A5" }}>*</AppText>
+                </AppText>
+                <TextInput
+                  style={[
+                    styles.input,
+                    { height: 150, textAlignVertical: "top" },
                   ]}
-                  value={formData.religion}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, religion: value })
+                  multiline
+                  numberOfLines={4}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, admittingDiagnosis: text })
                   }
-                  placeholder={{ label: "Select Religion", value: "" }}
-                  style={pickerSelectStyles}
-                  useNativeAndroidPickerStyle={false}
+                />
+
+                <AppText style={styles.label}>Final Diagnosis</AppText>
+                <TextInput
+                  style={[
+                    styles.input,
+                    { height: 150, textAlignVertical: "top" },
+                  ]}
+                  multiline
+                  numberOfLines={4}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, finalDiagnosis: text })
+                  }
+                />
+              </ScrollView>
+
+              <View style={styles.divider} />
+
+              <View style={styles.column}>
+                <AppText style={styles.sectionTitle}>
+                  Emergency Contact Details
+                </AppText>
+                <AppText style={styles.label}>
+                  First Name <AppText style={{ color: "#5879A5" }}>*</AppText>
+                </AppText>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, emergencyFirstName: text })
+                  }
+                />
+                <AppText style={styles.label}>
+                  Surname <AppText style={{ color: "#5879A5" }}>*</AppText>
+                </AppText>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, emergencySurname: text })
+                  }
+                />
+                <AppText style={styles.label}>
+                  Relation to Patient{" "}
+                  <AppText style={{ color: "#5879A5" }}>*</AppText>
+                </AppText>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, relation: text })
+                  }
+                />
+                <AppText style={styles.label}>
+                  Contact Number{" "}
+                  <AppText style={{ color: "#5879A5" }}>*</AppText>
+                </AppText>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, emergencyPhone: text })
+                  }
                 />
               </View>
-
-              {formData.religion === "Other" ? (
-                <>
-                  <AppText style={styles.label}>
-                    Specify Other Religion{" "}
-                    <AppText style={{ color: "#5879A5" }}>*</AppText>
-                  </AppText>
-                  <TextInput
-                    style={styles.input}
-                    onChangeText={(text) =>
-                      setFormData({ ...formData, otherReligionSpecify: text })
-                    }
-                    value={formData.otherReligionSpecify}
-                    placeholder="Please specify your religion"
-                  />
-                </>
-              ) : null}
-
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <View style={{ flex: 1, marginRight: 10 }}>
-                  <AppText style={styles.label}>
-                    Height (meters) <AppText style={{ color: "#5879A5" }}>*</AppText>
-                  </AppText>
-                  <TextInput
-                    style={styles.input}
-                    keyboardType="numeric"
-                    placeholder="e.g., 1.70"
-                    value={formData.height}
-                    onChangeText={(text) =>
-                      setFormData({ ...formData, height: text })
-                    }
-                  />
-                </View>
-                <View style={{ flex: 1 }}>
-                  <AppText style={styles.label}>
-                    Weight (kg) <AppText style={{ color: "#5879A5" }}>*</AppText>
-                  </AppText>
-                  <TextInput
-                    style={styles.input}
-                    keyboardType="numeric"
-                    placeholder="e.g., 65"
-                    value={formData.weight}
-                    onChangeText={(text) =>
-                      setFormData({ ...formData, weight: text })
-                    }
-                  />
-                </View>
-              </View>
-
-              <AppText style={styles.label}>
-                Diet <AppText style={{ color: "#5879A5" }}>*</AppText>
-              </AppText>
-              <View>
-                <RNPickerSelect
-                  Icon={() => (
-                    <Icon name="arrow-drop-down" size={20} color="gray" />
-                  )}
-                  items={dietOptions}
-                  value={formData.diet.split(":")[0]}
-                  onValueChange={handleDietChange}
-                  placeholder={
-                    formData.diet ? {} : { label: "Select Diet", value: "" }
-                  }
-                  style={pickerSelectStyles}
-                  useNativeAndroidPickerStyle={false}
-                />
-              </View>
-
-              {formData.diet.startsWith("ngt:") ? (
-                <>
-                  <AppText style={styles.label}>
-                    Specify NGT Details <AppText style={{ color: "#5879A5" }}>*</AppText>
-                  </AppText>
-                  <TextInput
-                    style={styles.input}
-                    onChangeText={(text) =>
-                      handleDietSpecifyChange(text, "ngt")
-                    }
-                    value={formData.ngtSpecify}
-                    placeholder="e.g., Formula"
-                  />
-                </>
-              ) : null}
-
-              {formData.diet.startsWith("other:") ? (
-                <>
-                  <AppText style={styles.label}>
-                    Specify Other Diet <AppText style={{ color: "#5879A5" }}>*</AppText>
-                  </AppText>
-                  <TextInput
-                    style={styles.input}
-                    onChangeText={(text) =>
-                      handleDietSpecifyChange(text, "other")
-                    }
-                    value={formData.otherDietSpecify}
-                    placeholder="Please specify the diet"
-                  />
-                </>
-              ) : null}
-
-              <AppText style={styles.label}>
-                Contact Number <AppText style={{ color: "#5879A5" }}>*</AppText>
-              </AppText>
-              <TextInput
-                style={styles.input}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, phoneNumber: text })
-                }
-              />
-
-              <AppText style={styles.label}>
-                Bed Number <AppText style={{ color: "#5879A5" }}>*</AppText>
-              </AppText>
-              <TextInput
-                style={styles.input}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, bedNumber: text })
-                }
-              />
-
-              <AppText style={styles.label}>
-                Room Number <AppText style={{ color: "#5879A5" }}>*</AppText>
-              </AppText>
-              <TextInput
-                style={styles.input}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, roomNumber: text })
-                }
-              />
-
-              <AppText style={styles.label}>
-                Chief Complaint/s <AppText style={{ color: "#5879A5" }}>*</AppText>
-              </AppText>
-              <TextInput
-                style={[
-                  styles.input,
-                  { height: 150, textAlignVertical: "top" },
-                ]}
-                multiline
-                numberOfLines={4}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, chiefComplaint: text })
-                }
-              />
-
-              <AppText style={styles.label}>
-                Admitting Diagnosis <AppText style={{ color: "#5879A5" }}>*</AppText>
-              </AppText>
-              <TextInput
-                style={[
-                  styles.input,
-                  { height: 150, textAlignVertical: "top" },
-                ]}
-                multiline
-                numberOfLines={4}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, admittingDiagnosis: text })
-                }
-              />
-
-              <AppText style={styles.label}>Final Diagnosis</AppText>
-              <TextInput
-                style={[
-                  styles.input,
-                  { height: 150, textAlignVertical: "top" },
-                ]}
-                multiline
-                numberOfLines={4}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, finalDiagnosis: text })
-                }
-              />
-            </ScrollView>
-
-            <View style={styles.divider} />
-
-            <View style={styles.column}>
-              <AppText style={styles.sectionTitle}>Emergency Contact Details</AppText>
-              <AppText style={styles.label}>
-                First Name <AppText style={{ color: "#5879A5" }}>*</AppText>
-              </AppText>
-              <TextInput
-                style={styles.input}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, emergencyFirstName: text })
-                }
-              />
-              <AppText style={styles.label}>
-                Surname <AppText style={{ color: "#5879A5" }}>*</AppText>
-              </AppText>
-              <TextInput
-                style={styles.input}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, emergencySurname: text })
-                }
-              />
-              <AppText style={styles.label}>
-                Relation to Patient <AppText style={{ color: "#5879A5" }}>*</AppText>
-              </AppText>
-              <TextInput
-                style={styles.input}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, relation: text })
-                }
-              />
-              <AppText style={styles.label}>
-                Contact Number <AppText style={{ color: "#5879A5" }}>*</AppText>
-              </AppText>
-              <TextInput
-                style={styles.input}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, emergencyPhone: text })
-                }
-              />
             </View>
-            </View>
 
-                <View style={styles.buttonContainer}>
+            <View style={styles.buttonContainer}>
               <TouchableOpacity
                 onPress={() => handleNavigate("/directory")}
                 style={[styles.button, styles.leaveButton]}
               >
-              <AppText style={styles.buttonText}>Cancel</AppText>
+                <AppText style={styles.buttonText}>Cancel</AppText>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={handleRegister}
@@ -758,77 +779,78 @@ export default function RegisterNewPatient() {
                 <AppText style={styles.buttonText}>Register Patient</AppText>
               </TouchableOpacity>
             </View>
-
           </View>
 
-        {/* Cancel Confirmation Modal */}
-        <Modal visible={modalVisible} transparent animationType="fade">
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalContainer}>
-              <AppText style={styles.modalTitle}>Cancel Patient Registration</AppText>
-              <AppText style={styles.modalMessage}>
-                Are you sure you want to cancel patient registration?
-              </AppText>
-              <View style={styles.modalButtonContainer}>
-                <TouchableOpacity
-                  style={[styles.modalButton, styles.stayButton]}
-                  onPress={() => setModalVisible(false)}
-                >
-                  <AppText style={styles.modalButtonText}>Stay</AppText>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.modalButton, styles.leaveButton]}
-                  onPress={() => {
-                    setModalVisible(false);
-                    router.push("/directory");
-                  }}
-                >
-                  <AppText style={styles.modalButtonText}>Leave</AppText>
-                </TouchableOpacity>
+          {/* Cancel Confirmation Modal */}
+          <Modal visible={modalVisible} transparent animationType="fade">
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContainer}>
+                <AppText style={styles.modalTitle}>
+                  Cancel Patient Registration
+                </AppText>
+                <AppText style={styles.modalMessage}>
+                  Are you sure you want to cancel patient registration?
+                </AppText>
+                <View style={styles.modalButtonContainer}>
+                  <TouchableOpacity
+                    style={[styles.modalButton, styles.stayButton]}
+                    onPress={() => setModalVisible(false)}
+                  >
+                    <AppText style={styles.modalButtonText}>Stay</AppText>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.modalButton, styles.leaveButton]}
+                    onPress={() => {
+                      setModalVisible(false);
+                      router.push("/directory");
+                    }}
+                  >
+                    <AppText style={styles.modalButtonText}>Leave</AppText>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-          </View>
-        </Modal>
+          </Modal>
 
-        <Modal visible={warningModalVisible} transparent animationType="fade">
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalContainer}>
-              <AppText style={styles.modalTitle}>Incomplete Form</AppText>
-              <AppText style={styles.modalMessage}>
-                {registrationSuccessMessage}
-              </AppText>
-              <View style={styles.modalButtonContainer}>
-                <TouchableOpacity
-                  style={[styles.modalButton, styles.stayButton]}
-                  onPress={() => {
-                    setWarningModalVisible(false);
-                    handleRegister(); // Consider if you want to attempt registration with missing fields
-                  }}
-                >
-                  <AppText style={styles.modalButtonText}>Proceed</AppText>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.modalButton, styles.leaveButton]}
-                  onPress={() => setWarningModalVisible(false)}
-                >
-                  <AppText style={styles.modalButtonText}>Go Back</AppText>
-                </TouchableOpacity>
+          <Modal visible={warningModalVisible} transparent animationType="fade">
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContainer}>
+                <AppText style={styles.modalTitle}>Incomplete Form</AppText>
+                <AppText style={styles.modalMessage}>
+                  {registrationSuccessMessage}
+                </AppText>
+                <View style={styles.modalButtonContainer}>
+                  <TouchableOpacity
+                    style={[styles.modalButton, styles.stayButton]}
+                    onPress={() => {
+                      setWarningModalVisible(false);
+                      handleRegister(); // Consider if you want to attempt registration with missing fields
+                    }}
+                  >
+                    <AppText style={styles.modalButtonText}>Proceed</AppText>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.modalButton, styles.leaveButton]}
+                    onPress={() => setWarningModalVisible(false)}
+                  >
+                    <AppText style={styles.modalButtonText}>Go Back</AppText>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-          </View>
-        </Modal>
+          </Modal>
 
-        {/* Patient Registered Successfully Alert */}
-        <CustomAlert
-          visible={registrationSuccessVisible}
-          message={registrationSuccessMessage}
-          onClose={() => {
-            setRegistrationSuccessVisible(false);
-            router.push("/directory"); // Redirect after successful registration
-          }}
-        />
-      </View>
-    </GestureHandlerRootView>
+          {/* Patient Registered Successfully Alert */}
+          <CustomAlert
+            visible={registrationSuccessVisible}
+            message={registrationSuccessMessage}
+            onClose={() => {
+              setRegistrationSuccessVisible(false);
+              router.push("/directory"); // Redirect after successful registration
+            }}
+          />
+        </View>
+      </GestureHandlerRootView>
     </SafeAreaView>
   );
 }

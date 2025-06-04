@@ -367,6 +367,9 @@ export default function UpdatePatientScreen() {
               </AppText>
               <View>
                 <RNPickerSelect
+                  Icon={() => (
+                    <Icon name="arrow-drop-down" size={20} color="gray" />
+                  )}
                   items={[
                     { label: "Male", value: "M" },
                     { label: "Female", value: "F" },
@@ -376,14 +379,8 @@ export default function UpdatePatientScreen() {
                   placeholder={
                     formData.sex ? {} : { label: "Select Sex", value: "" }
                   }
-                  style={{
-                    inputAndroid: styles.input,
-                    inputIOS: styles.input,
-                    inputWeb: styles.input,
-                    placeholder: {
-                      color: "#999",
-                    },
-                  }}
+                  style={pickerSelectStyles}
+                  useNativeAndroidPickerStyle={false}
                 />
               </View>
               <AppText style={styles.label}>
@@ -518,7 +515,7 @@ export default function UpdatePatientScreen() {
                 <>
                   <AppText style={styles.label}>
                     Specify Other Religion{" "}
-                    <AppText style={{ color: "red" }}>*</AppText>
+                    <AppText style={{ color: "#5879A5" }}>*</AppText>
                   </AppText>
                   <TextInput
                     style={styles.input}
@@ -585,7 +582,7 @@ export default function UpdatePatientScreen() {
                 <>
                   <AppText style={styles.label}>
                     Specify NGT Details{" "}
-                    <AppText style={{ color: "red" }}>*</AppText>
+                    <AppText style={{ color: "#5879A5" }}>*</AppText>
                   </AppText>
                   <TextInput
                     style={styles.input}
@@ -601,7 +598,7 @@ export default function UpdatePatientScreen() {
                 <>
                   <AppText style={styles.label}>
                     Specify Other Diet{" "}
-                    <AppText style={{ color: "red" }}>*</AppText>
+                    <AppText style={{ color: "#5879A5" }}>*</AppText>
                   </AppText>
                   <TextInput
                     style={styles.input}

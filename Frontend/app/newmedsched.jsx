@@ -324,7 +324,7 @@ export default function NewMedSched() {
                 <AppText style={styles.label}>
                   Medication Name <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
                 </AppText>
-                <View style={styles.autocompleteContainer}>
+                <View style={styles.PickerContainer}>
                   <Autocomplete
                     data={filteredMedications}
                     value={query}
