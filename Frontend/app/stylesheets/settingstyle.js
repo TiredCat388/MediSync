@@ -44,7 +44,7 @@ slider: {
     borderRadius: 15,
 },
 pickerWrapper: {
-    width: "90%",
+    width: "100%",
     borderWidth: 2,
     borderColor: "#808080",
     borderRadius: 12,
