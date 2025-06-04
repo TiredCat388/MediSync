@@ -48,7 +48,7 @@ export default StyleSheet.create({
     elevation: 2,
   },
   sortButton: {
-    backgroundColor: "#5c87b2",
+    backgroundColor: "#4E84D3",
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 10,
