@@ -184,7 +184,7 @@ export const styles = StyleSheet.create({
     borderColor: "#999999",
     borderRadius: 5,
     fontSize: 15,
-    width: 120, 
+    width: "100%", 
     color: "#000",
     paddingHorizontal: 10,
     paddingVertical: 2,

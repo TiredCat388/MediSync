@@ -17,7 +17,14 @@ import { FontAwesome5 } from '@expo/vector-icons';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
-const TESTING_PATIENT = { id: "0123456", name: "TESTING PURPOSES ONLY" };
+const TESTING_PATIENT = {
+  patient_number: "999999",
+  first_name: "Archive",
+  middle_name: "T",
+  last_name: "Patient",
+  is_archived: true,
+  date_archived: new Date().toISOString(),
+};
 
 export default function PatientsDirectory() {
   const router = useRouter();
