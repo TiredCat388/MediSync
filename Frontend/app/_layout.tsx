@@ -3,7 +3,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
 import { NotificationProvider } from '../notifcontext';
 import GlobalNotification from '../app/notification/globalnotif';
-import { Provider as PaperProvider } from 'react-native-paper'; // <-- Add this import
+import { SettingsProvider } from "../SettingsContext";
+import { Provider as PaperProvider } from 'react-native-paper';
 
 export default function Layout() {
   const [fontsLoaded] = useFonts({
@@ -16,10 +17,12 @@ export default function Layout() {
   return (
     <PaperProvider>
       <SafeAreaProvider>
-        <NotificationProvider>
-          <Slot />
-          <GlobalNotification />
-        </NotificationProvider>
+        <SettingsProvider>
+          <NotificationProvider>
+            <Slot />
+            <GlobalNotification />
+          </NotificationProvider>
+        </SettingsProvider>
       </SafeAreaProvider>
     </PaperProvider>
   );

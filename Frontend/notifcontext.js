@@ -1,17 +1,16 @@
-import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
-import Constants from 'expo-constants';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { createContext, useContext, useEffect, useRef } from 'react';
 import { Audio } from 'expo-av';
+import { useSettings } from "./SettingsContext"; // <-- Add this import
+import Constants from 'expo-constants';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 const NotificationContext = createContext();
 
 export const NotificationProvider = ({ children }) => {
-  const [visible, setVisible] = useState(false);
-  const [notificationData, setNotificationData] = useState(null);
-  const [soundObject, setSoundObject] = useState(null);
-  const [volume, setVolume] = useState(100);
-  const [alertSound, setAlertSound] = useState("alarm 1");
+  const [visible, setVisible] = React.useState(false);
+  const [notificationData, setNotificationData] = React.useState(null);
+  const [soundObject, setSoundObject] = React.useState(null);
+  const { volume, alertSound } = useSettings();
 
   const patientsRef = useRef([]);
   const alertedAt60Min = useRef(new Set());
@@ -31,23 +30,6 @@ export const NotificationProvider = ({ children }) => {
   const hideNotification = () => {
     setVisible(false);
     setNotificationData(null);
-  };
-
-  const loadSettings = async () => {
-    try {
-      const storedVolume = await AsyncStorage.getItem("volume");
-      const storedAlertSound = await AsyncStorage.getItem("alertSound");
-
-      if (storedVolume !== null) setVolume(JSON.parse(storedVolume));
-      if (storedAlertSound !== null) setAlertSound(storedAlertSound);
-
-      log("Loaded sound settings", {
-        alertSound: storedAlertSound || "alarm 1",
-        volume: storedVolume || 100,
-      });
-    } catch (error) {
-      console.error("Error loading settings:", error);
-    }
   };
 
   const getSoundFile = (soundName) => {
@@ -112,8 +94,6 @@ export const NotificationProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    loadSettings();
-
     // Fetch patients ONCE
     const fetchPatients = async () => {
       try {
@@ -226,7 +206,7 @@ export const NotificationProvider = ({ children }) => {
       clearTimeout(timeout);
       if (interval) clearInterval(interval);
     };
-  }, []);
+  }, [volume, alertSound]);
 
   return (
     <NotificationContext.Provider value={{ showNotification, hideNotification, visible, notificationData }}>

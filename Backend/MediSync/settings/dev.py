@@ -3,7 +3,7 @@ from decouple import config
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1','172.16.12.64']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1','172.16.12.64', '192.168.1.4']
 
 
 DATABASES = {

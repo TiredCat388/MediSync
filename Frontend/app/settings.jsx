@@ -1,23 +1,33 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Modal } from "react-native";
+import { View, TouchableOpacity } from "react-native";
 import Slider from "@react-native-community/slider";
 import Sidebar from "./components/sidebar";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Audio } from "expo-av";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppText from './components/AppText';
 import styles from "./stylesheets/settingstyle";
 import RNPickerSelect from "react-native-picker-select";
+import { useSettings } from "../SettingsContext";
+import { Audio } from "expo-av";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SettingsScreen() {
-  const [volume, setVolume] = useState(50);
-  const [alertSound, setAlertSound] = useState("alarm 1");
+  const { volume, alertSound, saveSettings } = useSettings();
+  const [localVolume, setLocalVolume] = useState(volume);
+  const [localAlertSound, setLocalAlertSound] = useState(alertSound);
   const [sidebarWidth, setSidebarWidth] = useState(70);
-  const [isSaving, setIsSaving] = useState(false); // For showing loading state
-  const [isSaved, setIsSaved] = useState(false); // To track if settings are saved
+  const [isSaving, setIsSaving] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
   const [soundObject, setSoundObject] = useState(null);
-  const [volumeChangeTimeout, setVolumeChangeTimeout] = useState(null);
+
+  // Sync localVolume with context volume
+  useEffect(() => {
+    setLocalVolume(volume);
+  }, [volume]);
+
+  useEffect(() => {
+    setLocalAlertSound(alertSound);
+  }, [alertSound]);
 
   const soundFiles = {
     "alarm 1": require("../assets/sounds/alarm 1.mp3"),
@@ -26,46 +36,8 @@ export default function SettingsScreen() {
     "alarm 4": require("../assets/sounds/alarm 4.mp3"),
   };
 
-  const soundFile = soundFiles[alertSound] || soundFiles["alarm 1"];
-
-  useEffect(() => {
-    const loadSettings = async () => {
-      try {
-        const storedVolume = await AsyncStorage.getItem("volume");
-        const storedAlertSound = await AsyncStorage.getItem("alertSound");
-
-        if (storedVolume !== null) {
-          setVolume(JSON.parse(storedVolume));
-        }
-        if (storedAlertSound !== null) {
-          setAlertSound(storedAlertSound);
-        }
-      } catch (error) {
-        console.error("Error loading settings from AsyncStorage:", error);
-      }
-    };
-
-    loadSettings();
-  }, []);
-
-  // Save settings to AsyncStorage
-  const saveSettings = async () => {
-    setIsSaving(true);
-    setIsSaved(false);
-
-    try {
-      await AsyncStorage.setItem("volume", JSON.stringify(volume));
-      await AsyncStorage.setItem("alertSound", alertSound);
-      setIsSaved(true);
-    } catch (error) {
-      console.error("Error saving settings:", error);
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
   // Play sound at current volume
-  const playSound = async (soundFile, vol = volume) => {
+  const playSound = async (soundFile, vol = localVolume) => {
     try {
       if (vol === 0) return;
 
@@ -93,43 +65,23 @@ export default function SettingsScreen() {
     }
   };
 
-  // Play feedback sound as slider moves
-  const handleVolumeChange = (value) => {
-    setVolume(value);
-
-    if (volumeChangeTimeout) {
-      clearTimeout(volumeChangeTimeout);
+  // Save settings using context
+  const handleSave = async () => {
+    setIsSaving(true);
+    setIsSaved(false);
+    try {
+      await saveSettings(localVolume, localAlertSound);
+      setIsSaved(true);
+    } catch (error) {
+      console.error("Error saving settings:", error);
+    } finally {
+      setIsSaving(false);
     }
-
-    const newTimeout = setTimeout(async () => {
-      const selectedSound = soundFiles[alertSound] || soundFiles["alarm 1"];
-
-      if (value > 0) {
-        await playSound(selectedSound, value);
-      } else if (soundObject) {
-        await soundObject.unloadAsync();
-        setSoundObject(null);
-      }
-    }, 500);
-
-    setVolumeChangeTimeout(newTimeout);
   };
-
-  const handleVolumeRelease = async (value) => {
-  const selectedSound = soundFiles[alertSound] || soundFiles["alarm 1"];
-
-  if (value > 0) {
-    await playSound(selectedSound, value);
-  } else if (soundObject) {
-    await soundObject.unloadAsync();
-    setSoundObject(null);
-  }
-};
-
 
   // Play sound when alert sound changes
   const handleAlertSoundChange = async (itemValue) => {
-    setAlertSound(itemValue);
+    setLocalAlertSound(itemValue);
 
     let soundFile;
     switch (itemValue) {
@@ -152,6 +104,16 @@ export default function SettingsScreen() {
     await playSound(soundFile);
   };
 
+  const handleVolumeRelease = async (value) => {
+    const selectedSound = soundFiles[localAlertSound] || soundFiles["alarm 1"];
+
+    if (value > 0) {
+      await playSound(selectedSound, value);
+    } else if (soundObject) {
+      await soundObject.unloadAsync();
+      setSoundObject(null);
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -165,7 +127,7 @@ export default function SettingsScreen() {
 
           <AppText style={styles.label}>Volume</AppText>
           <View style={styles.volumeContainer}>
-            {volume === 0 ? (
+            {localVolume === 0 ? ( // use localVolume here
               <Ionicons
                 name="volume-mute-outline"
                 size={40}
@@ -186,8 +148,8 @@ export default function SettingsScreen() {
                   style={styles.slider}
                   minimumValue={0}
                   maximumValue={100}
-                  value={volume}
-                  onValueChange={(value) => setVolume(value)}
+                  value={localVolume}
+                  onValueChange={setLocalVolume}
                   onSlidingComplete={handleVolumeRelease}
                   minimumTrackTintColor="#5879A5"
                   maximumTrackTintColor="#e0e0e0"
@@ -207,7 +169,7 @@ export default function SettingsScreen() {
           <View style={styles.pickerWrapper}>
             <RNPickerSelect
               onValueChange={handleAlertSoundChange}
-              value={alertSound}
+              value={localAlertSound}
               items={[
                 { label: "Alarm 1", value: "alarm 1" },
                 { label: "Alarm 2", value: "alarm 2" },
@@ -234,7 +196,7 @@ export default function SettingsScreen() {
                 styles.saveButton,
                 { backgroundColor: isSaving ? "#333333" : "#4E84D3" },
               ]}
-              onPress={saveSettings}
+              onPress={handleSave}
               disabled={isSaving}
             >
               <AppText style={styles.saveButtonText}>

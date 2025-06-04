@@ -85,8 +85,8 @@ const AnalogClock = () => {
   };
 
   const isCurrentTime = (alertTime) => {
-    if (!alertTime) return false; // <-- Add this guard
-    const [alertHours, alertMinutes] = alertTime.split(":").map(Number);
+    if (!alertTime) return false;
+    const [alertHours, alertMinutes] = (alertTime || "").split(":").map(Number);
     const now = new Date();
     return now.getHours() === alertHours && now.getMinutes() === alertMinutes;
   };
@@ -100,16 +100,15 @@ const AnalogClock = () => {
   useEffect(() => {
     const fetchAlerts = async () => {
       try {
-        // Fetch both medication schedules and patient info
+        // Fetch both medication schedules and only non-archived patients
         const [medsResponse, patientsResponse] = await Promise.all([
           fetch(`${BASE_API}/api/medications`),
-          fetch(`${BASE_API}/api/patients`),
+          fetch(`${BASE_API}/api/patients?is_archive=false`),
         ]);
 
         if (!medsResponse.ok || !patientsResponse.ok) {
           throw new Error("Failed to fetch meds or patients");
         }
-
 
         const medsData = await medsResponse.json();
         const patientsData = await patientsResponse.json();
@@ -121,16 +120,18 @@ const AnalogClock = () => {
         });
 
         // Combine the medication and patient data
-        const enrichedAlerts = medsData.map((med) => {
-          const patient = patientMap[med.patient_number] || {};
-          return {
-            ...med,
-            patient_first_name: patient.first_name || "",
-            patient_middle_name: patient.middle_name || "",
-            patient_last_name: patient.last_name || "",
-            room_number: patient.room_number || "N/A",
-          };
-        });
+        const enrichedAlerts = medsData
+          .filter((med) => patientMap[med.patient_number]) // Only meds for non-archived patients
+          .map((med) => {
+            const patient = patientMap[med.patient_number] || {};
+            return {
+              ...med,
+              patient_first_name: patient.first_name || "",
+              patient_middle_name: patient.middle_name || "",
+              patient_last_name: patient.last_name || "",
+              room_number: patient.room_number || "N/A",
+            };
+          });
 
         setUpcomingAlerts(enrichedAlerts);
       } catch (error) {
