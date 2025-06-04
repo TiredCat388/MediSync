@@ -41,7 +41,7 @@ slider: {
     height: 50,
     marginHorizontal: 10,
     borderRadius: 15,
-    backgroundColor: "e0e0e0",
+    backgroundColor: "#e0e0e0",
 },
 pickerWrapper: {
     width: Platform.OS === "ios" ? "100%" : 220,
