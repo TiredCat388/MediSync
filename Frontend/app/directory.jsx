@@ -30,15 +30,7 @@ export default function PatientsDirectory() {
   useEffect(() => {
     fetchPatients();
   }, []);
-
-  const TESTING_PATIENT = {
-  patient_number: "000000",
-  first_name: "Test",
-  middle_name: "T",
-  last_name: "Patient",
-  is_archived: false,
-};
-
+  
   const fetchPatients = async () => {
     try {
       const response = await fetch(`${BASE_API}/api/patients/`);
@@ -46,12 +38,8 @@ export default function PatientsDirectory() {
 
       const activePatients = data.filter((patient) => !patient.is_archived);
 
-      setPatients(
-        activePatients.length > 0 ? activePatients : [TESTING_PATIENT]
-      );
+      setPatients(activePatients);
     } catch (error) {
-      // On error, use the testing patient
-      setPatients([TESTING_PATIENT]);
       console.error("Error fetching patients:", error);
     }
   };

@@ -22,73 +22,6 @@ const { width } = Dimensions.get("window");
 const isTablet = width > 900;
 const sidebarWidth = 70;
 
-const TESTING_PATIENT = {
-  patient_number: "999999",
-  first_name: "Archive",
-  middle_name: "T",
-  last_name: "Patient",
-  sex: "Other",
-  date_of_birth: "1990-01-01",
-  age: 34,
-  blood_group: "A+",
-  religion: "None",
-  height: "1.65",
-  weight: "60",
-  BMI: "22.0",
-  diet: "Regular",
-  contact_number: "09123456789",
-  room_number: "N/A",
-  chief_complaint: "Testing Archive",
-  admitting_diagnosis: "Testing",
-  Final_diagnosis: "Testing",
-  emergency_contact: {
-    first_name: "Jane",
-    last_name: "Doe",
-    relation_to_patient: "Sibling",
-    contact_number: "09998887777",
-  },
-  is_archived: true,
-  date_archived: new Date().toISOString(),
-};
-
-const TESTING_MEDICATIONS = [
-  {
-    schedule_id: 1,
-    Medication_name: "TestMed 1",
-    Medication_Time: "08:00 AM",
-    Medication_notes: "Morning dose",
-    patient_number: "999999",
-  },
-  {
-    schedule_id: 2,
-    Medication_name: "TestMed 2",
-    Medication_Time: "12:00 PM",
-    Medication_notes: "Noon dose",
-    patient_number: "999999",
-  },
-  {
-    schedule_id: 3,
-    Medication_name: "TestMed 3",
-    Medication_Time: "04:00 PM",
-    Medication_notes: "Afternoon dose",
-    patient_number: "999999",
-  },
-  {
-    schedule_id: 4,
-    Medication_name: "TestMed 4",
-    Medication_Time: "08:00 PM",
-    Medication_notes: "Evening dose",
-    patient_number: "999999",
-  },
-  {
-    schedule_id: 5,
-    Medication_name: "TestMed 5",
-    Medication_Time: "10:00 PM",
-    Medication_notes: "Bedtime dose",
-    patient_number: "999999",
-  },
-];
-
 export default function PatientDetails() {
   const router = useRouter();
   const { patient_number, schedule_id } = useLocalSearchParams();
@@ -106,11 +39,6 @@ export default function PatientDetails() {
   }, [patient_number]);
 
   const fetchPatientDetails = async () => {
-    if (patient_number === "999999") {
-      setPatient(TESTING_PATIENT);
-      setLoading(false);
-      return;
-    }
     try {
       const response = await fetch(
         `${BASE_API}/api/patients/by-number/${patient_number}/`
@@ -122,6 +50,7 @@ export default function PatientDetails() {
       setPatient(data);
     } catch (err) {
       console.error("Error fetching patient:", err.message);
+      setPatient(null);
     } finally {
       setLoading(false);
     }
@@ -155,10 +84,6 @@ export default function PatientDetails() {
   };
 
   const fetchMedications = async () => {
-    if (patient_number === "999999") {
-      setMedicationData(TESTING_MEDICATIONS);
-      return;
-    }
     try {
       const response = await fetch(
         `${BASE_API}/api/medications/?patient_number=${patient_number}`
