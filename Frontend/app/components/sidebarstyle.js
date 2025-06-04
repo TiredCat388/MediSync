@@ -133,6 +133,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   activeItem: {
+    width: "100%",
     backgroundColor: "#00000033",
     },
   activesubItem: {

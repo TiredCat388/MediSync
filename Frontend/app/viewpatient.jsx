@@ -24,6 +24,34 @@ const { width } = Dimensions.get("window");
 const isTablet = width > 900;
 const sidebarWidth = 70;
 
+const TESTING_PATIENT = {
+  patient_number: "000000",
+  first_name: "Test",
+  middle_name: "T",
+  last_name: "Patient",
+  sex: "Other",
+  date_of_birth: "2000-01-01",
+  age: 24,
+  blood_group: "O+",
+  religion: "None",
+  height: "1.70",
+  weight: "70",
+  BMI: "24.2",
+  diet: "Regular",
+  contact_number: "09123456789",
+  room_number: "101",
+  chief_complaint: "Testing",
+  admitting_diagnosis: "Testing",
+  Final_diagnosis: "Testing",
+  emergency_contact: {
+    first_name: "Jane",
+    last_name: "Doe",
+    relation_to_patient: "Sibling",
+    contact_number: "09998887777",
+  },
+  is_archived: false,
+};
+
 export default function PatientDetails() {
   const router = useRouter();
   const { patient_number, schedule_id } = useLocalSearchParams();
@@ -53,6 +81,7 @@ export default function PatientDetails() {
       setPatient(data);
     } catch (err) {
       console.error("Error fetching patient:", err.message);
+      setPatient(TESTING_PATIENT); // Use testing patient on error
     } finally {
       setLoading(false);
     }

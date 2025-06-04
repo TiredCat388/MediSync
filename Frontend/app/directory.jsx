@@ -31,6 +31,14 @@ export default function PatientsDirectory() {
     fetchPatients();
   }, []);
 
+  const TESTING_PATIENT = {
+  patient_number: "000000",
+  first_name: "Test",
+  middle_name: "T",
+  last_name: "Patient",
+  is_archived: false,
+};
+
   const fetchPatients = async () => {
     try {
       const response = await fetch(`${BASE_API}/api/patients/`);
@@ -42,6 +50,8 @@ export default function PatientsDirectory() {
         activePatients.length > 0 ? activePatients : [TESTING_PATIENT]
       );
     } catch (error) {
+      // On error, use the testing patient
+      setPatients([TESTING_PATIENT]);
       console.error("Error fetching patients:", error);
     }
   };

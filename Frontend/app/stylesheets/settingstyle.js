@@ -27,7 +27,7 @@ label: {
 volumeContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 30,
+    marginBottom: 50,
 },
 sliderWrapper: {
     width: "85%",
@@ -41,17 +41,12 @@ slider: {
     height: 50,
     marginHorizontal: 10,
     borderRadius: 15,
-    backgroundColor: "#e0e0e0",
 },
 pickerWrapper: {
-    width: Platform.OS === "ios" ? "100%" : 220,
+    width: "90%",
     borderWidth: 2,
     borderColor: "#808080",
     borderRadius: 12,
-    ...Platform.select({
-      ios: { overflow: "hidden" },
-      android: {},
-    }),
 },
 picker: {
     height: 50,

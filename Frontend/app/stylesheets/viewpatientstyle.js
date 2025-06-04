@@ -9,10 +9,12 @@ export const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     backgroundColor: "#F8F8F8",
+    paddingTop: 20,
   },
   mainContent: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 40,
+    paddingBottom: 40,
   },
 
   // Header & Buttons
@@ -53,7 +55,7 @@ export const styles = StyleSheet.create({
   },
   addMedicationButton: {
     backgroundColor: "#4E84D3",
-    paddingHorisontal: 10,
+    paddingHorizontal: 10,
     borderRadius: 7,
     color: "#FFFFFF",
   },
@@ -173,14 +175,14 @@ export const styles = StyleSheet.create({
 
   // Search Bar
   searchBarColumn: {
-    paddingVertical: 15,
+    paddingVertical: 5,
   },
   searchInput: {
     backgroundColor: "#fff",
     borderWidth: 1,
     borderColor: "#999999",
     borderRadius: 5,
-    fontSize: 15,
+    fontSize: 12,
     width: "100%",
   },
 
