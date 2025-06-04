@@ -52,6 +52,65 @@ const TESTING_PATIENT = {
   is_archived: false,
 };
 
+const TESTING_MEDICATIONS = [
+  {
+    schedule_id: 1,
+    Medication_name: "Aspirin",
+    Medication_Time: "08:00 AM",
+    Medication_notes: "Take with food",
+    patient_number: "000000",
+  },
+  {
+    schedule_id: 2,
+    Medication_name: "Paracetamol",
+    Medication_Time: "12:00 PM",
+    Medication_notes: "After lunch",
+    patient_number: "000000",
+  },
+  {
+    schedule_id: 3,
+    Medication_name: "Ibuprofen",
+    Medication_Time: "04:00 PM",
+    Medication_notes: "If headache persists",
+    patient_number: "000000",
+  },
+  {
+    schedule_id: 4,
+    Medication_name: "Metformin",
+    Medication_Time: "06:00 AM",
+    Medication_notes: "Before breakfast",
+    patient_number: "000000",
+  },
+  {
+    schedule_id: 5,
+    Medication_name: "Lisinopril",
+    Medication_Time: "09:00 PM",
+    Medication_notes: "Daily dose",
+    patient_number: "000000",
+  },
+  {
+    schedule_id: 6,
+    Medication_name: "Atorvastatin",
+    Medication_Time: "10:00 PM",
+    Medication_notes: "Before sleep",
+    patient_number: "000000",
+  },
+  {
+    schedule_id: 7,
+    Medication_name: "Amoxicillin",
+    Medication_Time: "07:00 AM",
+    Medication_notes: "Every 8 hours",
+    patient_number: "000000",
+  },
+  {
+    schedule_id: 8,
+    Medication_name: "Omeprazole",
+    Medication_Time: "05:00 AM",
+    Medication_notes: "Before meals",
+    patient_number: "000000",
+  },
+];
+
 export default function PatientDetails() {
   const router = useRouter();
   const { patient_number, schedule_id } = useLocalSearchParams();
@@ -116,6 +175,11 @@ export default function PatientDetails() {
 
   const fetchMedications = async () => {
     try {
+      // If this is the testing patient, use the test data
+      if (patient_number === "000000") {
+        setMedicationData(TESTING_MEDICATIONS);
+        return;
+      }
       const response = await fetch(
         `${BASE_API}/api/medications/?patient_number=${patient_number}`
       );
@@ -131,7 +195,12 @@ export default function PatientDetails() {
       }
     } catch (err) {
       console.error("Error fetching medications:", err.message);
-      setMedicationData([]);
+      // On error, use test data if this is the testing patient
+      if (patient_number === "000000") {
+        setMedicationData(TESTING_MEDICATIONS);
+      } else {
+        setMedicationData([]);
+      }
     }
   };
 
