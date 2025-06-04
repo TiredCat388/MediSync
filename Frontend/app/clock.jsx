@@ -15,6 +15,7 @@ import Constants from "expo-constants";
 import Clock from "./components/analogclock";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppText from './components/AppText';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
@@ -112,73 +113,31 @@ const AnalogClock = () => {
 
 
         const medsData = await medsResponse.json();
-        console.log("Fetched medications:", medsData);
         const patientsData = await patientsResponse.json();
-        console.log("Fetched patients:", patientsData);
 
         // Index patients by patientID for fast lookup
         const patientMap = {};
         patientsData.forEach((p) => {
-          patientMap[p.patientID] = p;
+          patientMap[p.patient_number] = p;
         });
 
         // Combine the medication and patient data
         const enrichedAlerts = medsData.map((med) => {
-          const patient = patientMap[med.patientID] || {};
+          const patient = patientMap[med.patient_number] || {};
           return {
             ...med,
             patient_first_name: patient.first_name || "",
             patient_middle_name: patient.middle_name || "",
             patient_last_name: patient.last_name || "",
             room_number: patient.room_number || "N/A",
-            // medicationName may already be in med, if not add fallback here
           };
         });
-        console.log("Enriched alerts:", enrichedAlerts);
 
         setUpcomingAlerts(enrichedAlerts);
       } catch (error) {
         console.error("Fetch failed:", error);
-        // You may want to use mock data here as fallback
-        setUpcomingAlerts([...mockData1, ...mockData2]);
       }
     };
-
-    const mockData1 = [
-      {
-        patientID: "AB256",
-        schedule_id: "SCH123",
-        patient_first_name: "Jane",
-        patient_middle_name: "Bee",
-        patient_last_name: "Smith",
-        medicationName: "Ibuprofen",
-        dosage: "2",
-        dosageUnit: "tablets",
-        medicationNotes:
-          "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ",
-        room_number: "102",
-        quantity: "5",
-        Medication_Time: "13:12",
-      },
-    ];
-
-    const mockData2 = [
-      {
-        patientID: "AB123",
-        schedule_id: "SCH122",
-        patient_first_name: "John",
-        patient_middle_name: "Adam",
-        patient_last_name: "Doe",
-        medicationName: "Paracetamol",
-        dosage: "500",
-        dosageUnit: "mg",
-        medicationNotes:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        room_number: "103",
-        quantity: "7",
-        Medication_Time: "13:12",
-      },
-    ];
 
     fetchAlerts();
   }, []);
@@ -270,25 +229,24 @@ const AnalogClock = () => {
       const newlyPending = [];
 
       upcomingRef.current.forEach((alert) => {
-        const [alertHour, alertMinute] =
-          alert.Medication_Time.split(":").map(Number);
-        const alertDate = new Date();
-        alertDate.setHours(alertHour, alertMinute, 0, 0);
+        const alertDate = new Date(alert.next_dose_time);
+        const diffMs = alertDate - now;
 
-        const diffInMinutes = (now - alertDate) / (1000 * 60);
-
-        if (diffInMinutes > 1) {
+        if (diffMs < 0) {
+          // Already due → Pending
           newlyPending.push({ ...alert, status: "pending" });
-        } else {
+        } else if (diffMs > 0 && diffMs <= 3600000) {
+          // Due within the next hour → Upcoming
           updatedUpcoming.push(alert);
         }
+
       });
 
       if (newlyPending.length > 0) {
         setUpcomingAlerts(updatedUpcoming);
         setPendingAlerts((prev) => [...prev, ...newlyPending]);
       }
-    }, 60 * 1000);
+    }, 60 * 100);
 
     return () => clearInterval(interval);
   }, []);
@@ -356,30 +314,42 @@ const AnalogClock = () => {
                             />
                           </View>
                           <View style={{ flex: 1 }}>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                               <AppText style={styles.alertText}>
-                                Schedule ID: {alert.patient_number} - {scheduleId}
+                                Patient: {alert.patient_last_name.toUpperCase()}, {alert.patient_first_name} - {alert.Medication_name}
                               </AppText>
-                              <AppText style={[styles.alertText, {paddingRight: 10}]}>
-                                {(alert.next_dose_time).split("T")[1]?.split("+")[0]}
+                              <AppText style={[styles.alertText, { paddingRight: 10 }]}>
+                                {(() => {
+                                  const [date, timeWithZone] = alert.next_dose_time.split("T");
+                                  const time = timeWithZone?.split("+")[0];
+                                  return `${date} | ${time}`;
+                                })()}
                               </AppText>
                             </View>
+
                             {isExpanded && (
                               <>
                                 <AppText style={[styles.alertText]}>
-                                  {alert.patient_first_name}{" "}
-                                  {alert.patient_middle_name}{" "}
-                                  {alert.patient_last_name} - Room{" "}
-                                  {alert.room_number}
-                                </AppText>
-                                <AppText style={[styles.alertText]}>
-                                  Medication: {alert.Medication_name}
+                                  Room{" "}{alert.room_number}
                                 </AppText>
                                 <AppText style={[styles.alertText]}>
                                   Medication Form: {alert.Medication_form}
                                 </AppText>
                                 <AppText style={[styles.alertText]}>
                                   Strength: {alert.Medication_strength} {alert.Medication_unit}
+                                </AppText>
+                                <AppText style={[styles.alertText]}>
+                                  Medication Route: {alert.Medication_route}
+                                </AppText>
+                                <AppText style={[styles.alertText]}>
+                                  Frequency: {alert.Frequency_type === 'Other'
+                                    ? `${alert.frequency_days ? `${alert.frequency_days} Day${alert.frequency_days > 1 ? 's' : ''} ` : ''}` +
+                                    `${alert.frequency_hours ? `${alert.frequency_hours} Hour${alert.frequency_hours > 1 ? 's' : ''} ` : ''}` +
+                                    `${alert.frequency_minutes ? `${alert.frequency_minutes} Minute${alert.frequency_minutes > 1 ? 's' : ''}` : ''}`
+                                    : alert.Frequency_type}
+                                </AppText>
+                                <AppText style={[styles.alertText]}>
+                                  Physician: {alert.physicianID}
                                 </AppText>
                                 <AppText style={[styles.alertText]}>
                                   Notes: {alert.Medication_notes}

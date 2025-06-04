@@ -24,10 +24,10 @@ const styles = StyleSheet.create({
   formContainer: {
     flexDirection: "row",
     backgroundColor: "#b8cbdb",
-    padding: 40,
+    padding: 20,
     borderRadius: 10,
     justifyContent: "space-between",
-    maxHeight: 590,
+    maxHeight: 550,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
-    marginTop: 20,
+    marginTop: 30,
     justifyContent: "flex-end",
   },
   button: {
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
   autocompleteContainer: {
     flex: 1,
     zIndex: 10,
-    width: 405,
+    width: 425,
     marginBottom: 10,
   },
 

@@ -10,10 +10,8 @@ import {
 import { DataTable, Button } from "react-native-paper";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import Sidebar from "./components/sidebar";
-import { Feather } from "@expo/vector-icons";
 import { Alert } from "react-native";
 import { styles } from "./stylesheets/historystyle";
-import { useNavigation } from "@react-navigation/native";
 import Constants from 'expo-constants';
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppText from './components/AppText';
@@ -52,21 +50,6 @@ export default function PatientDetails() {
       setPatient(data);
     } catch (err) {
       console.error("Error fetching patient:", err.message);
-      setPatient({
-        patient_number: patient_number || "12345",
-        first_name: "John",
-        middle_name: "Adam",
-        last_name: "Doe",
-        date_of_birth: "1990-01-01",
-        contact_number: "123-456-7890",
-        room_number: "101",
-        emergency_contact: {
-          first_name: "Jane",
-          last_name: "Doe",
-          relation_to_patient: "Sister",
-          contact_number: "987-654-3210",
-        },
-      });
     } finally {
       setLoading(false);
     }
@@ -89,7 +72,7 @@ export default function PatientDetails() {
 
       if (response.ok) {
         Alert.alert("Success", "Patient activated successfully");
-        router.push("/directory"); // Navigate back to the directory
+        router.push("/directory"); 
       } else {
         Alert.alert("Error", "Failed to activate patient");
       }
@@ -151,7 +134,7 @@ export default function PatientDetails() {
               }
             }}
           >
-            <AppText style={styles.activatebuttonText}>Activate Patient</AppText>
+            <AppText style={styles.buttonText}>Activate Patient</AppText>
           </TouchableOpacity>
         </View>
 
@@ -165,20 +148,20 @@ export default function PatientDetails() {
             <View style={styles.section}>
               <AppText style={styles.sectionTitle}>Patient Details</AppText>
               <AppText style={styles.boldLabel}>Name</AppText>
-              <AppText>
+              <AppText style={styles.rowText}>
                 {patient?.last_name?.toUpperCase()}, {patient?.first_name}{" "}
                 {patient?.middle_name
                   ? `${patient.middle_name.charAt(0)}.`
                   : ""}
               </AppText>
               <AppText style={styles.boldLabel}>Sex</AppText>
-              <AppText>{patient?.sex}</AppText>
+              <AppText style={styles.rowText}>{patient?.sex}</AppText>
               <AppText style={styles.boldLabel}>Birth Date</AppText>
-              <AppText>{patient?.date_of_birth}</AppText>
+              <AppText style={styles.rowText}>{patient?.date_of_birth}</AppText>
               <AppText style={styles.boldLabel}>Age</AppText>
-              <AppText>{patient?.age}</AppText>
+              <AppText style={styles.rowText}>{patient?.age}</AppText>
               <AppText style={styles.boldLabel}>Blood Type</AppText>
-              <AppText>{patient?.blood_group}</AppText>
+              <AppText style={styles.rowText}>{patient?.blood_group}</AppText>
             </View>
           </View>
 
@@ -188,15 +171,15 @@ export default function PatientDetails() {
             <AppText style={styles.sectionTitle}> </AppText>
             <View style={styles.section}>
               <AppText style={styles.boldLabel}>Religion</AppText>
-              <AppText>{patient?.religion}</AppText>
+              <AppText style={styles.rowText}>{patient?.religion}</AppText>
               <AppText style={styles.boldLabel}>Height</AppText>
-              <AppText>{patient?.height}</AppText>
+              <AppText style={styles.rowText}>{patient?.height}</AppText>
               <AppText style={styles.boldLabel}>Weight</AppText>
-              <AppText>{patient?.weight}</AppText>
+              <AppText style={styles.rowText}>{patient?.weight}</AppText>
               <AppText style={styles.boldLabel}>Diet</AppText>
-              <AppText>{patient?.diet}</AppText>
+              <AppText style={styles.rowText}>{patient?.diet}</AppText>
               <AppText style={styles.boldLabel}>Contact Details</AppText>
-              <AppText>{patient?.contact_number}</AppText>
+              <AppText style={styles.rowText}>{patient?.contact_number}</AppText>
             </View>
           </View>
 
@@ -206,13 +189,13 @@ export default function PatientDetails() {
             <AppText style={styles.sectionTitle}> </AppText>
             <View style={styles.section}>
               <AppText style={styles.boldLabel}>Room No</AppText>
-              <AppText>{patient?.room_number}</AppText>
+              <AppText style={styles.rowText}>{patient?.room_number}</AppText>
               <AppText style={styles.boldLabel}>Chief Complaint/s</AppText>
-              <AppText>{patient?.chief_complaint}</AppText>
+              <AppText style={styles.rowText}>{patient?.chief_complaint}</AppText>
               <AppText style={styles.boldLabel}>Admitting Diagnosis</AppText>
-              <AppText>{patient?.admitting_diagnosis}</AppText>
+              <AppText style={styles.rowText}>{patient?.admitting_diagnosis}</AppText>
               <AppText style={styles.boldLabel}>Final Diagnosis</AppText>
-              <AppText>{patient?.Final_diagnosis}</AppText>
+              <AppText style={styles.rowText}>{patient?.Final_diagnosis}</AppText>
             </View>
           </View>
 
@@ -222,14 +205,14 @@ export default function PatientDetails() {
             <View style={styles.section}>
               <AppText style={styles.sectionTitle}>Emergency Contact Details</AppText>
               <AppText style={styles.boldLabel}>Name</AppText>
-              <AppText>
+              <AppText style={styles.rowText}>
                 {patient?.emergency_contact?.first_name}{" "}
                 {patient?.emergency_contact?.last_name}
               </AppText>
               <AppText style={styles.boldLabel}>Relation to Patient</AppText>
-              <AppText>{patient?.emergency_contact?.relation_to_patient}</AppText>
+              <AppText style={styles.rowText}>{patient?.emergency_contact?.relation_to_patient}</AppText>
               <AppText style={styles.boldLabel}>Contact Details</AppText>
-              <AppText>{patient?.emergency_contact?.contact_number}</AppText>
+              <AppText style={styles.rowText}>{patient?.emergency_contact?.contact_number}</AppText>
             </View>
           </View>
         </View>
@@ -264,16 +247,16 @@ export default function PatientDetails() {
                   <View style={styles.headerRowContainer}>
                     <DataTable.Header style={styles.tableHeader}>
                       <DataTable.Title style={styles.columnId}>
-                        Schedule ID
+                        <AppText style={styles.tableHeaderText}>Schedule ID</AppText>
                       </DataTable.Title>
                       <DataTable.Title style={styles.columnName}>
-                        Medication Name
+                        <AppText style={styles.tableHeaderText}>Medication Name</AppText>
                       </DataTable.Title>
                       <DataTable.Title style={styles.columnTime}>
-                        Time
+                        <AppText style={styles.tableHeaderText}>Time</AppText>
                       </DataTable.Title>
                       <DataTable.Title style={styles.columnNotes}>
-                        Notes
+                        <AppText style={styles.tableHeaderText}>Notes</AppText>
                       </DataTable.Title>
                       <DataTable.Title style={styles.searchBarColumn}>
                         <TextInput
@@ -296,20 +279,19 @@ export default function PatientDetails() {
                     >
                       <DataTable.Row style={styles.row}>
                         <DataTable.Cell style={styles.columnId}>
-                          {item.schedule_id}
+                          <AppText style={styles.rowText}>{item.schedule_id}</AppText>
                         </DataTable.Cell>
                         <DataTable.Cell style={styles.columnName}>
-                          {item.Medication_name}
+                          <AppText style={styles.rowText}>{item.Medication_name}</AppText>
                         </DataTable.Cell>
                         <DataTable.Cell style={styles.columnTime}>
-                          {item.Medication_Time}
+                          <AppText style={styles.rowText}>{item.Medication_Time}</AppText>
                         </DataTable.Cell>
                         <DataTable.Cell style={styles.columnNotes}>
-                          {item.Medication_notes}
+                          <AppText style={styles.rowText}>{item.Medication_notes}</AppText>
                         </DataTable.Cell>
-
                         <DataTable.Cell style={styles.columnActions}>
-                          <View style={{ position: "relative" }}></View>
+                          <View style={{ position: "relative" }} />
                         </DataTable.Cell>
                       </DataTable.Row>
                     </View>

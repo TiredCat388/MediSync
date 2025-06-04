@@ -89,12 +89,17 @@ const styles = StyleSheet.create({
     },
     alertItem: {
       backgroundColor: '#eee',
-      padding: 10,
+      padding: 15,
       borderRadius: 5,
       marginBottom: 8,
       flexDirection: 'row',
       justifyContent: 'space-between',
       position: 'relative', 
+    },
+    scheduleText: {
+      fontSize: 18,
+      color: '#333333',
+      fontWeight: "bold",
     },
     alertText: {
       fontSize: 16,
@@ -109,7 +114,7 @@ const styles = StyleSheet.create({
       fontSize: 16,
     },
     clockPanel: { 
-      padding: 30,
+      padding: 15,
       justifyContent: 'center',
       alignItems: 'center',
     },
