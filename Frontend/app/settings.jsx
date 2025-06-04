@@ -9,7 +9,6 @@ import styles from "./stylesheets/settingstyle";
 import RNPickerSelect from "react-native-picker-select";
 import { useSettings } from "../SettingsContext";
 import { Audio } from "expo-av";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SettingsScreen() {
   const { volume, alertSound, saveSettings } = useSettings();
@@ -101,7 +100,7 @@ export default function SettingsScreen() {
         soundFile = require("../assets/sounds/alarm 1.mp3");
     }
 
-    await playSound(soundFile);
+    await playSound(soundFile, localVolume);
   };
 
   const handleVolumeRelease = async (value) => {

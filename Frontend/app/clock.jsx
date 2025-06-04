@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   TextInput,
   Modal,
-  Button,
 } from "react-native";
 import Sidebar from "./components/sidebar";
 import { Checkbox } from "react-native-paper";
@@ -21,6 +20,7 @@ const BASE_API = Constants.expoConfig.extra.BASE_API;
 const AnalogClock = () => {
   const sidebarWidth = 70;
   const upcomingRef = useRef([]);
+  const administeredKeys = useRef(new Set());
   const [time, setTime] = useState(new Date());
   const [upcomingAlerts, setUpcomingAlerts] = useState([]);
   const [pendingAlerts, setPendingAlerts] = useState([]);
@@ -31,6 +31,7 @@ const AnalogClock = () => {
   const [isCancelModalVisible, setIsCancelModalVisible] = useState(false);
   const [cancelReason, setCancelReason] = useState("");
   const [selectedCancelId, setSelectedCancelId] = useState(null);
+  const [medicationList, setMedicationList] = useState([]);
 
   const toggleExpand = (id) => {
     setExpandedAlerts((prev) => ({
@@ -40,14 +41,16 @@ const AnalogClock = () => {
   };
 
   const handleAdministerPress = (scheduleId) => {
-    // Try to find alert in upcoming or pending
     const alertToAdminister =
       upcomingAlerts.find((a) => a.schedule_id === scheduleId) ||
       pendingAlerts.find((a) => a.schedule_id === scheduleId);
 
-    if (!alertToAdminister) return; // nothing found
+    if (!alertToAdminister) return;
 
-    // Remove from upcoming and pending
+    // Create a unique key for this schedule and dose time
+    const alertKey = `${scheduleId}_${alertToAdminister.next_dose_time}`;
+    administeredKeys.current.add(alertKey);
+
     setUpcomingAlerts((prev) =>
       prev.filter((alert) => alert.schedule_id !== scheduleId)
     );
@@ -55,16 +58,15 @@ const AnalogClock = () => {
       prev.filter((alert) => alert.schedule_id !== scheduleId)
     );
 
-    // Add to history with status administered
     setHistoryAlerts((prev) => [
       ...prev,
       {
         ...alertToAdminister,
         status: "administered",
+        administered: true,
       },
     ]);
 
-    // Check the alert
     setCheckedAlerts((prev) => ({
       ...prev,
       [scheduleId]: true,
@@ -133,7 +135,27 @@ const AnalogClock = () => {
             };
           });
 
-        setUpcomingAlerts(enrichedAlerts);
+        setMedicationList(enrichedAlerts);
+
+        // Initial filter for upcoming
+        const now = new Date();
+        const initialUpcoming = enrichedAlerts.filter(alert => {
+          const alertDate = new Date(alert.next_dose_time);
+          const diffMs = alertDate - now;
+          const alertKey = `${alert.schedule_id}_${alert.next_dose_time}`;
+          return !administeredKeys.current.has(alertKey) && diffMs > 0 && diffMs <= 3600000;
+        });
+        setUpcomingAlerts(initialUpcoming);
+
+        // Initial filter for pending
+        const initialPending = enrichedAlerts.filter(alert => {
+          const alertDate = new Date(alert.next_dose_time);
+          const diffMs = alertDate - now;
+          const alertKey = `${alert.schedule_id}_${alert.next_dose_time}`;
+          return !administeredKeys.current.has(alertKey) && diffMs <= 0;
+        });
+        setPendingAlerts(initialPending);
+
       } catch (error) {
         console.error("Fetch failed:", error);
       }
@@ -223,33 +245,73 @@ const AnalogClock = () => {
   }, [upcomingAlerts]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    
+    // Function to update upcoming and pending lists
+    const updateAlerts = () => {
       const now = new Date();
       const updatedUpcoming = [];
       const newlyPending = [];
+      const timestamp = new Date().toISOString();
+      console.log(`[Updated medication][${timestamp}]`);
 
-      upcomingRef.current.forEach((alert) => {
-        const alertDate = new Date(alert.next_dose_time);
-        const diffMs = alertDate - now;
-
-        if (diffMs < 0) {
-          // Already due → Pending
-          newlyPending.push({ ...alert, status: "pending" });
-        } else if (diffMs > 0 && diffMs <= 3600000) {
-          // Due within the next hour → Upcoming
-          updatedUpcoming.push(alert);
+      // Clean up old administered keys
+      administeredKeys.current.forEach((key) => {
+        const [, nextDoseTime] = key.split("_");
+        if (new Date(nextDoseTime) < now) {
+          administeredKeys.current.delete(key);
         }
-
       });
 
-      if (newlyPending.length > 0) {
-        setUpcomingAlerts(updatedUpcoming);
-        setPendingAlerts((prev) => [...prev, ...newlyPending]);
-      }
-    }, 60 * 1000);
+      medicationList.forEach((alert) => {
+        const alertDate = new Date(alert.next_dose_time);
+        const diffMs = alertDate - now;
+        const alertKey = `${alert.schedule_id}_${alert.next_dose_time}`;
 
-    return () => clearInterval(interval);
-  }, []);
+        if (!administeredKeys.current.has(alertKey)) {
+          if (diffMs > 0 && diffMs <= 3600000) {
+            updatedUpcoming.push(alert);
+          } else if (diffMs <= 0) {
+            newlyPending.push({ ...alert, status: "pending" });
+          }
+        }
+      });
+
+      setUpcomingAlerts(updatedUpcoming);
+      setPendingAlerts(newlyPending);
+
+      // --- Clear old history entries for schedule_ids with new next_dose_time ---
+      setHistoryAlerts((prevHistory) => {
+        const latestDoseMap = {};
+        medicationList.forEach(alert => {
+          latestDoseMap[alert.schedule_id] = alert.next_dose_time;
+        });
+        // Only keep history entries that either:
+        // - have a schedule_id not in the current medicationList
+        // - or have the same next_dose_time as the latest for that schedule_id
+        return prevHistory.filter(
+          entry =>
+            !latestDoseMap[entry.schedule_id] ||
+            entry.next_dose_time === latestDoseMap[entry.schedule_id]
+        );
+      });
+    };
+
+    // Calculate ms until the next minute
+    const now = new Date();
+    const msUntilNextMinute = 60000 - (now.getTime() % 60000);
+
+    // Start at the next minute
+    const timeout = setTimeout(() => {
+      updateAlerts();
+      const interval = setInterval(updateAlerts, 60000);
+      // Store interval id if you want to clear it later
+    }, msUntilNextMinute);
+
+    return () => {
+      clearTimeout(timeout);
+      // If you store interval id, clearInterval here as well
+    };
+  }, [medicationList]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
