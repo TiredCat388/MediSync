@@ -223,7 +223,7 @@ export default function NewMedSched() {
       let hour24 = parseInt(hour);
       if (period === "PM" && hour24 !== 12) hour24 += 12;
       if (period === "AM" && hour24 === 12) hour24 = 0;
-      return `${hour24.toString().padStart(2, "0")}:${minute.padStart(2, "0")}`;
+      return `${hour24.toString().padStart(2, "0")}:${minute.padStart(2, "0")}+08:00`;
     };
 
     try {

@@ -118,7 +118,7 @@ export default StyleSheet.create({
   },
   calendarCellMedText: {
     fontSize: 12,
-    textAlign: "flex-start",
+    textAlign: "left",
     color: "#000",
     fontWeight: "bold",
   },
@@ -155,7 +155,7 @@ export default StyleSheet.create({
   },
   modalMedText: {
     fontSize: 13,
-    textAlign: "flex-start",
+    textAlign: "left",
     color: "#000",
     fontWeight: "bold",
   },

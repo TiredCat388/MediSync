@@ -162,8 +162,10 @@ export default function NewMedSched() {
             const userId = await AsyncStorage.getItem("userId");
 
             // Parse the time into hours, minutes, and period
-            const [timeHour = "00", timeMinute = "00"] =
-              data.Medication_Time?.split(":") || ["00", "00"]; // Fallback to 00:00 if null
+            // Use regex to extract hour, minute, and period, ignore timezone for display
+            const timeMatch = data.Medication_Time?.match(/^(\d{2}):(\d{2})/);
+            const timeHour = timeMatch ? timeMatch[1] : "00";
+            const timeMinute = timeMatch ? timeMatch[2] : "00";
             let timePeriod = "AM";
             const hourNum = parseInt(timeHour);
             if (hourNum >= 12) {
@@ -290,14 +292,11 @@ export default function NewMedSched() {
     
 
     const convertTo24Hour = (hour, minute, period) => {
-      if (!hour || !minute || !period) return "00:00:00";
+      if (!hour || !minute || !period) return "00:00:00+08:00";
       let hour24 = parseInt(hour, 10);
       if (period === "PM" && hour24 !== 12) hour24 += 12;
       if (period === "AM" && hour24 === 12) hour24 = 0;
-      return `${hour24.toString().padStart(2, "0")}:${minute.padStart(
-        2,
-        "0"
-      )}:00`;
+      return `${hour24.toString().padStart(2,"0")}:${minute.padStart(2,"0")}:00+08:00`;
     };
 
     try {
