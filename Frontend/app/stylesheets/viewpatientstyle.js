@@ -9,7 +9,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     backgroundColor: "#F8F8F8",
-    paddingTop: 20,
   },
   mainContent: {
     flex: 1,
@@ -19,6 +18,7 @@ export const styles = StyleSheet.create({
 
   // Header & Buttons
   headerButtons: {
+    paddingTop: 20,
     flexDirection: "row",
     justifyContent: "flex-end",
     marginBottom: 10,

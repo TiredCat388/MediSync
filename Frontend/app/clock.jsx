@@ -1,12 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import {
   View,
-  Text,
   ScrollView,
   TouchableOpacity,
   TextInput,
   Modal,
-  Button,
 } from "react-native";
 import Sidebar from "./components/sidebar";
 import { Checkbox } from "react-native-paper";
@@ -15,7 +13,6 @@ import Constants from "expo-constants";
 import Clock from "./components/analogclock";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppText from './components/AppText';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
