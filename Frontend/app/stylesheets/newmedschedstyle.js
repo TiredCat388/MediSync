@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   formContainer: {
+    flex: 1,
     flexDirection: "row",
     backgroundColor: "#b8cbdb",
     padding: 20,
@@ -169,7 +170,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#5879A5",
   },
   leaveButton: {
-    backgroundColor: "#999999",
+    backgroundColor: "#D9534F",
   },
   modalButtonText: {
     fontSize: 16,
