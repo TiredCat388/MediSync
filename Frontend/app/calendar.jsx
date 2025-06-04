@@ -65,8 +65,6 @@ export default function CalendarApp() {
         frequencyType: med.Frequency_type, 
       });
     }
-
-    console.log("Formatted Data:", formattedData);
     setMedicationData(formattedData);
   } catch (error) {
     console.error("Error fetching medication data:", error);

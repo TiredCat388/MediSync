@@ -169,7 +169,6 @@ export default function UpdatePatientScreen() {
         const response = await fetch(
           `${BASE_API}/api/patients/by-number/${patient_number}/`
         );
-        console.log(response)
         if (response.ok) {
           const data = await response.json();
           // Handle diet data

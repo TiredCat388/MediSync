@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#5879A5",
   },
   leaveButton: {
-    backgroundColor: "#D9534F",
+    backgroundColor: "#999999",
   },
   modalButtonText: {
     fontSize: 16,

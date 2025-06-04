@@ -102,8 +102,6 @@ export default function NewMedSched() {
           AsyncStorage.getItem("userId"), // or "physicianId" depending on your storage
         ]);
 
-        console.log("User role:", role, "User ID:", userId);
-
         if (role !== "physician") {
           setAccessDeniedMessage(
             "Access denied: Only physicians can update medication."
@@ -263,7 +261,6 @@ export default function NewMedSched() {
   }));
 
   const handleRegister = async () => {
-    console.log("Form Data Before Submit:", formData);
 
     const requiredFields = [
       "medicineName",
@@ -351,10 +348,6 @@ export default function NewMedSched() {
         : `${BASE_API}/api/medications/${patient_number}/`;
       const method = schedule_id ? "PUT" : "POST";
 
-      console.log("Request URL:", url);
-      console.log("Request Method:", method);
-      console.log("Request Data:", requestData);
-
       const response = await fetch(url, {
         method: method,
         headers: {
@@ -364,7 +357,6 @@ export default function NewMedSched() {
       });
 
       const responseData = await response.json();
-      console.log("Response Data:", responseData);
 
       if (response.ok) {
         setAddSuccessMessage("Medication updated successfully!");

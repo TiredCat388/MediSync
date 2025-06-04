@@ -98,11 +98,6 @@ const LoginScreen = () => {
           "userId",
           "authToken",
         ]);
-        console.log("Stored login data:", {
-          role: storedData[0][1],
-          id: storedData[1][1],
-          token: storedData[2][1],
-        });
 
         Alert.alert("Login successful!");
         router.push("/directory");

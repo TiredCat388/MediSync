@@ -128,7 +128,6 @@ export default function PatientsDirectory() {
                 <View style={styles.tableHeaderCellEmpty} />
               </View>
               {/* ScrollView for Table Rows */}
-              <ScrollView>
                 <FlatList
                   data={displayedPatients}
                   keyExtractor={(item, index) => index.toString()}
@@ -189,7 +188,6 @@ export default function PatientsDirectory() {
                     </TouchableOpacity>
                   )}
                 />
-              </ScrollView>
             </View>
           </View>
         </View>
