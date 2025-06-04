@@ -505,17 +505,6 @@ export default function PatientDetails() {
               Update
             </AppText>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.menuItem}
-            onPress={() => {
-              setOpenMenuId(null);
-              deleteSchedule(openMenuId, patient_number);
-            }}
-          >
-            <AppText style={[styles.menuItemText, styles.deleteText]}>
-              Archive
-            </AppText>
-          </TouchableOpacity>
         </View>
       )}
     </Portal>
