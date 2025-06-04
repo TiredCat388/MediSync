@@ -6,6 +6,7 @@ container: {
     paddingHorizontal: 40,
     paddingBottom: 40,
     backgroundColor: "#F8F8F8",
+    justifyContent: "center",
 },
 heading: {
     paddingVertical: 20,
