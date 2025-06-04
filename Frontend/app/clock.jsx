@@ -15,7 +15,6 @@ import Constants from "expo-constants";
 import Clock from "./components/analogclock";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppText from './components/AppText';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
@@ -246,7 +245,7 @@ const AnalogClock = () => {
         setUpcomingAlerts(updatedUpcoming);
         setPendingAlerts((prev) => [...prev, ...newlyPending]);
       }
-    }, 60 * 100);
+    }, 60 * 1000);
 
     return () => clearInterval(interval);
   }, []);
