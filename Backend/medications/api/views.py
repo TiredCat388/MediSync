@@ -57,64 +57,65 @@ class MedicationsViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-def update(self, request, *args, **kwargs):
-    try:
-        patient_number = self.kwargs.get("patient_number")
-        schedule_id = self.kwargs.get("schedule_id")
-        medication = Medications.objects.get(
-            patient_number=patient_number, schedule_id=schedule_id
-        )
-        serializer = self.get_serializer(medication, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        log_action(
-            message=f"Updated medication with schedule ID {schedule_id} for patient {patient_number}.",
-            log_type="ACTION",
-            message_extended=f"Medication update successful for schedule ID {schedule_id} and patient {patient_number}."
-        )
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    except Medications.DoesNotExist:
-        log_action(
-            message=f"Failed to update medication with schedule ID {schedule_id} for patient {patient_number}.",
-            log_type="ERROR",
-            message_extended="Medication record not found for update."
-        )
-        return Response(
-            {"error": "Medication not found"},
-            status=status.HTTP_404_NOT_FOUND,
-        )
-    except Exception as e:
-        log_action(
-            message=f"Error updating medication with schedule ID {schedule_id} for patient {patient_number}.",
-            log_type="ERROR",
-            message_extended=str(e) or "Unknown error during medication update."
-        )
-        return Response({"error": "An error occurred while updating the medication."}, status=status.HTTP_400_BAD_REQUEST)
-    def destroy(self, request, *args, **kwargs):
-        patient_number = kwargs.get("patient_number")
-        schedule_id = kwargs.get("schedule_id")
-
-        # Use filter() to retrieve all matching records
-        medications = Medications.objects.filter(
-            patient_number=patient_number, schedule_id=schedule_id
-        )
-
-        if not medications.exists():
+    def update(self, request, *args, **kwargs):
+        try:
+            patient_number = self.kwargs.get("patient_number")
+            schedule_id = self.kwargs.get("schedule_id")
+            medication = Medications.objects.get(
+                patient_number=patient_number, schedule_id=schedule_id
+            )
+            serializer = self.get_serializer(medication, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            log_action(
+                message=f"Updated medication with schedule ID {schedule_id} for patient {patient_number}.",
+                log_type="ACTION",
+                message_extended=f"Medication update successful for schedule ID {schedule_id} and patient {patient_number}."
+            )
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Medications.DoesNotExist:
+            log_action(
+                message=f"Failed to update medication with schedule ID {schedule_id} for patient {patient_number}.",
+                log_type="ERROR",
+                message_extended="Medication record not found for update."
+            )
             return Response(
-                {"error": "No matching medication found."},
+                {"error": "Medication not found"},
                 status=status.HTTP_404_NOT_FOUND,
             )
+        except Exception as e:
+            log_action(
+                message=f"Error updating medication with schedule ID {schedule_id} for patient {patient_number}.",
+                log_type="ERROR",
+                message_extended=str(e) or "Unknown error during medication update."
+            )
+            return Response({"error": "An error occurred while updating the medication."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Delete all matching records
-        count, _ = medications.delete()
+    def destroy(self, request, *args, **kwargs):
+            patient_number = kwargs.get("patient_number")
+            schedule_id = kwargs.get("schedule_id")
 
-        # Log the deletion
-        log_action(
-            f"Archived medication with schedule ID {schedule_id} for patient {patient_number}.",
-            log_type="Archive",
-        )
+            # Use filter() to retrieve all matching records
+            medications = Medications.objects.filter(
+                patient_number=patient_number, schedule_id=schedule_id
+            )
 
-        return Response(
-            {"message": f"Successfully archived {count} medication(s) for patient {patient_number}."},
-            status=status.HTTP_204_NO_CONTENT,
-        )
+            if not medications.exists():
+                return Response(
+                    {"error": "No matching medication found."},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+
+            # Delete all matching records
+            count, _ = medications.delete()
+
+            # Log the deletion
+            log_action(
+                f"Archived medication with schedule ID {schedule_id} for patient {patient_number}.",
+                log_type="Archive",
+            )
+
+            return Response(
+                {"message": f"Successfully archived {count} medication(s) for patient {patient_number}."},
+                status=status.HTTP_204_NO_CONTENT,
+            )

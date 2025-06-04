@@ -16,6 +16,7 @@ export const NotificationProvider = ({ children }) => {
   const patientsRef = useRef([]);
   const alertedAt60Min = useRef(new Set());
   const alertedAt30Min = useRef(new Set());
+  const alertedAt1Min = useRef(new Set());
 
   const log = (msg, data = null) => {
     const timestamp = new Date().toISOString();
@@ -144,6 +145,8 @@ export const NotificationProvider = ({ children }) => {
           const diffMs = schedTime - now;
           const diffMinutes = diffMs / (1000 * 60);
           const scheduleId = sched.id;
+          const alertKey60 = `${scheduleId}_${sched.next_dose_time}_60`;
+          const alertKey30 = `${scheduleId}_${sched.next_dose_time}_30`;
 
           // Reset alert flags if dose time passed so next alerts can trigger
           if (diffMinutes < 0) {
@@ -154,24 +157,28 @@ export const NotificationProvider = ({ children }) => {
 
           // 60-minute alert
           if (
-            !alertedAt60Min.current.has(scheduleId) &&
-            diffMinutes >= 59 &&
-            diffMinutes <= 61
+            !alertedAt60Min.current.has(alertKey60) &&
+            diffMinutes >= 59 && diffMinutes <= 61
           ) {
-            log(`⚠️ Triggering 60-minute alert for schedule ID ${scheduleId}`);
-            alertedAt60Min.current.add(scheduleId);
+            alertedAt60Min.current.add(alertKey60);
             upcoming.push(sched);
             return;
           }
 
           // 30-minute alert
           if (
-            !alertedAt30Min.current.has(scheduleId) &&
-            diffMinutes >= 29 &&
-            diffMinutes <= 31
+            !alertedAt30Min.current.has(alertKey30) &&
+            diffMinutes >= 29 && diffMinutes <= 31
           ) {
-            log(`⚠️ Triggering 30-minute alert for schedule ID ${scheduleId}`);
-            alertedAt30Min.current.add(scheduleId);
+            alertedAt30Min.current.add(alertKey30);
+            upcoming.push(sched);
+            return;
+          }
+
+          // 1-minute alert (for testing)
+          if (
+            diffMinutes >= 0 && diffMinutes <= 1
+          ) {
             upcoming.push(sched);
             return;
           }
