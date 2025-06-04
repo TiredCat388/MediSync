@@ -9,6 +9,9 @@
       "distribution": "internal"
     },
     "preview": {
+      "env": {
+        "BASE_API": "https://medisync-production.up.railway.app"
+      },
       "distribution": "internal"
     },
     "production": {

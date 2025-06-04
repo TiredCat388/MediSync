@@ -19,6 +19,15 @@ export default function SettingsScreen() {
   const [soundObject, setSoundObject] = useState(null);
   const [volumeChangeTimeout, setVolumeChangeTimeout] = useState(null);
 
+  const soundFiles = {
+    "alarm 1": require("../assets/sounds/alarm 1.mp3"),
+    "alarm 2": require("../assets/sounds/alarm 2.mp3"),
+    "alarm 3": require("../assets/sounds/alarm 3.mp3"),
+    "alarm 4": require("../assets/sounds/alarm 4.mp3"),
+  };
+
+  const soundFile = soundFiles[alertSound] || soundFiles["alarm 1"];
+
   useEffect(() => {
     const loadSettings = async () => {
       try {
@@ -88,67 +97,35 @@ export default function SettingsScreen() {
   const handleVolumeChange = (value) => {
     setVolume(value);
 
-    // Clear any existing timeout to debounce
     if (volumeChangeTimeout) {
       clearTimeout(volumeChangeTimeout);
     }
 
     const newTimeout = setTimeout(async () => {
-      let soundFile;
-      switch (alertSound) {
-        case "alarm 1":
-          soundFile = require("../assets/sounds/alarm 1.mp3");
-          break;
-        case "alarm 2":
-          soundFile = require("../assets/sounds/alarm 2.mp3");
-          break;
-        case "alarm 3":
-          soundFile = require("../assets/sounds/alarm 3.mp3");
-          break;
-        case "alarm 4":
-          soundFile = require("../assets/sounds/alarm 4.mp3");
-          break;
-        default:
-          soundFile = require("../assets/sounds/alarm 1.mp3");
-      }
+      const selectedSound = soundFiles[alertSound] || soundFiles["alarm 1"];
 
       if (value > 0) {
-        await playSound(soundFile, value);
+        await playSound(selectedSound, value);
       } else if (soundObject) {
         await soundObject.unloadAsync();
         setSoundObject(null);
       }
-    }, 500); // Wait 200ms after last change before playing sound
+    }, 500);
 
     setVolumeChangeTimeout(newTimeout);
   };
 
   const handleVolumeRelease = async (value) => {
-    let soundFile;
-    switch (alertSound) {
-      case "alarm 1":
-        soundFile = require("../assets/sounds/alarm 1.mp3");
-        break;
-      case "alarm 2":
-        soundFile = require("../assets/sounds/alarm 2.mp3");
-        break;
-      case "alarm 3":
-        soundFile = require("../assets/sounds/alarm 3.mp3");
-        break;
-      case "alarm 4":
-        soundFile = require("../assets/sounds/alarm 4.mp3");
-        break;
-      default:
-        soundFile = require("../assets/sounds/alarm 1.mp3");
-    }
+  const selectedSound = soundFiles[alertSound] || soundFiles["alarm 1"];
 
-    if (value > 0) {
-      await playSound(soundFile, value);
-    } else if (soundObject) {
-      await soundObject.unloadAsync();
-      setSoundObject(null);
-    }
-  };
+  if (value > 0) {
+    await playSound(selectedSound, value);
+  } else if (soundObject) {
+    await soundObject.unloadAsync();
+    setSoundObject(null);
+  }
+};
+
 
   // Play sound when alert sound changes
   const handleAlertSoundChange = async (itemValue) => {
@@ -210,8 +187,8 @@ export default function SettingsScreen() {
                   minimumValue={0}
                   maximumValue={100}
                   value={volume}
-                  onValueChange={(value) => setVolume(value)} 
-                  onSlidingComplete={handleVolumeRelease}   
+                  onValueChange={(value) => setVolume(value)}
+                  onSlidingComplete={handleVolumeRelease}
                   minimumTrackTintColor="#5879A5"
                   maximumTrackTintColor="#e0e0e0"
                   thumbTintColor="#5879A5"
@@ -226,29 +203,29 @@ export default function SettingsScreen() {
             />
           </View>
 
-        <AppText style={styles.label}>Alert Sound</AppText>
-        <View style={styles.pickerWrapper}>
-          <RNPickerSelect
-            onValueChange={handleAlertSoundChange}
-            value={alertSound}
-            items={[
-              { label: "Alarm 1", value: "alarm 1" },
-              { label: "Alarm 2", value: "alarm 2" },
-              { label: "Alarm 3", value: "alarm 3" },
-              { label: "Alarm 4", value: "alarm 4" },
-            ]}
-            placeholder={{ label: "Default", value: "" }}
-            style={{
-              inputIOS: styles.picker,
-              inputAndroid: styles.picker,
-              placeholder: { color: "#808080" },
-            }}
-            Icon={() => (
-              <Ionicons name="chevron-down" size={24} color="#808080" style={{ top: 12, right: 10 }} />
-            )}
-            useNativeAndroidPickerStyle={false}
-          />
-        </View>
+          <AppText style={styles.label}>Alert Sound</AppText>
+          <View style={styles.pickerWrapper}>
+            <RNPickerSelect
+              onValueChange={handleAlertSoundChange}
+              value={alertSound}
+              items={[
+                { label: "Alarm 1", value: "alarm 1" },
+                { label: "Alarm 2", value: "alarm 2" },
+                { label: "Alarm 3", value: "alarm 3" },
+                { label: "Alarm 4", value: "alarm 4" },
+              ]}
+              placeholder={{ label: "Default", value: "" }}
+              style={{
+                inputIOS: styles.picker,
+                inputAndroid: styles.picker,
+                placeholder: { color: "#808080" },
+              }}
+              Icon={() => (
+                <Ionicons name="chevron-down" size={24} color="#808080" style={{ top: 12, right: 10 }} />
+              )}
+              useNativeAndroidPickerStyle={false}
+            />
+          </View>
 
           {/* Save Button */}
           <View style={styles.saveButtonWrapper}>
