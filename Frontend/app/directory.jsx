@@ -17,13 +17,6 @@ import { FontAwesome5 } from '@expo/vector-icons';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
-const TESTING_PATIENT = {
-  patient_number: "0123456",
-  first_name: "TESTING",
-  middle_name: "ABC",
-  last_name: "PURPOSES ONLY",
-};
-
 const { height } = Dimensions.get('window');
 const TABLE_HEIGHT = height-200;
 
@@ -50,7 +43,6 @@ export default function PatientsDirectory() {
       );
     } catch (error) {
       console.error("Error fetching patients:", error);
-      setPatients([TESTING_PATIENT]);
     }
   };
 

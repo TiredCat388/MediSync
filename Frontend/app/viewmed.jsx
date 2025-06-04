@@ -64,7 +64,6 @@ export default function ViewMedSched() {
             setPatientName(`${data.first_name} ${data.last_name}`);
           }
         } catch (error) {
-          // Handle error
         }
       };
       fetchPatientName();

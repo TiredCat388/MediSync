@@ -53,21 +53,6 @@ export default function PatientDetails() {
       setPatient(data);
     } catch (err) {
       console.error("Error fetching patient:", err.message);
-      setPatient({
-        patient_number: patient_number || "12345",
-        first_name: "John",
-        middle_name: "Adam",
-        last_name: "Doe",
-        date_of_birth: "1990-01-01",
-        contact_number: "123-456-7890",
-        room_number: "101",
-        emergency_contact: {
-          first_name: "Jane",
-          last_name: "Doe",
-          relation_to_patient: "Sister",
-          contact_number: "987-654-3210",
-        },
-      });
     } finally {
       setLoading(false);
     }
