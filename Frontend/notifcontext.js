@@ -1,21 +1,21 @@
-import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
-import Constants from 'expo-constants';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { createContext, useContext, useEffect, useRef } from 'react';
 import { Audio } from 'expo-av';
+import { useSettings } from "./SettingsContext"; // <-- Add this import
+import Constants from 'expo-constants';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 const NotificationContext = createContext();
 
 export const NotificationProvider = ({ children }) => {
-  const [visible, setVisible] = useState(false);
-  const [notificationData, setNotificationData] = useState(null);
-  const [soundObject, setSoundObject] = useState(null);
-  const [volume, setVolume] = useState(100);
-  const [alertSound, setAlertSound] = useState("alarm 1");
+  const [visible, setVisible] = React.useState(false);
+  const [notificationData, setNotificationData] = React.useState(null);
+  const [soundObject, setSoundObject] = React.useState(null);
+  const { volume, alertSound } = useSettings();
 
   const patientsRef = useRef([]);
   const alertedAt60Min = useRef(new Set());
   const alertedAt30Min = useRef(new Set());
+  const alertedAt1Min = useRef(new Set());
 
   const log = (msg, data = null) => {
     const timestamp = new Date().toISOString();
@@ -30,23 +30,6 @@ export const NotificationProvider = ({ children }) => {
   const hideNotification = () => {
     setVisible(false);
     setNotificationData(null);
-  };
-
-  const loadSettings = async () => {
-    try {
-      const storedVolume = await AsyncStorage.getItem("volume");
-      const storedAlertSound = await AsyncStorage.getItem("alertSound");
-
-      if (storedVolume !== null) setVolume(JSON.parse(storedVolume));
-      if (storedAlertSound !== null) setAlertSound(storedAlertSound);
-
-      log("Loaded sound settings", {
-        alertSound: storedAlertSound || "alarm 1",
-        volume: storedVolume || 100,
-      });
-    } catch (error) {
-      console.error("Error loading settings:", error);
-    }
   };
 
   const getSoundFile = (soundName) => {
@@ -111,8 +94,6 @@ export const NotificationProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    loadSettings();
-
     // Fetch patients ONCE
     const fetchPatients = async () => {
       try {
@@ -144,6 +125,8 @@ export const NotificationProvider = ({ children }) => {
           const diffMs = schedTime - now;
           const diffMinutes = diffMs / (1000 * 60);
           const scheduleId = sched.id;
+          const alertKey60 = `${scheduleId}_${sched.next_dose_time}_60`;
+          const alertKey30 = `${scheduleId}_${sched.next_dose_time}_30`;
 
           // Reset alert flags if dose time passed so next alerts can trigger
           if (diffMinutes < 0) {
@@ -154,24 +137,28 @@ export const NotificationProvider = ({ children }) => {
 
           // 60-minute alert
           if (
-            !alertedAt60Min.current.has(scheduleId) &&
-            diffMinutes >= 59 &&
-            diffMinutes <= 61
+            !alertedAt60Min.current.has(alertKey60) &&
+            diffMinutes >= 59 && diffMinutes <= 61
           ) {
-            log(`⚠️ Triggering 60-minute alert for schedule ID ${scheduleId}`);
-            alertedAt60Min.current.add(scheduleId);
+            alertedAt60Min.current.add(alertKey60);
             upcoming.push(sched);
             return;
           }
 
           // 30-minute alert
           if (
-            !alertedAt30Min.current.has(scheduleId) &&
-            diffMinutes >= 29 &&
-            diffMinutes <= 31
+            !alertedAt30Min.current.has(alertKey30) &&
+            diffMinutes >= 29 && diffMinutes <= 31
           ) {
-            log(`⚠️ Triggering 30-minute alert for schedule ID ${scheduleId}`);
-            alertedAt30Min.current.add(scheduleId);
+            alertedAt30Min.current.add(alertKey30);
+            upcoming.push(sched);
+            return;
+          }
+
+          // 1-minute alert (for testing)
+          if (
+            diffMinutes >= 0 && diffMinutes <= 1
+          ) {
             upcoming.push(sched);
             return;
           }
@@ -219,7 +206,7 @@ export const NotificationProvider = ({ children }) => {
       clearTimeout(timeout);
       if (interval) clearInterval(interval);
     };
-  }, []);
+  }, [volume, alertSound]);
 
   return (
     <NotificationContext.Provider value={{ showNotification, hideNotification, visible, notificationData }}>

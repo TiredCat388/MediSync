@@ -8,7 +8,7 @@ import styles from "./stylesheets/updatemedstyle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CustomAlert from "./components/alert";
 import Constants from "expo-constants";
-import { ScrollView } from "react-native";  
+import { ScrollView } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppText from './components/AppText';
@@ -161,7 +161,6 @@ export default function NewMedSched() {
 
             const userId = await AsyncStorage.getItem("userId");
 
-            // Parse the time into hours, minutes, and period
             const [timeHour = "00", timeMinute = "00"] =
               data.Medication_Time?.split(":") || ["00", "00"]; // Fallback to 00:00 if null
             let timePeriod = "AM";
@@ -170,9 +169,9 @@ export default function NewMedSched() {
               timePeriod = "PM";
             }
 
-            const [frequencyHour = "00", frequencyMinute = "00"] = 
-            data.Frequency?.split(":") || ["00", "00"]; // Fallback to 00:00 if null
-    
+            const [frequencyHour = "00", frequencyMinute = "00"] =
+              data.Frequency?.split(":") || ["00", "00"]; // Fallback to 00:00 if null
+
             setFormData({
               medicineName: data.Medication_name,
               medicationForm: data.Medication_form,
@@ -285,19 +284,13 @@ export default function NewMedSched() {
       );
       return;
     }
-  
-
-    
 
     const convertTo24Hour = (hour, minute, period) => {
       if (!hour || !minute || !period) return "00:00:00";
       let hour24 = parseInt(hour, 10);
       if (period === "PM" && hour24 !== 12) hour24 += 12;
       if (period === "AM" && hour24 === 12) hour24 = 0;
-      return `${hour24.toString().padStart(2, "0")}:${minute.padStart(
-        2,
-        "0"
-      )}:00`;
+      return `${hour24.toString().padStart(2, "0")}:${minute.padStart(2, "0")}:00`;
     };
 
     try {
@@ -319,22 +312,20 @@ export default function NewMedSched() {
         Medication_strength: formData.medicationStrength,
         Medication_unit: formData.medicationUnit,
         Medication_Time: medicationTime,
-        Medication_start_date: `${
-          formData.medicationYear
-        }-${formData.medicationMonth.padStart(
-          2,
-          "0"
-        )}-${formData.medicationDay.padStart(2, "0")}`,
+        Medication_start_date: `${formData.medicationYear
+          }-${formData.medicationMonth.padStart(
+            2,
+            "0"
+          )}-${formData.medicationDay.padStart(2, "0")}`,
         Medication_end_date:
           formData.medicationEndYear &&
-          formData.medicationEndMonth &&
-          formData.medicationEndDay
-            ? `${
-                formData.medicationEndYear
-              }-${formData.medicationEndMonth.padStart(
-                2,
-                "0"
-              )}-${formData.medicationEndDay.padStart(2, "0")}`
+            formData.medicationEndMonth &&
+            formData.medicationEndDay
+            ? `${formData.medicationEndYear
+            }-${formData.medicationEndMonth.padStart(
+              2,
+              "0"
+            )}-${formData.medicationEndDay.padStart(2, "0")}`
             : null,
         Frequency: frequency,
         Frequency_type: formData.frequencyType,
@@ -401,7 +392,7 @@ export default function NewMedSched() {
 
                 {/* Medication Name with Autocomplete */}
                 <AppText style={styles.label}>Medication Name</AppText>
-                <View style={styles.autocompleteContainer}>
+                <View style={styles.PickerContainer}>
                   <Autocomplete
                     data={filteredMedications}
                     value={formData.medicineName}
@@ -422,6 +413,7 @@ export default function NewMedSched() {
                     containerStyle={styles.autocompleteWrapper}
                     inputContainerStyle={styles.autocompleteInput}
                   />
+                  </View>
 
                   <AppText style={[styles.label]}>
                     Medication form{" "}
@@ -510,6 +502,7 @@ export default function NewMedSched() {
                         marginBottom: 10,
                         flex: 1,
                         height: 36,
+                        keyboardType: "numeric",
                       }}
                       value={formData.medicationStrength?.toString() || ""}
                       onChangeText={(text) =>
@@ -542,7 +535,6 @@ export default function NewMedSched() {
                       />
                     </View>
                   </View>
-                </View>
 
                 <AppText style={styles.label}>
                   Medication Start Date{" "}
@@ -728,22 +720,21 @@ export default function NewMedSched() {
                   Frequency <AppText style={{ color: "#5879A5" }}>*</AppText>{" "}
                 </AppText>
                 <View style={styles.PickerContainer}>
-
-                <RNPickerSelect
-                  Icon={() => (
-                    <Icon name="arrow-drop-down" size={20} color="gray" />
-                  )}
-                  items={frequencyOptions}
-                  value={formData.frequencyType}
-                  onValueChange={handleFrequencyChange}
-                  placeholder={
-                    formData.frequencyType
-                      ? {}
-                      : { label: "Select frequency", value: "" }
-                  }
-                  style={pickerSelectStyles}
-                  useNativeAndroidPickerStyle={false}
-                />
+                  <RNPickerSelect
+                    Icon={() => (
+                      <Icon name="arrow-drop-down" size={20} color="gray" />
+                    )}
+                    items={frequencyOptions}
+                    value={formData.frequencyType}
+                    onValueChange={handleFrequencyChange}
+                    placeholder={
+                      formData.frequencyType
+                        ? {}
+                        : { label: "Select frequency", value: "" }
+                    }
+                    style={pickerSelectStyles}
+                    useNativeAndroidPickerStyle={false}
+                  />
                 </View>
 
                 {formData.frequencyType === "Other" && (
