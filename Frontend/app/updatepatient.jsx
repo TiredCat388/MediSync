@@ -324,7 +324,7 @@ export default function UpdatePatientScreen() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
-        <Sidebar onNavigate={() => {}} /> {/* Adjust navigation as needed */}
+        <Sidebar onNavigate={() => {}} />
         <View
           style={[
             styles.contentContainer,

@@ -11,12 +11,12 @@ class PatientsViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Patients.objects.all()
-        is_archive = self.request.query_params.get('is_archived')
-        if is_archive is not None:
-            if is_archive.lower() == 'false':
-                queryset = queryset.filter(is_archive=False)
-            elif is_archive.lower() == 'true':
-                queryset = queryset.filter(is_archive=True)
+        is_archived = self.request.query_params.get('is_archived')
+        if is_archived is not None:
+            if is_archived.lower() == 'false':
+                queryset = queryset.filter(is_archived=False)
+            elif is_archived.lower() == 'true':
+                queryset = queryset.filter(is_archived=True)
         return queryset
 
     @action(detail=False, methods=['get'], url_path='by-number/(?P<patient_number>[^/.]+)')

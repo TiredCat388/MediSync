@@ -104,7 +104,7 @@ const AnalogClock = () => {
         // Fetch both medication schedules and only non-archived patients
         const [medsResponse, patientsResponse] = await Promise.all([
           fetch(`${BASE_API}/api/medications`),
-          fetch(`${BASE_API}/api/patients?is_archive=false`),
+          fetch(`${BASE_API}/api/patients?is_archived=false`),
         ]);
 
         if (!medsResponse.ok || !patientsResponse.ok) {
