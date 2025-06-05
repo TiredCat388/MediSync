@@ -128,6 +128,9 @@ export const NotificationProvider = ({ children }) => {
           const alertKey60 = `${scheduleId}_${sched.next_dose_time}_60`;
           const alertKey30 = `${scheduleId}_${sched.next_dose_time}_30`;
 
+          const patient = getPatientById(sched.patient_number);
+          if (patient?.is_archived) return;
+
           // Reset alert flags if dose time passed so next alerts can trigger
           if (diffMinutes < -1) {
             alertedAt60Min.current.delete(scheduleId);
