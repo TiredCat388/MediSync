@@ -1,4 +1,4 @@
-import { Slot } from 'expo-router';
+import { Slot, usePathname } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
 import { NotificationProvider } from '../notifcontext';
@@ -12,6 +12,9 @@ export default function Layout() {
     AGBold: require('../app/fonts/AnekGujarati-Bold.ttf'),
   });
 
+  const pathname = usePathname();
+  const hideNotification = pathname === '/' || pathname === '/index';
+
   if (!fontsLoaded) return null;
 
   return (
@@ -20,7 +23,7 @@ export default function Layout() {
         <SettingsProvider>
           <NotificationProvider>
             <Slot />
-            <GlobalNotification />
+            {!hideNotification && <GlobalNotification />}
           </NotificationProvider>
         </SettingsProvider>
       </SafeAreaProvider>

@@ -9,6 +9,16 @@ class PatientsViewSet(viewsets.ModelViewSet):
     queryset = Patients.objects.all()
     serializer_class = PatientsModelSerializer
 
+    def get_queryset(self):
+        queryset = Patients.objects.all()
+        is_archive = self.request.query_params.get('is_archived')
+        if is_archive is not None:
+            if is_archive.lower() == 'false':
+                queryset = queryset.filter(is_archive=False)
+            elif is_archive.lower() == 'true':
+                queryset = queryset.filter(is_archive=True)
+        return queryset
+
     @action(detail=False, methods=['get'], url_path='by-number/(?P<patient_number>[^/.]+)')
     def get_by_patient_number(self, request, patient_number=None):
         print(f"Attempting to fetch patient number: {patient_number}")  # Debug log
@@ -35,17 +45,3 @@ class PatientsViewSet(viewsets.ModelViewSet):
             return Response({'error': 'Patient not found'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-class PatientListAPIView(generics.ListAPIView):
-    serializer_class = PatientsModelSerializer
-
-    def get_queryset(self):
-        queryset = Patients.objects.all()
-        is_archive = self.request.query_params.get('is_archived')
-        if is_archive is not None:
-            if is_archive.lower() == 'false':
-                queryset = queryset.filter(is_archive=False)
-            elif is_archive.lower() == 'true':
-                queryset = queryset.filter(is_archive=True)
-        return queryset
-
