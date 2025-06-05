@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   multipleCard: {
-    backgroundColor: "#333333",
+    backgroundColor: "#5879a5",
     borderRadius: 12,
     overflow: "hidden",
   },
@@ -139,8 +139,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   multipleBanner: {
-    padding: 16,
-    backgroundColor: "#444444", 
+    padding: 16, 
   },
   title: {
     fontWeight: "bold",

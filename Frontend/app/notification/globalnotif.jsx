@@ -10,6 +10,7 @@ export default function GlobalNotification() {
       visible={visible}
       data={notificationData}
       onHide={hideNotification}
+      isMultiple={notificationData?.multiple === true}
     />
   );
 }
