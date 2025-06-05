@@ -12,11 +12,13 @@ export const styles = StyleSheet.create({
   },
   mainContent: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 40,
+    paddingBottom: 40,
   },
 
   // Header & Buttons
   headerButtons: {
+    paddingTop: 20,
     flexDirection: "row",
     justifyContent: "flex-end",
     marginBottom: 10,
@@ -49,11 +51,11 @@ export const styles = StyleSheet.create({
   },
   buttonWrapper: {
     alignItems: "flex-end",
-    marginTop: 10,
+    marginBottom: 20,
   },
   addMedicationButton: {
     backgroundColor: "#4E84D3",
-    paddingHorisontal: 10,
+    paddingHorizontal: 10,
     borderRadius: 7,
     color: "#FFFFFF",
   },
@@ -136,6 +138,7 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     maxHeight: 600,
     overflow: "hidden",
+    marginBottom: 10,
   },
   tableHeader: {
     fontSize: 1,
@@ -173,7 +176,7 @@ export const styles = StyleSheet.create({
 
   // Search Bar
   searchBarColumn: {
-    paddingVertical: 15,
+    paddingVertical: 5,
   },
   searchInput: {
     backgroundColor: "#fff",
@@ -181,7 +184,10 @@ export const styles = StyleSheet.create({
     borderColor: "#999999",
     borderRadius: 5,
     fontSize: 15,
-    width: "100%",
+    width: "100%", 
+    color: "#000",
+    paddingHorizontal: 10,
+    paddingVertical: 2,
   },
 
   // Popup Menu

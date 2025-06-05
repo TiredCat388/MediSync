@@ -12,7 +12,7 @@ export default function AppText(props: TextProps) {
     <Text
       {...rest}
       style={[
-        { fontFamily: isBold ? 'AGBold' : 'AnekGujarati' },
+        { fontFamily: isBold ? 'AGBold' : 'AnekGujarati', color: '#000000' },
         styleWithoutFontWeight,
       ]}
     />

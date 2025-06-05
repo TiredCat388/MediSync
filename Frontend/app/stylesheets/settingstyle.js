@@ -6,6 +6,7 @@ container: {
     paddingHorizontal: 40,
     paddingBottom: 40,
     backgroundColor: "#F8F8F8",
+    justifyContent: "center",
 },
 heading: {
     paddingVertical: 20,
@@ -27,7 +28,7 @@ label: {
 volumeContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 30,
+    marginBottom: 50,
 },
 sliderWrapper: {
     width: "85%",
@@ -41,17 +42,12 @@ slider: {
     height: 50,
     marginHorizontal: 10,
     borderRadius: 15,
-    backgroundColor: "#e0e0e0",
 },
 pickerWrapper: {
-    width: Platform.OS === "ios" ? "100%" : 220,
+    width: "100%",
     borderWidth: 2,
     borderColor: "#808080",
     borderRadius: 12,
-    ...Platform.select({
-      ios: { overflow: "hidden" },
-      android: {},
-    }),
 },
 picker: {
     height: 50,

@@ -35,7 +35,8 @@ export default StyleSheet.create({
     borderColor: "#000",
     borderWidth: 1,
     borderRadius: 10,
-    paddingHorizontal: 14,
+    paddingHorizontal: 10,
+    paddingVertical: 2,
     marginRight: 12,
     backgroundColor: "#fff",
     fontSize: 16,
@@ -48,7 +49,7 @@ export default StyleSheet.create({
     elevation: 2,
   },
   sortButton: {
-    backgroundColor: "#5c87b2",
+    backgroundColor: "#4E84D3",
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 10,

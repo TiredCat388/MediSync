@@ -17,13 +17,6 @@ import { FontAwesome5 } from '@expo/vector-icons';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
-const TESTING_PATIENT = {
-  patient_number: "0123456",
-  first_name: "TESTING",
-  middle_name: "ABC",
-  last_name: "PURPOSES ONLY",
-};
-
 const { height } = Dimensions.get('window');
 const TABLE_HEIGHT = height-200;
 
@@ -37,7 +30,7 @@ export default function PatientsDirectory() {
   useEffect(() => {
     fetchPatients();
   }, []);
-
+  
   const fetchPatients = async () => {
     try {
       const response = await fetch(`${BASE_API}/api/patients/`);
@@ -45,12 +38,9 @@ export default function PatientsDirectory() {
 
       const activePatients = data.filter((patient) => !patient.is_archived);
 
-      setPatients(
-        activePatients.length > 0 ? activePatients : [TESTING_PATIENT]
-      );
+      setPatients(activePatients);
     } catch (error) {
       console.error("Error fetching patients:", error);
-      setPatients([TESTING_PATIENT]);
     }
   };
 

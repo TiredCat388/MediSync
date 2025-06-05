@@ -50,6 +50,7 @@ export default function PatientDetails() {
       setPatient(data);
     } catch (err) {
       console.error("Error fetching patient:", err.message);
+      setPatient(null);
     } finally {
       setLoading(false);
     }
@@ -94,11 +95,9 @@ export default function PatientDetails() {
       if (Array.isArray(data)) {
         setMedicationData(data);
       } else {
-        console.error("Unexpected API response format:", data);
         setMedicationData([]);
       }
     } catch (err) {
-      console.error("Error fetching medications:", err.message);
       setMedicationData([]);
     }
   };

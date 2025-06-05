@@ -17,8 +17,6 @@ import { FontAwesome5 } from '@expo/vector-icons';
 
 const BASE_API = Constants.expoConfig.extra.BASE_API;
 
-const TESTING_PATIENT = { id: "0123456", name: "TESTING PURPOSES ONLY" };
-
 export default function PatientsDirectory() {
   const router = useRouter();
   const [patients, setPatients] = useState([]);
@@ -34,12 +32,9 @@ export default function PatientsDirectory() {
       const response = await fetch(`${BASE_API}/api/patients/`);
       const data = await response.json();
       const archivedPatients = data.filter((patient) => patient.is_archived);
-      setPatients(
-        archivedPatients.length > 0 ? archivedPatients : [TESTING_PATIENT]
-      );
+      setPatients(archivedPatients);
     } catch (error) {
       console.error("Error fetching patients:", error);
-      setPatients([TESTING_PATIENT]);
     }
   };
 
