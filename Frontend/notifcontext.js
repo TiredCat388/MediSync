@@ -129,9 +129,15 @@ export const NotificationProvider = ({ children }) => {
           const alertKey30 = `${scheduleId}_${sched.next_dose_time}_30`;
 
           // Reset alert flags if dose time passed so next alerts can trigger
-          if (diffMinutes < 0) {
+          if (diffMinutes < -1) {
             alertedAt60Min.current.delete(scheduleId);
             alertedAt30Min.current.delete(scheduleId);
+            return;
+          }
+          if (
+            diffMinutes >= -1 && diffMinutes <= 1
+          ) {
+            upcoming.push(sched);
             return;
           }
 
@@ -156,12 +162,6 @@ export const NotificationProvider = ({ children }) => {
           }
 
           // 1-minute alert (for testing)
-          if (
-            diffMinutes >= 0 && diffMinutes <= 1
-          ) {
-            upcoming.push(sched);
-            return;
-          }
         });
 
         if (upcoming.length > 1) {

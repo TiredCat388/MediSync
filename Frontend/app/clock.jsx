@@ -41,8 +41,8 @@ const AnalogClock = () => {
 
   const handleAdministerPress = (scheduleId) => {
     const alertToAdminister =
-      upcomingAlerts.find((a) => a.schedule_id === scheduleId) ||
-      pendingAlerts.find((a) => a.schedule_id === scheduleId);
+      upcomingAlerts.find((a) => a.id === scheduleId) ||
+      pendingAlerts.find((a) => a.id === scheduleId);
 
     if (!alertToAdminister) return;
 
@@ -51,10 +51,10 @@ const AnalogClock = () => {
     administeredKeys.current.add(alertKey);
 
     setUpcomingAlerts((prev) =>
-      prev.filter((alert) => alert.schedule_id !== scheduleId)
+      prev.filter((alert) => alert.id !== scheduleId)
     );
     setPendingAlerts((prev) =>
-      prev.filter((alert) => alert.schedule_id !== scheduleId)
+      prev.filter((alert) => alert.id !== scheduleId)
     );
 
     setHistoryAlerts((prev) => [
@@ -141,7 +141,7 @@ const AnalogClock = () => {
         const initialUpcoming = enrichedAlerts.filter(alert => {
           const alertDate = new Date(alert.next_dose_time);
           const diffMs = alertDate - now;
-          const alertKey = `${alert.schedule_id}_${alert.next_dose_time}`;
+          const alertKey = `${alert.id}_${alert.next_dose_time}`;
           return !administeredKeys.current.has(alertKey) && diffMs > 0 && diffMs <= 3600000;
         });
         setUpcomingAlerts(initialUpcoming);
@@ -150,7 +150,7 @@ const AnalogClock = () => {
         const initialPending = enrichedAlerts.filter(alert => {
           const alertDate = new Date(alert.next_dose_time);
           const diffMs = alertDate - now;
-          const alertKey = `${alert.schedule_id}_${alert.next_dose_time}`;
+          const alertKey = `${alert.id}_${alert.next_dose_time}`;
           return !administeredKeys.current.has(alertKey) && diffMs <= 0;
         });
         setPendingAlerts(initialPending);
@@ -205,16 +205,16 @@ const AnalogClock = () => {
   const confirmCancellation = () => {
     // Try to find alert in upcoming or pending
     const cancelledAlert =
-      upcomingAlerts.find((a) => a.schedule_id === selectedCancelId) ||
-      pendingAlerts.find((a) => a.schedule_id === selectedCancelId);
+      upcomingAlerts.find((a) => a.id === selectedCancelId) ||
+      pendingAlerts.find((a) => a.id === selectedCancelId);
 
     if (cancelledAlert) {
       // Remove from upcoming and pending
       setUpcomingAlerts((prev) =>
-        prev.filter((a) => a.schedule_id !== selectedCancelId)
+        prev.filter((a) => a.id !== selectedCancelId)
       );
       setPendingAlerts((prev) =>
-        prev.filter((a) => a.schedule_id !== selectedCancelId)
+        prev.filter((a) => a.id !== selectedCancelId)
       );
 
       // Add to history with status cancelled and reason
@@ -264,7 +264,7 @@ const AnalogClock = () => {
       medicationList.forEach((alert) => {
         const alertDate = new Date(alert.next_dose_time);
         const diffMs = alertDate - now;
-        const alertKey = `${alert.schedule_id}_${alert.next_dose_time}`;
+        const alertKey = `${alert.id}_${alert.next_dose_time}`;
 
         if (!administeredKeys.current.has(alertKey)) {
           if (diffMs > 0 && diffMs <= 3600000) {
@@ -282,15 +282,15 @@ const AnalogClock = () => {
       setHistoryAlerts((prevHistory) => {
         const latestDoseMap = {};
         medicationList.forEach(alert => {
-          latestDoseMap[alert.schedule_id] = alert.next_dose_time;
+          latestDoseMap[alert.id] = alert.next_dose_time;
         });
         // Only keep history entries that either:
         // - have a schedule_id not in the current medicationList
         // - or have the same next_dose_time as the latest for that schedule_id
         return prevHistory.filter(
           entry =>
-            !latestDoseMap[entry.schedule_id] ||
-            entry.next_dose_time === latestDoseMap[entry.schedule_id]
+            !latestDoseMap[entry.id] ||
+            entry.next_dose_time === latestDoseMap[entry.id]
         );
       });
     };
@@ -343,7 +343,7 @@ const AnalogClock = () => {
                   <AppText style={styles.noAlerts}>No alerts</AppText>
                 ) : (
                   sortedAlerts.map((alert) => {
-                    const scheduleId = alert.schedule_id;
+                    const scheduleId = alert.id;
                     const isExpanded = expandedAlerts[scheduleId];
                     return (
                       <TouchableOpacity
